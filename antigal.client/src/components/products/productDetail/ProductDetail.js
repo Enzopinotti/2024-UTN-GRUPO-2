@@ -11,7 +11,7 @@ const ProductDetail = () => {
     <div>
       <h2>Detalle del Producto</h2>
       <p>Producto ID: {id}</p>
-      {/* Aquí mostrarás los detalles reales del producto */}
+      
     </div>
   );
 };

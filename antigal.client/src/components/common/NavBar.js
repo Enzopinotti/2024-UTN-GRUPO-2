@@ -9,7 +9,7 @@ const NavBar = () => {
         <li><a href="/cart">Carrito</a></li>
         <li><a href="/login">Login</a></li>
       </ul>
-    </nav>
+    </nav>  
   );
 };
 
