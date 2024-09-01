@@ -1,0 +1,16 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+.header {
+  display: flex;
+  width: 100%;
+}
+
+/*# sourceMappingURL=index.css.map */
