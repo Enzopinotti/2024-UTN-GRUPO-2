@@ -1,6 +1,0 @@
-@Antigal.Server_HostAddress = http://localhost:5210
-
-GET {{Antigal.Server_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
