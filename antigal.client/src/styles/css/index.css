@@ -10,7 +10,18 @@ li {
 
 .header {
   display: flex;
+  
+}
+
+
+.header .header-mobile {
+  display: flex;
   width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem 1.5rem;
+  position: relative;
+  
 }
 
 /*# sourceMappingURL=index.css.map */

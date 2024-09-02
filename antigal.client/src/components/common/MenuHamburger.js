@@ -1,11 +1,12 @@
-import React from 'react'
+// src/components/common/MenuHamburger.js
+import React from 'react';
 
-const MenuHamburger = () => {
+const MenuHamburger = ({ onClick }) => {
   return (
-    <div> 
-        <img src='/images/hamburgesa.png' alt='imagen del menu de hamburgesa' />
+    <div onClick={onClick}> 
+      <img className='hamburgesa' src='/images/hamburgesa.png' alt='menu de hamburguesa' />
     </div>
-  )
+  );
 }
 
-export default MenuHamburger
+export default MenuHamburger;
