@@ -1,3 +1,5 @@
+@import '../abstract/variables';
+
 /* Animación para abrir el menú desde la derecha */
 @keyframes slideInFromRight {
   0% {
@@ -39,8 +41,28 @@
 }
 
 .header {
-  display: flex;
-  width: 100%;
+  .header-desktop {
+    display: flex;
+    width: 100%;
+    background-color: #ffffff;
+
+    align-items: center;
+    justify-content: space-between;
+    .widgets{
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        
+        img{
+            padding: 0.5rem;
+            
+        }
+    }
+    .logo{
+        height:45px;
+        width: auto;
+    }
+}
   .header-mobile {
     display: flex;
     width: 100%;
@@ -112,7 +134,7 @@
             text-align: center;
             font-size: 0.7rem;
             width: 48%;
-            border: solid 1px #669f00;
+            border: solid 1px $primary-color;
             border-radius: 10px;
             -webkit-border-radius: 10px;
             -moz-border-radius: 10px;
@@ -153,8 +175,11 @@
         color: #333;
         font-size: 1rem;
         &.active {
-          color: #669f00; /* Color distintivo para el enlace activo */
+          color: $primary-color; /* Color distintivo para el enlace activo */
           font-weight: bold; /* Negrita para destacar */
+        }
+        &:hover{
+            color: $primary-color;
         }
       }
     }
@@ -182,9 +207,12 @@
         display: flex;
         justify-content: center;
         &.active {
-          color: #669f00; /* Color distintivo para el enlace activo */
+          color: $primary-color; /* Color distintivo para el enlace activo */
           font-weight: bold; /* Negrita para destacar */
         }
+        &:hover {
+            color: $primary-color;
+          }
       }
     }
   }

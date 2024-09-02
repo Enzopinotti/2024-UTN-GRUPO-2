@@ -53,7 +53,7 @@ const NavBar = ({ vertical = false, onLinkClick = () => {} }) => {
             Contacto
           </NavLink>
         </li>
-        <li>
+        <li className="cartMobile">
           <NavLink 
             to="/cart" 
             className={({ isActive }) => isActive ? 'active' : undefined}
