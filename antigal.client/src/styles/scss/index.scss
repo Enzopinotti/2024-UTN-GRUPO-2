@@ -1,0 +1,14 @@
+
+
+@use './abstract/mixins';
+
+@use './base/resets';
+
+@use './layout/media-queries';
+
+@use './components/header';
+@import './abstract/variables';
+
+*{
+  font-family: $font;
+}
