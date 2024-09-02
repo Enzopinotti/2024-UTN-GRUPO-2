@@ -1,10 +1,14 @@
-@use './abstract/variables';
+
+
 @use './abstract/mixins';
 
 @use './base/resets';
 
+@use './layout/media-queries';
 
-.header {
-  display: flex;
-  width: 100%;
+@use './components/header';
+@import './abstract/variables';
+
+*{
+  font-family: $font;
 }
