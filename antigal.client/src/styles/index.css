@@ -2,11 +2,216 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Roboto'
 }
 
 
+/* Animación para abrir el menú desde la derecha */
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+    -webkit-transform: translateX(100%);
+    -moz-transform: translateX(100%);
+    -ms-transform: translateX(100%);
+    -o-transform: translateX(100%);
+}
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+    -webkit-transform: translateX(0);
+    -moz-transform: translateX(0);
+    -ms-transform: translateX(0);
+    -o-transform: translateX(0);
+}
+}
+
+/* Animación para cerrar el menú hacia la izquierda */
+@keyframes slideOutToLeft {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+    -webkit-transform: translateX(0);
+    -moz-transform: translateX(0);
+    -ms-transform: translateX(0);
+    -o-transform: translateX(0);
+}
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+    -webkit-transform: translateX(100%);
+    -moz-transform: translateX(100%);
+    -ms-transform: translateX(100%);
+    -o-transform: translateX(100%);
+}
+}
 
 .header {
   display: flex;
+  
+}
+
+
+.header .header-mobile {
+  display: flex;
   width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem 1.5rem;
+  position: relative;
+  
+}
+
+.header .header-mobile .logo {
+  width: 180px;
+  cursor: pointer;
+  position: relative;
+  right: 4px;
+}
+
+
+.header .header-mobile  .hamburgesa {
+  width: 38px;
+  cursor: pointer;
+}
+
+
+.header .header-mobile .mobile-menu { 
+  display: flex;
+  flex-direction: column;
+  background-color: #FFFFFF;
+  position: absolute;
+  top: 0px; 
+  right: 0;
+  width: 100%;
+  padding: 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  animation-duration: 0.4s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in-out;
+}
+
+.mobile-menu.open {
+  animation-name: slideInFromRight;
+}
+
+.mobile-menu.close {
+  animation-name: slideOutToLeft;
+}
+
+.cierreYlogo {
+  display: flex;
+  align-items: center;
+}
+.cierreYlogo .close-icon {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
+.cierreYlogo .closeIcon {
+  width: 45px;
+  height: 45px;
+  position: relative;
+  left: 6px;
+}
+.nav-horizontal ul {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+}
+.nav-horizontal ul li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 1rem;
+}
+.nav-vertical {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
+  width: 100%;
+}
+/* Estilos para el NavBar vertical */
+.nav-vertical ul {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  gap: 20px;
+  width: 100%;
+}
+.nav-vertical ul li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 1.5rem; 
+  display: flex;
+  justify-content: center;
+}
+.nav-horizontal ul li a.active,
+.nav-vertical ul li a.active {
+  color: #669F00; /* Color distintivo para el enlace activo */
+  font-weight: bold; /* Negrita para destacar */
+}
+
+.mobile-menu .social-media {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-menu .social-media a {
+  padding: 1rem;
+  
+}
+
+.mobile-menu .social-media a img {
+  width: 34px;
+}
+
+.mobile-menu .user-icon-container{
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  cursor: pointer;
+}
+.mobile-menu .user-icon-container img {
+  width: 50px;
+  position: relative;
+  left: 9px;
+}
+
+.mobile-menu .user-icon-container .user-menu {
+  list-style: none;
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.mobile-menu .user-icon-container .user-menu li {
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 0.7rem;
+  width: 48%;
+  border: solid 1px #669F00;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+
+@media (min-width: 350px) {
+  .mobile-menu .user-icon-container .user-menu li {
+    
+    font-size: 1rem;
+    
+  }
+}
+
+@media (min-width: 420px) {
+  .mobile-menu .user-icon-container .user-menu li {
+    
+    font-size: 1.3rem;
+    
+  }
 }
