@@ -10,6 +10,7 @@
     -ms-transform: translateX(100%);
     -o-transform: translateX(100%);
   }
+
   100% {
     transform: translateX(0);
     opacity: 1;
@@ -39,7 +40,19 @@
     -o-transform: translateX(100%);
   }
 }
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
 .header {
   .header-desktop {
     display: flex;
@@ -111,24 +124,27 @@
           }
         }
       }
-
-      .user-icon-container {
+      .sessionContainer {
         display: flex;
         justify-content: end;
-        align-items: center;
-        cursor: pointer;
-
-        img {
-          width: 50px;
-          position: relative;
-          left: 9px;
-        }
-
         .user-menu {
           list-style: none;
           display: flex;
           justify-content: space-evenly;
           width: 100%;
+          align-items: center;
+          opacity: 0;
+          transform: translateX(100%);
+          animation-duration: 0.4s;
+          animation-fill-mode: forwards;
+          animation-timing-function: ease-in-out;
+          &.open {
+            animation-name: slideInFromRight;
+          }
+          
+          &.close {
+            animation-name: slideOutToLeft;
+          }
           li {
             padding: 0.5rem;
             text-align: center;
@@ -140,7 +156,28 @@
             -moz-border-radius: 10px;
             -ms-border-radius: 10px;
             -o-border-radius: 10px;
+            height: 65%;
+            
           }
+        }
+        .user-icon-container {
+          display: flex;
+          justify-content: end;
+          align-items: center;
+          cursor: pointer;
+          background-color: $primary-color;
+          padding: 0.5rem;
+          width: fit-content;
+          border-radius: 100%;
+          -webkit-border-radius: 100%;
+          -moz-border-radius: 100%;
+          -ms-border-radius: 100%;
+          -o-border-radius: 100%;
+          img {
+            width: 40px;
+          }
+  
+          
         }
       }
     }
@@ -160,7 +197,7 @@
     width: 45px;
     height: 45px;
     position: relative;
-    left: 6px;
+    right: 6px;
   }
 }
 
@@ -175,8 +212,8 @@
         color: #333;
         font-size: 1rem;
         &.active {
-          color: $primary-color; /* Color distintivo para el enlace activo */
-          font-weight: bold; /* Negrita para destacar */
+          color: $primary-color; 
+          font-weight: bold; 
         }
         &:hover{
             color: $primary-color;
@@ -186,7 +223,6 @@
   }
 }
 
-/* Estilos para el NavBar vertical */
 .nav-vertical {
   margin-top: 1rem;
   display: flex;
@@ -216,4 +252,75 @@
       }
     }
   }
+}
+
+.header-desktop {
+  display: flex;
+  padding: 2rem;
+  .nav-horizontal{
+    display: flex;
+    li{
+      a{
+        font-size: 0.90rem;
+      }
+      
+    }
+  }
+
+  .sessionContainer {
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 0.5rem;
+    .user-icon-container {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      background-color: $primary-color;
+      width: fit-content;
+      border-radius: 100%;
+      -webkit-border-radius: 100%;
+      -moz-border-radius: 100%;
+      -ms-border-radius: 100%;
+      -o-border-radius: 100%;
+      &:hover{
+        background-color: $shadow-green-color;
+        box-shadow: $shadow-green-color 1px 1px 3px 1px;
+      }
+
+      .user-icon {
+        width: 40px;
+        height: 40px;
+        padding: 0.4rem;
+      }
+      
+     
+    }
+    .user-menu {
+      position: absolute;
+      top: 80px; /* Ajusta según el tamaño del ícono */
+      right: 33px;
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      list-style: none;
+      padding: 10px 0;
+      margin: 0;
+      width: 150px;
+      opacity: 0;
+      transform: translateY(-10px);
+      animation: fadeIn 0.3s forwards;
+      z-index: 1000;
+  
+      li {
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
+        &:hover {
+          background-color: #f0f0f0;
+        }
+      }
+    }
+  }
+ 
 }

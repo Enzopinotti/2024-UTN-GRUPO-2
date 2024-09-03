@@ -12,8 +12,19 @@
       font-size: 1.3rem;
       
     }
+    .header .header-mobile {
+      
+      padding: 2rem 3rem !important;
+      
+    }
   }
-
+  @media (min-width: 580px) {
+    .header .header-mobile {
+      
+      padding: 2.5rem 4rem !important;
+      
+    }
+  }
   @media (min-width: 768px) {
     .header {
       .header-desktop{
@@ -25,4 +36,153 @@
     .cartMobile{
         display:none;
     }
+  }
+  @media (min-width: 800px) {
+
+  }
+  
+  @media (min-width: 900px) {
+    .header-desktop {
+      display: flex;
+      padding: 2rem;
+      .nav-horizontal{
+        display: flex;
+        li{
+          a{
+            font-size: 1rem !important;
+          }
+          
+        }
+      }
+    }
+  }
+
+  @media (min-width: 1000px) {
+
+    .header-desktop {
+      display: flex;
+      padding: 2rem 3rem !important;
+      .nav-horizontal{
+        display: flex;
+        li{
+          a{
+            font-size: 1.2rem !important;
+            padding: 0.47rem;
+          }
+          
+        }
+      }
+    }
+
+    .header-desktop .sessionContainer .user-menu {
+      position: absolute;
+      top: 80px;
+      right: 60px !important;
+    }
+  }
+
+  @media (min-width: 1280px) {
+
+    .header-desktop {
+      .logo {
+        height: 70px !important;
+      }
+      .nav-horizontal {
+        li {
+          a{
+            font-size: 1.4rem !important;
+            padding: 0.5rem;
+          }
+        }
+      }
+      .widgets {
+        div {
+          margin-left: 0.25rem !important;
+          margin-right: 0.25rem !important;
+        }
+        .lupa {
+          width: 45px !important;
+        }
+        .carrito {
+          width: 45px !important;
+        }
+      }
+      .sessionContainer {
+        .user-menu {
+          top: 90px !important;
+        }
+      }
+    }
+
+  }
+
+  @media (min-width: 1450px) {
+
+    .header-desktop {
+      
+        display: flex;
+        padding: 2rem 4.5rem !important;
+      .logo {
+        height: 80px !important;
+      }
+      .nav-horizontal {
+        li {
+          a{
+            font-size: 1.5rem !important;
+            padding: 1rem;
+          }
+        }
+      }
+      .widgets {
+        div {
+          margin-left: 0.6rem !important;
+          margin-right: 0.6rem !important;
+        }
+        .lupa {
+          width: 50px !important;
+        }
+        .carrito {
+          width: 50px !important;
+        }
+      }
+      .sessionContainer {
+        .user-menu {
+          top: 100px !important;
+          right: 90px !important;
+        }
+        .user-icon-container{
+          .user-icon{
+            width: 50px !important;
+            height: 50px !important;
+            padding: 0.5rem !important;
+          }
+        }
+      }
+    }
+
+  }
+  @media (min-width: 1570px) {
+
+    .header-desktop{
+      .widgets {
+        div {
+          margin-left: 1.3rem !important;
+          margin-right: 1.3rem !important;
+        }
+        .lupa {
+          width: 50px !important;
+        }
+        .carrito {
+          width: 50px !important;
+        }
+      }
+      .sessionContainer{
+        .user-menu {
+          right: 100px !important;
+        }
+      }
+    }
+
+
+
   }

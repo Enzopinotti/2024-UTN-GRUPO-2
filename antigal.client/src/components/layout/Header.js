@@ -54,12 +54,14 @@ const Header = () => {
     <header className='header'>
       {isMobile ? (
         <div className='header-mobile'>
-          <Logo />
+          <CartWidget />
+          
+          <Logo toggleMenu={toggleMenu} isMenuOpen={isMenuOpen} />
           <MenuHamburger onClick={toggleMenu} />
           {isMenuVisible && (
             <div className={`mobile-menu ${isMenuOpen ? 'open' : 'close'}`}>
               <article className='cierreYlogo'>
-                <Logo />
+                <Logo toggleMenu={toggleMenu} isMenuOpen={isMenuOpen} />
                 <CloseIcon onClick={toggleMenu} />
               </article>
               <UserIcon />                  
@@ -73,8 +75,9 @@ const Header = () => {
           <Logo />
           <NavBar />
           <div className='widgets'>
-            <CartWidget />
             <LupaWidget />
+            <CartWidget />
+            <UserIcon />
           </div>
         </div>
       )}
