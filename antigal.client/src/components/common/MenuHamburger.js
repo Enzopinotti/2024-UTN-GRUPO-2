@@ -4,7 +4,7 @@ import React from 'react';
 const MenuHamburger = ({ onClick }) => {
   return (
     <div onClick={onClick}> 
-      <img className='hamburgesa' src='/images/hamburgesa.png' alt='menu de hamburguesa' />
+      <img className='hamburgesa' src='/images/hamburgesa.svg' alt='menu de hamburguesa' />
     </div>
   );
 }
