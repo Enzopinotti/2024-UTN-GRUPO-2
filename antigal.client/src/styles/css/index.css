@@ -215,13 +215,13 @@ li {
   position: relative;
 }
 .header .header-mobile .logo {
-  width: 150px;
+  width: 180px;
   cursor: pointer;
   position: relative;
   right: 4px;
 }
 .header .header-mobile .hamburgesa {
-  width: 35px;
+  width: 38px;
   cursor: pointer;
 }
 .header .header-mobile .mobile-menu {
