@@ -82,10 +82,10 @@
     width: 100%;
     align-items: center;
     justify-content: space-between;
-    padding: 2rem 1.5rem;
+    padding: 2rem 1rem;
     position: relative;
     .logo {
-      width: 180px;
+      width: 165px;
       cursor: pointer;
       position: relative;
       right: 4px;
@@ -107,6 +107,7 @@
       animation-duration: 0.4s;
       animation-fill-mode: forwards;
       animation-timing-function: ease-in-out;
+      z-index: 10;
       &.open {
         animation-name: slideInFromRight;
       }
