@@ -21,7 +21,7 @@
             width: 300px;
         }
         .subtitulo {
-            color: $primary-black-color;
+            color: $secondary-color;
             font-size: 1.3rem;
             text-align: center;
             padding-bottom: 1.5rem;
@@ -61,7 +61,7 @@
             bottom: 3rem;
         }
     }
-    .segundaSection{
+    .terceraSection{
         position: relative;
         bottom: 2rem;
         .contenedorFondo{
@@ -145,7 +145,7 @@
                     width: 85%;
                 }
             }
-            .maniContenedor{
+            .maniorganicoContenedor{
                 padding-top: 2rem;
                 padding-right: 2.5rem;
                 .contenedorIconos{
@@ -175,9 +175,10 @@
                 .parrafo {
                     color: $primary-white-color;
                     font-weight: 100;
+                    width: 85%;
                 }
             }
-            .energiaContenedor{
+            .deenergiaContenedor{
                 padding-top: 2rem;
                 padding-right: 2.5rem;
                 position: relative;

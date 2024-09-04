@@ -2,7 +2,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import CartWidget from './CartWidget';
 
 const NavBar = ({ vertical = false, onLinkClick = () => {} }) => {
   return (
@@ -51,15 +50,6 @@ const NavBar = ({ vertical = false, onLinkClick = () => {} }) => {
             onClick={onLinkClick}
           >
             Contacto
-          </NavLink>
-        </li>
-        <li className="cartMobile">
-          <NavLink 
-            to="/cart" 
-            className={({ isActive }) => isActive ? 'active' : undefined}
-            onClick={onLinkClick}
-          >
-            <CartWidget />
           </NavLink>
         </li>
       </ul>
