@@ -840,15 +840,18 @@ li {
   background-color: #ED8B00;
   padding: 0.5rem 1.4rem;
   border-radius: 20px;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  -ms-border-radius: 20px;
-  -o-border-radius: 20px;
   border: #FFFFFF solid 1px;
   position: relative;
   bottom: 4rem;
   color: #FFFFFF;
   font-weight: 900;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+}
+.home_container .primeraSection .botonCompraContainer .botonComprar:hover {
+  background-color: #ba6d00;
 }
 .home_container .primeraSection .contenedorFrasco {
   width: 100%;

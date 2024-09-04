@@ -1,4 +1,5 @@
 @import '../abstract/variables';
+@import '../abstract/mixins';
 
 .home_container {
     
@@ -32,18 +33,7 @@
             display: flex;
             justify-content: center;
             .botonComprar {
-                background-color: $secondary-color;
-                padding: 0.5rem 1.4rem;
-                border-radius: 20px;
-                -webkit-border-radius: 20px;
-                -moz-border-radius: 20px;
-                -ms-border-radius: 20px;
-                -o-border-radius: 20px;
-                border: $primary-white-color solid 1px;
-                position: relative;
-                bottom: 4rem;
-                color: $primary-white-color;
-                font-weight: 900;
+                @include boton($secondary-color, $primary-white-color, $primary-white-color);
             }
         }
         
