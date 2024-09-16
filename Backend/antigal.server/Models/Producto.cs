@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using antigal.server.Relationships;
+using System.ComponentModel.DataAnnotations;
 
 namespace antigal.server.Models
 {
@@ -7,9 +8,9 @@ namespace antigal.server.Models
         [Key]
         public int idProducto { get; set; }
         [Required]
-        public string nombre { get; set; }
+        public required string nombre { get; set; }
         [Required]
-        public string marca { get; set; }
+        public required string marca { get; set; }
         public string? descripcion { get; set; }
         public int?  codigoBarras { get; set; }
         [Required]
@@ -19,8 +20,12 @@ namespace antigal.server.Models
         public  float precio { get; set; }
         [Required]
         public  int stock { get; set; }
- 
 
+        //RELACION UNO A MUCHOS CON IMAGEN
+        public List <Imagen> imagenes { get; set; } = new List<Imagen> ();
+
+        //RELACION MUCHOS A MUCHOS CON CATEGORIA
+        public List<ProductoCategoria> CategoriaProductos { get; set; } = new List<ProductoCategoria>();
 
         public Producto(int idProducto, string nombre, string marca, string? descripcion, int? codigoBarras, int disponible, int? destacado, float precio, int stock)
         {
@@ -34,6 +39,8 @@ namespace antigal.server.Models
             this.precio = precio;
             this.stock = stock;
         }
+        //CONSTRUCTOR SIN PARAMETROS REQUERIDO POR EF.
+        public Producto() {}
 
     }
 }

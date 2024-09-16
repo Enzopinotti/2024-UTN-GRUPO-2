@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using antigal.server.Data;
 
@@ -11,9 +12,11 @@ using antigal.server.Data;
 namespace antigal.server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240916034642_RelacionProductoImagen")]
+    partial class RelacionProductoImagen
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,21 +109,6 @@ namespace antigal.server.Migrations
                     b.ToTable("Productos");
                 });
 
-            modelBuilder.Entity("antigal.server.Relationships.ProductoCategoria", b =>
-                {
-                    b.Property<int>("idProducto")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idCategoria")
-                        .HasColumnType("int");
-
-                    b.HasKey("idProducto", "idCategoria");
-
-                    b.HasIndex("idCategoria");
-
-                    b.ToTable("ProductoCategoria");
-                });
-
             modelBuilder.Entity("antigal.server.Models.Imagen", b =>
                 {
                     b.HasOne("antigal.server.Models.Producto", "Producto")
@@ -132,34 +120,8 @@ namespace antigal.server.Migrations
                     b.Navigation("Producto");
                 });
 
-            modelBuilder.Entity("antigal.server.Relationships.ProductoCategoria", b =>
-                {
-                    b.HasOne("antigal.server.Models.Categoria", "Categoria")
-                        .WithMany("CategoriaProductos")
-                        .HasForeignKey("idCategoria")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("antigal.server.Models.Producto", "Producto")
-                        .WithMany("CategoriaProductos")
-                        .HasForeignKey("idProducto")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Categoria");
-
-                    b.Navigation("Producto");
-                });
-
-            modelBuilder.Entity("antigal.server.Models.Categoria", b =>
-                {
-                    b.Navigation("CategoriaProductos");
-                });
-
             modelBuilder.Entity("antigal.server.Models.Producto", b =>
                 {
-                    b.Navigation("CategoriaProductos");
-
                     b.Navigation("imagenes");
                 });
 #pragma warning restore 612, 618
