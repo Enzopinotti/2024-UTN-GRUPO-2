@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import PrimeraSection from '../home/PrimeraSection';
-import TerceraSection from '../home/TerceraSection';
+import PrimeraSection from '../components/home/PrimeraSection';
+import TerceraSection from '../components/home/TerceraSection';
+import SegundaSection from '../components/home/SegundaSection';
 
 const Home = () => {
   const [backgroundImage, setBackgroundImage] = useState('/images/fondoVerde.png');
@@ -13,7 +14,7 @@ const Home = () => {
         setBackgroundImage('/images/fondoVerde.png');
       }
     };
-
+    
     // Ejecutar al cargar el componente para establecer la imagen correcta
     updateBackgroundImage();
 
@@ -28,6 +29,7 @@ const Home = () => {
   return (
     <div className='home_container'>
       <PrimeraSection />
+      <SegundaSection />
       <TerceraSection backgroundImage={backgroundImage} />
     </div>
   );

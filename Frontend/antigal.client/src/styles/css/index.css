@@ -297,7 +297,7 @@ li {
     right: 60px !important;
   }
   .home_container .primeraSection .titulo {
-    margin-bottom: 2rem;
+    margin-bottom: 0rem;
     margin-top: 0;
     padding-top: 0 !important;
   }
@@ -315,6 +315,46 @@ li {
     user-select: none;
     cursor: pointer;
   }
+  .home_container .segundaSection.fondoBlanco {
+    padding-top: 0;
+    margin-bottom: 4rem;
+  }
+  .home_container .segundaSection.fondoBlanco .carousel {
+    flex-direction: column;
+  }
+  .home_container .segundaSection.fondoBlanco .carousel .offerCard {
+    box-shadow: none;
+  }
+  .home_container .segundaSection.fondoBlanco .carousel .offerCard.row {
+    flex-direction: row;
+  }
+  .home_container .segundaSection.fondoBlanco .carousel .offerCard.row-reverse {
+    flex-direction: row-reverse;
+  }
+  .home_container .segundaSection.fondoBlanco .carousel .offerCard img {
+    width: 350px;
+  }
+  .home_container .segundaSection.fondoBlanco .navigation-buttons {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    position: relative;
+    bottom: 30rem;
+  }
+  .home_container .segundaSection.fondoBlanco .navigation-buttons img {
+    opacity: 0.6;
+    width: 90px;
+    cursor: pointer;
+  }
+  .home_container .segundaSection.fondoBlanco .navigation-buttons img.prevButton {
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180de);
+    -moz-transform: rotate(180de);
+    -ms-transform: rotate(180de);
+    -o-transform: rotate(180de);
+  }
   .home_container .terceraSection .contenedorFondo {
     display: flex;
     align-items: center;
@@ -327,7 +367,7 @@ li {
   .home_container .terceraSection .contenedorFondo .contenedorFrutosSecos .pistachosContenedor {
     flex: 1 1 48%;
     left: 0rem !important;
-    padding-top: 12rem !important;
+    padding-top: 5rem !important;
     width: fit-content !important;
   }
   .home_container .terceraSection .contenedorFondo .contenedorFrutosSecos .pistachosContenedor .titulo {
@@ -340,8 +380,8 @@ li {
   .home_container .terceraSection .contenedorFondo .contenedorFrutosSecos .deenergiaContenedor {
     flex: 1 1 48%;
     left: 0rem !important;
-    padding-top: 8rem !important;
-    padding-bottom: 8rem !important;
+    padding-top: 5rem !important;
+    padding-bottom: 5rem !important;
   }
   .home_container .terceraSection .contenedorFondo .contenedorFrutosSecos .deenergiaContenedor .titulo {
     font-size: 2.2rem !important;
@@ -352,7 +392,7 @@ li {
   }
   .home_container .terceraSection .contenedorFondo .contenedorFrutosSecos .almendrasContenedor {
     flex: 1 1 48%;
-    padding-top: 12rem !important;
+    padding-top: 4.3rem !important;
   }
   .home_container .terceraSection .contenedorFondo .contenedorFrutosSecos .almendrasContenedor .titulo {
     font-size: 2.2rem !important;
@@ -373,8 +413,6 @@ li {
     width: 60% !important;
   }
   .home_container .terceraSection .contenedorFondo .fotoFrutos {
-    width: 350px !important;
-    height: 200px;
     margin-right: 4rem;
   }
 }
@@ -430,6 +468,40 @@ li {
     width: 50px !important;
     height: 50px !important;
     padding: 0.5rem !important;
+  }
+  .home_container .primeraSection .titulo {
+    margin-bottom: 2rem;
+    margin-top: 0;
+    padding-top: 0 !important;
+  }
+  .home_container .primeraSection .frascoYtitulo .contenedorFrasco .imagenFrasco {
+    width: 1000px !important;
+  }
+  .home_container .primeraSection .botonCompraContainer .botonComprar {
+    position: relative;
+    bottom: 36.5rem !important;
+  }
+  .home_container .segundaSection.fondoBlanco {
+    margin-bottom: 4rem;
+  }
+  .home_container .segundaSection.fondoBlanco .carousel {
+    flex-direction: column;
+  }
+  .home_container .segundaSection.fondoBlanco .carousel .offerCard {
+    box-shadow: none;
+  }
+  .home_container .segundaSection.fondoBlanco .carousel .offerCard.row {
+    flex-direction: row;
+  }
+  .home_container .segundaSection.fondoBlanco .carousel .offerCard.row-reverse {
+    flex-direction: row-reverse;
+  }
+  .home_container .segundaSection.fondoBlanco .carousel .offerCard img {
+    width: 450px;
+  }
+  .home_container .segundaSection.fondoBlanco .navigation-buttons {
+    padding-left: 6rem;
+    padding-right: 6rem;
   }
   .home_container .terceraSection .contenedorFondo {
     display: flex;
@@ -866,6 +938,136 @@ li {
   position: relative;
   bottom: 3rem;
 }
+.home_container .segundaSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8rem 20px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.home_container .segundaSection .tituloOfertas {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 900;
+  text-shadow: 1px 1px 1px #222222;
+  color: #222222;
+}
+.home_container .segundaSection .carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  width: 100%;
+  gap: 20px;
+}
+.home_container .segundaSection .carousel .offerCard {
+  flex-grow: 1;
+  max-width: calc(100% - 10px);
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: auto;
+}
+.home_container .segundaSection .carousel .offerCard img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.home_container .segundaSection .carousel .offerCard .offerName {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 10px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.home_container .segundaSection .carousel .offerCard .offerBrand {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 10px;
+}
+.home_container .segundaSection .carousel .offerCard .offerPrice {
+  margin-bottom: 10px;
+}
+.home_container .segundaSection .carousel .offerCard .offerPrice .precioAnterior {
+  text-decoration: line-through;
+  color: #999;
+  margin-right: 10px;
+}
+.home_container .segundaSection .carousel .offerCard .offerPrice .precioOferta {
+  font-weight: bold;
+  color: #ED8B00;
+}
+.home_container .segundaSection .carousel .offerCard .offerRating {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.home_container .segundaSection .carousel .offerCard .offerRating span {
+  margin-left: 5px;
+  color: #777;
+}
+.home_container .segundaSection .carousel .offerCard .comprarButton {
+  background-color: #74873D;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.home_container .segundaSection .carousel .offerCard .comprarButton:hover {
+  background-color: #56642d;
+}
+.home_container .segundaSection .carousel .offerCard .likeSection {
+  margin-top: auto;
+  text-align: center;
+}
+.home_container .segundaSection .carousel .offerCard .likeSection .likeButton {
+  background-color: transparent;
+  border: none;
+  color: #3498db;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.home_container .segundaSection .carousel .offerCard .likeSection .likeButton:hover {
+  color: #217dbb;
+}
+.home_container .segundaSection .pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  background-color: #FFFFFF;
+  padding: 0.5rem;
+  border-radius: 1rem;
+}
+.home_container .segundaSection .pagination .dot {
+  width: 10px;
+  height: 10px;
+  background-color: #222222;
+  opacity: 0.9;
+  border-radius: 50%;
+  margin: 0 5px;
+  transition: width 0.3s ease, height 0.3s ease;
+  cursor: pointer;
+}
+.home_container .segundaSection .pagination .dot.active {
+  background-color: #ED8B00;
+  opacity: 1;
+  width: 15px; /* Aumentar tamaño del punto activo */
+  height: 15px;
+}
 .home_container .terceraSection {
   position: relative;
   bottom: 2rem;
@@ -873,6 +1075,8 @@ li {
 .home_container .terceraSection .contenedorFondo {
   width: 100%;
   position: relative;
+  bottom: 4rem;
+  z-index: 2;
 }
 .home_container .terceraSection .contenedorFondo .fondoVerde {
   position: absolute;
