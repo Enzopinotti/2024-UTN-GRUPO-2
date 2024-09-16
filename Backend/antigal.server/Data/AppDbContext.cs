@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using antigal.server.Models;
 
 namespace antigal.server.Data
 {
@@ -6,6 +7,8 @@ namespace antigal.server.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     
+        //MAPEO PRODUCTOS
+        public DbSet <Producto> Productos { get; set; }
    
     }
 }
