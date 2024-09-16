@@ -6,7 +6,7 @@ const ProductListContainer = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    // Array de productos de ejemplo
+
     const productData = [
       {
         id: 1,
@@ -29,11 +29,9 @@ const ProductListContainer = () => {
         imageUrl: '/images/avena.jpg',
         category: 'Cereales',
       },
-      // Agrega más productos según sea necesario
     ];
 
     setProducts(productData);
-
     // Código preparado para realizar fetch a la API del backend (comentado por ahora)
     /*
     fetch('http://localhost:5000/api/products')

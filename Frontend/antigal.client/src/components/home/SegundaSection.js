@@ -1,4 +1,3 @@
-// src/components/home/SegundaSection.js
 import React, { useState, useEffect } from 'react';
 import OfferCard from '../common/OfferCard';
 import { getVisibleItems } from '../../utils/screenUtils';
@@ -19,6 +18,7 @@ const SegundaSection = () => {
       imagen: "/images/granola.png",
       estrellas: 4.5,
       totalReviews: 27,
+      descripcion: "Granola con frutos secos para un desayuno saludable y energético."
     },
     {
       id: 2,
@@ -29,6 +29,7 @@ const SegundaSection = () => {
       imagen: "/images/banana_chips.png",
       estrellas: 4.7,
       totalReviews: 19,
+      descripcion: "Crujientes banana chips perfectas para snacks saludables."
     },
     {
       id: 3,
@@ -39,8 +40,8 @@ const SegundaSection = () => {
       imagen: "/images/yogurt_griego.png",
       estrellas: 4.3,
       totalReviews: 13,
+      descripcion: "Yogurt griego sin lactosa, ideal para una dieta balanceada."
     },
-  
   ];
 
   // Manejar el redimensionamiento de la ventana
@@ -48,7 +49,6 @@ const SegundaSection = () => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
-
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -87,15 +87,22 @@ const SegundaSection = () => {
   };
 
   return (
-    <section className="segundaSection" style={{ backgroundImage: "url('/images/fondoCarruselOffertas.jpg')" }}>
+    <section
+      className={`segundaSection ${windowWidth > 1080 ? 'fondoBlanco' : ''}`}
+      style={{ backgroundImage: windowWidth > 1080 ? 'none' : "url('/images/fondoCarruselOffertas.jpg')" }}
+    >
       <h2 className="tituloOfertas">TOP PRODUCTOS RECOMENDADOS</h2>
       <div className="carousel" {...handlers}>
-        {displayedProducts.map((producto) => (
-          <OfferCard key={producto.id} producto={producto} />
+        {displayedProducts.map((producto, index) => (
+          <OfferCard
+            key={producto.id}
+            producto={producto}
+            isDesktop={windowWidth > 1080}
+            reverse={index % 2 === 1} // Alterna 'row' y 'row-reverse' para cada tarjeta en desktop
+          />
         ))}
       </div>
 
-      {/* Puntos de navegación */}
       <div className="pagination">
         {Array.from({ length: numDots }).map((_, index) => (
           <div
@@ -105,6 +112,14 @@ const SegundaSection = () => {
           ></div>
         ))}
       </div>
+
+      {/* Botones para desktop */}
+      {windowWidth > 1080 && (
+        <div className="navigation-buttons">
+          <img className='prevButton' src='./images/flechaCarruselDesktop.svg' onClick={handlePrev} alt='botón back de Antigal' />
+          <img className='nextButton' src='./images/flechaCarruselDesktop.svg' onClick={handlePrev} alt='botón next de Antigal' />
+        </div>
+      )}
     </section>
   );
 };

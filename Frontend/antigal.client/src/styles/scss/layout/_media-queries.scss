@@ -379,7 +379,7 @@
   .home_container{
     .primeraSection {
       .titulo{
-        margin-bottom: 2rem;
+        margin-bottom: 0rem;
         margin-top: 0;
         padding-top: 0 !important;
       }
@@ -403,6 +403,48 @@
         }
       }
     }
+    .segundaSection.fondoBlanco{
+      padding-top: 0;
+      margin-bottom: 4rem;
+      .carousel{
+        flex-direction: column;
+        .offerCard{
+          box-shadow: none;
+          &.row {
+            flex-direction: row; // Estilo normal para desktop
+          }
+    
+          &.row-reverse {
+            flex-direction: row-reverse; // Cambiar el orden de los elementos
+          }
+          img{
+            width: 350px;
+          }
+        }
+      }
+      .navigation-buttons{
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        padding-left: 2rem;
+        padding-right: 2rem;
+        position: relative;
+        bottom: 30rem;
+        img{
+          opacity: 0.6;
+          width: 90px;
+          cursor: pointer;
+          &.prevButton{
+            transform: rotate(180deg);
+            -webkit-transform: rotate(180de);
+            -moz-transform: rotate(180de);
+            -ms-transform: rotate(180de);
+            -o-transform: rotate(180de);
+          }
+
+        }
+      }
+    }
     .terceraSection {
       .contenedorFondo{
         display: flex;
@@ -414,7 +456,7 @@
           .pistachosContenedor {
             flex: 1 1 48%;
             left: 0rem !important;
-            padding-top: 12rem !important;
+            padding-top: 5rem !important;
             width: fit-content !important;
             .titulo{
               font-size: 2.2rem !important;
@@ -427,8 +469,8 @@
           .deenergiaContenedor{
             flex: 1 1 48%;
             left: 0rem !important;
-            padding-top: 8rem !important;
-            padding-bottom: 8rem !important;
+            padding-top: 5rem !important;
+            padding-bottom: 5rem !important;
             .titulo{
               font-size: 2.2rem !important;
             }
@@ -439,7 +481,7 @@
           }
           .almendrasContenedor{
             flex: 1 1 48%;
-            padding-top: 12rem !important;
+            padding-top: 4.3rem !important;
             .titulo{
               font-size: 2.2rem !important;
             }
@@ -461,8 +503,7 @@
           }
         }
         .fotoFrutos{
-          width: 350px !important;
-          height: 200px;
+          
           margin-right: 4rem;
         }
       }
@@ -546,6 +587,55 @@
     }
   }
   .home_container{
+    .primeraSection{
+      
+          .titulo{
+            margin-bottom: 2rem;
+            margin-top: 0;
+            padding-top: 0 !important;
+          }
+          .frascoYtitulo{
+            
+            .contenedorFrasco {
+              .imagenFrasco{
+                width: 1000px !important;
+                
+              }
+            }
+            
+          }
+          .botonCompraContainer{
+            .botonComprar{
+              position: relative;
+              bottom: 36.5rem !important;
+            }
+          }
+    }
+    .segundaSection.fondoBlanco{
+      margin-bottom: 4rem;
+      .carousel{
+        flex-direction: column;
+        .offerCard{
+          box-shadow: none;
+          &.row {
+            flex-direction: row; // Estilo normal para desktop
+          }
+    
+          &.row-reverse {
+            flex-direction: row-reverse; // Cambiar el orden de los elementos
+          }
+          img{
+            width: 450px;
+          }
+        }
+      }
+      .navigation-buttons{
+        
+        padding-left: 6rem;
+        padding-right: 6rem;
+        
+      }
+    }
     .terceraSection {
       .contenedorFondo{
         display: flex;
