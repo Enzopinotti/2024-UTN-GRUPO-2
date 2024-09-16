@@ -1,5 +1,6 @@
-using Microsoft.EntityFrameworkCore;
+ï»¿using Microsoft.EntityFrameworkCore;
 using antigal.server.Data;
+using antigal.server.Controllers;
 
 namespace antigal.server
 {
@@ -22,7 +23,7 @@ namespace antigal.server
 
             var app = builder.Build();
 
-            // Configurar el middleware de la aplicación
+            // Configurar el middleware de la aplicaciï¿½n
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -34,6 +35,8 @@ namespace antigal.server
             app.UseAuthorization();
 
             app.MapControllers();
+
+                        app.MapProductoEndpoints();
 
             app.Run();
 
