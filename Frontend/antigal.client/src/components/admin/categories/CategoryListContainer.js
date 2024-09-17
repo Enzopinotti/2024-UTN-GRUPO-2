@@ -18,9 +18,7 @@ const CategoryListContainer = () => {
       <div className="new-btn">
         <button onClick={handleShowModal}> + Nueva Categoría </button>
       </div>
-
       <CategoryForm show={showModal} onClose={handleCloseModal} />
-
       <CategoryList />
     </div>
   );

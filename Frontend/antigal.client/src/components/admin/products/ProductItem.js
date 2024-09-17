@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
+import CategoryDropdown from "../categories/CategoryDropdown";
 
 const AdminProductItem = ({ product }) => {
+  const [showDropdown, setShowDropdown] = useState(false);
+  const handleDropdownToggle = () => {
+    setShowDropdown(!showDropdown);
+  };
   return (
     <div className="product-item">
       <div className="product-img">
@@ -22,12 +27,32 @@ const AdminProductItem = ({ product }) => {
         </div>
 
         <div className="bottom-section">
-            <div><p>{product.description}</p> </div>
-          
-            <div className="row"> 
-               <p>Precio: {product.price}</p> 
-               <p>Stock: {product.stock}</p>      
-             </div>
+          <div className="row">
+            <p>{product.description}</p>{" "}
+          </div>
+
+          <div className="row">
+            <div className="text">
+              <p>Precio: {product.price}</p>
+              <p>Stock: {product.stock}</p>
+            </div>
+            <div className="desplegable">
+              <button onClick={handleDropdownToggle} className={showDropdown ? "active" : "inactive"}>
+                Categorías
+              </button>
+              {showDropdown && (
+                <CategoryDropdown
+                  categories={[
+                    "Sin Tacc",
+                    "Veganos",
+                    "Cereales",
+                    "Suplementos",
+                  ]}
+                />
+              )}
+    
+            </div>
+          </div>
         </div>
       </div>
     </div>

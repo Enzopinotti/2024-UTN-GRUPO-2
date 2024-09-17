@@ -4,11 +4,21 @@ const CategoryForm = ({ show, onClose }) => {
   if (!show) {
     return null;
   }
-  //aca iría la lógica
+  
+  const handleOverlayClick = (event) => {
+    if (event.target.className === "form-overlay") {
+      onClose();
+    }
+  };
+
+  
+  const handleFormClick = (event) => {
+    event.stopPropagation();
+  };
 
   return (
-    <div className="form-overlay" onClick={onClose}>
-      <div className="form">
+    <div className="form-overlay" onClick={handleOverlayClick}>
+      <div className="form" onClick={handleFormClick}>
         <div className="top-section">
           <h2>Crear nueva categoría </h2>
           <button type="button" className="exit-btn" onClick={onClose}>

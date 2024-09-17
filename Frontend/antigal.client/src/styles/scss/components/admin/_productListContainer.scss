@@ -1,4 +1,6 @@
-.product-list {
+@import'../../abstract/variables';
+.admi-page {
+  .product-list {
     width: 100%;
     height: auto;
     gap: 10px;
@@ -30,13 +32,60 @@
       gap: 10px;
       justify-content: flex-start;
       align-items: center;
-      .row{
+      .row {
         padding: 10px 0px;
         width: 100%;
         display: flex;
-        justify-content: flex-start;
-        align-items: flex-start;
-        gap:10px;
+        justify-content: space-between;
+        gap: 10px;
+        position: relative;
+        .desplegable {
+            button{
+                &.active{
+                    background-color: darken(rgb(237, 237, 237), 25%);
+            }}
+          .category-dropdown {
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            position: absolute;
+            width: 200px;
+            max-width: 90%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            right: 0;
+            transform: translateX(0);
+            z-index: 1000;
+            h4 {
+                text-align: center;
+                margin-bottom: 10px;
+              }
+              label {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 8px;
+              }
+              input{
+                cursor: pointer;
+              }
+    
+          }
+
+          .btn {
+            display: flex;
+            justify-content: center;
+            .confirm-btn {
+              margin-top: 10px;
+              background-color: $primary-color;
+              color: white;
+              border: none;
+              padding: 5px 10px;
+              cursor: pointer;
+              &:hover{
+                background-color: darken($primary-color,15%);
+              }
+            }
+          }
+        }
       }
       .top-section {
         display: flex;
@@ -68,8 +117,7 @@
       }
     }
   }
-
-
+}
 @media (max-width: 768px) {
   .product-button {
     .delete-btn span,

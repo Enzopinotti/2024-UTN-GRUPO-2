@@ -39,20 +39,20 @@
         border: none;
         background-color: rgb(237, 237, 237);
         cursor: pointer;
-        display: inline-flex; /* Flexbox para centrar el contenido */
-        align-items: center; /* Centrar verticalmente */
-        justify-content: center; /* Centrar horizontalmente */
-        text-decoration: none; /* Eliminar subrayado del enlace */
-        color: black; /* Color del texto */
+        display: inline-flex; 
+        align-items: center;
+        justify-content: center; 
+        text-decoration: none;
+        color: black;
       
         &:hover {
-          background-color: darken(rgb(237, 237, 237), 15%); /* Fondo más oscuro al pasar el mouse */
+          background-color: darken(rgb(237, 237, 237), 15%); 
         }
       
         &.active {
-          background-color:$primary-color; /* Color de fondo cuando está activo */
+          background-color:$primary-color;
           border: none;
-          color: white; /* Borde visible cuando está activo */
+          color: white; 
         }
       }
     .admi-btn {
