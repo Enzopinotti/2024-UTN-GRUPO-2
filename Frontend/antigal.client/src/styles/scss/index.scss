@@ -1,14 +1,17 @@
 
 
 @use './abstract/mixins';
-@use './components/productDetail';
 @use './base/resets';
+
 
 @use './layout/media-queries';
 
 @use './components/header';
 @use './components/footer';
 @use './components/home';
+@use './components/productDetail';
+
+@use './components/admin/categoryListContainer';
 @import './abstract/variables';
 
 *{
