@@ -3,6 +3,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 * {
   box-sizing: border-box;
   margin: 0;
@@ -1467,14 +1468,14 @@ footer .footer-bottom img {
     width: 100% !important;
   }
 }
-.category-page {
+.admi-page {
   width: 100%;
   min-height: 100vh;
 }
-.category-page h2 {
+.admi-page h2 {
   padding-bottom: 10px;
 }
-.category-page button {
+.admi-page button {
   min-height: 35px;
   width: 100px;
   padding: 5px;
@@ -1483,10 +1484,10 @@ footer .footer-bottom img {
   background-color: rgb(237, 237, 237);
   cursor: pointer;
 }
-.category-page button:hover {
+.admi-page button:hover {
   background-color: #c7c7c7;
 }
-.category-page .admi-nav {
+.admi-page .admi-nav {
   background-color: black;
   color: white;
   display: flex;
@@ -1496,14 +1497,36 @@ footer .footer-bottom img {
   width: 100%;
   min-height: 100px;
 }
-.category-page .admi-nav h2 {
+.admi-page .admi-nav h2 {
   padding-bottom: 10px;
 }
-.category-page .admi-nav .admi-btn {
+.admi-page .admi-nav .nav-button {
+  min-height: 35px;
+  width: 100px;
+  padding: 5px;
+  border-radius: 8px;
+  border: none;
+  background-color: rgb(237, 237, 237);
+  cursor: pointer;
+  display: inline-flex; /* Flexbox para centrar el contenido */
+  align-items: center; /* Centrar verticalmente */
+  justify-content: center; /* Centrar horizontalmente */
+  text-decoration: none; /* Eliminar subrayado del enlace */
+  color: black; /* Color del texto */
+}
+.admi-page .admi-nav .nav-button:hover {
+  background-color: #c7c7c7; /* Fondo más oscuro al pasar el mouse */
+}
+.admi-page .admi-nav .nav-button.active {
+  background-color: #74873D; /* Color de fondo cuando está activo */
+  border: none;
+  color: white; /* Borde visible cuando está activo */
+}
+.admi-page .admi-nav .admi-btn {
   display: flex;
   justify-content: space-evenly;
 }
-.category-page .new-btn {
+.admi-page .new-btn {
   width: 100%;
   min-height: 50px;
   display: flex;
@@ -1512,10 +1535,10 @@ footer .footer-bottom img {
   padding-top: 20px;
   padding-right: 40px;
 }
-.category-page .new-btn button {
+.admi-page .new-btn button {
   min-width: 180px;
 }
-.category-page .category-list {
+.admi-page .category-list {
   width: 100%;
   height: auto;
   gap: 10px;
@@ -1524,23 +1547,23 @@ footer .footer-bottom img {
   justify-content: space-evenly;
   padding: 20px;
 }
-.category-page .category-list .category-item {
+.admi-page .category-list .category-item {
   background-color: #d9d9d9;
   display: flex;
   width: 100%;
   padding: 10px;
   gap: 10px;
 }
-.category-page .category-list .category-item .category-img {
+.admi-page .category-list .category-item .category-img {
   width: 100px;
   height: 100px;
 }
-.category-page .category-list .category-item .category-img img {
+.admi-page .category-list .category-item .category-img img {
   width: 100px;
   height: 100px;
   object-fit: cover;
 }
-.category-page .category-list .category-info {
+.admi-page .category-list .category-info {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -1548,30 +1571,30 @@ footer .footer-bottom img {
   justify-content: flex-start;
   align-items: center;
 }
-.category-page .category-list .category-info .top-section {
+.admi-page .category-list .category-info .top-section {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
-.category-page .category-list .category-info .top-section .title {
+.admi-page .category-list .category-info .top-section .title {
   width: 100%;
 }
-.category-page .category-list .category-info .top-section .category-button {
+.admi-page .category-list .category-info .top-section .category-button {
   display: flex;
   width: 100%;
   justify-content: flex-end;
   align-items: flex-start;
   gap: 10px;
 }
-.category-page .category-list .category-info .top-section .category-button .delete-btn {
+.admi-page .category-list .category-info .top-section .category-button .delete-btn {
   background-color: rgb(222, 42, 42);
   color: white;
   border: white;
 }
-.category-page .category-list .category-info .top-section .category-button .delete-btn:hover {
+.admi-page .category-list .category-info .top-section .category-button .delete-btn:hover {
   background-color: #a21919;
 }
-.category-page .category-list .category-info .top-section .category-button .button span {
+.admi-page .category-list .category-info .top-section .category-button .button span {
   display: inline;
 }
 
@@ -1581,6 +1604,83 @@ footer .footer-bottom img {
     display: none;
   }
   .category-button button {
+    width: 40px !important;
+  }
+}
+.product-list {
+  width: 100%;
+  height: auto;
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 20px;
+}
+.product-list .product-item {
+  background-color: #d9d9d9;
+  display: flex;
+  width: 100%;
+  padding: 10px;
+  gap: 10px;
+}
+.product-list .product-item .product-img {
+  width: 100px;
+  height: 100px;
+}
+.product-list .product-item .product-img img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+.product-list .product-info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: flex-start;
+  align-items: center;
+}
+.product-list .product-info .row {
+  padding: 10px 0px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+}
+.product-list .product-info .top-section {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.product-list .product-info .top-section .title {
+  width: 100%;
+}
+.product-list .product-info .top-section .product-button {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 10px;
+}
+.product-list .product-info .top-section .product-button .delete-btn {
+  background-color: rgb(222, 42, 42);
+  color: white;
+  border: white;
+}
+.product-list .product-info .top-section .product-button .delete-btn:hover {
+  background-color: #a21919;
+}
+.product-list .product-info .top-section .product-button .button span {
+  display: inline;
+}
+
+@media (max-width: 768px) {
+  .product-button .delete-btn span,
+  .product-button .mod-btn span {
+    display: none;
+  }
+  .product-button button {
     width: 40px !important;
   }
 }

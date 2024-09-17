@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import ProductListContainer from './components/products/productList/ProductListContainer';
 import ProductDetail from './components/products/productDetail/ProductDetail';
 import CategoryListContainer from './components/admin/categories/CategoryListContainer';
+import AdminProductListContainer from './components/admin/products/ProductListContainer';
 // import CartContainer from './components/carts/CartContainer';
 // import CheckoutContainer from './components/checkout/CheckoutContainer';
 // import Login from './components/auth/Login';
@@ -21,6 +22,7 @@ function App() {
             <Route path="/products" element={<ProductListContainer />} />
             <Route path="/products/:id" element={<ProductDetail />} />
             <Route path="/admin/categories" element={<CategoryListContainer />} />
+            <Route path="/admin/products" element={<AdminProductListContainer />} />
           {/* <Route path="/cart" element={<CartContainer />} /> */}
           {/* <Route path="/checkout" element={<CheckoutContainer />} /> */}
           {/* <Route path="/login" element={<Login />} /> */}

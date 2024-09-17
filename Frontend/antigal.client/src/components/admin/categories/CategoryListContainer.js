@@ -4,7 +4,7 @@ import AdminNav from '../AdminNav';
 
 const CategoryListContainer=()=>{
     return(
-    <div className="category-page">
+    <div className="admi-page">
         <AdminNav/>
         <div className='new-btn'>
             <button> + Nueva Categoría </button>
