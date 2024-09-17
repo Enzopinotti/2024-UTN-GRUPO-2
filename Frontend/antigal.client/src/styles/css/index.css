@@ -4,6 +4,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 * {
   box-sizing: border-box;
   margin: 0;
@@ -1607,6 +1608,55 @@ footer .footer-bottom img {
     width: 40px !important;
   }
 }
+.admi-page .form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.admi-page .form-overlay .form {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+}
+.admi-page .form-overlay .form .input {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 0px;
+}
+.admi-page .form-overlay .form .input label {
+  margin-bottom: 5px;
+}
+.admi-page .form-overlay .top-section {
+  display: flex;
+  justify-content: space-between;
+}
+.admi-page .form-overlay .top-section .exit-btn {
+  width: 40px;
+  background-color: white;
+}
+.admi-page .form-overlay .top-section .exit-btn:hover {
+  color: #404040;
+}
+.admi-page .form-overlay .bottom-section {
+  margin: 10px 0px;
+  display: flex;
+  justify-content: space-around;
+}
+.admi-page .form-overlay .bottom-section .create-btn {
+  background-color: #74873D;
+  color: white;
+}
+.admi-page .form-overlay .bottom-section .create-btn:hover {
+  background-color: #475225;
+}
+
 .product-list {
   width: 100%;
   height: auto;

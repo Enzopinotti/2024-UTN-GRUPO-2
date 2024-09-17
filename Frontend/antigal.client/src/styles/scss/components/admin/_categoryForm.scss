@@ -1,0 +1,53 @@
+@import '../../abstract/variables';
+
+.admi-page {
+  .form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  .form{
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px; 
+    .input{
+        display: flex;
+        flex-direction: column;
+        padding: 5px 0px;
+        label{
+            margin-bottom: 5px
+        }
+    }
+  }
+  .top-section{
+    display: flex;
+    justify-content: space-between;
+    .exit-btn{
+        width: 40px;
+        background-color: white;
+        &:hover{
+            color:lighten(black,25%);
+        }
+    }
+  }
+
+  .bottom-section{
+    margin: 10px 0px;
+    display: flex;
+    justify-content: space-around;
+    .create-btn{
+        background-color: $primary-color;
+        color: white;
+        &:hover{
+            background-color: darken($primary-color,15%)
+        }
+    } 
+  }
+    }
+}
