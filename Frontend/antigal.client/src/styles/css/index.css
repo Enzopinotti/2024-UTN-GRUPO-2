@@ -1619,12 +1619,14 @@ footer .footer-bottom img {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 999;
 }
 .admi-page .form-overlay .form {
   background-color: white;
   padding: 20px;
   border-radius: 8px;
   width: 400px;
+  z-index: 1000;
 }
 .admi-page .form-overlay .form .input {
   display: flex;
@@ -1777,6 +1779,12 @@ footer .footer-bottom img {
     width: 40px !important;
   }
 }
+.admi-page .small-input {
+  display: flex;
+  padding: 5px 0px;
+  width: 100%;
+}
+
 * {
   font-family: "Roboto", sans-serif;
 }
