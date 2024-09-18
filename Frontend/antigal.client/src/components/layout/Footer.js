@@ -33,17 +33,17 @@ const Footer = () => {
           <h3>Nosotros</h3>
           <ul>
             <li>
-              <NavLink to="/about" activeClassName="active">
+              <NavLink to="/about" className="active">
                 Sobre Nosotros
               </NavLink>
             </li>
             <li>
-              <NavLink to="/store" activeClassName="active">
+              <NavLink to="/store" className="active">
                 Nuestra Tienda
               </NavLink>
             </li>
             <li>
-              <NavLink to="/products" activeClassName="active">
+              <NavLink to="/products" className="active">
                 Nuestros Productos
               </NavLink>
             </li>
@@ -56,7 +56,7 @@ const Footer = () => {
               <a href="#">FAQ</a>
             </li>
             <li>
-              <NavLink to="/contact" activeClassName="active">
+              <NavLink to="/contact" className="active">
                 Contacto
               </NavLink>
             </li>
