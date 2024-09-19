@@ -33,14 +33,48 @@ const ProductForm = ({ show, onClose }) => {
             <label htmlFor="descripcion">Descripción:</label>
             <textarea id="descripcion" name="descripcion" required />
           </div>
+          <div className="input">
+            <label htmlFor="marca">Marca del producto:</label>
+            <input type="text" id="marca" name="marca" required />
+          </div>
+
           <div className="small-input">
-            <div>
-              <label htmlFor="stock">Stock: </label>
-              <input type="number" id="stock" name="stock" required />
+            <div className="column">
+              <div className="input">
+                <label htmlFor="stock">Stock: </label>
+                <input type="number" id="stock" name="stock" required />
+              </div>
+              <div className="input">
+                <label htmlFor="price">Precio: </label>
+                <input type="text" id="stock" name="stock" required />
+              </div>
             </div>
-            <div>
-              <label htmlFor="price">Precio: </label>
-              <input type="text" id="stock" name="stock" required />
+            <div className="column">
+              <div className="input">
+                <label htmlFor="codBarra">Codigo de Barra:</label>
+                <input type="number" id="codBarra" name="codBarra" required />
+              </div>
+              <div className="input">
+                <p>DESTACADO:</p>
+                <div className="check">
+                  <label for="destacadoHome">Home</label>
+                  <input
+                    type="radio"
+                    id="destacadoHome"
+                    name="destacado"
+                    value="Home"
+                  />
+                </div>
+                <div className="check">
+                  <label for="destacadoNo">No</label>
+                  <input
+                    type="radio"
+                    id="destacadoNo"
+                    name="destacado"
+                    value="No"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -48,6 +82,11 @@ const ProductForm = ({ show, onClose }) => {
             <label htmlFor="imagen">Subir imagen:</label>
             <input type="file" id="imagen" name="imagen" accepts="image/*" />
           </div>
+          
+          <div className="">
+            {/*check box para categorias  */}
+          </div>
+
           <div className="bottom-section">
             <button type="button" onClick={onClose}>
               Cancelar
