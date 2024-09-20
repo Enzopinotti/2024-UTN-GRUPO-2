@@ -21,20 +21,18 @@ namespace antigal.server.Models
         public  float precio { get; set; }
         [Required]
         public  int stock { get; set; }
-
+       
         //RELACION UNO A MUCHOS CON IMAGEN
        
         public List <Imagen> imagenes { get; set; } = new List<Imagen> ();
 
         //RELACION MUCHOS A MUCHOS CON CATEGORIA
-
-
-
         //REVISAR
         [JsonIgnore]
         public List<ProductoCategoria> CategoriaProductos { get; set; } = new List<ProductoCategoria>();
         //REVISAR
-
+        [JsonIgnore]
+        public List<ProductoCategoria> categoriaProductos { get; set; } = new List<ProductoCategoria>();
 
 
         public Producto(int idProducto, string nombre, string marca, string? descripcion, int? codigoBarras, int disponible, int? destacado, float precio, int stock)

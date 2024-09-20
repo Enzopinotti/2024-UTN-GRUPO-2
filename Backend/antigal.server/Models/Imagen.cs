@@ -10,15 +10,9 @@ namespace antigal.server.Models
         public int id { get; set; }
         [Required]
         public required string url { get; set; }
-
         // Clave externa que hace referencia a Producto. Este atributo va a ser la [ForeignKey] que se especifica en AppDbContext.cs
-
         public int idProducto { get; set; }
         // Propiedad de navegación para la relación muchos a uno
-
-
-
-
         //REVISAR
         [JsonIgnore]
         public Producto? Producto { get; set; }

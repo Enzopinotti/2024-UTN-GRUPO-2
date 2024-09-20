@@ -2,7 +2,6 @@ using antigal.server.Models;
 using antigal.server.Relationships;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace antigal.server.Data
 {
     public class AppDbContext : DbContext
@@ -30,7 +29,7 @@ namespace antigal.server.Data
 
             modelBuilder.Entity<ProductoCategoria>()
                 .HasOne(cp => cp.Producto)
-                .WithMany(p => p.CategoriaProductos)
+                .WithMany(p => p.categoriaProductos)
                 .HasForeignKey(cp => cp.idProducto);
 
             modelBuilder.Entity<ProductoCategoria>()

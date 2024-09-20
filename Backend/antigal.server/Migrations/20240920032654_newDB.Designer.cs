@@ -12,8 +12,8 @@ using antigal.server.Data;
 namespace antigal.server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240916051412_RelacionProductoCategorias")]
-    partial class RelacionProductoCategorias
+    [Migration("20240920032654_newDB")]
+    partial class newDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -111,15 +111,20 @@ namespace antigal.server.Migrations
 
             modelBuilder.Entity("antigal.server.Relationships.ProductoCategoria", b =>
                 {
-                    b.Property<int>("ProductoId")
+                    b.Property<int>("idProducto")
                         .HasColumnType("int");
 
-                    b.Property<int>("CategoriaId")
+                    b.Property<int>("idCategoria")
                         .HasColumnType("int");
 
-                    b.HasKey("ProductoId", "CategoriaId");
+                    b.Property<int?>("ProductoidProducto")
+                        .HasColumnType("int");
 
-                    b.HasIndex("CategoriaId");
+                    b.HasKey("idProducto", "idCategoria");
+
+                    b.HasIndex("ProductoidProducto");
+
+                    b.HasIndex("idCategoria");
 
                     b.ToTable("ProductoCategoria");
                 });
@@ -137,15 +142,19 @@ namespace antigal.server.Migrations
 
             modelBuilder.Entity("antigal.server.Relationships.ProductoCategoria", b =>
                 {
+                    b.HasOne("antigal.server.Models.Producto", null)
+                        .WithMany("CategoriaProductos")
+                        .HasForeignKey("ProductoidProducto");
+
                     b.HasOne("antigal.server.Models.Categoria", "Categoria")
                         .WithMany("CategoriaProductos")
-                        .HasForeignKey("CategoriaId")
+                        .HasForeignKey("idCategoria")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("antigal.server.Models.Producto", "Producto")
-                        .WithMany("CategoriaProductos")
-                        .HasForeignKey("ProductoId")
+                        .WithMany("categoriaProductos")
+                        .HasForeignKey("idProducto")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -162,6 +171,8 @@ namespace antigal.server.Migrations
             modelBuilder.Entity("antigal.server.Models.Producto", b =>
                 {
                     b.Navigation("CategoriaProductos");
+
+                    b.Navigation("categoriaProductos");
 
                     b.Navigation("imagenes");
                 });

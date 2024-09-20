@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace antigal.server.Services
 {
@@ -56,8 +57,21 @@ namespace antigal.server.Services
         {
             try
             {
-                var producto = _context.Productos.FirstOrDefault(p => p.nombre == nombre);
-                _response.Data = producto;
+                var normalizedNombre = nombre.ToLower();
+                // Obtener productos del contexto de datos
+                var productos = _context.Productos
+                .Where(p => p.nombre.ToLower().Contains(normalizedNombre))
+                .Select(p => new
+                {
+                    p.idProducto,
+                    p.nombre,
+                    p.marca
+                })
+                .ToList(); // Ejecutar la consulta
+
+                // Asignar los productos encontrados a la respuesta
+                _response.Data = productos;
+                _response.IsSuccess = true; // Indicar éxito
             }
             catch (Exception ex)
             {

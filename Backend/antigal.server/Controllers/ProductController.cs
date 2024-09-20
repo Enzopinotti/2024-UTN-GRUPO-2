@@ -17,40 +17,41 @@ namespace antigal.server.Controllers
             _productService = productService;
         }
 
-        [HttpGet("GetProduct")]
+        [HttpGet("getProduct")]
         public ResponseDto GetProduct()
         {
             return _productService.GetProducts();
         }
 
-        [HttpGet("GetProductById/{id}")]
+        [HttpGet("getProductById/{id}")]
         public ResponseDto GetProductById(int id)
         {
             return _productService.GetProductById(id);
         }
 
-        [HttpGet("GetProductByTitle/{nombre}")]
+        [HttpGet("getProductByTitle/{nombre}")]
         public ResponseDto GetProductByTitle(string nombre)
         {
             return _productService.GetProductByTitle(nombre);
         }
 
-        [HttpPost("PostProduct")]
+        [HttpPost("addProduct")]
         public ResponseDto PostProduct([FromBody] Producto producto)
         {
             return _productService.AddProduct(producto);
         }
 
-        [HttpDelete("DeleteProduct/{int id}")]
+        [HttpPut("updateProduct")]
+        public ResponseDto PutProduct([FromBody] Producto producto)
+        {
+            return _productService.PutProduct(producto);
+        }
+
+        [HttpDelete("deleteProduct/{id}")]
         public ResponseDto DeleteProduct(int id)
         {
             return _productService.DeleteProduct(id);
         }
 
-        [HttpPut("PutProduct")]
-        public ResponseDto PutProduct([FromBody] Producto producto)
-        {
-            return _productService.PutProduct(producto);
-        }
     }
 }

@@ -13,8 +13,11 @@ namespace antigal.server
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            //SERVICIOS
             // Inyección del servicio IProductService y su implementación ProductService
             builder.Services.AddScoped<IProductService, ProductService>();
+            // Inyección del servicio ICategoryService y su implementación CategoryService
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
 
             // Agregar servicios adicionales (controladores, etc.)
             builder.Services.AddControllers();

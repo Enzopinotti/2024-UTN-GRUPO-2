@@ -114,7 +114,12 @@ namespace antigal.server.Migrations
                     b.Property<int>("idCategoria")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ProductoidProducto")
+                        .HasColumnType("int");
+
                     b.HasKey("idProducto", "idCategoria");
+
+                    b.HasIndex("ProductoidProducto");
 
                     b.HasIndex("idCategoria");
 
@@ -134,6 +139,10 @@ namespace antigal.server.Migrations
 
             modelBuilder.Entity("antigal.server.Relationships.ProductoCategoria", b =>
                 {
+                    b.HasOne("antigal.server.Models.Producto", null)
+                        .WithMany("CategoriaProductos")
+                        .HasForeignKey("ProductoidProducto");
+
                     b.HasOne("antigal.server.Models.Categoria", "Categoria")
                         .WithMany("CategoriaProductos")
                         .HasForeignKey("idCategoria")
@@ -141,7 +150,7 @@ namespace antigal.server.Migrations
                         .IsRequired();
 
                     b.HasOne("antigal.server.Models.Producto", "Producto")
-                        .WithMany("CategoriaProductos")
+                        .WithMany("categoriaProductos")
                         .HasForeignKey("idProducto")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -159,6 +168,8 @@ namespace antigal.server.Migrations
             modelBuilder.Entity("antigal.server.Models.Producto", b =>
                 {
                     b.Navigation("CategoriaProductos");
+
+                    b.Navigation("categoriaProductos");
 
                     b.Navigation("imagenes");
                 });
