@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace antigal.server.Models
 {
@@ -15,7 +16,16 @@ namespace antigal.server.Models
         public int idProducto { get; set; }
         // Propiedad de navegación para la relación muchos a uno
 
+
+
+
+        //REVISAR
+        [JsonIgnore]
         public Producto? Producto { get; set; }
+        //REVISAR
+
+
+
 
         public Imagen (int id, string url, int idProducto)
         {

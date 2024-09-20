@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using antigal.server.Data;
-using antigal.server.Controllers;
-
+using antigal.server.Services;
 namespace antigal.server
 {
     public class Program
@@ -13,6 +12,9 @@ namespace antigal.server
             // Agregar el contexto de la base de datos al contenedor de servicios
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            // Inyección del servicio IProductService y su implementación ProductService
+            builder.Services.AddScoped<IProductService, ProductService>();
 
             // Agregar servicios adicionales (controladores, etc.)
             builder.Services.AddControllers();
@@ -36,12 +38,11 @@ namespace antigal.server
 
             app.MapControllers();
 
-                        app.MapProductoEndpoints();
-
             app.Run();
+
 
         }
 
-    }
+    } 
 }
 

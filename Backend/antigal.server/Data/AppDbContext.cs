@@ -1,10 +1,7 @@
 using antigal.server.Models;
 using antigal.server.Relationships;
 using Microsoft.EntityFrameworkCore;
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 
 namespace antigal.server.Data
 {

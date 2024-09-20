@@ -1,5 +1,6 @@
 ﻿using antigal.server.Relationships;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace antigal.server.Models
 {
@@ -22,10 +23,19 @@ namespace antigal.server.Models
         public  int stock { get; set; }
 
         //RELACION UNO A MUCHOS CON IMAGEN
+       
         public List <Imagen> imagenes { get; set; } = new List<Imagen> ();
 
         //RELACION MUCHOS A MUCHOS CON CATEGORIA
+
+
+
+        //REVISAR
+        [JsonIgnore]
         public List<ProductoCategoria> CategoriaProductos { get; set; } = new List<ProductoCategoria>();
+        //REVISAR
+
+
 
         public Producto(int idProducto, string nombre, string marca, string? descripcion, int? codigoBarras, int disponible, int? destacado, float precio, int stock)
         {
