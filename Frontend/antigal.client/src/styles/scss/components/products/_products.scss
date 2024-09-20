@@ -1,0 +1,145 @@
+.product-item {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    overflow: hidden;
+    position: relative;
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
+
+    
+    .sale-tag {
+      background-color: #68be85;
+      color: white;
+      font-size: 0.85em;
+      padding: 4px 8px;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      border-radius: 15px;
+      -webkit-border-radius: 15px;
+      -moz-border-radius: 15px;
+      -ms-border-radius: 15px;
+      -o-border-radius: 15px;
+}
+  
+    .imageAndIcons {
+      background-color: #74873d32;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 10px;
+        align-items: flex-start;
+      img {
+        width: 85%;
+        max-width: 100%; // Asegura que la imagen no se desborde del contenedor
+        aspect-ratio: 4 / 3;
+        object-fit: contain;
+        border-radius: 15px;
+      }
+  
+      .actions {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%; // Asegura que los botones se distribuyan a lo ancho del contenedor
+        button {
+          background: none;
+          border: none;
+          cursor: pointer;
+          font-size: 1.2em;
+  
+          &.like-button {
+            color: #ff6347;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            animation: none; // La animación solo se aplicará cuando se dé o quite un like
+            transition: transform 0.2s ease-in-out; // Suavizar la transición
+            // Aplicar la animación cuando el botón se haga clic
+            &:active {
+                animation: likeAnimation 0.5s ease-in-out; // Aplicar la animación completa
+            }
+          }
+  
+            &.cart-button {
+                position: relative;
+                background: none;
+                border: none;
+                cursor: pointer;
+                .cart-count {
+                    position: absolute;
+                    top: -10px;
+                    right: -5px;
+                    background-color: red;
+                    color: white;
+                    border-radius: 50%;
+                    padding: 3px 6px;
+                    font-size: 0.7em;
+                    font-weight: bold;
+                    transition: transform 0.3s ease-in-out;
+                
+                    &.animate {
+                        animation: cartCountGrow 0.5s ease-in-out;
+                        -webkit-animation: cartCountGrow 0.5s ease-in-out;
+                    }
+                }
+            }
+        }
+      }
+    }
+  
+    .info {
+      padding: 10px;
+  
+      h3, .category, .offerPrice {
+        margin: 5px 0;
+      }
+  
+      .precioAnterior {
+        text-decoration: line-through;
+        color: #888;
+      }
+  
+      .precioOferta {
+        color: black;
+        font-weight: bold;
+  
+        &.onSale {
+          color: #4CAF50;
+        }
+      }
+    }
+  }
+  
+  
+  // Media Queries para ajustar la disposición de los productos según el tamaño de pantalla
+  @media (min-width: 480px) { // Dos productos por fila en tabletas pequeñas
+    .product-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+  
+    .product-item {
+      width: calc(50% - 20px); // Se ajusta para dos productos por fila con un margen
+    }
+  }
+  
+  @media (min-width: 768px) { // Tres productos por fila en tabletas grandes
+    .product-item {
+      width: calc(33.333% - 20px); // Se ajusta para tres productos por fila
+    }
+  }
+  
+  @media (min-width: 1024px) { // Cuatro productos por fila en pantallas grandes
+    .product-item {
+      width: calc(25% - 20px); // Se ajusta para cuatro productos por fila
+    }
+  }
+  
