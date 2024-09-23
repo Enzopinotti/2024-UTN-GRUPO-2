@@ -15,8 +15,6 @@ const Product = ({ product }) => {
 
   const { addToCart, removeFromCart } = useContext(CartContext);  // Usar el contexto del carrito
 
-  const [animateCartCount, setAnimateCartCount] = useState(false);  // Estado para controlar la animación del contador
-
   useEffect(() => {
     localStorage.setItem(`liked-${product.id}`, JSON.stringify(liked));
   }, [liked, product.id]);
@@ -41,13 +39,7 @@ const Product = ({ product }) => {
       confirmButtonText: 'Cerrar'
     });
 
-    // Activar la animación en el contador
-    setAnimateCartCount(true);
-
-    // Desactivar la animación después de un corto tiempo
-    setTimeout(() => {
-      setAnimateCartCount(false);
-    }, 500);  // Duración de la animación
+    
   };
 
   const handleLike = () => {
@@ -83,23 +75,6 @@ const Product = ({ product }) => {
               alt="like icon"
             /> 
           </button>
-          
-          {/* Botón de carrito */}
-          <button className="cart-button" onClick={handleAddToCart}>
-            <img src='./icons/cartCardIcon.png' alt="cart icon" />
-            {cartCount > 0 && (
-              <span className={`cart-count ${animateCartCount ? 'animate' : ''}`}>
-                {cartCount}
-              </span>
-            )}
-          </button>
-
-          {/* Botón para eliminar el producto del carrito */}
-          {cartCount > 0 && (
-            <button className="remove-button" onClick={handleRemoveFromCart}>
-              X
-            </button>
-          )}
         </div>
       </article>
       
@@ -117,6 +92,21 @@ const Product = ({ product }) => {
             ${product.onSale ? parseFloat(product.salePrice).toFixed(2) : parseFloat(product.price).toFixed(2)}
           </span>
         </p>
+      </div>
+      <div>
+        <section className='buttonsContainer'>
+          <article className='cartButton' onClick={handleAddToCart}>
+            <div>Agregar al Carrito</div>
+            <img src='./icons/cartCardIcon.svg' alt='Icono de carrito de Antigal' />
+
+          </article>
+          
+          <article className='cartDeleteButton' onClick={handleRemoveFromCart}>
+            <div>Eliminar del Carrito</div>
+            <img src='./icons/closeCardIcon.svg' alt='Icono de cerrar de Antigal' />
+
+          </article>
+        </section>
       </div>
     </div>
   );
