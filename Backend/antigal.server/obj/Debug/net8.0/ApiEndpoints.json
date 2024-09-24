@@ -298,5 +298,31 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.ProductController",
+    "Method": "UploadProductsFromExcel",
+    "RelativePath": "api/Product/uploadProductsFromExcel",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "antigal.server.Models.Dto.ResponseDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   }
 ]

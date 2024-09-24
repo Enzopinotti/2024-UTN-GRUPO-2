@@ -53,5 +53,11 @@ namespace antigal.server.Controllers
             return _productService.DeleteProduct(id);
         }
 
+        [HttpPost("uploadProductsFromExcel")]
+        public ResponseDto UploadProductsFromExcel(IFormFile file)
+        {
+            return _productService.ImportProductsFromExcel(file);
+        }
+
     }
 }

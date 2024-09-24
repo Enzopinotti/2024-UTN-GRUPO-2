@@ -4,6 +4,7 @@ using antigal.server.Models;
 using antigal.server.Models.Dto;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using NPOI.XSSF.UserModel;
 using System.Collections.Generic;
 using System.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -140,6 +141,85 @@ namespace antigal.server.Services
             }
 
             return _response;
+        }
+        public ResponseDto ImportProductsFromExcel(IFormFile file)
+        {
+            var response = new ResponseDto();
+
+            try
+            {
+                using (var stream = new MemoryStream())
+                {
+                    file.CopyTo(stream);
+                    stream.Position = 0;
+
+                    // Usamos NPOI para leer el archivo Excel
+                    XSSFWorkbook workbook = new XSSFWorkbook(stream);
+                    var sheet = workbook.GetSheetAt(0); // Suponemos que el primer sheet contiene los productos
+
+                    for (int i = 1; i <= sheet.LastRowNum; i++) // Saltamos la primera fila de encabezado
+                    {
+                        var row = sheet.GetRow(i);
+                        if (row == null) continue;
+
+                        // Validaciones de los datos
+                        var nombre = row.GetCell(0)?.ToString();
+                        var marca = row.GetCell(1)?.ToString();
+                        var descripcion = row.GetCell(2)?.ToString();
+                        var codigoBarrasCell = row.GetCell(3)?.ToString();
+                        var disponibleCell = row.GetCell(4)?.ToString();
+                        var destacadoCell = row.GetCell(5)?.ToString();
+                        var precioCell = row.GetCell(6)?.ToString();
+                        var stockCell = row.GetCell(7)?.ToString();
+
+                        if (string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(marca) ||
+                            !int.TryParse(codigoBarrasCell, out int codigoBarras) ||
+                            !int.TryParse(disponibleCell, out int disponible) ||
+                            !float.TryParse(precioCell, out float precio) ||
+                            !int.TryParse(stockCell, out int stock))
+                        {
+                            response.IsSuccess = false;
+                            response.Message = $"Error en la fila {i + 1}: datos inválidos.";
+                            return response;
+                        }
+
+                        // Validamos si destacado es nulo o no
+                        int? destacado = null;
+                        if (int.TryParse(destacadoCell, out int destacadoVal))
+                        {
+                            destacado = destacadoVal;
+                        }
+
+                        // Creamos un nuevo producto basado en los datos del Excel
+                        Producto producto = new Producto
+                        {
+                            nombre = nombre,
+                            marca = marca,
+                            descripcion = descripcion,
+                            codigoBarras = codigoBarras,
+                            disponible = disponible,
+                            destacado = destacado,
+                            precio = precio,
+                            stock = stock
+                        };
+
+                        // Agregamos el producto a la base de datos
+                        _context.Productos.Add(producto);
+                    }
+
+                    _context.SaveChanges();
+                }
+
+                response.IsSuccess = true;
+                response.Message = "Productos importados exitosamente.";
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = $"Error al procesar el archivo: {ex.Message}";
+            }
+
+            return response;
         }
     }
 }
