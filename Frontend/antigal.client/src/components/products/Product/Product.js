@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { CartContext } from '../../../contexts/CartContext';  // Importar el contexto del carrito
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import formatCamelCase from '../../../utils/formatCamelCase';  // Importamos la función para formatear
 
 const Product = ({ product }) => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Product = ({ product }) => {
     return savedCount || 0;
   });
 
-  const { addToCart, removeFromCart } = useContext(CartContext);  // Usar el contexto del carrito
+  const { addToCart } = useContext(CartContext);  // Usar el contexto del carrito
 
   useEffect(() => {
     localStorage.setItem(`liked-${product.id}`, JSON.stringify(liked));
@@ -38,25 +39,12 @@ const Product = ({ product }) => {
       icon: 'success',
       confirmButtonText: 'Cerrar'
     });
-
-    
   };
 
   const handleLike = () => {
     setLiked(!liked);
   };
 
-  // Nueva función para eliminar todos los productos de un tipo específico
-  const handleRemoveFromCart = () => {
-    setCartCount(0);  // Reiniciar el contador local
-    removeFromCart(product.id);  // Llamar a la función del contexto para eliminar el producto
-    Swal.fire({
-      title: 'Producto eliminado',
-      text: 'El producto ha sido eliminado del carrito',
-      icon: 'info',
-      confirmButtonText: 'Cerrar'
-    });
-  };
 
   return (
     <div className="product-item">
@@ -79,8 +67,11 @@ const Product = ({ product }) => {
       </article>
       
       <div className="info">
-        <h3>{product.name}</h3>
-        <p className="category">Categoría: {product.category}</p>
+        {/* Aplicamos la función formatCamelCase al nombre del producto */}
+        <h3>{formatCamelCase(product.name)}</h3>
+        
+        {/* Aplicamos la función formatCamelCase a la categoría */}
+        <p className="category">{formatCamelCase(product.category)}</p>
         
         <p className="offerPrice">
           {product.onSale && (
@@ -98,13 +89,6 @@ const Product = ({ product }) => {
           <article className='cartButton' onClick={handleAddToCart}>
             <div>Agregar al Carrito</div>
             <img src='./icons/cartCardIcon.svg' alt='Icono de carrito de Antigal' />
-
-          </article>
-          
-          <article className='cartDeleteButton' onClick={handleRemoveFromCart}>
-            <div>Eliminar del Carrito</div>
-            <img src='./icons/closeCardIcon.svg' alt='Icono de cerrar de Antigal' />
-
           </article>
         </section>
       </div>

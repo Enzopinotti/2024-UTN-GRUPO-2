@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import formatCamelCase from '../../utils/formatCamelCase';  // Importamos la función
 
 const Breadcrumb = () => {
   const location = useLocation();
@@ -13,10 +14,13 @@ const Breadcrumb = () => {
           const to = `/${pathnames.slice(0, index + 1).join('/')}`;
           const isLast = index === pathnames.length - 1;
 
+          // Aplicamos formatCamelCase al valor del segmento
+          const formattedValue = formatCamelCase(value);
+
           return isLast ? (
-            <><span> &gt;</span><span key={to} className="active">  {value}</span></> // Último segmento activo en naranja
+            <><span> <img className='imgBread' src='/icons/flechaBreadgrumb.svg' /></span><span key={to} className="active">  {formattedValue}</span></> // Último segmento activo en naranja
           ) : (
-            <><span> &gt;</span><span key={to}> &gt; <Link to={to}>{value}</Link></span></>
+            <><span> &gt;</span><span key={to}><Link to={to}>{formattedValue}</Link></span></>
           );
         })}
       </p>

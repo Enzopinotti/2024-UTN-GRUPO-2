@@ -1,9 +1,21 @@
-// src/components/common/NavBar.js
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import Swal from 'sweetalert2'; // Importamos SweetAlert2
 
 const NavBar = ({ vertical = false, onLinkClick = () => {} }) => {
+
+  // Función para mostrar mensaje de "Funcionalidad en Desarrollo"
+  const showDevelopmentAlert = (event) => {
+    event.preventDefault(); // Evitar la navegación por ahora
+    Swal.fire({
+      title: 'Funcionalidad en Desarrollo',
+      text: 'Esta sección estará disponible pronto.',
+      icon: 'info',
+      confirmButtonText: 'Cerrar'
+    });
+  };
+
   return (
     <nav className={vertical ? 'nav-vertical' : 'nav-horizontal'}>
       <ul>
@@ -26,10 +38,11 @@ const NavBar = ({ vertical = false, onLinkClick = () => {} }) => {
           </NavLink>
         </li>
         <li>
+          {/* Mantener NavLink pero con alerta de desarrollo */}
           <NavLink 
             to="/about" 
             className={({ isActive }) => isActive ? 'active' : undefined}
-            onClick={onLinkClick}
+            onClick={showDevelopmentAlert}  // Mostrar mensaje de desarrollo
           >
             Sobre Nosotros
           </NavLink>
@@ -38,7 +51,7 @@ const NavBar = ({ vertical = false, onLinkClick = () => {} }) => {
           <NavLink 
             to="/store" 
             className={({ isActive }) => isActive ? 'active' : undefined}
-            onClick={onLinkClick}
+            onClick={showDevelopmentAlert}  // Mostrar mensaje de desarrollo
           >
             Tienda Física
           </NavLink>
@@ -47,7 +60,7 @@ const NavBar = ({ vertical = false, onLinkClick = () => {} }) => {
           <NavLink 
             to="/contact" 
             className={({ isActive }) => isActive ? 'active' : undefined}
-            onClick={onLinkClick}
+            onClick={showDevelopmentAlert}  // Mostrar mensaje de desarrollo
           >
             Contacto
           </NavLink>

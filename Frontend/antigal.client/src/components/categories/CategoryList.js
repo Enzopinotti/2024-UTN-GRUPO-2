@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import formatCamelCase from '../../utils/formatCamelCase'; // Importamos la función de utilidades
 
 const CategoryList = ({ categories, onCategoryClick, selectedCategory }) => {
   return (
@@ -12,7 +13,9 @@ const CategoryList = ({ categories, onCategoryClick, selectedCategory }) => {
             className={category.name === selectedCategory ? 'active' : ''}
             onClick={() => onCategoryClick(category.name)}
           >
-            <span>{category.name}</span> <span>({category.count})</span>
+            {/* Formateamos el nombre de la categoría con la función formatCamelCase */}
+            <span>{formatCamelCase(category.name)}</span> 
+            <span>({category.count})</span>
           </li>
         ))}
       </ul>
