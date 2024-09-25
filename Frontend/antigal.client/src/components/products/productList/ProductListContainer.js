@@ -6,6 +6,7 @@ import CartPreview from '../../carts/CartPreview'; // Importamos el CartPreview
 import { useLocation } from 'react-router-dom';
 import LoadingSVG from '../../common/LoadingSVG'; // Animación de carga
 import ErrorAnimation from '../../common/ErrorAnimation'; // Animación de error
+import Banner from '../../common/Banner';
 
 const ProductListContainer = () => {
   const [products, setProducts] = useState([]);
@@ -82,15 +83,15 @@ const ProductListContainer = () => {
 
   return (
     <div className="products-page">
-      {/* En mobile, mostramos el botón de filtro y el breadcrumb */}
+      
       <div className="mobile-filters">
         <button className="filter-button" onClick={toggleDropdown}>
           <img src="/icons/filterIcon.svg" alt="Filter" />
         </button>
-        <Breadcrumb currentLocation={location.pathname} /> {/* Breadcrumb dinámico */}
+        <Breadcrumb currentLocation={location.pathname} /> 
       </div>
 
-      {/* Dropdown de categorías en mobile */}
+      
       {isDropdownOpen && (
         <div className="categories-dropdown open">
           <CategoryList
@@ -124,7 +125,10 @@ const ProductListContainer = () => {
               <h2>Oops... Algo salió mal. Intenta de nuevo más tarde.</h2>
             </div>
           ) : (
-            <ProductList products={filteredProducts} />
+            <>
+              <Banner />
+              <ProductList products={filteredProducts} />
+            </>
           )}
         </div>
 

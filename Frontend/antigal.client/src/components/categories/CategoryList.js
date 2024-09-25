@@ -8,15 +8,21 @@ const CategoryList = ({ categories, onCategoryClick, selectedCategory }) => {
       <h3>Categorías</h3>
       <ul>
         {categories.map((category) => (
-          <li
-            key={category.name}
-            className={category.name === selectedCategory ? 'active' : ''}
-            onClick={() => onCategoryClick(category.name)}
-          >
-            {/* Formateamos el nombre de la categoría con la función formatCamelCase */}
-            <span>{formatCamelCase(category.name)}</span> 
-            <span>({category.count})</span>
-          </li>
+          <div>
+            <li
+              key={category.name}
+              className={category.name === selectedCategory ? 'active' : ''}
+              onClick={() => onCategoryClick(category.name)}
+            >
+              {/* Formateamos el nombre de la categoría con la función formatCamelCase */}
+              <span>{formatCamelCase(category.name)}</span> 
+              <span>({category.count})</span>
+            </li>
+            <hr></hr>
+          </div>
+            
+          
+          
         ))}
       </ul>
     </div>

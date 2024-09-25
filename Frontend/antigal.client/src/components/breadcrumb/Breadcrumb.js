@@ -20,7 +20,7 @@ const Breadcrumb = () => {
           return isLast ? (
             <><span> <img className='imgBread' src='/icons/flechaBreadgrumb.svg' /></span><span key={to} className="active">  {formattedValue}</span></> // Último segmento activo en naranja
           ) : (
-            <><span> &gt;</span><span key={to}><Link to={to}>{formattedValue}</Link></span></>
+            <><span> <img className='imgBread' src='/icons/flechaBreadgrumb.svg' /></span><span key={to}><Link to={to}>{formattedValue}</Link></span></>
           );
         })}
       </p>

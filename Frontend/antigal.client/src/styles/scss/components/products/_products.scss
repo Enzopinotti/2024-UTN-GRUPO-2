@@ -28,7 +28,13 @@
       font-size: 14px;
       color: $primary-black-color;
       margin: 0;
-
+      .imgBread{
+        width: 0.54rem;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+        position: relative;
+        top: 0.2rem;
+      }
       a {
         color: $primary-black-color;
         text-decoration: none;
@@ -107,6 +113,9 @@
 
   .product-list-container{
     width: 100%;
+    .banner-container{
+      display: none;
+    }
     .error-container{
       margin-top: 6rem;
       margin-bottom: 6rem;
@@ -329,7 +338,7 @@
       .categories-aside {
         display: block;
         width: 20%; // Ajustamos el ancho del aside
-        padding-left: 2rem;
+        padding-left: 1.5rem;
         .breadcrumb{
           margin-bottom: 2rem;
           .imgBread{
@@ -345,18 +354,59 @@
             margin-bottom: 1.5rem;
           }
           ul{
-            li{
-              display: flex;
-              justify-content: space-between;
-              margin-bottom: 0.7rem;
-              &.active{
-                color: $secondary-color;
+            
+              li{
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 0.7rem;
+                margin-top: 0.7rem;
+                cursor: pointer;
+                &.active{
+                  color: $secondary-color;
+                  text-shadow: $secondary-color 1px 1px 2px;
+                }
               }
-            }
+              
+            
+            
           }
         }
       }
       .product-list-container{
+        .banner-container{
+          display: flex;
+          padding-left: 2.6rem;
+          padding-right: 2.6rem;
+          margin-bottom: 2rem;
+          position: relative;
+          width: 100%;
+          align-items: center;
+          justify-content: center;
+          .banner-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            opacity: 0.5; /* Menor opacidad cuando no se pueden usar */
+            &:hover {
+              opacity: 0.8; /* Mayor opacidad al pasar el ratón por encima */
+            }
+            &.disabled {
+              pointer-events: none; /* Desactivar interacción si está deshabilitado */
+            }
+            &.banner-prev {
+              left: 14px;
+            }
+            &.banner-next {
+              right: 14px;
+            }
+            img{
+              width: 20px;
+            }
+          }
+        }
         .loading-container{
           margin-top: 6rem;
           margin-bottom: 6rem;

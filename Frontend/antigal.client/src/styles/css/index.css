@@ -1407,6 +1407,13 @@ footer .footer-bottom img {
   color: #222222;
   margin: 0;
 }
+.products-page .breadcrumb p .imgBread {
+  width: 0.54rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  position: relative;
+  top: 0.2rem;
+}
 .products-page .breadcrumb p a {
   color: #222222;
   text-decoration: none;
@@ -1467,6 +1474,9 @@ footer .footer-bottom img {
 }
 .products-page .product-list-container {
   width: 100%;
+}
+.products-page .product-list-container .banner-container {
+  display: none;
 }
 .products-page .product-list-container .error-container {
   margin-top: 6rem;
@@ -1662,7 +1672,7 @@ footer .footer-bottom img {
   .products-page .asideYProductos .categories-aside {
     display: block;
     width: 20%;
-    padding-left: 2rem;
+    padding-left: 1.5rem;
   }
   .products-page .asideYProductos .categories-aside .breadcrumb {
     margin-bottom: 2rem;
@@ -1681,9 +1691,46 @@ footer .footer-bottom img {
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.7rem;
+    margin-top: 0.7rem;
+    cursor: pointer;
   }
   .products-page .asideYProductos .categories-aside .category-list ul li.active {
     color: #ED8B00;
+    text-shadow: #ED8B00 1px 1px 2px;
+  }
+  .products-page .asideYProductos .product-list-container .banner-container {
+    display: flex;
+    padding-left: 2.6rem;
+    padding-right: 2.6rem;
+    margin-bottom: 2rem;
+    position: relative;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+  .products-page .asideYProductos .product-list-container .banner-container .banner-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    opacity: 0.5; /* Menor opacidad cuando no se pueden usar */
+  }
+  .products-page .asideYProductos .product-list-container .banner-container .banner-nav:hover {
+    opacity: 0.8; /* Mayor opacidad al pasar el ratón por encima */
+  }
+  .products-page .asideYProductos .product-list-container .banner-container .banner-nav.disabled {
+    pointer-events: none; /* Desactivar interacción si está deshabilitado */
+  }
+  .products-page .asideYProductos .product-list-container .banner-container .banner-nav.banner-prev {
+    left: 14px;
+  }
+  .products-page .asideYProductos .product-list-container .banner-container .banner-nav.banner-next {
+    right: 14px;
+  }
+  .products-page .asideYProductos .product-list-container .banner-container .banner-nav img {
+    width: 20px;
   }
   .products-page .asideYProductos .product-list-container .loading-container {
     margin-top: 6rem;
