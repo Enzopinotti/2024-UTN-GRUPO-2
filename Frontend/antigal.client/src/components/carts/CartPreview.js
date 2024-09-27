@@ -18,24 +18,40 @@ const CartPreview = () => {
         <p className="empty-cart-message">No hay productos en el carrito.</p>
       ) : (
         <ul className="cart-items-list">
-          {cartItems.map(item => (
+          {cartItems.map((item) => (
             <li key={item.id} className="cart-item">
               <div className="cart-item-details">
-                <img src={item.imageUrl} alt={item.name} width={50} className="cart-item-image" />
-                <span className="cart-item-name">{item.name}</span>
+                <img src={item.imageUrl} alt={item.name} className="cart-item-image" />
+                <div className="cart-item-info">
+                  <span className="cart-item-name">{item.name}</span>
+                  <span className="cart-item-price">
+                    ${item.price.toFixed(2)} x {item.quantity} = ${(item.price * item.quantity).toFixed(2)}
+                  </span>
+                </div>
               </div>
-              <div className="cart-item-quantity">
-                <button className="quantity-button" onClick={() => addToCart(item, 1)}>+</button>
-                <span className="quantity-value">{item.quantity}</span>
-                <button className="quantity-button" onClick={() => addToCart(item, -1)}>-</button>
+              <div className="cart-item-actions">
+                <div className="cart-item-quantity">
+                  <button
+                    className="quantity-button"
+                    onClick={() => addToCart(item, -1)}
+                    disabled={item.quantity <= 1}
+                  >
+                    -
+                  </button>
+                  <span className="quantity-value">{item.quantity}</span>
+                  <button className="quantity-button" onClick={() => addToCart(item, 1)}>
+                    +
+                  </button>
+                </div>
+                <button className="remove-button" onClick={() => removeFromCart(item.id)}>
+                  Eliminar
+                </button>
               </div>
-              <span className="cart-item-price">${(item.price * item.quantity).toFixed(2)}</span>
-              <button className="remove-button" onClick={() => removeFromCart(item.id)}>Eliminar</button>
             </li>
           ))}
         </ul>
       )}
-      
+
       <div className="cart-summary">
         <p className="cart-subtotal">Subtotal: ${subtotal.toFixed(2)}</p>
         <p className="cart-taxes">Impuestos (10%): ${taxes.toFixed(2)}</p>

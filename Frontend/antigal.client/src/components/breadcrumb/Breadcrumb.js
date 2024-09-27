@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import formatCamelCase from '../../utils/formatCamelCase';  // Importamos la función
+import formatCamelCase from '../../utils/formatCamelCase';
 
 const Breadcrumb = () => {
   const location = useLocation();
-  const pathnames = location.pathname.split('/').filter((item) => item); // Dividimos la ruta en segmentos
+  const pathnames = location.pathname.split('/').filter((item) => item);
 
   return (
     <div className="breadcrumb">
@@ -13,14 +13,24 @@ const Breadcrumb = () => {
         {pathnames.map((value, index) => {
           const to = `/${pathnames.slice(0, index + 1).join('/')}`;
           const isLast = index === pathnames.length - 1;
-
-          // Aplicamos formatCamelCase al valor del segmento
           const formattedValue = formatCamelCase(value);
 
           return isLast ? (
-            <><span> <img className='imgBread' src='/icons/flechaBreadgrumb.svg' /></span><span key={to} className="active">  {formattedValue}</span></> // Último segmento activo en naranja
+            <React.Fragment key={to}>
+              <span>
+                <img className='imgBread' src='/icons/flechaBreadgrumb.svg' alt='flecha de Antigal' />
+              </span>
+              <span className="active">{formattedValue}</span>
+            </React.Fragment>
           ) : (
-            <><span> <img className='imgBread' src='/icons/flechaBreadgrumb.svg' /></span><span key={to}><Link to={to}>{formattedValue}</Link></span></>
+            <React.Fragment key={to}>
+              <span>
+                <img className='imgBread' src='/icons/flechaBreadgrumb.svg' alt='flecha de Antigal' />
+              </span>
+              <span>
+                <Link to={to}>{formattedValue}</Link>
+              </span>
+            </React.Fragment>
           );
         })}
       </p>

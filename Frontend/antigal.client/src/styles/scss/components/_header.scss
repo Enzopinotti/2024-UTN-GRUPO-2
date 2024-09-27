@@ -85,6 +85,7 @@
     position: relative;
     .cart-widget{
       position: relative;
+      user-select: none;
       .cart-count {
         position: absolute;
         top: -10px;

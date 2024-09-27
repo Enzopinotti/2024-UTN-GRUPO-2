@@ -10,7 +10,7 @@ const CartWidget = ({ onClick }) => {
 
   return (
     <div className="cart-widget" onClick={onClick}>
-      <img src="./images/carrito.svg" alt="carrito" width={40} className="carrito" />
+      <img src="/icons/carrito.svg" alt="carrito" width={40} className="carrito" />
       {totalItems > 0 && (
         <span className="cart-count">
           {totalItems}

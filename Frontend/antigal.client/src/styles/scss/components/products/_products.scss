@@ -88,7 +88,7 @@
         font-size: 16px;
         cursor: pointer;
         transition: background-color 0.3s;
-
+        user-select: none;
         &:hover {
           background-color: #e9ecef;
           border-radius: 4px;
@@ -153,7 +153,7 @@
         overflow: hidden;
         position: relative;
         margin-bottom: 4rem;
-    
+        
         
         .sale-tag {
           background-color: #68be85;
@@ -168,6 +168,7 @@
           -moz-border-radius: 15px;
           -ms-border-radius: 15px;
           -o-border-radius: 15px;
+          user-select: none;
     }
       
         .imageAndIcons {
@@ -184,6 +185,7 @@
           -moz-border-radius: 15px;
           -ms-border-radius: 15px;
           -o-border-radius: 15px;
+          user-select: none;
           img {
             width: 85%;
             max-width: 100%; // Asegura que la imagen no se desborde del contenedor
@@ -254,6 +256,7 @@
           display: flex;
           justify-content: center;
           font-size: 0.8rem !important;
+          user-select: none;
           .cartButton{
             background-color: $primary-color;
             display: flex;
@@ -341,6 +344,7 @@
         padding-left: 1.5rem;
         .breadcrumb{
           margin-bottom: 2rem;
+          user-select: none;
           .imgBread{
             width: 0.54rem;
             margin-left: 0.5rem;
@@ -355,6 +359,7 @@
           }
           ul{
             
+            user-select: none;
               li{
                 display: flex;
                 justify-content: space-between;
@@ -382,6 +387,7 @@
           width: 100%;
           align-items: center;
           justify-content: center;
+          user-select: none;
           .banner-nav {
             position: absolute;
             top: 50%;
@@ -442,15 +448,12 @@
         height: auto;
         position: sticky;
         .cart-preview {
-          
-          
-          
           font-family: $font;
           padding: 20px;
           background-color: $primary-white-color;
           border-radius: 8px;
           max-width: 400px;
-          box-shadow: 0 4px 12px rgba($shadow-green-color, 0.2); // Sombra verde oscura
+          box-shadow: 0 4px 12px rgba($shadow-green-color, 0.2);
         
           h2.cart-title {
             font-size: 1.5em;
@@ -472,8 +475,6 @@
             li.cart-item {
               display: flex;
               flex-direction: column;
-              justify-content: space-between;
-              align-items: center;
               margin-bottom: 15px;
               padding-bottom: 10px;
               border-bottom: 1px solid $primary-black-color;
@@ -484,62 +485,82 @@
                 align-items: center;
         
                 .cart-item-image {
+                  width: 60px;
+                  height: 60px;
                   margin-right: 10px;
                   border-radius: 5px;
+                  object-fit: cover;
                 }
         
-                .cart-item-name {
-                  font-size: 1em;
-                  font-weight: 500;
-                  color: $primary-black-color;
+                .cart-item-info {
+                  display: flex;
+                  flex-direction: column;
+        
+                  .cart-item-name {
+                    font-size: 1em;
+                    font-weight: 500;
+                    color: $primary-black-color;
+                  }
+        
+                  .cart-item-price {
+                    font-size: 0.9em;
+                    font-weight: bold;
+                    color: $primary-color;
+                  }
                 }
               }
         
-              /* Cantidad del producto */
-              .cart-item-quantity {
+              /* Acciones del producto */
+              .cart-item-actions {
                 display: flex;
+                justify-content: space-between;
                 align-items: center;
+                margin-top: 10px;
         
-                .quantity-button {
-                  background-color: $primary-color;
-                  color: $primary-white-color;
-                  border: none;
+                .cart-item-quantity {
+                  display: flex;
+                  align-items: center;
+        
+                  .quantity-button {
+                    background-color: $primary-color;
+                    color: $primary-white-color;
+                    border: none;
+                    padding: 5px 10px;
+                    cursor: pointer;
+                    font-weight: 500;
+                    margin: 0 5px;
+                    border-radius: 4px;
+        
+                    &:disabled {
+                      opacity: 0.5;
+                      cursor: not-allowed;
+                    }
+                  }
+        
+                  .quantity-value {
+                    font-size: 1em;
+                    font-weight: 500;
+                    color: $primary-black-color;
+                  }
+                }
+        
+                .remove-button {
+                  background-color: transparent;
+                  color: $secondary-color;
+                  border: solid $secondary-color;
                   padding: 5px 10px;
                   cursor: pointer;
+                  font-size: 0.9em;
                   font-weight: 500;
-                  margin: 0 5px;
-                  border-radius: 4px;
-                }
-        
-                .quantity-value {
-                  font-size: 1em;
-                  font-weight: 500;
-                  color: $primary-black-color;
-                }
-              }
-        
-              /* Precio del producto */
-              .cart-item-price {
-                font-size: 1em;
-                font-weight: bold;
-                color: $primary-black-color;
-                margin-left: 10px;
-              }
-        
-              /* Botón de eliminar producto */
-              .remove-button {
-                background-color: $secondary-color;
-                color: $primary-white-color;
-                border: none;
-                padding: 5px 10px;
-                cursor: pointer;
-                font-size: 0.9em;
-                font-weight: 500;
-                border-radius: 5px;
-                transition: background-color 0.3s ease;
-        
-                &:hover {
-                  background-color: darken($secondary-color, 10%);
+                  border-radius: 10px;
+                  transition: color 0.3s ease;
+                  -webkit-border-radius: 10px;
+                  -moz-border-radius: 10px;
+                  -ms-border-radius: 10px;
+                  -o-border-radius: 10px;
+                  &:hover {
+                    color: darken($secondary-color, 10%);
+                  }
                 }
               }
             }
