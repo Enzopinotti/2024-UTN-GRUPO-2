@@ -25,17 +25,17 @@ namespace antigal.server.Data
        
             // Relacion muchos a muchos usando la tabla intermedia. ProductoCategoria
             modelBuilder.Entity<ProductoCategoria>()
-                .HasKey(cp => new { cp.idProducto, cp.idCategoria });
+                .HasKey(pc => new { pc.idProducto, pc.idCategoria });
 
             modelBuilder.Entity<ProductoCategoria>()
-                .HasOne(cp => cp.Producto)
-                .WithMany(p => p.categoriaProductos)
-                .HasForeignKey(cp => cp.idProducto);
+                .HasOne(pc => pc.Producto)
+                .WithMany(p => p.CategoriaProductos)
+                .HasForeignKey(pc => pc.idProducto);
 
             modelBuilder.Entity<ProductoCategoria>()
-                .HasOne(cp => cp.Categoria)
+                .HasOne(pc => pc.Categoria)
                 .WithMany(c => c.CategoriaProductos)
-                .HasForeignKey(cp => cp.idCategoria);
+                .HasForeignKey(pc => pc.idCategoria);
         }
 
     }

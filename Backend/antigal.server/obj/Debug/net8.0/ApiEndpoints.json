@@ -298,5 +298,119 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.ProductCategoryController",
+    "Method": "AsignarCategoriaAProducto",
+    "RelativePath": "api/ProductCategory/asignar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idProducto",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "idCategoria",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "antigal.server.Models.Dto.ResponseDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.ProductCategoryController",
+    "Method": "ObtenerCategoriasDeProducto",
+    "RelativePath": "api/ProductCategory/categorias/{idProducto}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idProducto",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "antigal.server.Models.Dto.ResponseDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.ProductCategoryController",
+    "Method": "DesasignarCategoriaDeProducto",
+    "RelativePath": "api/ProductCategory/desasignar",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idProducto",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "idCategoria",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "antigal.server.Models.Dto.ResponseDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.ProductCategoryController",
+    "Method": "ObtenerProductosDeCategoria",
+    "RelativePath": "api/ProductCategory/productos/{idCategoria}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idCategoria",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "antigal.server.Models.Dto.ResponseDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   }
 ]

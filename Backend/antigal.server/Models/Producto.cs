@@ -30,9 +30,6 @@ namespace antigal.server.Models
         //REVISAR
         [JsonIgnore]
         public List<ProductoCategoria> CategoriaProductos { get; set; } = new List<ProductoCategoria>();
-        //REVISAR
-        [JsonIgnore]
-        public List<ProductoCategoria> categoriaProductos { get; set; } = new List<ProductoCategoria>();
 
 
         public Producto(int idProducto, string nombre, string marca, string? descripcion, int? codigoBarras, int disponible, int? destacado, float precio, int stock)
