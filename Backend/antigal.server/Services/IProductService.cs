@@ -14,5 +14,6 @@ namespace antigal.server.Services
         ResponseDto AddProduct(Producto producto);
         ResponseDto DeleteProduct(int id);
         ResponseDto PutProduct(Producto producto);
+        ResponseDto ImportProductsFromExcel(IFormFile file);
     }
 }
