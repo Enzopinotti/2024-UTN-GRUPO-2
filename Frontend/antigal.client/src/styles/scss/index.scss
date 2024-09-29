@@ -16,6 +16,7 @@
 @use './components/admin/categoryForm';
 @use './components/admin/productListContainer';
 @use './components/admin/productForm';
+@use './components/admin/adminNav';
 @import './abstract/variables';
 
 *{
@@ -81,3 +82,5 @@
     -o-transform: scale(1);
 }
 }
+
+

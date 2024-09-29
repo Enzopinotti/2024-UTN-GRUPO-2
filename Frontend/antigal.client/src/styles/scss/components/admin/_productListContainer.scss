@@ -1,131 +1,99 @@
-@import'../../abstract/variables';
+// src/components/admin/products/ProductList.scss
+@import '../../abstract/variables';
+
 .admi-page {
   .product-list {
-    width: 100%;
-    height: auto;
-    gap: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    padding: 20px;
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr; // Mobile first: 1 columna
+    padding: 2rem;
 
     .product-item {
-      background-color: #d9d9d9;
+      background-color: lighten($primary-color, 40%);
       display: flex;
+      flex-direction: column;
+      border: 1px solid $primary-black-color;
+      border-radius: 8px;
+      overflow: hidden;
       width: 100%;
-      padding: 10px;
-      gap: 10px;
+
       .product-img {
-        width: 100px;
-        height: 100px;
+        width: 100%;
+        height: 200px;
+        background-color: $primary-white-color;
+        
         img {
-          width: 100px;
-          height: 100px;
+          width: 100%;
+          height: 100%;
           object-fit: cover;
         }
       }
-    }
-    .product-info {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      justify-content: flex-start;
-      align-items: center;
-      .row {
-        padding: 10px 0px;
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        gap: 10px;
-        position: relative;
-        .desplegable {
-            button{
-                &.active{
-                    background-color: darken(rgb(237, 237, 237), 25%);
-            }}
-          .category-dropdown {
-            background-color: white;
-            border: 1px solid #ccc;
-            padding: 10px;
-            position: absolute;
-            width: 200px;
-            max-width: 90%;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            right: 0;
-            transform: translateX(0);
-            z-index: 1000;
-            h4 {
-                text-align: center;
-                margin-bottom: 10px;
-              }
-              label {
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: 8px;
-              }
-              input{
-                cursor: pointer;
-              }
-    
-          }
 
-          .btn {
-            display: flex;
-            justify-content: center;
-            .confirm-btn {
-              margin-top: 10px;
-              background-color: $primary-color;
-              color: white;
-              border: none;
-              padding: 5px 10px;
-              cursor: pointer;
-              &:hover{
-                background-color: darken($primary-color,15%);
+      .product-info {
+        padding: 10px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        .top-section {
+          flex: 1;
+        }
+
+        .bottom-section {
+          flex: 1;
+        }
+
+        h2 {
+          font-size: 1.2rem;
+          margin: 0 0 10px 0;
+        }
+
+        p {
+          margin: 0 0 5px 0;
+        }
+
+        .product-button {
+          margin-top: auto;
+          display: flex;
+          justify-content: space-between;
+
+          button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            font-family: $font;
+            cursor: pointer;
+            transition: background-color 0.3s;
+
+            &.mod-btn {
+              background-color: $secondary-color;
+              color: $primary-white-color;
+
+              &:hover {
+                background-color: darken($secondary-color, 10%);
+              }
+            }
+
+            &.delete-btn {
+              background-color: rgb(222, 42, 42);
+              color: $primary-white-color;
+
+              &:hover {
+                background-color: darken(rgb(222, 42, 42), 10%);
               }
             }
           }
         }
       }
-      .top-section {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-        .title {
-          width: 100%;
-        }
-        .product-button {
-          display: flex;
-          width: 100%;
-          justify-content: flex-end;
-          align-items: flex-start;
-          gap: 10px;
-          .delete-btn {
-            background-color: rgb(222, 42, 42);
-            color: white;
-            border: white;
-            &:hover {
-              background-color: darken(rgb(222, 42, 42), 15%);
-            }
-          }
-          .button {
-            span {
-              display: inline;
-            }
-          }
-        }
-      }
     }
-  }
-}
-@media (max-width: 768px) {
-  .product-button {
-    .delete-btn span,
-    .mod-btn span {
-      display: none;
+
+    // Media queries para dispositivos más grandes
+    @media (min-width: 600px) {
+      grid-template-columns: repeat(2, 1fr); // 2 columnas en tablets
     }
-    button {
-      width: 40px !important;
+
+    @media (min-width: 900px) {
+      grid-template-columns: repeat(3, 1fr); // 3 columnas en escritorio
     }
   }
 }

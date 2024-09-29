@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const PrimeraSection = () => {
   const [frascoImage, setFrascoImage] = useState('/images/imgFrasco.png');
-
+  const navigate = useNavigate(); 
   // Cambiar la imagen cuando el ancho de la pantalla es mayor a 1080px
+  const handleComprar =  () => {
+    try{
+
+      navigate('/products');
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   useEffect(() => {
     const updateFrascoImage = () => {
       if (window.innerWidth > 1080) {
@@ -37,7 +47,7 @@ const PrimeraSection = () => {
         </div>
       </div>
       <div className='botonCompraContainer'>
-        <button className='botonComprar'>Comprar</button>
+        <button onClick={handleComprar} className='botonComprar' >Comprar</button>
       </div>
       <h1 className='titulo'>LA SELECCIÓN DE FRUTOS SECOS PERFECTA, EXISTE.</h1>
     </section>

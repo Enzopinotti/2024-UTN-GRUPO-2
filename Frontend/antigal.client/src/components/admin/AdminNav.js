@@ -1,25 +1,27 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+// src/components/admin/AdminNav.js
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 const AdminNav = () => {
   return (
-    <div className="admi-nav">
-      <h2> Administrador</h2>
-      <div className="admi-btn">
-      <NavLink 
-          to="/admin/categories" 
-          className={({ isActive }) => isActive ? 'nav-button active' : 'nav-button'}
+    <div className="admin-nav">
+      <h2>Ventana del Administrador</h2>
+      <nav className="admin-menu">
+        <NavLink
+          to="/admin/categories"
+          className={({ isActive }) => (isActive ? 'nav-button active' : 'nav-button')}
         >
           Categorías
         </NavLink>
-        <NavLink 
-          to="/admin/products" 
-          className={({ isActive }) => isActive ? 'nav-button active' : 'nav-button'}
+        <NavLink
+          to="/admin/products"
+          className={({ isActive }) => (isActive ? 'nav-button active' : 'nav-button')}
         >
           Productos
         </NavLink>
-      </div>
+      </nav>
     </div>
   );
 };
+
 export default AdminNav;

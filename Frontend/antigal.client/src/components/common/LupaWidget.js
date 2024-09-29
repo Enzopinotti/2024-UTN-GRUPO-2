@@ -1,8 +1,8 @@
 import React from 'react'
 
-const LupaWidget = () => {
+const LupaWidget = ({ onClick }) => {
   return (
-    <div>
+    <div onClick={onClick} >
         <img className='lupa' src='/images/lupa.svg' width={40} alt='icono de lupa de antigal' />
     </div>
   )
