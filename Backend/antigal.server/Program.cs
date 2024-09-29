@@ -2,6 +2,8 @@
 using antigal.server.Data;
 using antigal.server.Services;
 using antigal.server.Repositories;
+using FluentValidation;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 namespace antigal.server
 {
     public class Program
@@ -39,6 +41,10 @@ namespace antigal.server
 
             // Controllers
             builder.Services.AddControllers();
+
+            // Validaciones
+            builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+            builder.Services.AddFluentValidationAutoValidation();
 
             // Agregar otros servicios como Swagger si es necesario
             builder.Services.AddEndpointsApiExplorer();

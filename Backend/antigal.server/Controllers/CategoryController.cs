@@ -35,8 +35,8 @@ namespace antigal.server.Controllers
             return _categoryService.GetCategoryByTitle(nombre);
         }
 
-        [HttpPost("addProduct")]
-        public ResponseDto PostProduct([FromBody] Categoria categoria)
+        [HttpPost("addCategory")]
+        public ResponseDto PostCategory([FromBody] Categoria categoria)
         {
             return _categoryService.AddCategory(categoria);
         }

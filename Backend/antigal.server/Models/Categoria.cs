@@ -8,7 +8,6 @@ namespace antigal.server.Models
     {
         [Key]
         public int idCategoria { get; set; }
-        [Required]
         public required string nombre { get; set; }
         public string? descripcion { get; set; }
         public string? imagen { get; set; }

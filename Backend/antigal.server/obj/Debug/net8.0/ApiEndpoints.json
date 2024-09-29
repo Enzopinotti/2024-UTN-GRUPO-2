@@ -1,8 +1,8 @@
 [
   {
     "ContainingType": "antigal.server.Controllers.CategoryController",
-    "Method": "PostProduct",
-    "RelativePath": "api/Category/addProduct",
+    "Method": "PostCategory",
+    "RelativePath": "api/Category/addCategory",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -300,32 +300,16 @@
     ]
   },
   {
-<<<<<<< HEAD
-    "ContainingType": "antigal.server.Controllers.ProductCategoryController",
-    "Method": "AsignarCategoriaAProducto",
-    "RelativePath": "api/ProductCategory/asignar",
-=======
     "ContainingType": "antigal.server.Controllers.ProductController",
     "Method": "UploadProductsFromExcel",
     "RelativePath": "api/Product/uploadProductsFromExcel",
->>>>>>> origin/BackEnd
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-<<<<<<< HEAD
-        "Name": "idProducto",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "idCategoria",
-        "Type": "System.Int32",
-=======
         "Name": "file",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
->>>>>>> origin/BackEnd
         "IsRequired": false
       }
     ],
@@ -340,7 +324,37 @@
         "StatusCode": 200
       }
     ]
-<<<<<<< HEAD
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.ProductCategoryController",
+    "Method": "AsignarCategoriaAProducto",
+    "RelativePath": "api/ProductCategory/asignar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idProducto",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "idCategoria",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "antigal.server.Models.Dto.ResponseDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "antigal.server.Controllers.ProductCategoryController",
@@ -424,7 +438,5 @@
         "StatusCode": 200
       }
     ]
-=======
->>>>>>> origin/BackEnd
   }
 ]

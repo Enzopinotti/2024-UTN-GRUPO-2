@@ -1,6 +1,16 @@
-@antigal.server_HostAddress = http://localhost:5279
+@antigal.server_HostAddress = http://localhost:7255
 
 GET {{antigal.server_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+POST {{antigal.server_HostAddress}}/api/Category/addCategory
+Accept: application/json
+Content-Type: application/json
+
+{
+"nombre": "aaaaaaa",
+"descripcion": "aaaaaaa";
+"imagen": "aaaaaaaaaa";
+}

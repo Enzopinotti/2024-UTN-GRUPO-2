@@ -8,18 +8,13 @@ namespace antigal.server.Models
     {
         [Key]
         public int idProducto { get; set; }
-        [Required]
         public required string nombre { get; set; }
-        [Required]
         public required string marca { get; set; }
         public string? descripcion { get; set; }
         public int?  codigoBarras { get; set; }
-        [Required]
         public int disponible { get; set; }
         public int? destacado { get; set; }
-        [Required]
         public  float precio { get; set; }
-        [Required]
         public  int stock { get; set; }
        
         //RELACION UNO A MUCHOS CON IMAGEN
@@ -39,13 +34,23 @@ namespace antigal.server.Models
             this.marca = marca;
             this.descripcion = descripcion;
             this.codigoBarras = codigoBarras;
-            this.disponible = disponible;
+            this.disponible = verificarDisponible();
             this.destacado = destacado;
             this.precio = precio;
             this.stock = stock;
         }
+
+        //funcion para que actualice automatico el "disponible" (no funciona)
+        public int verificarDisponible()
+        {
+            return stock > 0 ? 1 : 0; // Devuelve 1 si stock > 0, de lo contrario 0
+        }
+
         //CONSTRUCTOR SIN PARAMETROS REQUERIDO POR EF.
         public Producto() {}
 
+        
+
     }
+    
 }
