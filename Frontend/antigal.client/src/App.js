@@ -11,6 +11,9 @@ import AdminDashboard from './components/admin/dashboard/AdminDashboard';
 import CategoryListContainer from './components/admin/categories/CategoryListContainer';
 import AdminProductListContainer from './components/admin/products/ProductListContainer';
 import { CartProvider } from './contexts/CartContext';
+import { ToastContainer, toast } from "react-toastify"; // Importación de toast y ToastContainer
+import "react-toastify/dist/ReactToastify.css"; // Estilos de react-toastify
+
 
 function App() {
   const isAuthenticated = true; // Cambia esto según tu lógica de autenticación
@@ -38,6 +41,7 @@ function App() {
         </Main>
         <Footer />
       </Router>
+      <ToastContainer />
     </CartProvider>
   );
 }
