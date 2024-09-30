@@ -2203,88 +2203,119 @@ footer .footer-bottom img {
     width: 100% !important;
   }
 }
-.admi-page .category-list {
+.admin-page .content {
+  padding: 2rem;
+}
+.admin-page .content .new-btn {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+}
+.admin-page .content .new-btn button {
+  padding: 10px 20px;
+  background-color: #74873D;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+.admin-page .content .new-btn button:hover {
+  background-color: #56642d;
+}
+.admin-page .content .category-list {
   display: grid;
   gap: 20px;
   grid-template-columns: 1fr;
-  padding: 2rem;
 }
-@media (min-width: 600px) {
-  .admi-page .category-list {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-@media (min-width: 900px) {
-  .admi-page .category-list {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-.admi-page .category-list .category-item {
-  background-color: #d2ddb3;
+.admin-page .content .category-list .category-item {
+  background-color: #ffe2ba;
   display: flex;
   flex-direction: column;
   border: 1px solid #222222;
   border-radius: 8px;
   overflow: hidden;
   width: 100%;
+  box-shadow: 0 2px 5px rgba(34, 34, 34, 0.1);
+  transition: transform 0.3s;
 }
-.admi-page .category-list .category-item .category-img {
+.admin-page .content .category-list .category-item:hover {
+  transform: translateY(-2px);
+}
+.admin-page .content .category-list .category-item .category-img {
   width: 100%;
   height: 200px;
   background-color: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
 }
-.admi-page .category-list .category-item .category-img img {
+.admin-page .content .category-list .category-item .category-img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.admi-page .category-list .category-item .category-img .no-image {
-  color: #222222;
-  font-weight: bold;
+.admin-page .content .category-list .category-item .category-img .no-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #f0f0f0;
+  color: #888;
+  font-size: 1rem;
 }
-.admi-page .category-list .category-item .category-info {
+.admin-page .content .category-list .category-item .category-info {
   padding: 10px;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
-.admi-page .category-list .category-item .category-info h2 {
+.admin-page .content .category-list .category-item .category-info h2 {
   font-size: 1.2rem;
   margin: 0 0 10px 0;
+  color: #222222;
 }
-.admi-page .category-list .category-item .category-info p {
+.admin-page .content .category-list .category-item .category-info p {
   margin: 0 0 5px 0;
-  flex: 1;
+  color: #222222;
+  font-size: 0.95rem;
 }
-.admi-page .category-list .category-item .category-info .category-buttons {
+.admin-page .content .category-list .category-item .category-info .category-buttons {
   margin-top: auto;
   display: flex;
   justify-content: space-between;
 }
-.admi-page .category-list .category-item .category-info .category-buttons button {
+.admin-page .content .category-list .category-item .category-info .category-buttons button {
   padding: 8px 12px;
   border: none;
   border-radius: 4px;
   font-family: "Roboto", sans-serif;
   cursor: pointer;
   transition: background-color 0.3s;
-}
-.admi-page .category-list .category-item .category-info .category-buttons button.mod-btn {
-  background-color: #ED8B00;
   color: #FFFFFF;
+  font-size: 0.9rem;
 }
-.admi-page .category-list .category-item .category-info .category-buttons button.mod-btn:hover {
+.admin-page .content .category-list .category-item .category-info .category-buttons button.mod-btn {
+  background-color: #ED8B00;
+}
+.admin-page .content .category-list .category-item .category-info .category-buttons button.mod-btn:hover {
   background-color: #ba6d00;
 }
-.admi-page .category-list .category-item .category-info .category-buttons button.delete-btn {
+.admin-page .content .category-list .category-item .category-info .category-buttons button.delete-btn {
   background-color: rgb(222, 42, 42);
-  color: #FFFFFF;
 }
-.admi-page .category-list .category-item .category-info .category-buttons button.delete-btn:hover {
+.admin-page .content .category-list .category-item .category-info .category-buttons button.delete-btn:hover {
   background-color: #b81d1d;
+}
+@media (min-width: 600px) {
+  .admin-page .content .category-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 900px) {
+  .admin-page .content .category-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .form-overlay {
@@ -2297,109 +2328,143 @@ footer .footer-bottom img {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  z-index: 1000;
 }
-.form-overlay .form {
+.form-overlay .form-container {
   background-color: #FFFFFF;
   padding: 20px;
   border-radius: 8px;
   width: 90%;
   max-width: 500px;
-  z-index: 1000;
-  font-family: "Roboto", sans-serif;
+  box-shadow: 0 4px 8px rgba(34, 34, 34, 0.2);
+  position: relative;
 }
-.form-overlay .form .top-section {
+.form-overlay .form-container .form-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 1rem;
 }
-.form-overlay .form .top-section h2 {
+.form-overlay .form-container .form-header h2 {
   margin: 0;
-}
-.form-overlay .form .top-section .exit-btn {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
+  font-size: 1.5rem;
   color: #222222;
 }
-.form-overlay .form .top-section .exit-btn:hover {
+.form-overlay .form-container .form-header .close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #222222;
+  transition: color 0.3s;
+}
+.form-overlay .form-container .form-header .close-button:hover {
   color: #555555;
 }
-.form-overlay .form form {
+.form-overlay .form-container .category-form {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 1rem;
 }
-.form-overlay .form form .form-fields {
+.form-overlay .form-container .category-form .form-group {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  margin-top: 20px;
 }
-@media (min-width: 1080px) {
-  .form-overlay .form form .form-fields .left-column,
-  .form-overlay .form form .form-fields .right-column {
-    width: 50%;
-  }
+.form-overlay .form-container .category-form .form-group label {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #222222;
 }
-.form-overlay .form form .form-fields .input {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 15px;
+.form-overlay .form-container .category-form .form-group label .required {
+  color: red;
+  margin-left: 2px;
 }
-.form-overlay .form form .form-fields .input label {
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-.form-overlay .form form .form-fields .input input,
-.form-overlay .form form .form-fields .input textarea {
-  padding: 8px;
-  border: 1px solid #222222;
+.form-overlay .form-container .category-form .form-group input[type=text],
+.form-overlay .form-container .category-form .form-group textarea,
+.form-overlay .form-container .category-form .form-group input[type=file] {
+  padding: 8px 12px;
+  border: 1px solid #888888;
   border-radius: 4px;
-  font-family: "Roboto", sans-serif;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
-.form-overlay .form form .form-fields .input textarea {
+.form-overlay .form-container .category-form .form-group input[type=text]:focus,
+.form-overlay .form-container .category-form .form-group textarea:focus,
+.form-overlay .form-container .category-form .form-group input[type=file]:focus {
+  border-color: #74873D;
+  box-shadow: 0 0 5px rgba(116, 135, 61, 0.3);
+  outline: none;
+}
+.form-overlay .form-container .category-form .form-group textarea {
   resize: vertical;
+  min-height: 80px;
 }
-.form-overlay .form form .bottom-section {
+.form-overlay .form-container .category-form .form-group .image-preview {
+  margin-top: 0.5rem;
+}
+.form-overlay .form-container .category-form .form-group .image-preview img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.form-overlay .form-container .category-form .form-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 1rem;
 }
-.form-overlay .form form .bottom-section button {
+.form-overlay .form-container .category-form .form-actions .cancel-button,
+.form-overlay .form-container .category-form .form-actions .submit-button {
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
-  font-family: "Roboto", sans-serif;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+  font-family: "Roboto", sans-serif;
 }
-.form-overlay .form form .bottom-section button:first-of-type {
+.form-overlay .form-container .category-form .form-actions .cancel-button {
   background-color: #888888;
   color: #222222;
 }
-.form-overlay .form form .bottom-section button:first-of-type:hover {
-  background-color: #a2a2a2;
-  transform: translateY(-2px);
+.form-overlay .form-container .category-form .form-actions .cancel-button:hover {
+  background-color: #6f6f6f;
 }
-.form-overlay .form form .bottom-section button.create-btn {
+.form-overlay .form-container .category-form .form-actions .submit-button {
   background-color: #74873D;
   color: #FFFFFF;
 }
-.form-overlay .form form .bottom-section button.create-btn:hover {
+.form-overlay .form-container .category-form .form-actions .submit-button:hover {
   background-color: #56642d;
-  transform: translateY(-2px);
 }
 
-.admi-page .product-list {
+.admin-page .content {
+  padding: 2rem;
+}
+.admin-page .content .new-btn {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+}
+.admin-page .content .new-btn button {
+  padding: 10px 20px;
+  background-color: #74873D;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+.admin-page .content .new-btn button:hover {
+  background-color: #56642d;
+}
+.admin-page .content .product-list {
   display: grid;
   gap: 20px;
   grid-template-columns: 1fr;
-  padding: 2rem;
 }
-.admi-page .product-list .product-item {
+.admin-page .content .product-list .product-item {
   background-color: #d2ddb3;
   display: flex;
   flex-direction: column;
@@ -2407,195 +2472,91 @@ footer .footer-bottom img {
   border-radius: 8px;
   overflow: hidden;
   width: 100%;
+  box-shadow: 0 2px 5px rgba(34, 34, 34, 0.1);
 }
-.admi-page .product-list .product-item .product-img {
+.admin-page .content .product-list .product-item:hover {
+  transform: translateY(-2px);
+}
+.admin-page .content .product-list .product-item .product-img {
   width: 100%;
   height: 200px;
   background-color: #FFFFFF;
+  position: relative;
 }
-.admi-page .product-list .product-item .product-img img {
+.admin-page .content .product-list .product-item .product-img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.admi-page .product-list .product-item .product-info {
+.admin-page .content .product-list .product-item .product-img .no-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #f0f0f0;
+  color: #888;
+  font-size: 1rem;
+}
+.admin-page .content .product-list .product-item .product-info {
   padding: 10px;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
-.admi-page .product-list .product-item .product-info .top-section {
+.admin-page .content .product-list .product-item .product-info .top-section {
   flex: 1;
 }
-.admi-page .product-list .product-item .product-info .bottom-section {
+.admin-page .content .product-list .product-item .product-info .bottom-section {
   flex: 1;
+  margin-top: 10px;
 }
-.admi-page .product-list .product-item .product-info h2 {
+.admin-page .content .product-list .product-item .product-info h2 {
   font-size: 1.2rem;
   margin: 0 0 10px 0;
+  color: #222222;
 }
-.admi-page .product-list .product-item .product-info p {
+.admin-page .content .product-list .product-item .product-info p {
   margin: 0 0 5px 0;
+  color: #222222;
+  font-size: 0.95rem;
 }
-.admi-page .product-list .product-item .product-info .product-button {
+.admin-page .content .product-list .product-item .product-info .product-button {
   margin-top: auto;
   display: flex;
   justify-content: space-between;
 }
-.admi-page .product-list .product-item .product-info .product-button button {
+.admin-page .content .product-list .product-item .product-info .product-button button {
   padding: 8px 12px;
   border: none;
   border-radius: 4px;
   font-family: "Roboto", sans-serif;
   cursor: pointer;
   transition: background-color 0.3s;
-}
-.admi-page .product-list .product-item .product-info .product-button button.mod-btn {
-  background-color: #ED8B00;
   color: #FFFFFF;
+  font-size: 0.9rem;
 }
-.admi-page .product-list .product-item .product-info .product-button button.mod-btn:hover {
+.admin-page .content .product-list .product-item .product-info .product-button button.mod-btn {
+  background-color: #ED8B00;
+}
+.admin-page .content .product-list .product-item .product-info .product-button button.mod-btn:hover {
   background-color: #ba6d00;
 }
-.admi-page .product-list .product-item .product-info .product-button button.delete-btn {
+.admin-page .content .product-list .product-item .product-info .product-button button.delete-btn {
   background-color: rgb(222, 42, 42);
-  color: #FFFFFF;
 }
-.admi-page .product-list .product-item .product-info .product-button button.delete-btn:hover {
+.admin-page .content .product-list .product-item .product-info .product-button button.delete-btn:hover {
   background-color: #b81d1d;
 }
 @media (min-width: 600px) {
-  .admi-page .product-list {
+  .admin-page .content .product-list {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 @media (min-width: 900px) {
-  .admi-page .product-list {
+  .admin-page .content .product-list {
     grid-template-columns: repeat(3, 1fr);
   }
-}
-
-.form-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(34, 34, 34, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-.form-overlay .form {
-  background-color: #FFFFFF;
-  padding: 20px;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 600px;
-  z-index: 1000;
-  font-family: "Roboto", sans-serif;
-}
-.form-overlay .form .top-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.form-overlay .form .top-section h2 {
-  margin: 0;
-}
-.form-overlay .form .top-section .exit-btn {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #222222;
-}
-.form-overlay .form .top-section .exit-btn:hover {
-  color: #555555;
-}
-.form-overlay .form form {
-  display: flex;
-  flex-direction: column;
-}
-.form-overlay .form form .form-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-top: 20px;
-}
-.form-overlay .form form .form-fields .left-column,
-.form-overlay .form form .form-fields .right-column {
-  width: 100%;
-}
-.form-overlay .form form .form-fields .left-column .input,
-.form-overlay .form form .form-fields .right-column .input {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 15px;
-}
-.form-overlay .form form .form-fields .left-column .input label,
-.form-overlay .form form .form-fields .right-column .input label {
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-.form-overlay .form form .form-fields .left-column .input input,
-.form-overlay .form form .form-fields .left-column .input select,
-.form-overlay .form form .form-fields .left-column .input textarea,
-.form-overlay .form form .form-fields .right-column .input input,
-.form-overlay .form form .form-fields .right-column .input select,
-.form-overlay .form form .form-fields .right-column .input textarea {
-  padding: 8px;
-  border: 1px solid #222222;
-  border-radius: 4px;
-  font-family: "Roboto", sans-serif;
-}
-.form-overlay .form form .form-fields .left-column .input textarea,
-.form-overlay .form form .form-fields .right-column .input textarea {
-  resize: vertical;
-}
-.form-overlay .form form .form-fields .left-column .input.textarea,
-.form-overlay .form form .form-fields .right-column .input.textarea {
-  flex: 1;
-}
-@media (min-width: 768px) {
-  .form-overlay .form form .form-fields {
-    flex-direction: row;
-  }
-  .form-overlay .form form .form-fields .left-column,
-  .form-overlay .form form .form-fields .right-column {
-    width: 50%;
-  }
-}
-.form-overlay .form form .bottom-section {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
-}
-.form-overlay .form form .bottom-section button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  font-family: "Roboto", sans-serif;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-}
-.form-overlay .form form .bottom-section button:first-of-type {
-  background-color: #888888;
-  color: #222222;
-}
-.form-overlay .form form .bottom-section button:first-of-type:hover {
-  background-color: #a2a2a2;
-  transform: translateY(-2px);
-}
-.form-overlay .form form .bottom-section button.create-btn {
-  background-color: #74873D;
-  color: #FFFFFF;
-}
-.form-overlay .form form .bottom-section button.create-btn:hover {
-  background-color: #56642d;
-  transform: translateY(-2px);
 }
 
 main .admin-dashboard {
@@ -2603,7 +2564,7 @@ main .admin-dashboard {
   min-height: 100vh;
   font-family: "Roboto", sans-serif;
 }
-main .admin-dashboard .admi-page .admin-nav {
+main .admin-dashboard .admin-page .admin-nav {
   background-color: #222222;
   color: #FFFFFF;
   padding: 20px;
@@ -2611,15 +2572,16 @@ main .admin-dashboard .admi-page .admin-nav {
   flex-direction: column;
   align-items: center;
 }
-main .admin-dashboard .admi-page .admin-nav h2 {
+main .admin-dashboard .admin-page .admin-nav h2 {
   margin-bottom: 20px;
   font-family: "Roboto", sans-serif;
+  font-size: 1.3rem;
 }
-main .admin-dashboard .admi-page .admin-nav .admin-menu {
+main .admin-dashboard .admin-page .admin-nav .admin-menu {
   display: flex;
   gap: 20px;
 }
-main .admin-dashboard .admi-page .admin-nav .admin-menu .nav-button {
+main .admin-dashboard .admin-page .admin-nav .admin-menu .nav-button {
   padding: 10px 20px;
   border-radius: 8px;
   text-decoration: none;
@@ -2629,22 +2591,22 @@ main .admin-dashboard .admi-page .admin-nav .admin-menu .nav-button {
   border: 2px solid #FFFFFF;
   transition: background-color 0.3s, transform 0.3s;
 }
-main .admin-dashboard .admi-page .admin-nav .admin-menu .nav-button:hover {
+main .admin-dashboard .admin-page .admin-nav .admin-menu .nav-button:hover {
   background-color: #3c3c3c;
   transform: translateY(-2px);
 }
-main .admin-dashboard .admi-page .admin-nav .admin-menu .nav-button.active {
+main .admin-dashboard .admin-page .admin-nav .admin-menu .nav-button.active {
   background-color: #74873D;
   border-color: #74873D;
   color: #FFFFFF;
 }
-main .admin-dashboard .admi-page .content .new-btn {
+main .admin-dashboard .admin-page .content .new-btn {
   margin-top: 1rem;
   display: flex;
   justify-content: end;
   padding-right: 4rem;
 }
-main .admin-dashboard .admi-page .content .new-btn button {
+main .admin-dashboard .admin-page .content .new-btn button {
   border: 0;
   padding: 10px 20px;
   background-color: #74873D;
@@ -2655,13 +2617,260 @@ main .admin-dashboard .admi-page .content .new-btn button {
   -o-border-radius: 0.5rem;
   color: #FFFFFF;
 }
-main .admin-dashboard .admi-page .content .product-list .product-item .product-img .no-image {
+main .admin-dashboard .admin-page .content .product-list .product-item .product-img .no-image {
   display: flex;
   height: 100%;
   width: 100%;
   justify-content: center;
   align-items: center;
   font-weight: 900;
+}
+
+@media (min-width: 1024px) {
+  main .admin-dashboard .admin-page .admin-nav h2 {
+    font-size: 2rem;
+  }
+}
+.form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(34, 34, 34, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.form-overlay .form-container {
+  background-color: #FFFFFF;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 700px;
+  box-shadow: 0 4px 10px rgba(34, 34, 34, 0.1);
+  font-family: "Roboto", sans-serif;
+  position: relative;
+  overflow-y: auto;
+  max-height: 90vh;
+  /* Media Queries for Enhanced Responsiveness */
+}
+.form-overlay .form-container .form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.form-overlay .form-container .form-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #222222;
+}
+.form-overlay .form-container .form-header .close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #222222;
+  transition: color 0.3s;
+}
+.form-overlay .form-container .form-header .close-button:hover {
+  color: #555555;
+}
+.form-overlay .form-container .product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.form-overlay .form-container .product-form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+.form-overlay .form-container .product-form .form-group label {
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #222222;
+}
+.form-overlay .form-container .product-form .form-group input[type=text],
+.form-overlay .form-container .product-form .form-group input[type=number],
+.form-overlay .form-container .product-form .form-group input[type=file],
+.form-overlay .form-container .product-form .form-group select,
+.form-overlay .form-container .product-form .form-group textarea {
+  padding: 10px 12px;
+  border: 1px solid #888888;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.form-overlay .form-container .product-form .form-group input[type=text]:focus,
+.form-overlay .form-container .product-form .form-group input[type=number]:focus,
+.form-overlay .form-container .product-form .form-group input[type=file]:focus,
+.form-overlay .form-container .product-form .form-group select:focus,
+.form-overlay .form-container .product-form .form-group textarea:focus {
+  border-color: #74873D;
+  box-shadow: 0 0 5px rgba(116, 135, 61, 0.3);
+  outline: none;
+}
+.form-overlay .form-container .product-form .form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+.form-overlay .form-container .product-form .form-group.radio-group p {
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #222222;
+}
+.form-overlay .form-container .product-form .form-group.radio-group .radio-options {
+  display: flex;
+  gap: 20px;
+}
+.form-overlay .form-container .product-form .form-group.radio-group .radio-options .radio-option {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.form-overlay .form-container .product-form .form-group.radio-group .radio-options .radio-option input[type=radio] {
+  accent-color: #74873D;
+  width: 16px;
+  height: 16px;
+}
+.form-overlay .form-container .product-form .form-group.radio-group .radio-options .radio-option label {
+  font-weight: 500;
+  color: #222222;
+}
+.form-overlay .form-container .product-form .form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+@media (min-width: 768px) {
+  .form-overlay .form-container .product-form .form-row {
+    flex-direction: row;
+    gap: 20px;
+  }
+}
+.form-overlay .form-container .product-form .form-row .form-group {
+  flex: 1;
+}
+.form-overlay .form-container .product-form .form-row .form-group label {
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #222222;
+}
+.form-overlay .form-container .product-form .form-row .form-group input[type=number],
+.form-overlay .form-container .product-form .form-row .form-group input[type=text] {
+  padding: 10px 12px;
+  border: 1px solid #888888;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.form-overlay .form-container .product-form .form-row .form-group input[type=number]:focus,
+.form-overlay .form-container .product-form .form-row .form-group input[type=text]:focus {
+  border-color: #74873D;
+  box-shadow: 0 0 5px rgba(116, 135, 61, 0.3);
+  outline: none;
+}
+.form-overlay .form-container .product-form .image-previews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.form-overlay .form-container .product-form .image-previews .image-preview {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border: 1px solid #888888;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.form-overlay .form-container .product-form .image-previews .image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.form-overlay .form-container .product-form .image-previews .image-preview .remove-image-button {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: rgba(34, 34, 34, 0.7);
+  border: none;
+  color: #FFFFFF;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  transition: background 0.3s;
+}
+.form-overlay .form-container .product-form .image-previews .image-preview .remove-image-button:hover {
+  background: rgba(34, 34, 34, 0.9);
+}
+.form-overlay .form-container .product-form .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+.form-overlay .form-container .product-form .form-actions .cancel-button,
+.form-overlay .form-container .product-form .form-actions .submit-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  font-family: "Roboto", sans-serif;
+}
+.form-overlay .form-container .product-form .form-actions .cancel-button {
+  background-color: #888888;
+  color: #222222;
+}
+.form-overlay .form-container .product-form .form-actions .cancel-button:hover {
+  background-color: #6f6f6f;
+  transform: translateY(-2px);
+}
+.form-overlay .form-container .product-form .form-actions .submit-button {
+  background-color: #74873D;
+  color: #FFFFFF;
+}
+.form-overlay .form-container .product-form .form-actions .submit-button:hover {
+  background-color: #56642d;
+  transform: translateY(-2px);
+}
+@media (min-width: 1024px) {
+  .form-overlay .form-container .form-container {
+    padding: 30px 40px;
+  }
+  .form-overlay .form-container .form-container .product-form .form-group input[type=text],
+  .form-overlay .form-container .form-container .product-form .form-group input[type=number],
+  .form-overlay .form-container .form-container .product-form .form-group textarea,
+  .form-overlay .form-container .form-container .product-form .form-group input[type=file] {
+    padding: 12px 14px;
+    font-size: 1.1rem;
+  }
+  .form-overlay .form-container .form-container .product-form .form-row .form-group input[type=text],
+  .form-overlay .form-container .form-container .product-form .form-row .form-group input[type=number] {
+    padding: 12px 14px;
+    font-size: 1.1rem;
+  }
+  .form-overlay .form-container .form-container .product-form .image-previews .image-preview {
+    width: 120px;
+    height: 120px;
+  }
+  .form-overlay .form-container .form-container .product-form .image-previews .image-preview .remove-image-button {
+    width: 24px;
+    height: 24px;
+    font-size: 1rem;
+  }
+  .form-overlay .form-container .form-container .product-form .form-actions .cancel-button,
+  .form-overlay .form-container .form-container .product-form .form-actions .submit-button {
+    padding: 12px 24px;
+    font-size: 1.1rem;
+  }
 }
 
 * {

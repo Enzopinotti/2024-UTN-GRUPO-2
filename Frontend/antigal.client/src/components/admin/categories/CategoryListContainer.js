@@ -4,7 +4,7 @@ import AdminNav from '../AdminNav';
 import CategoryList from './CategoryList';
 import CategoryForm from './CategoryForm';
 import Swal from 'sweetalert2';
-import initialCategories from '../../../data/initialCategories'; // Importamos los datos iniciales
+import { getCategories, addCategory, updateCategory, deleteCategory } from '../../../utils/categoryUtils';
 
 const CategoryListContainer = () => {
   const [categories, setCategories] = useState([]);
@@ -26,13 +26,9 @@ const CategoryListContainer = () => {
           const data = await response.json();
           setCategories(data);
         } else {
-          // Cargar categorías desde localStorage o desde los datos iniciales
-          const storedCategories = localStorage.getItem('categories');
-          if (storedCategories) {
-            setCategories(JSON.parse(storedCategories));
-          } else {
-            setCategories(initialCategories);
-          }
+          // Cargar categorías desde localStorage
+          const storedCategories = getCategories();
+          setCategories(storedCategories);
         }
       } catch (error) {
         console.error('Error al obtener categorías:', error);
@@ -51,41 +47,78 @@ const CategoryListContainer = () => {
     setEditingCategory(null);
   };
 
-  // Función para actualizar localStorage
-  const updateLocalStorage = (updatedCategories) => {
-    localStorage.setItem('categories', JSON.stringify(updatedCategories));
-  };
-
   // Función para agregar una nueva categoría
-  const handleAddCategory = (category) => {
-    if (useBackend) {
-      // Enviar solicitud POST al backend
-      // Aquí iría el código para el backend
-    } else {
-      // Agregar categoría al estado local y actualizar localStorage
-      const newCategories = [...categories, category];
-      setCategories(newCategories);
-      updateLocalStorage(newCategories);
-      setShowModal(false);
-      Swal.fire('¡Éxito!', 'Categoría añadida correctamente.', 'success');
+  const handleAddCategory = (formData) => {
+    try {
+      // Extraer datos del FormData
+      const categoryData = JSON.parse(formData.get('category') || '{}');
+      const imageFile = formData.get('imagen');
+
+      // Manejar la imagen
+      if (imageFile && imageFile instanceof File) {
+        // Convertir la imagen a base64
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64Image = reader.result;
+          const newCategory = {
+            ...categoryData,
+            idCategoria: Date.now(), // Generar un ID único
+            imagen: base64Image,
+          };
+          addCategory(newCategory);
+          setCategories(getCategories());
+          Swal.fire('¡Éxito!', 'Categoría añadida correctamente.', 'success');
+        };
+        reader.readAsDataURL(imageFile);
+      } else {
+        // Si no se proporciona imagen, proceder sin ella
+        const newCategory = {
+          ...categoryData,
+          idCategoria: Date.now(),
+        };
+        addCategory(newCategory);
+        setCategories(getCategories());
+        Swal.fire('¡Éxito!', 'Categoría añadida correctamente.', 'success');
+      }
+    } catch (error) {
+      console.error('Error al agregar categoría:', error);
+      Swal.fire('Error', 'No se pudo agregar la categoría.', 'error');
     }
   };
 
   // Función para editar una categoría existente
-  const handleEditCategory = (updatedCategory) => {
-    if (useBackend) {
-      // Enviar solicitud PUT al backend
-      // Aquí iría el código para el backend
-    } else {
-      // Actualizar categoría en el estado local y en localStorage
-      const newCategories = categories.map((cat) =>
-        cat.idCategoria === updatedCategory.idCategoria ? updatedCategory : cat
-      );
-      setCategories(newCategories);
-      updateLocalStorage(newCategories);
-      setShowModal(false);
-      setEditingCategory(null);
-      Swal.fire('¡Éxito!', 'Categoría actualizada correctamente.', 'success');
+  const handleEditCategory = (formData) => {
+    try {
+      // Extraer datos del FormData
+      const idCategoria = parseInt(formData.get('idCategoria'));
+      const categoryData = JSON.parse(formData.get('category') || '{}');
+      const imageFile = formData.get('imagen');
+
+      const updatedCategory = {
+        idCategoria,
+        ...categoryData,
+      };
+
+      if (imageFile && imageFile instanceof File) {
+        // Convertir la imagen a base64
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64Image = reader.result;
+          updatedCategory.imagen = base64Image;
+          updateCategory(updatedCategory);
+          setCategories(getCategories());
+          Swal.fire('¡Éxito!', 'Categoría actualizada correctamente.', 'success');
+        };
+        reader.readAsDataURL(imageFile);
+      } else {
+        // Si no se proporciona una nueva imagen, mantener la existente
+        updateCategory(updatedCategory);
+        setCategories(getCategories());
+        Swal.fire('¡Éxito!', 'Categoría actualizada correctamente.', 'success');
+      }
+    } catch (error) {
+      console.error('Error al actualizar categoría:', error);
+      Swal.fire('Error', 'No se pudo actualizar la categoría.', 'error');
     }
   };
 
@@ -100,22 +133,20 @@ const CategoryListContainer = () => {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        if (useBackend) {
-          // Enviar solicitud DELETE al backend
-          // Aquí iría el código para el backend
-        } else {
-          // Eliminar categoría del estado local y actualizar localStorage
-          const newCategories = categories.filter((cat) => cat.idCategoria !== idCategoria);
-          setCategories(newCategories);
-          updateLocalStorage(newCategories);
+        try {
+          deleteCategory(idCategoria);
+          setCategories(getCategories());
           Swal.fire('Eliminado', 'La categoría ha sido eliminada.', 'success');
+        } catch (error) {
+          console.error('Error al eliminar categoría:', error);
+          Swal.fire('Error', 'No se pudo eliminar la categoría.', 'error');
         }
       }
     });
   };
 
   return (
-    <div className="admi-page">
+    <div className="admin-page">
       <AdminNav />
       <div className="content">
         <div className="new-btn">

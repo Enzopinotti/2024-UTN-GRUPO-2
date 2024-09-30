@@ -25,7 +25,6 @@ function App() {
             <Route path="/products" element={<ProductListContainer />} />
             <Route path="/products/:id" element={<ProductDetail />} />
 
-            {/* Ruta protegida para el panel de administración */}
             <Route
               path="/admin/*"
               element={

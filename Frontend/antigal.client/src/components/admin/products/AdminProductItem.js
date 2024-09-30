@@ -1,12 +1,12 @@
-// src/components/admin/products/ProductItem.js
-import React, { useState } from 'react';
+// src/components/admin/products/AdminProductItem.js
+import React, { useState, useEffect } from 'react';
 
 const AdminProductItem = ({ product, onEdit, onDelete }) => {
   const {
     idProducto,
     nombre,
     precio,
-    imagen,
+    imagenes, // Cambiado de 'imagen' a 'imagenes'
     descripcion,
     marca,
     stock,
@@ -15,6 +15,25 @@ const AdminProductItem = ({ product, onEdit, onDelete }) => {
   } = product;
 
   const [imageError, setImageError] = useState(false);
+  const [imageSrc, setImageSrc] = useState('');
+
+  useEffect(() => {
+    if (imagenes && imagenes.length > 0) {
+      // Si la imagen es una URL (cadena), úsala directamente
+      // Si es un objeto File, crea una URL para previsualización
+      if (typeof imagenes[0] === 'string') {
+        setImageSrc(imagenes[0]);
+      } else {
+        const objectUrl = URL.createObjectURL(imagenes[0]);
+        setImageSrc(objectUrl);
+
+        // Limpia la URL creada para evitar fugas de memoria
+        return () => URL.revokeObjectURL(objectUrl);
+      }
+    } else {
+      setImageSrc('');
+    }
+  }, [imagenes]);
 
   const handleImageError = () => {
     setImageError(true);
@@ -23,8 +42,8 @@ const AdminProductItem = ({ product, onEdit, onDelete }) => {
   return (
     <div className="product-item">
       <div className="product-img">
-        {imagen && !imageError ? (
-          <img src={imagen} alt={nombre} onError={handleImageError} />
+        {imageSrc && !imageError ? (
+          <img src={imageSrc} alt={nombre} onError={handleImageError} />
         ) : (
           <div className="no-image">Sin Imagen</div>
         )}
@@ -35,7 +54,7 @@ const AdminProductItem = ({ product, onEdit, onDelete }) => {
           <p>{descripcion}</p>
         </div>
         <div className="bottom-section">
-          <p>Precio: ${precio}</p>
+          <p>Precio: ${precio.toFixed(2)}</p>
           <p>Stock: {stock}</p>
           <p>Marca: {marca}</p>
           <p>Código de Barras: {codigoBarras}</p>

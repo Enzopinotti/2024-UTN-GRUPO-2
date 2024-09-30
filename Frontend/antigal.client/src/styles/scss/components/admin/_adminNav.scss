@@ -9,7 +9,7 @@ main{
         background-color: $primary-white-color;
         min-height: 100vh;
         font-family: $font;
-        .admi-page{
+        .admin-page{
           .admin-nav {
               background-color: $primary-black-color;
               color: $primary-white-color;
@@ -17,10 +17,11 @@ main{
               display: flex;
               flex-direction: column;
               align-items: center;
-            
+
               h2 {
                 margin-bottom: 20px;
                 font-family: $font;
+                font-size: 1.3rem;
               }
             
               .admin-menu {
@@ -86,4 +87,20 @@ main{
         }
       }
       
+}
+@media (min-width: 1024px) {
+  main{
+    .admin-dashboard{
+        
+        .admin-page{
+          .admin-nav {
+              
+
+              h2 {
+                font-size: 2rem;
+              }
+            }
+          }
+        }
+      }
 }

@@ -4,15 +4,14 @@ import AdminNav from '../AdminNav';
 import ProductList from './ProductList';
 import ProductForm from './ProductForm';
 import Swal from 'sweetalert2';
-import initialProducts from '../../../data/initialProducts'; // Importamos los datos iniciales
+import initialProducts from '../../../data/initialProducts'; 
 
 const AdminProductListContainer = () => {
   const [products, setProducts] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
 
-  // Variable para controlar el uso del backend
-  const useBackend = false; // Cambia a 'true' para usar el backend
+  const useBackend = false; 
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -32,6 +31,8 @@ const AdminProductListContainer = () => {
             setProducts(JSON.parse(storedProducts));
           } else {
             setProducts(initialProducts);
+            // Inicializar localStorage con initialProducts si es necesario
+            localStorage.setItem('products', JSON.stringify(initialProducts));
           }
         }
       } catch (error) {
@@ -57,35 +58,54 @@ const AdminProductListContainer = () => {
   };
 
   // Función para agregar un nuevo producto
-  const handleAddProduct = async (product) => {
+  const handleAddProduct = async (formData) => {
     try {
-      if (useBackend) {
-        // ... (código para el backend)
-      } else {
-        const newProducts = [...products, product];
-        setProducts(newProducts);
-        updateLocalStorage(newProducts);
-        Swal.fire('¡Éxito!', 'Producto agregado correctamente.', 'success');
-      }
+      // Extraer datos del FormData
+      const producto = JSON.parse(formData.get('producto') || '{}');
+      const images = formData.getAll('imagenes');
+
+      const newProduct = {
+        ...producto,
+        idProducto: Date.now(), // Generar un ID único
+        imagenes: images,
+      };
+
+      const newProducts = [...products, newProduct];
+      setProducts(newProducts);
+      updateLocalStorage(newProducts);
+      Swal.fire('¡Éxito!', 'Producto agregado correctamente.', 'success');
     } catch (error) {
       console.error('Error al agregar producto:', error);
       Swal.fire('Error', 'No se pudo agregar el producto.', 'error');
     }
   };
-
-  // Función para editar un producto existente
-  const handleEditProduct = async (updatedProduct) => {
+  
+  const handleEditProduct = async (formData) => {
     try {
-      if (useBackend) {
-        // ... (código para el backend)
-      } else {
-        const newProducts = products.map((prod) =>
-          prod.idProducto === updatedProduct.idProducto ? updatedProduct : prod
-        );
-        setProducts(newProducts);
-        updateLocalStorage(newProducts);
-        Swal.fire('¡Éxito!', 'Producto actualizado correctamente.', 'success');
+      // Extraer datos del FormData
+      const idProducto = parseInt(formData.get('idProducto'));
+      const fields = JSON.parse(formData.get('fields') || '{}');
+      const images = formData.getAll('imagenes');
+
+      const updatedProduct = {
+        idProducto,
+        ...fields,
+      };
+
+      // Manejar imágenes adicionales si existen
+      if (images.length > 0) {
+        const existingProduct = products.find(prod => prod.idProducto === idProducto);
+        updatedProduct.imagenes = existingProduct.imagenes
+          ? [...existingProduct.imagenes, ...images]
+          : images;
       }
+
+      const newProducts = products.map((prod) =>
+        prod.idProducto === idProducto ? { ...prod, ...updatedProduct } : prod
+      );
+      setProducts(newProducts);
+      updateLocalStorage(newProducts);
+      Swal.fire('¡Éxito!', 'Producto actualizado correctamente.', 'success');
     } catch (error) {
       console.error('Error al actualizar producto:', error);
       Swal.fire('Error', 'No se pudo actualizar el producto.', 'error');
@@ -104,14 +124,10 @@ const AdminProductListContainer = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          if (useBackend) {
-            // ... (código para el backend)
-          } else {
-            const newProducts = products.filter((prod) => prod.idProducto !== idProducto);
-            setProducts(newProducts);
-            updateLocalStorage(newProducts);
-            Swal.fire('Eliminado', 'El producto ha sido eliminado.', 'success');
-          }
+          const newProducts = products.filter((prod) => prod.idProducto !== idProducto);
+          setProducts(newProducts);
+          updateLocalStorage(newProducts);
+          Swal.fire('Eliminado', 'El producto ha sido eliminado.', 'success');
         } catch (error) {
           console.error('Error al eliminar producto:', error);
           Swal.fire('Error', 'No se pudo eliminar el producto.', 'error');
@@ -121,7 +137,7 @@ const AdminProductListContainer = () => {
   };
 
   return (
-    <div className="admi-page">
+    <div className="admin-page"> {/* Cambiado de 'admi-page' a 'admin-page' */}
       <AdminNav />
       <div className="content">
         <div className="new-btn">
