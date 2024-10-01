@@ -6,7 +6,7 @@ import Main from './components/layout/Main';
 import Footer from './components/layout/Footer';
 import Home from './pages/Home';
 import ProductListContainer from './components/products/productList/ProductListContainer';
-import ProductDetail from './components/products/productDetail/ProductDetail';
+import ProductDetailContainer from './components/products/productDetail/ProductDetailContainer';
 import AdminDashboard from './components/admin/dashboard/AdminDashboard';
 import CategoryListContainer from './components/admin/categories/CategoryListContainer';
 import AdminProductListContainer from './components/admin/products/ProductListContainer';
@@ -26,7 +26,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<ProductListContainer />} />
-            <Route path="/products/:id" element={<ProductDetail />} />
+            <Route path="/products/:id" element={<ProductDetailContainer />} />
 
             <Route
               path="/admin/*"
