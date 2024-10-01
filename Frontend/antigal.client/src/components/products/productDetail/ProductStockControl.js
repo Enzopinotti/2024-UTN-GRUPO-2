@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { CartContext } from '../../../contexts/CartContext'; 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ProductStockControl = ({ product }) => {
+  const { addToCart } = useContext(CartContext);
   const [quantity, setQuantity] = useState(1);
   const isOutOfStock = product.stock === 0;
 
@@ -18,21 +20,8 @@ const ProductStockControl = ({ product }) => {
     }
   };
   const handleAddToCart =()=>{
-    const cart = JSON.parse(localStorage.getItem("cart"))||[];
-    const existingProductIndex = cart.findIndex((item)=>item.id === product.id);
-
-    if (existingProductIndex!==-1){
-      cart[existingProductIndex].quantity+=quantity;
-    }else{
-      cart.push({
-        id:product.id,
-        name:product.name,
-        price: product.price,
-        quantity:quantity,
-
-      });
-    }
-    localStorage.setItem("cart",JSON.stringify(cart));
+    addToCart(product, quantity); 
+   if(!isOutOfStock){
     toast.success(`${product.name} ha sido agregado al carrito (${quantity})`,{
       className: 'toast',
       position:'top-right',
@@ -43,8 +32,8 @@ const ProductStockControl = ({ product }) => {
       closeOnClick: true,
       pauseOnHover: true,
     });
-
-  }
+   }
+  };
   return (
     <div className="detail-section">
       <p className="disponibility">

@@ -1,63 +1,15 @@
 @import '../../abstract/variables';
-
+.page-detail-container{
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .products-page {
   display: flex;
   flex-direction: column;
   margin-top: 1rem ;
-  .mobile-filters {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: space-between;
-    padding: 10px 2rem;
-    align-items: center;
-
-    .filter-button {
-      background: none;
-      border: none;
-      cursor: pointer;
-
-      img {
-        width: 30px;
-        height: 30px;
-      }
-    }
-  }
-
-  .breadcrumb {
-    p {
-      font-size: 14px;
-      color: $primary-black-color;
-      margin: 0;
-      .imgBread{
-        width: 0.54rem;
-        margin-left: 0.5rem;
-        margin-right: 0.5rem;
-        position: relative;
-        top: 0.2rem;
-      }
-      a {
-        color: $primary-black-color;
-        text-decoration: none;
-
-        &:hover {
-          text-decoration: underline;
-        }
-
-        // Breadcrumb activo
-        &.active {
-          font-weight: 700;
-          color: $secondary-color; // Color naranja
-        }
-      }
-
-      // Último elemento (no enlace) en el breadcrumb
-      .active {
-        font-weight: 700;
-        color: $secondary-color;
-      }
-    }
-  }
-
+  
   .categories-aside {
     display: none;
   }

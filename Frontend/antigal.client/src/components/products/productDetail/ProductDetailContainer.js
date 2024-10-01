@@ -9,6 +9,7 @@ const ProductDetailContainer = () =>{
     const[product,setProduct] =useState(null);
     const [loading, setLoading]=useState(true);
     const [error, setError]=useState(false);
+   
 
     useEffect(()=>{
         const useBackend=false;
@@ -25,6 +26,7 @@ const ProductDetailContainer = () =>{
                 return response.json();
             })
             .then (data =>{
+    
                 const loadedProduct ={
                     id: data.id,
                     name: data.title,
@@ -32,6 +34,8 @@ const ProductDetailContainer = () =>{
                     imageUrl: data.image,
                     description: data.description,
                     category: data.category,
+                    //setea un stock para cuando no se usa el backend porque fakestore no tiene
+                    stock: useBackend ? data.stock : (data.stock || 10),
                 };
                 setProduct(loadedProduct);
                 setLoading(false);
@@ -45,7 +49,7 @@ const ProductDetailContainer = () =>{
     },[id]);
 
     return(
-        <div className="detail-container">
+        <div className="page-detail-container">
             {loading ? (
                 <div className="loading-container">
                     <LoadingSVG/>    
