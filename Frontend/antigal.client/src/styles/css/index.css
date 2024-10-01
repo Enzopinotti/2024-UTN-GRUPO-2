@@ -2139,6 +2139,56 @@ footer .footer-bottom img {
   background-color: white;
   cursor: pointer;
 }
+.productDetail .detail-container .info-section .more-info a {
+  cursor: pointer;
+}
+.productDetail .detail-container .info-section .info {
+  height: auto;
+  width: 100%;
+  background-color: #f1f5e8;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 8pt;
+}
+.productDetail .detail-container .info-section .info p {
+  padding-bottom: 5px;
+}
+.productDetail .detail-container .info-section .info a {
+  color: black;
+  cursor: pointer;
+}
+.productDetail .detail-container .info-section .info a:hover {
+  color: #4d4d4d;
+}
+.productDetail .detail-container .info-section .info .input-envio {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  font-size: 10pt;
+  padding: 5px 0 10px 0;
+}
+.productDetail .detail-container .info-section .info .input-envio input {
+  max-width: 100px;
+  padding: 5px;
+  border: 1px solid #74873D;
+  border-radius: 5px;
+  text-align: center;
+}
+.productDetail .detail-container .info-section .info .input-envio input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+.productDetail .detail-container .info-section .info .input-envio button {
+  background-color: #74873D;
+  border: white;
+  border-radius: 5px;
+  color: white;
+  padding: 5px;
+  cursor: pointer;
+}
+.productDetail .detail-container .info-section .info .input-envio button:hover {
+  background-color: #475225;
+}
 .productDetail .detail-container .info-section i {
   color: #74873D;
 }
