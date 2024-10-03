@@ -1,0 +1,21 @@
+@mixin boton($bg-color, $border-color, $text-color) {
+    background-color: $bg-color;
+    padding: 0.5rem 1.4rem;
+    border-radius: 20px;
+    border: $border-color solid 1px;
+    position: relative;
+    bottom: 4rem;
+    color: $text-color;
+    font-weight: 900;
+
+    // Prefijos para compatibilidad con navegadores más antiguos
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+
+    &:hover {
+        background-color: darken($bg-color, 10%);
+    }
+}
+
