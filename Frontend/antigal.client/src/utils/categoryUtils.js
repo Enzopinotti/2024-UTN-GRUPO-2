@@ -1,7 +1,7 @@
 // src/utils/categoryUtils.js
 
-  // Obtener todas las categorías de localStorage
-  export const getCategories = () => {
+// Obtener todas las categorías de localStorage
+export const getCategories = () => {
     const categories = localStorage.getItem('categories');
     return categories ? JSON.parse(categories) : [];
   };

@@ -1,4 +1,4 @@
-// src/components/products/ProductList.js
+// src/components/products/productList/ProductList.js
 import React from 'react';
 import Product from '../Product/Product';
 

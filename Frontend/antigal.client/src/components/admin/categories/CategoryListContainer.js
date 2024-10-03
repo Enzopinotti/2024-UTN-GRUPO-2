@@ -12,19 +12,19 @@ const CategoryListContainer = () => {
   const [editingCategory, setEditingCategory] = useState(null);
 
   // Variable para controlar el uso del backend
-  const useBackend = true; // Cambia a 'true' para usar el backend
+  const useBackend = false; // Cambia a 'true' para usar el backend
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         if (useBackend) {
           // Obtener categorías desde el backend
-          const response = await fetch('https://localhost:7255/api/Category/getCategories');
+          const response = await fetch('http://localhost:5000/categorias');
           if (!response.ok) {
             throw new Error('Error al obtener categorías del backend');
           }
-          const result = await response.json(); // Cambia a `result`
-          setCategories(result.data); // Asigna `result.data` a `categories`
+          const data = await response.json();
+          setCategories(data);
         } else {
           // Cargar categorías desde localStorage
           const storedCategories = getCategories();
@@ -35,10 +35,9 @@ const CategoryListContainer = () => {
         Swal.fire('Error', 'No se pudieron obtener las categorías.', 'error');
       }
     };
-  
+
     fetchCategories();
   }, [useBackend]);
-  
 
   const handleShowModal = () => {
     setShowModal(true);
