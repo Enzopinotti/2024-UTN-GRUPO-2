@@ -2,6 +2,7 @@
 using antigal.server.Data;
 using antigal.server.Models;
 using antigal.server.Models.Dto;
+using Azure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NPOI.XSSF.UserModel;
@@ -108,18 +109,34 @@ namespace antigal.server.Services
         {
             try
             {
+                // Buscar el producto por su ID
                 var producto = _context.Productos.FirstOrDefault(p => p.idProducto == id);
-                _context.Remove(producto);
+
+                // Verificar si el producto fue encontrado
+                if (producto == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = $"No se encontró el producto con ID {id}.";
+                    return _response; // Retornar respuesta si el producto no se encuentra
+                }
+
+                // Eliminar el producto
+                _context.Productos.Remove(producto); // Usar _context.Productos.Remove
                 _context.SaveChanges();
+
+                // Indicar éxito
+                _response.IsSuccess = true;
+                _response.Message = "Producto eliminado exitosamente.";
             }
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                _response.Message = ex.Message; // Manejo de errores
             }
 
-            return _response;
+            return _response; // Retornar la respuesta
         }
+
         public ResponseDto PutProduct(Producto producto)
         {
             try
@@ -221,5 +238,51 @@ namespace antigal.server.Services
 
             return response;
         }
+        public ResponseDto GetProductsByCategoryId(int categoriaId)
+        {
+            try
+            {
+                // Obtener productos de la categoría especificada
+                var productos = _context.ProductoCategoria
+                    .Include(pc => pc.Producto)  // Cargar Producto
+                    .Include(pc => pc.Categoria) // Cargar Categoria
+                    .Where(pc => pc.idCategoria == categoriaId)  // Filtrar por id de la categoría
+                    .ToList()  // Ejecutar la consulta
+                    .Select(pc => new
+                    {
+                        IdProducto = pc.Producto != null ? pc.Producto.idProducto : 0,  // Manejo de nullS
+                        Nombre = pc.Producto != null ? pc.Producto.nombre : "N/A",  // Manejo de null
+                        Marca = pc.Producto != null ? pc.Producto.marca : "N/A",  // Manejo de null
+                        Descripcion = pc.Producto != null ? pc.Producto.descripcion : "N/A",  // Manejo de null
+                        Precio = pc.Producto != null ? pc.Producto.precio : 0.0f,  // Manejo de null
+                        Stock = pc.Producto != null ? pc.Producto.stock : 0,  // Manejo de null
+                        Disponible = pc.Producto != null ? pc.Producto.disponible : 0,  // Manejo de null
+                        Imagenes = pc.Producto != null ? pc.Producto.imagenes.Select(i => i.url).ToList() : new List<string>(),  // Manejo de null
+                        Categoria = pc.Categoria != null ? pc.Categoria.nombre : "N/A"  // Manejo de null
+                    })
+                    .ToList(); // Ejecutar la consulta para materializar los resultados
+
+                if (productos == null || !productos.Any())
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = $"No se encontraron productos para la categoría con ID {categoriaId}.";
+                    return _response;
+                }
+
+                _response.Data = productos;
+                _response.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+
+            return _response;
+        }
+
+
+
+
     }
 }

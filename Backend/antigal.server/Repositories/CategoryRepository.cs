@@ -1,21 +1,15 @@
-﻿// Services/CategoryService.cs
-using antigal.server.Data;
+﻿using antigal.server.Data;
 using antigal.server.Models;
 using antigal.server.Models.Dto;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace antigal.server.Services
+namespace antigal.server.Repositories
 {
-    public class CategoryService : ICategoryService
+    public class CategoriaRepository : ICategoriaRepository
     {
         private readonly AppDbContext _context;
-        private ResponseDto _response;
+        private readonly ResponseDto _response;
 
-        public CategoryService(AppDbContext context)
+        public CategoriaRepository(AppDbContext context)
         {
             _context = context;
             _response = new ResponseDto();
@@ -25,8 +19,9 @@ namespace antigal.server.Services
         {
             try
             {
-                IEnumerable<Categoria> categorias = _context.Categorias.ToList();
+                var categorias = _context.Categorias.ToList();
                 _response.Data = categorias;
+                _response.IsSuccess = true;
             }
             catch (Exception ex)
             {
@@ -35,12 +30,14 @@ namespace antigal.server.Services
             }
             return _response;
         }
+
         public ResponseDto GetCategoryById(int id)
         {
             try
             {
                 var categoria = _context.Categorias.FirstOrDefault(c => c.idCategoria == id);
                 _response.Data = categoria;
+                _response.IsSuccess = true;
             }
             catch (Exception ex)
             {
@@ -49,34 +46,33 @@ namespace antigal.server.Services
             }
             return _response;
         }
-        public ResponseDto GetCategoryByTitle(string nombre)
+
+        public ResponseDto GetCategoriesByTitle(string nombre)
         {
             try
             {
-                var categoria = _context.Categorias.FirstOrDefault(c => c.nombre == nombre);
-                _response.Data = categoria;
+                var categorias = _context.Categorias
+                    .Where(c => c.nombre.ToLower().Contains(nombre.ToLower()))
+                    .ToList();
+                _response.Data = categorias;
+                _response.IsSuccess = true;
             }
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
                 _response.Message = ex.Message;
             }
-
             return _response;
         }
-        public ResponseDto AddCategory([FromBody] Categoria categoria)
+
+        public ResponseDto AddCategory(Categoria categoria)
         {
             try
             {
                 _context.Categorias.Add(categoria);
                 _context.SaveChanges();
-
                 _response.Data = categoria;
-            }
-            catch (DbUpdateException ex) // Capturar errores de la base de datos
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.InnerException?.Message ?? ex.Message; // Capturar la excepción interna si existe
+                _response.IsSuccess = true;
             }
             catch (Exception ex)
             {
@@ -86,14 +82,14 @@ namespace antigal.server.Services
             return _response;
         }
 
-        public ResponseDto PutCategory([FromBody] Categoria categoria)
+        public ResponseDto UpdateCategory(Categoria categoria)
         {
             try
             {
                 _context.Categorias.Update(categoria);
                 _context.SaveChanges();
-
                 _response.Data = categoria;
+                _response.IsSuccess = true;
             }
             catch (Exception ex)
             {
@@ -107,10 +103,19 @@ namespace antigal.server.Services
         {
             try
             {
-                var categoria = _context.Categorias.FirstOrDefault(c => c.idCategoria == id);
-                _context.Remove(categoria);
-
-                _context.SaveChanges();
+                var categoria = _context.Categorias.Find(id);
+                if (categoria != null)
+                {
+                    _context.Categorias.Remove(categoria);
+                    _context.SaveChanges();
+                    _response.IsSuccess = true;
+                    _response.Message = "Categoría eliminada exitosamente.";
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = $"No se encontró la categoría con ID {id}.";
+                }
             }
             catch (Exception ex)
             {
@@ -119,7 +124,5 @@ namespace antigal.server.Services
             }
             return _response;
         }
-
     }
-    
 }
