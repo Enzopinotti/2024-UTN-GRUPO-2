@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom';
 import LoadingSVG from '../../common/LoadingSVG'; // Animación de carga
 import ErrorAnimation from '../../common/ErrorAnimation'; // Animación de error
 import Banner from '../../common/Banner';
+import formatCamelCase from '../../../utils/formatCamelCase';
 
 const ProductListContainer = () => {
   const [products, setProducts] = useState([]);
@@ -20,48 +21,92 @@ const ProductListContainer = () => {
   const location = useLocation();  // Para Breadcrumb dinámico
 
   useEffect(() => {
-    const useBackend = false; // Cambia este flag a true para conectar con el backend
-    const fetchURL = useBackend ? 'http://localhost:5000/api/products' : 'https://fakestoreapi.com/products';
+    const fetchProductsAndCategories = async () => {
+      const useBackend = true; // Cambia este flag a true para conectar con el backend
+      const fetchURL = useBackend ? 'https://localhost:7255/api/Product/getProducts' : 'https://fakestoreapi.com/products';
 
-    fetch(fetchURL)
-      .then(response => {
+      try {
+        // Primera llamada: Obtener productos
+        const response = await fetch(fetchURL);
         if (!response.ok) {
           throw new Error('Error al obtener productos');
         }
-        return response.json();
-      })
-      .then(data => {
-        const adaptedData = data.map(item => ({
-          id: item.id,
-          name: item.title,
-          price: item.price,
-          imageUrl: item.image,
-          category: item.category,
-        }));
+        const data = await response.json();
 
-        setProducts(adaptedData);
-        setFilteredProducts(adaptedData); // Inicialmente todos los productos
+        if (data.data && Array.isArray(data.data)) {
+          // Adaptar los datos de los productos
+          const adaptedData = data.data.map(item => ({
+            id: item.idProducto,           // Mapear idProducto a id
+            name: item.nombre,             // Mapear nombre a name
+            brand: item.marca,             // Mapear marca a brand
+            description: item.descripcion, // Mapear descripcion a description
+            barcode: item.codigoBarras,    // Mapear codigoBarras a barcode
+            available: item.disponible,    // Mapear disponible a available
+            featured: item.destacado,      // Mapear destacado a featured
+            price: item.precio,            // Mapear precio a price
+            stock: item.stock,             // Mapear stock a stock
+            images: item.imagenes,         // Mapear imagenes a images
+            categories: [],                // Inicializar categorías vacías
+          }));
 
-        // Generar un objeto para contar productos por categoría
-        const categoryCount = adaptedData.reduce((acc, product) => {
-          acc[product.category] = (acc[product.category] || 0) + 1;
-          return acc;
-        }, {});
+          // Segunda llamada: Obtener categorías para cada producto
+          const productsWithCategories = await Promise.all(
+            adaptedData.map(async (product) => {
+              const fetchURLCategory = `https://localhost:7255/api/ProductCategory/categorias/${product.id}`;
+              try {
+                const responseCategory = await fetch(fetchURLCategory);
+                if (!responseCategory.ok) {
+                  throw new Error(`Error al obtener categorías para el producto ${product.id}`);
+                }
+                const dataCategory = await responseCategory.json();
 
-        // Formatear las categorías como {name, count} para el componente CategoryList
-        const formattedCategories = Object.entries(categoryCount).map(([name, count]) => ({
-          name,
-          count,
-        }));
+                if (dataCategory.data && Array.isArray(dataCategory.data)) {
+                  // Asumimos que cada categoría tiene un campo 'nombre'
+                  const formattedCategories = dataCategory.data.map(cat => formatCamelCase(cat.nombre));
+                  return { ...product, categories: formattedCategories };
+                } else {
+                  return { ...product, categories: [] };
+                }
+              } catch (errorCategory) {
+                console.error(`Error al obtener categorías para el producto ${product.id}: `, errorCategory);
+                return { ...product, categories: [] };
+              }
+            })
+          );
 
-        setCategories(formattedCategories);  // Actualizar el estado con las categorías formateadas
-        setLoading(false); 
-        setError(false); 
-      })
-      .catch(() => {
+          // Actualizar el estado de productos
+          setProducts(productsWithCategories);
+          setFilteredProducts(productsWithCategories); // Inicialmente todos los productos
+
+          // Generar un objeto para contar productos por categoría
+          const categoryCount = {};
+
+          productsWithCategories.forEach(product => {
+            product.categories.forEach(category => {
+              categoryCount[category] = (categoryCount[category] || 0) + 1;
+            });
+          });
+
+          // Formatear las categorías como {name, count} para el componente CategoryList
+          const formattedCategories = Object.entries(categoryCount).map(([name, count]) => ({
+            name,
+            count,
+          }));
+
+          setCategories(formattedCategories);  // Actualizar el estado con las categorías formateadas
+          setLoading(false); 
+          setError(false); 
+        } else {
+          throw new Error('Formato de datos incorrecto');
+        }
+      } catch (err) {
+        console.error('Error al obtener productos:', err);
         setLoading(false);  // Ya no está cargando
         setError(true);     // Ha ocurrido un error
-      });
+      }
+    };
+
+    fetchProductsAndCategories();
   }, []);
 
   // Alternar el estado del dropdown de categorías en mobile

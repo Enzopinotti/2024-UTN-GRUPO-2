@@ -11,20 +11,22 @@ const AdminProductListContainer = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
 
-  const useBackend = false; 
+  const useBackend = true; 
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         if (useBackend) {
           // Obtener productos desde el backend
-          const response = await fetch('http://localhost:5000/productos');
+          const response = await fetch('https://localhost:7255/api/Product/getProducts');
           if (!response.ok) {
             throw new Error('Error al obtener productos del backend');
           }
           const data = await response.json();
-          setProducts(data);
-        } else {
+          if(Array.isArray(data.data)){
+            setProducts(data.data);       
+          }
+          } else {
           // Cargar productos desde localStorage o desde los datos iniciales
           const storedProducts = localStorage.getItem('products');
           if (storedProducts) {

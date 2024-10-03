@@ -50,7 +50,7 @@ const Product = ({ product }) => {
     <div className="product-item">
       {product.onSale && <div className="sale-tag">SALE</div>}
       <article className="imageAndIcons">
-        <img src={product.imageUrl} alt={product.name} onClick={handleImageClick} />
+      <img className='imagesProducto' src={product.images && product.images.length > 0 ? product.images[0] : '/images/product/default.png'} alt={product.name} />
         <div className="actions">
           {/* Botón de like */}
           <button 
@@ -70,9 +70,20 @@ const Product = ({ product }) => {
         {/* Aplicamos la función formatCamelCase al nombre del producto */}
         <h3>{formatCamelCase(product.name)}</h3>
         
-        {/* Aplicamos la función formatCamelCase a la categoría */}
-        <p className="category">{formatCamelCase(product.category)}</p>
-        
+
+        {/* Mostrar categorías */}
+        <p className="category">
+          {product.categories && product.categories.length > 0 ? (
+            product.categories.map((category, index) => (
+              <span key={index} className="category-tag">
+                {category}
+              </span>
+            ))
+          ) : (
+            <span className="category-tag"></span>
+          )}
+        </p>
+
         <p className="offerPrice">
           {product.onSale && (
             <span className="precioAnterior">
