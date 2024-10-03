@@ -12,7 +12,7 @@ import CategoryListContainer from './components/admin/categories/CategoryListCon
 import AdminProductListContainer from './components/admin/products/ProductListContainer';
 import { CartProvider } from './contexts/CartContext';
 import { ToastContainer, toast } from "react-toastify"; // Importación de toast y ToastContainer
-import "react-toastify/dist/ReactToastify.css"; // Estilos de react-toastify
+import "react-toastify/dist/ReactToastify.css"; 
 
 
 function App() {

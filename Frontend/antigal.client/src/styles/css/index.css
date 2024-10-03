@@ -451,10 +451,10 @@ li {
     padding: 2rem 4.5rem !important;
   }
   .header-desktop .logo {
-    height: 80px !important;
+    height: 73px !important;
   }
   .header-desktop .nav-horizontal li a {
-    font-size: 1.5rem !important;
+    font-size: 1.35rem !important;
     padding: 1rem;
   }
   .header-desktop .widgets div {
@@ -711,7 +711,7 @@ li {
   right: 4px;
 }
 .header .header-mobile .hamburgesa {
-  width: 38px;
+  width: 35px;
   cursor: pointer;
 }
 .header .header-mobile .mobile-menu {
@@ -1576,6 +1576,40 @@ footer .footer-bottom img {
 .products-page .cart-preview-container {
   display: none;
 }
+.products-page .mobile-filters {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+.products-page .mobile-filters .filter-button {
+  background-color: transparent;
+  border: 0;
+}
+.products-page .mobile-filters .filter-button img {
+  width: 2rem;
+}
+.products-page .mobile-filters .breadcrumb p a {
+  color: #222222;
+  text-decoration: none;
+}
+.products-page .mobile-filters .breadcrumb p span {
+  color: #222222;
+  text-decoration: none;
+}
+.products-page .mobile-filters .breadcrumb p span img {
+  width: 0.7rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  position: relative;
+  top: 0.3rem;
+}
+.products-page .mobile-filters .breadcrumb p .active {
+  color: #ED8B00;
+  font-weight: 900;
+}
 .products-page .categories-dropdown {
   padding: 10px 2rem;
   background-color: #f8f9fa;
@@ -1822,6 +1856,25 @@ footer .footer-bottom img {
   .products-page .asideYProductos .categories-aside .breadcrumb {
     margin-bottom: 2rem;
     user-select: none;
+  }
+  .products-page .asideYProductos .categories-aside .breadcrumb p a {
+    color: #222222;
+    text-decoration: none;
+  }
+  .products-page .asideYProductos .categories-aside .breadcrumb p span {
+    color: #222222;
+    text-decoration: none;
+  }
+  .products-page .asideYProductos .categories-aside .breadcrumb p span img {
+    width: 0.7rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    position: relative;
+    top: 0.3rem;
+  }
+  .products-page .asideYProductos .categories-aside .breadcrumb p .active {
+    color: #ED8B00;
+    font-weight: 900;
   }
   .products-page .asideYProductos .categories-aside .breadcrumb .imgBread {
     width: 0.54rem;

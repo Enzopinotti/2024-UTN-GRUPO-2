@@ -11,14 +11,15 @@ const AdminProductListContainer = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
 
-  const useBackend = false; 
+  const useBackend = true; 
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         if (useBackend) {
           // Obtener productos desde el backend
-          const response = await fetch('http://localhost:5000/productos');
+          console.log('Entre a useBackend');
+          const response = await fetch('http://localhost:5279/api/Product/getProduct');
           if (!response.ok) {
             throw new Error('Error al obtener productos del backend');
           }

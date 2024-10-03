@@ -7,15 +7,16 @@ import MenuHamburger from '../common/MenuHamburger';
 import CloseIcon from '../common/CloseIcon';
 import SocialMedia from '../common/SocialMedia';
 import UserIcon from '../common/UserIconDos';
-import Swal from 'sweetalert2'; // Importamos SweetAlert2
+import Swal from 'sweetalert2'; 
 import SearchBar from '../common/SearchBar';
 import SearchBarMobile from '../common/SearchBarMobile';
 const Header = () => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 800);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
-  // Función para mostrar mensaje de "Funcionalidad en Desarrollo"
+  
+  
   const showDevelopmentAlert = () => {
     Swal.fire({
       title: 'Funcionalidad en Desarrollo',
@@ -68,7 +69,7 @@ const Header = () => {
     <header className='header'>
       {isMobile ? (
         <div className='header-mobile'>
-          {/* Alerta de "Funcionalidad en Desarrollo" al hacer clic en el carrito */}
+          
           <CartWidget onClick={showDevelopmentAlert} />
           
           <Logo toggleMenu={toggleMenu} isMenuOpen={isMenuOpen} />
@@ -91,14 +92,13 @@ const Header = () => {
           <Logo />
           <NavBar />
           <div className='widgets'>
-            {/* Alerta de "Funcionalidad en Desarrollo" al hacer clic en la lupa */}
             <LupaWidget onClick={toggleSearchBar} />
             <CartWidget onClick={showDevelopmentAlert} />
             <UserIcon />
           </div>
         </div>
       )}
-     {isSearchBarVisible && <SearchBar isVisible={isSearchBarVisible} onClose={toggleSearchBar } />}      </header>
+     {isSearchBarVisible && <SearchBar isVisible={isSearchBarVisible} onClose={toggleSearchBar } />}</header>
   );
 };
 
