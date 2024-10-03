@@ -1655,6 +1655,8 @@ footer .footer-bottom img {
   overflow: hidden;
   position: relative;
   margin-bottom: 4rem;
+  min-height: 350px;
+  justify-content: space-between;
 }
 .products-page .product-list-container .product-list .product-item .sale-tag {
   background-color: #68be85;
@@ -1675,6 +1677,7 @@ footer .footer-bottom img {
   background-color: rgba(116, 135, 61, 0.1960784314);
   display: flex;
   flex-direction: row;
+  justify-content: center;
   align-items: center;
   padding: 10px;
   padding-top: 20px;
@@ -1694,6 +1697,10 @@ footer .footer-bottom img {
   object-fit: contain;
   border-radius: 15px;
 }
+.products-page .product-list-container .product-list .product-item .imageAndIcons .imagesProducto {
+  position: relative;
+  left: 1.5rem;
+}
 .products-page .product-list-container .product-list .product-item .imageAndIcons .actions {
   display: flex;
   flex-direction: column;
@@ -1701,6 +1708,7 @@ footer .footer-bottom img {
   width: 100%;
 }
 .products-page .product-list-container .product-list .product-item .imageAndIcons .actions button {
+  position: relative;
   background: none;
   border: none;
   cursor: pointer;
@@ -1731,6 +1739,14 @@ footer .footer-bottom img {
   margin: 5px 0;
   display: flex;
   justify-content: center;
+}
+.products-page .product-list-container .product-list .product-item .info .category {
+  display: flex;
+  flex-direction: column;
+}
+.products-page .product-list-container .product-list .product-item .info .category .category-tag {
+  text-align: center;
+  padding-bottom: 0.2rem;
 }
 .products-page .product-list-container .product-list .product-item .info .precioAnterior {
   text-decoration: line-through;
