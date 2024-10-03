@@ -17,9 +17,10 @@ namespace antigal.server.Controllers
             _productService = productService;
         }
 
-        [HttpGet("getProduct")]
+        [HttpGet("getProducts")]
         public ResponseDto GetProduct()
         {
+            Console.WriteLine("funciona");
             return _productService.GetProducts();
         }
 

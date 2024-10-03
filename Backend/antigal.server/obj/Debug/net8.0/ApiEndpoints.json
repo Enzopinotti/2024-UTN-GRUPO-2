@@ -1,7 +1,7 @@
 [
   {
     "ContainingType": "antigal.server.Controllers.CategoryController",
-    "Method": "PostCategory",
+    "Method": "AddCategory",
     "RelativePath": "api/Category/addCategory",
     "HttpMethod": "POST",
     "IsController": true,
@@ -27,7 +27,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.CategoryController",
-    "Method": "DeleteProduct",
+    "Method": "DeleteCategory",
     "RelativePath": "api/Category/deleteCategory/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -53,7 +53,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.CategoryController",
-    "Method": "GetCategory",
+    "Method": "GetCategories",
     "RelativePath": "api/Category/getCategories",
     "HttpMethod": "GET",
     "IsController": true,
@@ -99,8 +99,8 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.CategoryController",
-    "Method": "GetProductByTitle",
-    "RelativePath": "api/Category/getProductByTitle/{nombre}",
+    "Method": "GetCategoryByTitle",
+    "RelativePath": "api/Category/getCategoryByTitle/{nombre}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -125,7 +125,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.CategoryController",
-    "Method": "PutCategory",
+    "Method": "UpdateCategory",
     "RelativePath": "api/Category/updateCategory",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -203,26 +203,6 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.ProductController",
-    "Method": "GetProduct",
-    "RelativePath": "api/Product/getProduct",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "antigal.server.Models.Dto.ResponseDto",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.ProductController",
     "Method": "GetProductById",
     "RelativePath": "api/Product/getProductById/{id}",
     "HttpMethod": "GET",
@@ -261,6 +241,26 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": [
+      {
+        "Type": "antigal.server.Models.Dto.ResponseDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.ProductController",
+    "Method": "GetProduct",
+    "RelativePath": "api/Product/getProducts",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": [
       {
         "Type": "antigal.server.Models.Dto.ResponseDto",

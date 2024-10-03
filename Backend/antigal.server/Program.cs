@@ -4,6 +4,7 @@ using antigal.server.Services;
 using antigal.server.Repositories;
 using FluentValidation;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
+
 namespace antigal.server
 {
     public class Program
@@ -27,8 +28,10 @@ namespace antigal.server
 
             //*********** REPOSITORIES ***********//
 
+            // Inyección del repositorio IProductCategoryRepository y su implementación ProductCategoryRepository
             builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
-
+            // Inyección del repositorio ICategoriaRepository y su implementación CategoriaRepository
+            builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 
             // Agregar servicios de CORS (sirve para restringir metodos, origen de solicitudes, etc) SEGURIDAD
             builder.Services.AddCors(options =>
@@ -55,7 +58,7 @@ namespace antigal.server
             // Usar la política de CORS
             app.UseCors("AllowLocalhost");
 
-            // Configurar el middleware de la aplicaci�n
+            // Configurar el middleware de la aplicación
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -69,10 +72,6 @@ namespace antigal.server
             app.MapControllers();
 
             app.Run();
-
-
         }
-
-    } 
+    }
 }
-

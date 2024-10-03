@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using antigal.server.Models;
-using antigal.server.Data;
+﻿using antigal.server.Models;
 using antigal.server.Models.Dto;
 using antigal.server.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace antigal.server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : Controller
+    public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
 
@@ -18,7 +17,7 @@ namespace antigal.server.Controllers
         }
 
         [HttpGet("getCategories")]
-        public ResponseDto GetCategory()
+        public ResponseDto GetCategories()
         {
             return _categoryService.GetCategories();
         }
@@ -29,26 +28,26 @@ namespace antigal.server.Controllers
             return _categoryService.GetCategoryById(id);
         }
 
-        [HttpGet("getProductByTitle/{nombre}")]
-        public ResponseDto GetProductByTitle(string nombre)
+        [HttpGet("getCategoryByTitle/{nombre}")]
+        public ResponseDto GetCategoryByTitle(string nombre)
         {
             return _categoryService.GetCategoryByTitle(nombre);
         }
 
         [HttpPost("addCategory")]
-        public ResponseDto PostCategory([FromBody] Categoria categoria)
+        public ResponseDto AddCategory([FromBody] Categoria categoria)
         {
             return _categoryService.AddCategory(categoria);
         }
 
         [HttpPut("updateCategory")]
-        public ResponseDto PutCategory([FromBody] Categoria categoria)
+        public ResponseDto UpdateCategory([FromBody] Categoria categoria)
         {
-            return _categoryService.PutCategory(categoria);
+            return _categoryService.UpdateCategory(categoria);
         }
 
         [HttpDelete("deleteCategory/{id}")]
-        public ResponseDto DeleteProduct(int id)
+        public ResponseDto DeleteCategory(int id)
         {
             return _categoryService.DeleteCategory(id);
         }
