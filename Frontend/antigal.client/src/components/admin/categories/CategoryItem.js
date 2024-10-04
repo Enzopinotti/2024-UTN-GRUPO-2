@@ -16,8 +16,8 @@ const CategoryItem = ({ category, onEdit, onDelete }) => {
   }, [imagen]);
 
   const handleImageError = () => {
-    setImageError(true);
-  };
+     setImageError(true);
+  }
 
   return (
     <div className="category-item">
@@ -25,7 +25,8 @@ const CategoryItem = ({ category, onEdit, onDelete }) => {
         {imageSrc && !imageError ? (
           <img src={imageSrc} alt={nombre} onError={handleImageError} />
         ) : (
-          <div className="no-image">Sin Imagen</div>
+           <div className="no-image">Sin Imagen</div>
+
         )}
       </div>
       <div className="category-info">
