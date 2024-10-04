@@ -150,6 +150,164 @@
     ]
   },
   {
+    "ContainingType": "antigal.server.Controllers.ImagenesController",
+    "Method": "GetImagenes",
+    "RelativePath": "api/Imagenes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[antigal.server.Models.Imagen, antigal.server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.ImagenesController",
+    "Method": "PostImagen",
+    "RelativePath": "api/Imagenes",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "url",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "idProducto",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Producto.idProducto",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Producto.nombre",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Producto.marca",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Producto.descripcion",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Producto.codigoBarras",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Producto.disponible",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Producto.destacado",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Producto.precio",
+        "Type": "System.Single",
+        "IsRequired": false
+      },
+      {
+        "Name": "Producto.stock",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Producto.imagenes",
+        "Type": "System.Collections.Generic.List\u00601[[antigal.server.Models.Imagen, antigal.server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Producto.CategoriaProductos",
+        "Type": "System.Collections.Generic.List\u00601[[antigal.server.Relationships.ProductoCategoria, antigal.server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "antigal.server.Models.Imagen",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.ImagenesController",
+    "Method": "GetImagen",
+    "RelativePath": "api/Imagenes/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "antigal.server.Models.Imagen",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.ImagenesController",
+    "Method": "DeleteImagen",
+    "RelativePath": "api/Imagenes/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "antigal.server.Controllers.ProductController",
     "Method": "PostProduct",
     "RelativePath": "api/Product/addProduct",
