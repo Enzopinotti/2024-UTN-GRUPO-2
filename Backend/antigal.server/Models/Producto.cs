@@ -22,7 +22,7 @@ namespace antigal.server.Models
         public List <Imagen> imagenes { get; set; } = new List<Imagen> ();
 
         //RELACION MUCHOS A MUCHOS CON CATEGORIA   
-        [JsonIgnore]
+        //[JsonIgnore]
         public List<ProductoCategoria> CategoriaProductos { get; set; } = new List<ProductoCategoria>();
 
 

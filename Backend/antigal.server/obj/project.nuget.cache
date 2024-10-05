@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "tKDu31MTN7E=",
+  "dgSpecHash": "gN9yXLDK33o=",
   "success": true,
-  "projectFilePath": "C:\\Users\\beker\\OneDrive\\Escritorio\\DESARROLLO\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
+  "projectFilePath": "C:\\Users\\beker\\Desktop\\Repositorios\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\beker\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\beker\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
