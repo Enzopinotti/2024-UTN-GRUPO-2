@@ -3,8 +3,8 @@
     public class Usuario
     {
         public int idUsuario { get; set; }
-        public string nombreCompleto { get; set; }
-        public string correo { get; set; }
-        public string contrasenia { get; set; }
+        public required string nombreCompleto { get; set; }
+        public required string correo { get; set; }
+        public required string contrasenia { get; set; }
     }
 }
