@@ -55,7 +55,7 @@ namespace antigal.server.Data
 
             });
 
-            modelBuilder.Entity<Usuario>().ToTable("Usuario");
+            modelBuilder.Entity<Usuario>().ToTable("Usuarios");
 
         }
 

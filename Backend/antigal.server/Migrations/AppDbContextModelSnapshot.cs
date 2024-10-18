@@ -131,7 +131,7 @@ namespace antigal.server.Migrations
 
                     b.HasKey("idUsuario");
 
-                    b.ToTable("Usuario", (string)null);
+                    b.ToTable("Usuarios", (string)null);
                 });
 
             modelBuilder.Entity("antigal.server.Relationships.ProductoCategoria", b =>

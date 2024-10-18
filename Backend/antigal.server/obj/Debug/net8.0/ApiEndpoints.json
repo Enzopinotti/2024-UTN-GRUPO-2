@@ -1,5 +1,21 @@
 [
   {
+    "ContainingType": "antigal.server.Controllers.AccesoController",
+    "Method": "Registrarse",
+    "RelativePath": "api/Acceso/Registrarse",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "objeto",
+        "Type": "antigal.server.Models.Dto.UsuarioDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "antigal.server.Controllers.CategoryController",
     "Method": "AddCategory",
     "RelativePath": "api/Category/addCategory",
