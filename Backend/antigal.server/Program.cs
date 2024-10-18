@@ -23,7 +23,7 @@ namespace antigal.server
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            //Utilidades, enfriptar y demas
+            //Utilidades, encriptar y demas
             builder.Services.AddSingleton<Utilidades>();
 
             builder.Services.AddAuthentication(config =>

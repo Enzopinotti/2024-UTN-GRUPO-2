@@ -1,6 +1,22 @@
 [
   {
     "ContainingType": "antigal.server.Controllers.AccesoController",
+    "Method": "Login",
+    "RelativePath": "api/Acceso/Login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "objeto",
+        "Type": "antigal.server.Models.Dto.LoginDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AccesoController",
     "Method": "Registrarse",
     "RelativePath": "api/Acceso/Registrarse",
     "HttpMethod": "POST",

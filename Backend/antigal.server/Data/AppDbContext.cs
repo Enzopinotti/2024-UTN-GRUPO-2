@@ -51,11 +51,11 @@ namespace antigal.server.Data
 
                 tb.Property(col => col.nombreCompleto).HasMaxLength(50);
                 tb.Property(col => col.correo).HasMaxLength(50);
-                tb.Property(col => col.contrasenia).HasMaxLength(50);
+                tb.Property(col => col.contrasenia).HasMaxLength(100);
 
             });
 
-            modelBuilder.Entity<Usuario>().ToTable("Usuarios");
+            modelBuilder.Entity<Usuario>().ToTable("Usuario");
 
         }
 

@@ -38,21 +38,25 @@ namespace antigal.server.Controllers
             await _AppDbContext.SaveChangesAsync();
 
             if (modeloUsuario.idUsuario != 0)
-                return StatusCode(StatusCodes.Status200OK, new { isSucces = true });
+                return StatusCode(StatusCodes.Status200OK, new { isSuccess = true });
             else
-                return StatusCode(StatusCodes.Status200OK, new { isSucces = false });
+                return StatusCode(StatusCodes.Status200OK, new { isSuccess = false });
 
         }
-        /*
+        
         [HttpPost]
         [Route("Login")]
         public async Task<IActionResult> Login(LoginDTO objeto)
         {
-            var usuarioEncontrado = await _AppDbContext:Usuarios
+            var usuarioEncontrado = await _AppDbContext.Usuarios
                                     .Where(u =>
                                         u.correo == objeto.correo &&
                                         u.contrasenia == _utilidades.encriptarSHA256(objeto.contrasenia)
                                     ).FirstOrDefaultAsync();
-        }*/
+            if(usuarioEncontrado == null)
+                return StatusCode(StatusCodes.Status200OK,new { isSuccess = false, token = "" });
+            else
+                return StatusCode(StatusCodes.Status200OK, new { isSuccess = true, token = _utilidades.generarJWT(usuarioEncontrado)});
+        }
     }
 }

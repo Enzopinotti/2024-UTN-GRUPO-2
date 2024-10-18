@@ -11,14 +11,14 @@ namespace antigal.server.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Usuarios",
+                name: "Usuario",
                 columns: table => new
                 {
                     idUsuario = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     nombreCompleto = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     correo = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    contrasenia = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    contrasenia = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,7 +30,7 @@ namespace antigal.server.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Usuarios");
+                name: "Usuario");
         }
     }
 }
