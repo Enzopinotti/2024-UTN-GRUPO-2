@@ -1,10 +1,11 @@
 using antigal.server.Models;
 using antigal.server.Relationships;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace antigal.server.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<User, Role, string>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }  // Esta línea es el constructor del contexto de la base de datos (AppDbContext).
 
@@ -17,6 +18,8 @@ namespace antigal.server.Data
         //OnModelCreating se utiliza para establecer las asociaciones entre dos clases para que impacten en la base de datos desde .NET
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder); // Llama al método base
+
             modelBuilder.Entity<Producto>()
                 .HasMany(p => p.imagenes)  //Un producto tiene muchas imagenes
                 .WithOne(i => i.Producto)  //Una imagen pertenece a un producto
@@ -36,6 +39,17 @@ namespace antigal.server.Data
                 .HasOne(pc => pc.Categoria)
                 .WithMany(c => c.CategoriaProductos)
                 .HasForeignKey(pc => pc.idCategoria);
+
+
+            modelBuilder.Entity<User>(b =>
+            {
+                b.Property(u => u.FullName);
+            });
+
+            modelBuilder.Entity<Role>(b =>
+            {
+                b.Property(r => r.Description);
+            });
         }
 
     }

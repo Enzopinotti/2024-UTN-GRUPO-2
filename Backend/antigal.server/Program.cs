@@ -4,6 +4,8 @@ using antigal.server.Services;
 using antigal.server.Repositories;
 using FluentValidation;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
+using Microsoft.AspNetCore.Identity;
+using antigal.server.Models;
 
 namespace antigal.server
 {
@@ -16,6 +18,11 @@ namespace antigal.server
             // Agregar el contexto de la base de datos al contenedor de servicios
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            // Configurar Identity
+            builder.Services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
 
             //*********** SERVICES ***********//
 
@@ -67,6 +74,7 @@ namespace antigal.server
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
