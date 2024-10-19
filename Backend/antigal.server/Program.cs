@@ -6,6 +6,9 @@ using FluentValidation;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using Microsoft.AspNetCore.Identity;
 using antigal.server.Models;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace antigal.server
 {
@@ -33,6 +36,9 @@ namespace antigal.server
             // Inyección del servicio IProductCategoryService y su implementación ProductCategoryService
             builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
 
+            // Registra el AuthService
+            builder.Services.AddScoped<AuthService>();
+
             //*********** REPOSITORIES ***********//
 
             // Inyección del repositorio IProductCategoryRepository y su implementación ProductCategoryRepository
@@ -55,6 +61,26 @@ namespace antigal.server
             // Validaciones
             builder.Services.AddValidatorsFromAssemblyContaining<Program>();
             builder.Services.AddFluentValidationAutoValidation();
+
+            // Configuración de autenticación JWT
+            var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
+            builder.Services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
 
             // Agregar otros servicios como Swagger si es necesario
             builder.Services.AddEndpointsApiExplorer();
