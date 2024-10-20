@@ -1,55 +1,45 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using antigal.server.Models.Dto;
+using antigal.server.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace antigal.server.Services
 {
-    public class AuthService
+    public class AuthService : IAuthService
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly string _secretKey;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
 
-        public AuthService(UserManager<IdentityUser> userManager, IConfiguration configuration)
+        public AuthService(UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _userManager = userManager;
-            _secretKey = configuration["Jwt:Key"];
+            _signInManager = signInManager;
         }
 
-        public async Task<IdentityResult> RegisterAsync(RegisterDto model)
+        public async Task<bool> RegisterUserAsync(RegisterDto registerDto)
         {
-            var user = new IdentityUser { UserName = model.Username, Email = model.Email };
-            return await _userManager.CreateAsync(user, model.Password);
-        }
-
-        public async Task<string> LoginAsync(LoginDto model)
-        {
-            var user = await _userManager.FindByNameAsync(model.Username);
-            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+            var user = new User
             {
-                return GenerateJwtToken(user);
+                UserName = registerDto.UserName,
+                Email = registerDto.Email,
+                FullName = registerDto.FullName
+            };
+
+            var result = await _userManager.CreateAsync(user, registerDto.Password);
+
+            return result.Succeeded;
+        }
+
+        public async Task<string> LoginUserAsync(LoginDto loginDto)
+        {
+            var result = await _signInManager.PasswordSignInAsync(loginDto.UserName, loginDto.Password, false, false);
+
+            if (result.Succeeded)
+            {
+                return "token";
             }
 
-            return null; // O lanzar una excepción si prefieres
-        }
-
-        private string GenerateJwtToken(IdentityUser user)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_secretKey);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, user.UserName) }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            return null;
         }
     }
 }

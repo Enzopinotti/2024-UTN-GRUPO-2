@@ -37,7 +37,7 @@ namespace antigal.server
             builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
 
             // Registra el AuthService
-            builder.Services.AddScoped<AuthService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
             //*********** REPOSITORIES ***********//
 
@@ -62,26 +62,6 @@ namespace antigal.server
             builder.Services.AddValidatorsFromAssemblyContaining<Program>();
             builder.Services.AddFluentValidationAutoValidation();
 
-            // Configuración de autenticación JWT
-            var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
-            builder.Services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
-
             // Agregar otros servicios como Swagger si es necesario
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -105,7 +85,31 @@ namespace antigal.server
 
             app.MapControllers();
 
+            // Crear roles
+            using (var scope = app.Services.CreateScope())
+            {
+                var serviceProvider = scope.ServiceProvider;
+                CreateRoles(serviceProvider).Wait();
+            }
+
+
             app.Run();
         }
+
+        private static async Task CreateRoles(IServiceProvider serviceProvider)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
+            string[] roleNames = { "Admin", "Usuario" };
+
+            foreach (var roleName in roleNames)
+            {
+                var roleExist = await roleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    await roleManager.CreateAsync(new Role { Name = roleName });
+                }
+            }
+        }
+
     }
 }

@@ -1,46 +1,84 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using antigal.server.Models.Dto;
+using antigal.server.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using antigal.server.Models.Dto;
-using antigal.server.Services;
 
-namespace antigal.server.Controllers
+namespace E_Commerce_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly AuthService _authService;
-
-        public AccountController(AuthService authService)
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
+        private readonly RoleManager<Role> _roleManager;
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager)
         {
-            _authService = authService;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _roleManager = roleManager;
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDto model)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterDto registerDto)
         {
-            var result = await _authService.RegisterAsync(model);
-
-            if (result.Succeeded)
+            if (!ModelState.IsValid)
             {
-                return Ok("User  created successfully");
+                return BadRequest(ModelState);
             }
 
-            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            return BadRequest($"Failed to create user: {errors}");
+            var user = new User
+            {
+                UserName = registerDto.UserName,
+                Email = registerDto.Email,
+                FullName = registerDto.FullName
+            };
+
+            var result = await _userManager.CreateAsync(user, registerDto.Password);
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, "Usuario");
+                return Ok();
+            }
+
+            return BadRequest(result.Errors);
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto model)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginDto loginDto)
         {
-            var token = await _authService.LoginAsync(model);
-
-            if (token != null)
+            if (!ModelState.IsValid)
             {
-                return Ok(new { Token = token });
+                return BadRequest(ModelState);
             }
 
-            return Unauthorized("Invalid username or password");
+            var result = await _signInManager.PasswordSignInAsync(loginDto.UserName, loginDto.Password, false, false);
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+
+            return Unauthorized();
+        }
+
+        [HttpPost("create-role")]
+        public async Task<IActionResult> CreateRoleAsync([FromBody] CreateRoleDto createRoleDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var role = new Role { Name = createRoleDto.RoleName };
+            var result = await _roleManager.CreateAsync(role);
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+
+            return BadRequest(result.Errors);
         }
     }
 }

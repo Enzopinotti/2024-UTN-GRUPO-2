@@ -41,15 +41,7 @@ namespace antigal.server.Data
                 .HasForeignKey(pc => pc.idCategoria);
 
 
-            modelBuilder.Entity<User>(b =>
-            {
-                b.Property(u => u.FullName);
-            });
-
-            modelBuilder.Entity<Role>(b =>
-            {
-                b.Property(r => r.Description);
-            });
+            
         }
 
     }
