@@ -1,6 +1,6 @@
 [
   {
-    "ContainingType": "E_Commerce_API.Controllers.AccountController",
+    "ContainingType": "antigal.server.Controllers.AccountController",
     "Method": "CreateRoleAsync",
     "RelativePath": "api/Account/create-role",
     "HttpMethod": "POST",
@@ -16,9 +16,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "E_Commerce_API.Controllers.AccountController",
+    "ContainingType": "antigal.server.Controllers.AccountController",
     "Method": "LoginAsync",
-    "RelativePath": "api/Account/login",
+    "RelativePath": "api/Account/login-admin",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -32,9 +32,41 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "E_Commerce_API.Controllers.AccountController",
+    "ContainingType": "antigal.server.Controllers.AccountController",
     "Method": "RegisterAsync",
-    "RelativePath": "api/Account/register",
+    "RelativePath": "api/Account/register-admin",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "registerDto",
+        "Type": "antigal.server.Models.Dto.RegisterDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AuthController",
+    "Method": "LoginAsync",
+    "RelativePath": "api/Auth/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loginDto",
+        "Type": "antigal.server.Models.Dto.LoginDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AuthController",
+    "Method": "RegisterAsync",
+    "RelativePath": "api/Auth/register",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,

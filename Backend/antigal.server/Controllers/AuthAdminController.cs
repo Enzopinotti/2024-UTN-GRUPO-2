@@ -5,23 +5,23 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace E_Commerce_API.Controllers
+namespace antigal.server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController : ControllerBase
+    public class AuthAdminController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<Role> _roleManager;
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager)
+        public AuthAdminController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
         }
 
-        [HttpPost("register")]
+        [HttpPost("register-admin")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterDto registerDto)
         {
             if (!ModelState.IsValid)
@@ -39,14 +39,14 @@ namespace E_Commerce_API.Controllers
             var result = await _userManager.CreateAsync(user, registerDto.Password);
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, "Usuario");
+                await _userManager.AddToRoleAsync(user, "Admin");
                 return Ok();
             }
 
             return BadRequest(result.Errors);
         }
 
-        [HttpPost("login")]
+        [HttpPost("login-admin")]
         public async Task<IActionResult> LoginAsync([FromBody] LoginDto loginDto)
         {
             if (!ModelState.IsValid)
