@@ -27,10 +27,10 @@ namespace antigal.server.Controllers
             var result = await _authService.RegisterUserAsync(registerDto);
             if (!result)
             {
-                return BadRequest("User registration failed.");
+                return BadRequest("Error al registrarse");
             }
 
-            return Ok("User registered successfully.");
+            return Ok("Usuario reegistrado con exito!");
         }
 
         [HttpPost("login")]
