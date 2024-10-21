@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace antigal.server.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,32 +24,6 @@ namespace antigal.server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -106,6 +80,89 @@ namespace antigal.server.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Imagenes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductoId = table.Column<int>(type: "int", nullable: true),
+                    UsuarioId = table.Column<int>(type: "int", nullable: true),
+                    CategoriaId = table.Column<int>(type: "int", nullable: true),
+                    FechaSubida = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Imagenes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Imagenes_Categorias_CategoriaId",
+                        column: x => x.CategoriaId,
+                        principalTable: "Categorias",
+                        principalColumn: "idCategoria");
+                    table.ForeignKey(
+                        name: "FK_Imagenes_Productos_ProductoId",
+                        column: x => x.ProductoId,
+                        principalTable: "Productos",
+                        principalColumn: "idProducto");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductoCategoria",
+                columns: table => new
+                {
+                    idProducto = table.Column<int>(type: "int", nullable: false),
+                    idCategoria = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductoCategoria", x => new { x.idProducto, x.idCategoria });
+                    table.ForeignKey(
+                        name: "FK_ProductoCategoria_Categorias_idCategoria",
+                        column: x => x.idCategoria,
+                        principalTable: "Categorias",
+                        principalColumn: "idCategoria",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductoCategoria_Productos_idProducto",
+                        column: x => x.idProducto,
+                        principalTable: "Productos",
+                        principalColumn: "idProducto",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImagenId = table.Column<int>(type: "int", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Imagenes_ImagenId",
+                        column: x => x.ImagenId,
+                        principalTable: "Imagenes",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -193,50 +250,6 @@ namespace antigal.server.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Imagenes",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    idProducto = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Imagenes", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_Imagenes_Productos_idProducto",
-                        column: x => x.idProducto,
-                        principalTable: "Productos",
-                        principalColumn: "idProducto",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductoCategoria",
-                columns: table => new
-                {
-                    idProducto = table.Column<int>(type: "int", nullable: false),
-                    idCategoria = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductoCategoria", x => new { x.idProducto, x.idCategoria });
-                    table.ForeignKey(
-                        name: "FK_ProductoCategoria_Categorias_idCategoria",
-                        column: x => x.idCategoria,
-                        principalTable: "Categorias",
-                        principalColumn: "idCategoria",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductoCategoria_Productos_idProducto",
-                        column: x => x.idProducto,
-                        principalTable: "Productos",
-                        principalColumn: "idProducto",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -270,6 +283,13 @@ namespace antigal.server.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_ImagenId",
+                table: "AspNetUsers",
+                column: "ImagenId",
+                unique: true,
+                filter: "[ImagenId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -277,9 +297,14 @@ namespace antigal.server.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Imagenes_idProducto",
+                name: "IX_Imagenes_CategoriaId",
                 table: "Imagenes",
-                column: "idProducto");
+                column: "CategoriaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Imagenes_ProductoId",
+                table: "Imagenes",
+                column: "ProductoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductoCategoria_idCategoria",
@@ -306,9 +331,6 @@ namespace antigal.server.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Imagenes");
-
-            migrationBuilder.DropTable(
                 name: "ProductoCategoria");
 
             migrationBuilder.DropTable(
@@ -316,6 +338,9 @@ namespace antigal.server.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Imagenes");
 
             migrationBuilder.DropTable(
                 name: "Categorias");
