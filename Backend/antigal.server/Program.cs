@@ -4,6 +4,11 @@ using antigal.server.Services;
 using antigal.server.Repositories;
 using FluentValidation;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
+using Microsoft.AspNetCore.Identity;
+using antigal.server.Models;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace antigal.server
 {
@@ -17,6 +22,11 @@ namespace antigal.server
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            // Configurar Identity
+            builder.Services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+
             //*********** SERVICES ***********//
 
             // Inyección del servicio IProductService y su implementación ProductService
@@ -29,6 +39,9 @@ namespace antigal.server
             builder.Services.AddScoped<ICartService, CartService>();
 
 
+
+            // Registra el AuthService
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
             //*********** REPOSITORIES ***********//
 
@@ -73,11 +86,36 @@ namespace antigal.server
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
 
+            // Crear roles
+            using (var scope = app.Services.CreateScope())
+            {
+                var serviceProvider = scope.ServiceProvider;
+                CreateRoles(serviceProvider).Wait();
+            }
+
+
             app.Run();
         }
+
+        private static async Task CreateRoles(IServiceProvider serviceProvider)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
+            string[] roleNames = { "Admin", "Usuario" };
+
+            foreach (var roleName in roleNames)
+            {
+                var roleExist = await roleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    await roleManager.CreateAsync(new Role { Name = roleName });
+                }
+            }
+        }
+
     }
 }

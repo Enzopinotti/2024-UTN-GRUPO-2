@@ -1,5 +1,6 @@
 [
   {
+<<<<<<< HEAD
     "ContainingType": "antigal.server.Controllers.CartController",
     "Method": "GetCartByUserId",
     "RelativePath": "api/Cart/{userId}",
@@ -29,11 +30,17 @@
     "ContainingType": "antigal.server.Controllers.CartController",
     "Method": "CreateCart",
     "RelativePath": "api/Cart/{userId}",
+=======
+    "ContainingType": "antigal.server.Controllers.AccountController",
+    "Method": "CreateRoleAsync",
+    "RelativePath": "api/Account/create-role",
+>>>>>>> origin/develop
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
+<<<<<<< HEAD
         "Name": "userId",
         "Type": "System.String",
         "IsRequired": true
@@ -81,11 +88,25 @@
     "ContainingType": "antigal.server.Controllers.CartController",
     "Method": "AddItemToCart",
     "RelativePath": "api/Cart/{userId}/items",
+=======
+        "Name": "createRoleDto",
+        "Type": "antigal.server.Models.Dto.CreateRoleDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AccountController",
+    "Method": "LoginAsync",
+    "RelativePath": "api/Account/login-admin",
+>>>>>>> origin/develop
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
+<<<<<<< HEAD
         "Name": "userId",
         "Type": "System.String",
         "IsRequired": true
@@ -113,10 +134,25 @@
     "Method": "RemoveItemFromCart",
     "RelativePath": "api/Cart/{userId}/items/{itemId}",
     "HttpMethod": "DELETE",
+=======
+        "Name": "loginDto",
+        "Type": "antigal.server.Models.Dto.LoginDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AccountController",
+    "Method": "RegisterAsync",
+    "RelativePath": "api/Account/register-admin",
+    "HttpMethod": "POST",
+>>>>>>> origin/develop
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
+<<<<<<< HEAD
         "Name": "userId",
         "Type": "System.String",
         "IsRequired": true
@@ -138,6 +174,46 @@
         "StatusCode": 200
       }
     ]
+=======
+        "Name": "registerDto",
+        "Type": "antigal.server.Models.Dto.RegisterDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AuthController",
+    "Method": "LoginAsync",
+    "RelativePath": "api/Auth/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loginDto",
+        "Type": "antigal.server.Models.Dto.LoginDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AuthController",
+    "Method": "RegisterAsync",
+    "RelativePath": "api/Auth/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "registerDto",
+        "Type": "antigal.server.Models.Dto.RegisterDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+>>>>>>> origin/develop
   },
   {
     "ContainingType": "antigal.server.Controllers.CategoryController",

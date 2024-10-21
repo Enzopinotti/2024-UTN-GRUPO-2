@@ -1,12 +1,13 @@
 using antigal.server.Models;
 using antigal.server.Relationships;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace antigal.server.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<User, Role, string>
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }  // Esta línea es el constructor del contexto de la base de datos (AppDbContext).
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }  // Esta lï¿½nea es el constructor del contexto de la base de datos (AppDbContext).
 
         //MAPEO PRODUCTOS. Los DbSet se utilizan para agregar las clases que van a ser mapeadas a la base de datos.
         public DbSet <Producto> Productos { get; set; }
@@ -19,6 +20,8 @@ namespace antigal.server.Data
         //OnModelCreating se utiliza para establecer las asociaciones entre dos clases para que impacten en la base de datos desde .NET
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder); // Llama al mï¿½todo base
+
             modelBuilder.Entity<Producto>()
                 .HasMany(p => p.imagenes)  //Un producto tiene muchas imagenes
                 .WithOne(i => i.Producto)  //Una imagen pertenece a un producto
@@ -42,7 +45,7 @@ namespace antigal.server.Data
             modelBuilder.Entity<Carrito>()
                 .HasMany(c => c.Items) // Un Carrito tiene muchos CarritoItems
                 .WithOne() // Cada CarritoItem se relaciona con un Carrito
-                .HasForeignKey(ci => ci.idCarritoItem); // Aquí se asume que idCarritoItem en CarritoItem es la clave foránea (ajusta si es necesario)
+                .HasForeignKey(ci => ci.idCarritoItem); // Aquï¿½ se asume que idCarritoItem en CarritoItem es la clave forï¿½nea (ajusta si es necesario)
 
             modelBuilder.Entity<CarritoItem>()
                 .HasOne(ci => ci.Producto) // Cada CarritoItem tiene un Producto
