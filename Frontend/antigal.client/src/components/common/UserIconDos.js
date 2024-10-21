@@ -1,11 +1,11 @@
 // src/components/common/UserIconDos.js
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const UserIconDos = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const isAuthenticated = true; // Suponiendo que esta variable controla si el usuario está autenticado como admin
+  const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
   const navigate = useNavigate();
   const menuRef = useRef(null);
 
@@ -13,30 +13,25 @@ const UserIconDos = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // Función para manejar clics fuera del menú
-  const handleClickOutside = (event) => {
-    if (menuRef.current && !menuRef.current.contains(event.target)) {
-      setIsMenuOpen(false);
-    }
-  };
-
-  // useEffect para agregar y limpiar el event listener
+  // Manejar clics fuera del menú
   useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
+    };
     if (isMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
     }
-    // Limpieza al desmontar el componente
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isMenuOpen]);
 
-  // Navegar al Dashboard de Admin
-  const goToAdminDashboard = () => {
-    navigate('/admin/products');
-    setIsMenuOpen(false); // Cerrar el menú después de navegar
+  // Funciones de navegación
+  const goToProfile = () => {
+    navigate('/profile');
+    setIsMenuOpen(false);
   };
 
   return (
@@ -45,14 +40,13 @@ const UserIconDos = () => {
         <ul className='user-menu'>
           {isAuthenticated ? (
             <>
-              <li onClick={goToAdminDashboard}>Administrar</li>
-              <li>Perfil</li>
-              <li>Cerrar Sesión</li>
+              <li onClick={goToProfile}>Perfil</li>
+              <li onClick={() => logout({ returnTo: window.location.origin })}>Cerrar Sesión</li>
             </>
           ) : (
             <>
-              <li onClick={() => Swal.fire('Funcionalidad en Desarrollo', 'Esta funcionalidad estará disponible pronto.', 'info')}>Registrarse</li>
-              <li onClick={() => Swal.fire('Funcionalidad en Desarrollo', 'Esta funcionalidad estará disponible pronto.', 'info')}>Iniciar Sesión</li>
+              <li onClick={() => loginWithRedirect({ screen_hint: 'signup' })}>Registrarse</li>
+              <li onClick={() => loginWithRedirect()}>Iniciar Sesión</li>
             </>
           )}
         </ul>
@@ -60,7 +54,7 @@ const UserIconDos = () => {
       <div className="user-icon-container">
         <img
           src="/icons/userIcon.svg"
-          alt="user icon de Antigal"
+          alt="user icon"
           onClick={toggleMenu}
           className="user-icon"
         />
