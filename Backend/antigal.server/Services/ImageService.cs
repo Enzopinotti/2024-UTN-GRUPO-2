@@ -4,6 +4,7 @@ using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace antigal.server.Services
 {
@@ -18,20 +19,20 @@ namespace antigal.server.Services
             _context = context;
         }
 
-        public async Task<Imagen> UploadImageAsync(IFormFile file, int? productoId = null, int? usuarioId = null, int? categoriaId = null)
+        public async Task<Imagen> UploadImageAsync(IFormFile file, int? productoId = null, string? usuarioId = null, int? categoriaId = null)
         {
             if (file == null || file.Length == 0)
             {
                 throw new ArgumentException("No file uploaded");
             }
 
-            var uploadparams = new ImageUploadParams()
+            var uploadParams = new ImageUploadParams()
             {
                 File = new FileDescription(file.FileName, file.OpenReadStream()),
-                Folder = "antigal-photos"
+                Folder = "antigal-photos" // Directorio en tu cuenta de Cloudinary
             };
 
-            var uploadResult = await _cloudinary.UploadAsync(uploadparams);
+            var uploadResult = await _cloudinary.UploadAsync(uploadParams);
 
             if (uploadResult.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -52,7 +53,6 @@ namespace antigal.server.Services
             {
                 throw new Exception("Error uploading image");
             }
-
         }
     }
 }

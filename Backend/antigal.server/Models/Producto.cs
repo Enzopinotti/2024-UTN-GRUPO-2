@@ -16,10 +16,7 @@ namespace antigal.server.Models
         public int? destacado { get; set; }
         public  float precio { get; set; }
         public  int stock { get; set; }
-       
-        //RELACION UNO A MUCHOS CON IMAGEN
-       
-        public List <Imagen> imagenes { get; set; } = new List<Imagen> ();
+        public ICollection<Imagen>? Imagenes { get; set; }
 
         //RELACION MUCHOS A MUCHOS CON CATEGORIA   
         [JsonIgnore]
@@ -38,6 +35,8 @@ namespace antigal.server.Models
             this.precio = precio;
             this.stock = stock;
         }
+
+
 
         //funcion para que actualice automatico el "disponible" (no funciona)
         public int verificarDisponible()

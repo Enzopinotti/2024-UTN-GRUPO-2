@@ -19,15 +19,25 @@ namespace antigal.server.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder); // Llama al método base
-        
-            /*
-            modelBuilder.Entity<Producto>()
-                .HasMany(p => p.imagenes)  //Un producto tiene muchas imagenes
-                .WithOne(i => i.Producto)  //Una imagen pertenece a un producto
-                .HasForeignKey(i => i.idProducto) //Establece la FK
-                .OnDelete(DeleteBehavior.Cascade); //Establece la regla la cual dice que si se elimina un Producto, se elmininaran las imagenes de dicho producto.
-           */
+            
+            modelBuilder.Entity<Imagen>()
+                .HasOne(i => i.Producto)
+                .WithMany(p => p.Imagenes) // Asegúrate de que Producto tenga una lista de imágenes
+                .HasForeignKey(i => i.ProductoId)
+                .OnDelete(DeleteBehavior.SetNull); // Opción para mantener las imágenes si se elimina un producto
 
+            modelBuilder.Entity<Imagen>()
+                .HasOne(i => i.User)
+                .WithOne() // Asegúrate de que esto esté relacionado con la propiedad de navegación si la tienes
+                .HasForeignKey<Imagen>(i => i.UsuarioId)
+                .OnDelete(DeleteBehavior.Cascade); // Si se elimina un usuario, también se eliminará la imagen
+
+            modelBuilder.Entity<Imagen>()
+                .HasOne(i => i.Categoria)
+                .WithMany() // Si no tienes una propiedad de colección en Categoria, esto es correcto
+                .HasForeignKey(i => i.CategoriaId)
+                .OnDelete(DeleteBehavior.SetNull); // Opción para mantener la imagen si se elimina una categoría
+           
             // Relacion muchos a muchos usando la tabla intermedia. ProductoCategoria
             modelBuilder.Entity<ProductoCategoria>()
                 .HasKey(pc => new { pc.idProducto, pc.idCategoria });
