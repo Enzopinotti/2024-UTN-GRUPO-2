@@ -8,6 +8,7 @@ namespace antigal.server.Models
     {
         public int Id { get; set; }
         public required string Url { get; set; }
+        public string? PublicId { get; set; }
         public int? ProductoId { get; set; }
         public string? UsuarioId { get; set; }
         public int? CategoriaId { get; set; }
@@ -17,6 +18,6 @@ namespace antigal.server.Models
         public Producto? Producto { get; set; }
         public User? User { get; set; }
         public Categoria? Categoria { get; set; }
-        //public object idProducto { get; internal set; }
+        
     }
 }

@@ -12,14 +12,14 @@ namespace antigal.server.Models
         public required string marca { get; set; }
         public string? descripcion { get; set; }
         public int?  codigoBarras { get; set; }
-        public int disponible { get; set; }
+        public int? disponible { get; set; }
         public int? destacado { get; set; }
-        public  float precio { get; set; }
+        public float precio { get; set; }
         public  int stock { get; set; }
        
         //RELACION UNO A MUCHOS CON IMAGEN
        
-        public List <Imagen> imagenes { get; set; } = new List<Imagen> ();
+        public ICollection <Imagen>? imagenes { get; set; }
 
         //RELACION MUCHOS A MUCHOS CON CATEGORIA   
         [JsonIgnore]

@@ -19,14 +19,16 @@ namespace antigal.server.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder); // Llama al método base
-        
-            /*
+
             modelBuilder.Entity<Producto>()
-                .HasMany(p => p.imagenes)  //Un producto tiene muchas imagenes
-                .WithOne(i => i.Producto)  //Una imagen pertenece a un producto
-                .HasForeignKey(i => i.idProducto) //Establece la FK
-                .OnDelete(DeleteBehavior.Cascade); //Establece la regla la cual dice que si se elimina un Producto, se elmininaran las imagenes de dicho producto.
-           */
+                .HasMany(p => p.imagenes)
+                .WithOne()
+                .HasForeignKey(i => i.ProductoId); 
+
+            modelBuilder.Entity<Categoria>()
+                .HasMany(c => c.CategoriaProductos)
+                .WithOne()
+                .HasForeignKey(cp => cp.idCategoria); 
 
             // Relacion muchos a muchos usando la tabla intermedia. ProductoCategoria
             modelBuilder.Entity<ProductoCategoria>()
