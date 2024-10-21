@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace antigal.server.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -90,7 +90,7 @@ namespace antigal.server.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductoId = table.Column<int>(type: "int", nullable: true),
-                    UsuarioId = table.Column<int>(type: "int", nullable: true),
+                    UsuarioId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CategoriaId = table.Column<int>(type: "int", nullable: true),
                     FechaSubida = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },

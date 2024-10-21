@@ -172,8 +172,8 @@ namespace antigal.server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UsuarioId")
-                        .HasColumnType("int");
+                    b.Property<string>("UsuarioId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

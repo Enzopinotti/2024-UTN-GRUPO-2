@@ -12,8 +12,8 @@ using antigal.server.Data;
 namespace antigal.server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241021161731_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20241021213315_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -175,8 +175,8 @@ namespace antigal.server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UsuarioId")
-                        .HasColumnType("int");
+                    b.Property<string>("UsuarioId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

@@ -8,6 +8,6 @@ namespace antigal.server.Services
 {
     public interface IImageService
     {
-        Task<Imagen> UploadImageAsync(IFormFile file, int? productoId = null, int? usuarioId = null, int? categoriaId = null);
+        Task<Imagen> UploadImageAsync(IFormFile file, int? productoId = null, string? usuarioId = null, int? categoriaId = null);
     }
 }

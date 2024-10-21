@@ -9,7 +9,7 @@ namespace antigal.server.Models
         public int Id { get; set; }
         public required string Url { get; set; }
         public int? ProductoId { get; set; }
-        public int? UsuarioId { get; set; }
+        public string? UsuarioId { get; set; }
         public int? CategoriaId { get; set; }
         public DateTime FechaSubida { get; set; } = DateTime.UtcNow;
 

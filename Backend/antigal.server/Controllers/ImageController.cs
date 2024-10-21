@@ -18,7 +18,7 @@ namespace antigal.server.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> Upload(IFormFile file, int? productoId = null, int? usuarioId = null, int? categoriaId = null)
+        public async Task<IActionResult> Upload(IFormFile file, int? productoId = null, string? usuarioId = null, int? categoriaId = null)
         {
             try
             {

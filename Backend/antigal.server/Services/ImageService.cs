@@ -18,7 +18,7 @@ namespace antigal.server.Services
             _context = context;
         }
 
-        public async Task<Imagen> UploadImageAsync(IFormFile file, int? productoId = null, int? usuarioId = null, int? categoriaId = null)
+        public async Task<Imagen> UploadImageAsync(IFormFile file, int? productoId = null, string? usuarioId = null, int? categoriaId = null)
         {
             if (file == null || file.Length == 0)
             {
