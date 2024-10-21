@@ -13,6 +13,8 @@ namespace antigal.server.Data
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet <Imagen> Imagenes { get; set; }
         public DbSet <ProductoCategoria> ProductoCategoria { get; set; }
+        public DbSet<Carrito> Carritos { get; set; }
+        public DbSet<CarritoItem> CarritoItems { get; set; }
 
         //OnModelCreating se utiliza para establecer las asociaciones entre dos clases para que impacten en la base de datos desde .NET
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,6 +38,17 @@ namespace antigal.server.Data
                 .HasOne(pc => pc.Categoria)
                 .WithMany(c => c.CategoriaProductos)
                 .HasForeignKey(pc => pc.idCategoria);
+
+            modelBuilder.Entity<Carrito>()
+                .HasMany(c => c.Items) // Un Carrito tiene muchos CarritoItems
+                .WithOne() // Cada CarritoItem se relaciona con un Carrito
+                .HasForeignKey(ci => ci.idCarritoItem); // Aquí se asume que idCarritoItem en CarritoItem es la clave foránea (ajusta si es necesario)
+
+            modelBuilder.Entity<CarritoItem>()
+                .HasOne(ci => ci.Producto) // Cada CarritoItem tiene un Producto
+                .WithMany() // Un Producto puede estar en muchos CarritoItems
+                .HasForeignKey(ci => ci.idProducto); // Asumiendo que tienes una propiedad idProducto en CarritoItem
+
         }
 
     }

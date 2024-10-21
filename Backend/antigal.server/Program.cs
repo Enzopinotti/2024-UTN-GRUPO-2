@@ -25,6 +25,10 @@ namespace antigal.server
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             // Inyección del servicio IProductCategoryService y su implementación ProductCategoryService
             builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
+            // Inyección del servicio ICartService y su implementación CartService
+            builder.Services.AddScoped<ICartService, CartService>();
+
+
 
             //*********** REPOSITORIES ***********//
 
@@ -32,6 +36,8 @@ namespace antigal.server
             builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
             // Inyección del repositorio ICategoriaRepository y su implementación CategoriaRepository
             builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+            // Inyección del repositorio ICartRepository y su implementación CartRepository
+            builder.Services.AddScoped<ICartRepository, CartRepository>();
 
             // Agregar servicios de CORS (sirve para restringir metodos, origen de solicitudes, etc) SEGURIDAD
             builder.Services.AddCors(options =>
