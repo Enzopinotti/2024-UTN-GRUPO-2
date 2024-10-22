@@ -38,6 +38,7 @@ namespace antigal.server.Services
                 var nuevaImagen = new Imagen
                 {
                     Url = uploadResult.SecureUrl.ToString(),
+                    PublicId = uploadResult.PublicId, 
                     ProductoId = productoId,
                     UsuarioId = usuarioId,
                     CategoriaId = categoriaId
@@ -83,5 +84,58 @@ namespace antigal.server.Services
             }
 
         }
+
+        public async Task<bool> DeleteImageAsync(int imageId)
+        {
+            var image = await _context.Imagenes.FindAsync(imageId);
+            if (image == null)
+            {
+                return false; // La imagen no existe
+            }
+
+            // Eliminar la imagen de Cloudinary
+            var deleteParams = new DeletionParams(image.PublicId);
+            var deleteResult = await _cloudinary.DestroyAsync(deleteParams);
+
+            if (deleteResult.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                // Eliminar la imagen de la base de datos
+                _context.Imagenes.Remove(image);
+
+                // Actualizar el producto, usuario o categoría según corresponda
+                if (image.ProductoId.HasValue)
+                {
+                    var producto = await _context.Productos.FindAsync(image.ProductoId.Value);
+                    if (producto != null)
+                    {
+                        producto.ImagenUrls.Remove(image.Url); // Eliminar la URL de la lista de URLs del producto
+                    }
+                }
+                else if (!string.IsNullOrEmpty(image.UsuarioId))
+                {
+                    var usuario = await _context.Users.FindAsync(image.UsuarioId);
+                    if (usuario != null)
+                    {
+                        usuario.ImagenUrl = null; // Limpiar la URL del usuario
+                    }
+                }
+                else if (image.CategoriaId.HasValue)
+                {
+                    var categoria = await _context.Categorias.FindAsync(image.CategoriaId.Value);
+                    if (categoria != null)
+                    {
+                        categoria.ImagenUrl = null; // Limpiar la URL de la categoría
+                    }
+                }
+
+                await _context.SaveChangesAsync(); // Guardar los cambios en la base de datos
+                return true; // Eliminación exitosa
+            }
+            else
+            {
+                return false; // Error al eliminar la imagen
+            }
+        }
+
     }
 }
