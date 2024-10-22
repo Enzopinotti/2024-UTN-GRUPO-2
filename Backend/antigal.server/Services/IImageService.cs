@@ -10,6 +10,6 @@ namespace antigal.server.Services
     {
         Task<Imagen> UploadImageAsync(IFormFile file, int? productoId = null, string? usuarioId = null, int? categoriaId = null);
         Task<bool> DeleteImageAsync(int imageId);
-
+        Task<bool> DeleteImageByUrlAsync(string imageUrl);
     }
 }

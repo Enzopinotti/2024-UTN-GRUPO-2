@@ -4,6 +4,7 @@ using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace antigal.server.Services
 {
@@ -99,7 +100,6 @@ namespace antigal.server.Services
 
             if (deleteResult.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                // Eliminar la imagen de la base de datos
                 _context.Imagenes.Remove(image);
 
                 // Actualizar el producto, usuario o categoría según corresponda
@@ -108,7 +108,7 @@ namespace antigal.server.Services
                     var producto = await _context.Productos.FindAsync(image.ProductoId.Value);
                     if (producto != null)
                     {
-                        producto.ImagenUrls.Remove(image.Url); // Eliminar la URL de la lista de URLs del producto
+                        producto.ImagenUrls.Remove(image.Url); 
                     }
                 }
                 else if (!string.IsNullOrEmpty(image.UsuarioId))
@@ -116,7 +116,7 @@ namespace antigal.server.Services
                     var usuario = await _context.Users.FindAsync(image.UsuarioId);
                     if (usuario != null)
                     {
-                        usuario.ImagenUrl = null; // Limpiar la URL del usuario
+                        usuario.ImagenUrl = null;
                     }
                 }
                 else if (image.CategoriaId.HasValue)
@@ -124,17 +124,88 @@ namespace antigal.server.Services
                     var categoria = await _context.Categorias.FindAsync(image.CategoriaId.Value);
                     if (categoria != null)
                     {
-                        categoria.ImagenUrl = null; // Limpiar la URL de la categoría
+                        categoria.ImagenUrl = null; 
                     }
                 }
 
-                await _context.SaveChangesAsync(); // Guardar los cambios en la base de datos
+                await _context.SaveChangesAsync(); 
                 return true; // Eliminación exitosa
             }
             else
             {
                 return false; // Error al eliminar la imagen
             }
+        }
+
+        public async Task<bool> DeleteImageByUrlAsync(string imageUrl)
+        {
+            var publicId = ExtractPublicIdFromUrl(imageUrl);
+            if (string.IsNullOrEmpty(publicId))
+            {
+                throw new Exception("No se pudo extraer el PublicId de la URL proporcionada.");
+            }
+
+            // Eliminar la imagen de Cloudinary
+            var deleteParams = new DeletionParams(publicId);
+            var deleteResult = await _cloudinary.DestroyAsync(deleteParams);
+
+            if (deleteResult.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                var image = await _context.Imagenes.FirstOrDefaultAsync(i => i.Url == imageUrl);
+                if (image != null)
+                {
+                    _context.Imagenes.Remove(image);
+
+                    // Actualizar el producto, usuario o categoría según corresponda
+                    if (image.ProductoId.HasValue)
+                    {
+                        var producto = await _context.Productos.FindAsync(image.ProductoId.Value);
+                        if (producto != null)
+                        {
+                            producto.ImagenUrls.Remove(image.Url); 
+                        }
+                    }
+                    else if (!string.IsNullOrEmpty(image.UsuarioId))
+                    {
+                        var usuario = await _context.Users.FindAsync(image.UsuarioId);
+                        if (usuario != null)
+                        {
+                            usuario.ImagenUrl = null; 
+                        }
+                    }
+                    else if (image.CategoriaId.HasValue)
+                    {
+                        var categoria = await _context.Categorias.FindAsync(image.CategoriaId.Value);
+                        if (categoria != null)
+                        {
+                            categoria.ImagenUrl = null; 
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+                return true; // Eliminación exitosa
+            }
+            else
+            {
+                return false; // Error al eliminar la imagen
+            }
+        }
+
+        //metodo para extraer la PublicId desde la url
+        private string ExtractPublicIdFromUrl(string imageUrl)
+        {
+            var uri = new Uri(imageUrl);
+            var segments = uri.Segments;
+
+            if (segments.Length > 0)
+            {
+                var publicIdWithExtension = segments[segments.Length - 1];
+                var publicId = publicIdWithExtension.Split('.')[0];
+                return publicId;
+            }
+
+            return null;
         }
 
     }

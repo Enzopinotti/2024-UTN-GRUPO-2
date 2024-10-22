@@ -247,6 +247,22 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.ImageController",
+    "Method": "DeleteImageByUrl",
+    "RelativePath": "api/Image/eliminar-por-url",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "imageUrl",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.ImageController",
     "Method": "Upload",
     "RelativePath": "api/Image/upload",
     "HttpMethod": "POST",
