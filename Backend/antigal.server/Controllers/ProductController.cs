@@ -1,8 +1,11 @@
 ﻿// Controllers/ProductController.cs
 using antigal.server.Models;
 using antigal.server.Models.Dto;
+using antigal.server.Relationships;
 using antigal.server.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using antigal.server.Data;
 
 namespace antigal.server.Controllers
 {
@@ -11,10 +14,15 @@ namespace antigal.server.Controllers
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
+        private readonly AppDbContext _context; // Añadido
+        private readonly IImageService _imageService; // Añadido
 
-        public ProductController(IProductService productService)
+
+        public ProductController(IProductService productService, AppDbContext context, IImageService imageService)
         {
             _productService = productService;
+            _context = context; // Inicializado
+            _imageService = imageService; // Inicializado
         }
 
         [HttpGet("getProducts")]
@@ -35,12 +43,15 @@ namespace antigal.server.Controllers
         {
             return _productService.GetProductByTitle(nombre);
         }
-
+  
         [HttpPost("addProduct")]
-        public ResponseDto PostProduct([FromBody] Producto producto)
-        {
+         public ResponseDto PostProduct([FromBody] Producto producto)
+         {
             return _productService.AddProduct(producto);
-        }
+         }
+ 
+       
+
 
         [HttpPut("updateProduct")]
         public ResponseDto PutProduct([FromBody] Producto producto)

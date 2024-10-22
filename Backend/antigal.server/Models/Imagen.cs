@@ -7,7 +7,7 @@ namespace antigal.server.Models
     public class Imagen
     {
         public int Id { get; set; }
-        public required string Url { get; set; }
+        public string? Url { get; set; }
         public string? PublicId { get; set; }
         public int? ProductoId { get; set; }
         public string? UsuarioId { get; set; }

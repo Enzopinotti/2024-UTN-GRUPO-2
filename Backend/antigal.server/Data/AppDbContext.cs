@@ -21,7 +21,7 @@ namespace antigal.server.Data
             base.OnModelCreating(modelBuilder); // Llama al método base
 
             modelBuilder.Entity<Producto>()
-                .HasMany(p => p.imagenes)
+                .HasMany(p => p.Imagenes)
                 .WithOne()
                 .HasForeignKey(i => i.ProductoId); 
 

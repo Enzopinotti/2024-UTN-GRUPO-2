@@ -183,16 +183,16 @@ namespace antigal.server.Services
                         var nombre = row.GetCell(0)?.ToString();
                         var marca = row.GetCell(1)?.ToString();
                         var descripcion = row.GetCell(2)?.ToString();
-                        var codigoBarrasCell = row.GetCell(3)?.ToString();
+                        var codigoBarras = row.GetCell(3)?.ToString();
                         var disponibleCell = row.GetCell(4)?.ToString();
                         var destacadoCell = row.GetCell(5)?.ToString();
                         var precioCell = row.GetCell(6)?.ToString();
                         var stockCell = row.GetCell(7)?.ToString();
 
                         if (string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(marca) ||
-                            !int.TryParse(codigoBarrasCell, out int codigoBarras) ||
+                            
                             !int.TryParse(disponibleCell, out int disponible) ||
-                            !float.TryParse(precioCell, out float precio) ||
+                            !decimal.TryParse(precioCell, out decimal precio) ||
                             !int.TryParse(stockCell, out int stock))
                         {
                             response.IsSuccess = false;
@@ -254,7 +254,7 @@ namespace antigal.server.Services
                         Nombre = pc.Producto != null ? pc.Producto.nombre : "N/A",  // Manejo de null
                         Marca = pc.Producto != null ? pc.Producto.marca : "N/A",  // Manejo de null
                         Descripcion = pc.Producto != null ? pc.Producto.descripcion : "N/A",  // Manejo de null
-                        Precio = pc.Producto != null ? pc.Producto.precio : 0.0f,  // Manejo de null
+                        Precio = pc.Producto != null ? pc.Producto.precio : 0,  // Manejo de null
                         Stock = pc.Producto != null ? pc.Producto.stock : 0,  // Manejo de null
                         Disponible = pc.Producto != null ? pc.Producto.disponible : 0,  // Manejo de null
                         //Imagenes = pc.Producto != null ? pc.Producto.imagenes.Select(i => i.url).ToList() : new List<string>(),  // Manejo de null
