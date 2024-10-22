@@ -32,6 +32,7 @@ namespace antigal.server.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImagenUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -60,7 +61,7 @@ namespace antigal.server.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    imagen = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ImagenUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -77,10 +78,11 @@ namespace antigal.server.Migrations
                     marca = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     codigoBarras = table.Column<int>(type: "int", nullable: true),
-                    disponible = table.Column<int>(type: "int", nullable: false),
+                    disponible = table.Column<int>(type: "int", nullable: true),
                     destacado = table.Column<int>(type: "int", nullable: true),
                     precio = table.Column<float>(type: "real", nullable: false),
-                    stock = table.Column<int>(type: "int", nullable: false)
+                    stock = table.Column<int>(type: "int", nullable: false),
+                    ImagenUrls = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -197,20 +199,36 @@ namespace antigal.server.Migrations
                 name: "Imagenes",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    idProducto = table.Column<int>(type: "int", nullable: false)
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PublicId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProductoId = table.Column<int>(type: "int", nullable: true),
+                    UsuarioId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CategoriaId = table.Column<int>(type: "int", nullable: true),
+                    FechaSubida = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Imagenes", x => x.id);
+                    table.PrimaryKey("PK_Imagenes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Imagenes_Productos_idProducto",
-                        column: x => x.idProducto,
+                        name: "FK_Imagenes_AspNetUsers_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Imagenes_Categorias_CategoriaId",
+                        column: x => x.CategoriaId,
+                        principalTable: "Categorias",
+                        principalColumn: "idCategoria",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Imagenes_Productos_ProductoId",
+                        column: x => x.ProductoId,
                         principalTable: "Productos",
                         principalColumn: "idProducto",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -277,9 +295,19 @@ namespace antigal.server.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Imagenes_idProducto",
+                name: "IX_Imagenes_CategoriaId",
                 table: "Imagenes",
-                column: "idProducto");
+                column: "CategoriaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Imagenes_ProductoId",
+                table: "Imagenes",
+                column: "ProductoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Imagenes_UsuarioId",
+                table: "Imagenes",
+                column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductoCategoria_idCategoria",

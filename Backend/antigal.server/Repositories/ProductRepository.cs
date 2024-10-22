@@ -257,7 +257,7 @@ namespace antigal.server.Services
                         Precio = pc.Producto != null ? pc.Producto.precio : 0.0f,  // Manejo de null
                         Stock = pc.Producto != null ? pc.Producto.stock : 0,  // Manejo de null
                         Disponible = pc.Producto != null ? pc.Producto.disponible : 0,  // Manejo de null
-                        Imagenes = pc.Producto != null ? pc.Producto.imagenes.Select(i => i.url).ToList() : new List<string>(),  // Manejo de null
+                        //Imagenes = pc.Producto != null ? pc.Producto.imagenes.Select(i => i.url).ToList() : new List<string>(),  // Manejo de null
                         Categoria = pc.Categoria != null ? pc.Categoria.nombre : "N/A"  // Manejo de null
                     })
                     .ToList(); // Ejecutar la consulta para materializar los resultados

@@ -2,6 +2,7 @@
 using antigal.server.Models.Dto;
 using antigal.server.Services;
 using System.Threading.Tasks;
+using antigal.server.Models;
 
 namespace antigal.server.Controllers
 {
@@ -29,6 +30,9 @@ namespace antigal.server.Controllers
             {
                 return BadRequest("Error al registrarse");
             }
+
+            // asignar token
+            //var token = await _tokenService.CreateToken(user);
 
             return Ok("Usuario reegistrado con exito!");
         }

@@ -20,12 +20,11 @@ namespace antigal.server.Data
         {
             base.OnModelCreating(modelBuilder); // Llama al método base
 
-            modelBuilder.Entity<Producto>()
-                .HasMany(p => p.imagenes)  //Un producto tiene muchas imagenes
-                .WithOne(i => i.Producto)  //Una imagen pertenece a un producto
-                .HasForeignKey(i => i.idProducto) //Establece la FK
-                .OnDelete(DeleteBehavior.Cascade); //Establece la regla la cual dice que si se elimina un Producto, se elmininaran las imagenes de dicho producto.
-       
+            modelBuilder.Entity<Categoria>()
+                .HasMany(c => c.CategoriaProductos)
+                .WithOne()
+                .HasForeignKey(cp => cp.idCategoria); 
+
             // Relacion muchos a muchos usando la tabla intermedia. ProductoCategoria
             modelBuilder.Entity<ProductoCategoria>()
                 .HasKey(pc => new { pc.idProducto, pc.idCategoria });
@@ -40,8 +39,26 @@ namespace antigal.server.Data
                 .WithMany(c => c.CategoriaProductos)
                 .HasForeignKey(pc => pc.idCategoria);
 
+            ///////////////////////Imagenes/////////////////////////
+            modelBuilder.Entity<Imagen>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(i => i.UsuarioId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            
+            modelBuilder.Entity<Imagen>()
+                .HasOne<Categoria>()
+                .WithMany()
+                .HasForeignKey(i => i.CategoriaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Imagen>()
+                .HasOne<Producto>()
+                .WithMany()
+                .HasForeignKey(i => i.ProductoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
         }
 
     }

@@ -9,6 +9,8 @@ using antigal.server.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using MathNet.Numerics.Interpolation;
+using CloudinaryDotNet;
 
 namespace antigal.server
 {
@@ -26,6 +28,43 @@ namespace antigal.server
             builder.Services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
+
+            // Configurar la autenticación JWT
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.Authority = "https://TU_DOMINIO_AUTH0/"; // Reemplaza con tu dominio de Auth0
+                options.Audience = "TU_API_AUDIENCE"; // Reemplaza con el Identifier de tu API en Auth0
+
+             
+            // Configurar validaciones adicionales si es necesario
+            options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = "https://TU_DOMINIO_AUTH0/",
+                    ValidateAudience = true,
+                    ValidAudience = "TU_API_AUDIENCE",
+                    ValidateLifetime = true,
+                };
+            });
+
+            //Cloudinary para imagenes
+            var cloudinaryConfig = builder.Configuration.GetSection("Cloudinary");
+
+            var cloudinary = new Cloudinary(new Account(
+                cloudinaryConfig["CloudName"],
+                cloudinaryConfig["ApiKey"],
+                cloudinaryConfig["ApiSecret"]
+                ));
+
+            builder.Services.AddSingleton(cloudinary);
+
+            builder.Services.AddScoped<IImageService, ImageService>();
+
 
             //*********** SERVICES ***********//
 
