@@ -42,15 +42,19 @@ namespace antigal.server.Data
                 .WithMany(c => c.CategoriaProductos)
                 .HasForeignKey(pc => pc.idCategoria);
 
+            // Relación uno a muchos entre Carrito y CarritoItem
             modelBuilder.Entity<Carrito>()
-                .HasMany(c => c.Items) // Un Carrito tiene muchos CarritoItems
-                .WithOne() // Cada CarritoItem se relaciona con un Carrito
-                .HasForeignKey(ci => ci.idCarritoItem); // Aqu� se asume que idCarritoItem en CarritoItem es la clave for�nea (ajusta si es necesario)
+                .HasMany(c => c.Items) // Un carrito tiene muchos items
+                .WithOne()
+                .HasForeignKey(ci => ci.idCarrito) // FK en CarritoItem
+                .OnDelete(DeleteBehavior.Cascade); // Si se elimina el carrito, se eliminan sus items
 
+            // Relación uno a muchos entre CarritoItem y Producto
             modelBuilder.Entity<CarritoItem>()
                 .HasOne(ci => ci.Producto) // Cada CarritoItem tiene un Producto
                 .WithMany() // Un Producto puede estar en muchos CarritoItems
-                .HasForeignKey(ci => ci.idProducto); // Asumiendo que tienes una propiedad idProducto en CarritoItem
+                .HasForeignKey(ci => ci.idProducto) // FK en CarritoItem
+                .OnDelete(DeleteBehavior.Restrict); // No eliminar el producto si tiene items en carritos
 
         }
 

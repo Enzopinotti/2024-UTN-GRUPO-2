@@ -30,30 +30,55 @@ namespace antigal.server.Repositories
 
         public ResponseDto CreateCart(string userId)
         {
+            // Verificar si el usuario ya tiene un carrito
+            var existingCart = _context.Carritos.FirstOrDefault(c => c.idUsuario == userId);
+            if (existingCart != null)
+            {
+                return new ResponseDto { IsSuccess = false, Message = "El usuario ya tiene un carrito." };
+            }
+
+            // Crear un nuevo carrito
             var cart = new Carrito(userId);
             _context.Carritos.Add(cart);
             _context.SaveChanges();
             return new ResponseDto { IsSuccess = true, Data = cart };
         }
 
-        public ResponseDto AddItemToCart(string userId, CarritoItem item)
+
+        public ResponseDto AddItemToCart(string userId, AddItemToCartDto addItemDto)
         {
+            // Verificar si el producto existe
+            var producto = _context.Productos.FirstOrDefault(p => p.idProducto == addItemDto.idProducto);
+            if (producto == null)
+            {
+                return new ResponseDto { IsSuccess = false, Message = "Producto no encontrado." };
+            }
+
             var cart = _context.Carritos.Include(c => c.Items).FirstOrDefault(c => c.idUsuario == userId);
             if (cart == null) return new ResponseDto { IsSuccess = false, Message = "Carrito no encontrado." };
 
-            var existingItem = cart.Items.FirstOrDefault(i => i.idCarritoItem == item.idProducto);
+            var existingItem = cart.Items.FirstOrDefault(i => i.idProducto == addItemDto.idProducto);
             if (existingItem != null)
             {
-                existingItem.cantidad += item.cantidad; // Sumar cantidades si el producto ya está en el carrito
+                existingItem.cantidad += addItemDto.cantidad; // Sumar cantidades si el producto ya está en el carrito
             }
             else
             {
-                cart.Items.Add(item); // Agregar nuevo ítem
+                // Convertir el DTO en un CarritoItem antes de agregarlo al carrito
+                var newItem = new CarritoItem
+                {
+                    idProducto = addItemDto.idProducto,
+                    cantidad = addItemDto.cantidad,
+                    // Puedes asignar otras propiedades aquí si es necesario
+                };
+
+                cart.Items.Add(newItem); // Agregar nuevo ítem
             }
 
             _context.SaveChanges();
             return new ResponseDto { IsSuccess = true, Data = cart };
         }
+
 
         public ResponseDto RemoveItemFromCart(string userId, int itemId)
         {

@@ -6,11 +6,11 @@ namespace antigal.server.Models
     {
         [Key]
         public int idCarritoItem { get; set; }  // ID del ítem en el carrito
-
         public int idProducto { get; set; } // ID del producto
         public Producto? Producto { get; set; } // Producto asociado (puede ser nulo)
-
+        public int idCarrito { get; set; } // ID del carrito
         public int cantidad { get; set; }   // Cantidad del producto en el carrito
+
 
         // Método para calcular el precio total del ítem
         public float CalcularSubtotal()

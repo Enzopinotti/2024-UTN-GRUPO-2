@@ -23,9 +23,9 @@ namespace antigal.server.Services
             return _cartRepository.CreateCart(userId);
         }
 
-        public ResponseDto AddItemToCart(string userId, CarritoItem item)
+        public ResponseDto AddItemToCart(string userId, AddItemToCartDto addItemDto)
         {
-            return _cartRepository.AddItemToCart(userId, item);
+            return _cartRepository.AddItemToCart(userId, addItemDto);
         }
 
         public ResponseDto RemoveItemFromCart(string userId, int itemId)

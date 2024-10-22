@@ -14,7 +14,7 @@ namespace antigal.server
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args) // Cambiar a Task
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -95,7 +95,8 @@ namespace antigal.server
             using (var scope = app.Services.CreateScope())
             {
                 var serviceProvider = scope.ServiceProvider;
-                CreateRoles(serviceProvider).Wait();
+                await CreateRoles(serviceProvider);
+
             }
 
 

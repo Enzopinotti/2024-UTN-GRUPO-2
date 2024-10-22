@@ -9,15 +9,17 @@ namespace antigal.server.Models
         public int idCarrito { get; set; }
 
         [Required] // Asegura que un carrito siempre tenga un usuario asociado
-        public string idUsuario { get; set; } // Identificador del usuario que posee el carrito
+        public string ?idUsuario { get; set; } // Identificador del usuario que posee el carrito
 
         public List<CarritoItem> Items { get; set; } = new List<CarritoItem>(); // Lista de ítems en el carrito
 
         // Constructor
         public Carrito(string userId)
         {
-            idUsuario = userId;
+            this.idUsuario = userId;
         }
+
+        public Carrito() { }
 
         // Método para calcular el precio total del carrito
         public float CalcularPrecioTotal()

@@ -1086,3 +1086,15 @@ C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.s
 C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.Options.dll

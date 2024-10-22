@@ -32,9 +32,9 @@ namespace antigal.server.Controllers
 
         // Agregar un ítem al carrito de un usuario
         [HttpPost("{userId}/items")]
-        public ResponseDto AddItemToCart(string userId, [FromBody] CarritoItem item)
+        public ResponseDto AddItemToCart(string userId, [FromBody] AddItemToCartDto addItemDto)
         {
-            return _cartService.AddItemToCart(userId, item);
+            return _cartService.AddItemToCart(userId, addItemDto);
         }
 
         // Eliminar un ítem del carrito de un usuario
