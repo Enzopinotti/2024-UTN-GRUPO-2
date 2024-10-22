@@ -30,5 +30,27 @@ namespace antigal.server.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpDelete("{imageId}")]
+        public async Task<IActionResult> DeleteImage(int imageId)
+        {
+            try
+            {
+                var result = await _imageService.DeleteImageAsync(imageId);
+                if (result)
+                {
+                    return Ok("Imagen eliminada con éxito");
+                }
+                else
+                {
+                    return NotFound("La imagen no existe");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
