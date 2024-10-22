@@ -11,6 +11,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MathNet.Numerics.Interpolation;
 using CloudinaryDotNet;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace antigal.server
 {
@@ -40,9 +42,8 @@ namespace antigal.server
                 options.Authority = "https://TU_DOMINIO_AUTH0/"; // Reemplaza con tu dominio de Auth0
                 options.Audience = "TU_API_AUDIENCE"; // Reemplaza con el Identifier de tu API en Auth0
 
-             
-            // Configurar validaciones adicionales si es necesario
-            options.TokenValidationParameters = new TokenValidationParameters
+                // Configurar validaciones adicionales si es necesario
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidIssuer = "https://TU_DOMINIO_AUTH0/",
@@ -51,6 +52,7 @@ namespace antigal.server
                     ValidateLifetime = true,
                 };
             });
+
 
             //Cloudinary para imagenes
             var cloudinaryConfig = builder.Configuration.GetSection("Cloudinary");
