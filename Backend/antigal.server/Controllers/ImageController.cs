@@ -52,5 +52,31 @@ namespace antigal.server.Controllers
             }
         }
 
+        [HttpDelete("eliminar-por-url")]
+        public async Task<IActionResult> DeleteImageByUrl([FromQuery] string imageUrl)
+        {
+            if (string.IsNullOrEmpty(imageUrl))
+            {
+                return BadRequest("La URL de la imagen no puede estar vacía.");
+            }
+
+            try
+            {
+                var result = await _imageService.DeleteImageByUrlAsync(imageUrl);
+                if (result)
+                {
+                    return Ok("Imagen eliminada con éxito.");
+                }
+                else
+                {
+                    return NotFound("No se pudo eliminar la imagen. Puede que no exista.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
