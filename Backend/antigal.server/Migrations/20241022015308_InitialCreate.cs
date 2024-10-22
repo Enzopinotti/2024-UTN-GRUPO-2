@@ -51,7 +51,7 @@ namespace antigal.server.Migrations
                     marca = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     codigoBarras = table.Column<int>(type: "int", nullable: true),
-                    disponible = table.Column<int>(type: "int", nullable: false),
+                    disponible = table.Column<int>(type: "int", nullable: true),
                     destacado = table.Column<int>(type: "int", nullable: true),
                     precio = table.Column<float>(type: "real", nullable: false),
                     stock = table.Column<int>(type: "int", nullable: false)
@@ -89,10 +89,12 @@ namespace antigal.server.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PublicId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProductoId = table.Column<int>(type: "int", nullable: true),
                     UsuarioId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CategoriaId = table.Column<int>(type: "int", nullable: true),
-                    FechaSubida = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    FechaSubida = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ProductoidProducto = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -105,6 +107,11 @@ namespace antigal.server.Migrations
                     table.ForeignKey(
                         name: "FK_Imagenes_Productos_ProductoId",
                         column: x => x.ProductoId,
+                        principalTable: "Productos",
+                        principalColumn: "idProducto");
+                    table.ForeignKey(
+                        name: "FK_Imagenes_Productos_ProductoidProducto",
+                        column: x => x.ProductoidProducto,
                         principalTable: "Productos",
                         principalColumn: "idProducto");
                 });
@@ -305,6 +312,11 @@ namespace antigal.server.Migrations
                 name: "IX_Imagenes_ProductoId",
                 table: "Imagenes",
                 column: "ProductoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Imagenes_ProductoidProducto",
+                table: "Imagenes",
+                column: "ProductoidProducto");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductoCategoria_idCategoria",

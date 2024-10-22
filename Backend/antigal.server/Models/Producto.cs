@@ -16,9 +16,9 @@ namespace antigal.server.Models
         public int? destacado { get; set; }
         public float precio { get; set; }
         public  int stock { get; set; }
-       
+
         //RELACION UNO A MUCHOS CON IMAGEN
-       
+        [JsonIgnore]
         public ICollection <Imagen>? imagenes { get; set; }
 
         //RELACION MUCHOS A MUCHOS CON CATEGORIA   

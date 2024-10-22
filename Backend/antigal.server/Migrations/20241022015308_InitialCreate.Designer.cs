@@ -12,7 +12,7 @@ using antigal.server.Data;
 namespace antigal.server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241021213315_InitialCreate")]
+    [Migration("20241022015308_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -171,6 +171,12 @@ namespace antigal.server.Migrations
                     b.Property<int?>("ProductoId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ProductoidProducto")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PublicId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -183,6 +189,8 @@ namespace antigal.server.Migrations
                     b.HasIndex("CategoriaId");
 
                     b.HasIndex("ProductoId");
+
+                    b.HasIndex("ProductoidProducto");
 
                     b.ToTable("Imagenes");
                 });
@@ -204,7 +212,7 @@ namespace antigal.server.Migrations
                     b.Property<int?>("destacado")
                         .HasColumnType("int");
 
-                    b.Property<int>("disponible")
+                    b.Property<int?>("disponible")
                         .HasColumnType("int");
 
                     b.Property<string>("marca")
@@ -403,9 +411,13 @@ namespace antigal.server.Migrations
                         .WithMany()
                         .HasForeignKey("CategoriaId");
 
-                    b.HasOne("antigal.server.Models.Producto", "Producto")
+                    b.HasOne("antigal.server.Models.Producto", null)
                         .WithMany("imagenes")
                         .HasForeignKey("ProductoId");
+
+                    b.HasOne("antigal.server.Models.Producto", "Producto")
+                        .WithMany()
+                        .HasForeignKey("ProductoidProducto");
 
                     b.Navigation("Categoria");
 
