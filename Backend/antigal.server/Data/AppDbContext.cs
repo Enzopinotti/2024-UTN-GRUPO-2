@@ -20,11 +20,6 @@ namespace antigal.server.Data
         {
             base.OnModelCreating(modelBuilder); // Llama al método base
 
-            modelBuilder.Entity<Producto>()
-                .HasMany(p => p.imagenes)
-                .WithOne()
-                .HasForeignKey(i => i.ProductoId); 
-
             modelBuilder.Entity<Categoria>()
                 .HasMany(c => c.CategoriaProductos)
                 .WithOne()
@@ -44,8 +39,26 @@ namespace antigal.server.Data
                 .WithMany(c => c.CategoriaProductos)
                 .HasForeignKey(pc => pc.idCategoria);
 
+            ///////////////////////Imagenes/////////////////////////
+            modelBuilder.Entity<Imagen>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(i => i.UsuarioId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            
+            modelBuilder.Entity<Imagen>()
+                .HasOne<Categoria>()
+                .WithMany()
+                .HasForeignKey(i => i.CategoriaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Imagen>()
+                .HasOne<Producto>()
+                .WithMany()
+                .HasForeignKey(i => i.ProductoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
         }
 
     }

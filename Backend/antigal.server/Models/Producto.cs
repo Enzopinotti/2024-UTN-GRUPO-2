@@ -18,8 +18,7 @@ namespace antigal.server.Models
         public  int stock { get; set; }
 
         //RELACION UNO A MUCHOS CON IMAGEN
-        [JsonIgnore]
-        public ICollection <Imagen>? imagenes { get; set; }
+        public List<string> ImagenUrls { get; set; } = new List<string>(); // Almacena solo las URLs
 
         //RELACION MUCHOS A MUCHOS CON CATEGORIA   
         [JsonIgnore]

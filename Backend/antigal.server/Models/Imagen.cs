@@ -14,10 +14,11 @@ namespace antigal.server.Models
         public int? CategoriaId { get; set; }
         public DateTime FechaSubida { get; set; } = DateTime.UtcNow;
 
+        /*
         // Relación con otras entidades
         public Producto? Producto { get; set; }
         public User? User { get; set; }
         public Categoria? Categoria { get; set; }
-        
+        */
     }
 }

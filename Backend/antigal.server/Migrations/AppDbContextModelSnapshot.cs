@@ -136,10 +136,10 @@ namespace antigal.server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idCategoria"));
 
-                    b.Property<string>("descripcion")
+                    b.Property<string>("ImagenUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("imagen")
+                    b.Property<string>("descripcion")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("nombre")
@@ -168,9 +168,6 @@ namespace antigal.server.Migrations
                     b.Property<int?>("ProductoId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductoidProducto")
-                        .HasColumnType("int");
-
                     b.Property<string>("PublicId")
                         .HasColumnType("nvarchar(max)");
 
@@ -179,7 +176,7 @@ namespace antigal.server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UsuarioId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -187,7 +184,7 @@ namespace antigal.server.Migrations
 
                     b.HasIndex("ProductoId");
 
-                    b.HasIndex("ProductoidProducto");
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Imagenes");
                 });
@@ -199,6 +196,10 @@ namespace antigal.server.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idProducto"));
+
+                    b.Property<string>("ImagenUrls")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("codigoBarras")
                         .HasColumnType("int");
@@ -283,8 +284,8 @@ namespace antigal.server.Migrations
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ImagenId")
-                        .HasColumnType("int");
+                    b.Property<string>("ImagenUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -320,10 +321,6 @@ namespace antigal.server.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ImagenId")
-                        .IsUnique()
-                        .HasFilter("[ImagenId] IS NOT NULL");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -404,30 +401,20 @@ namespace antigal.server.Migrations
 
             modelBuilder.Entity("antigal.server.Models.Imagen", b =>
                 {
-                    b.HasOne("antigal.server.Models.Categoria", "Categoria")
+                    b.HasOne("antigal.server.Models.Categoria", null)
                         .WithMany()
-                        .HasForeignKey("CategoriaId");
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("antigal.server.Models.Producto", null)
-                        .WithMany("imagenes")
-                        .HasForeignKey("ProductoId");
-
-                    b.HasOne("antigal.server.Models.Producto", "Producto")
                         .WithMany()
-                        .HasForeignKey("ProductoidProducto");
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Categoria");
-
-                    b.Navigation("Producto");
-                });
-
-            modelBuilder.Entity("antigal.server.Models.User", b =>
-                {
-                    b.HasOne("antigal.server.Models.Imagen", "imagen")
-                        .WithOne("User")
-                        .HasForeignKey("antigal.server.Models.User", "ImagenId");
-
-                    b.Navigation("imagen");
+                    b.HasOne("antigal.server.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("antigal.server.Relationships.ProductoCategoria", b =>
@@ -454,16 +441,9 @@ namespace antigal.server.Migrations
                     b.Navigation("CategoriaProductos");
                 });
 
-            modelBuilder.Entity("antigal.server.Models.Imagen", b =>
-                {
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("antigal.server.Models.Producto", b =>
                 {
                     b.Navigation("CategoriaProductos");
-
-                    b.Navigation("imagenes");
                 });
 #pragma warning restore 612, 618
         }

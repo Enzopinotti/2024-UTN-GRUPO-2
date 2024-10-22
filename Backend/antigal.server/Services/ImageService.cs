@@ -46,6 +46,35 @@ namespace antigal.server.Services
                 _context.Imagenes.Add(nuevaImagen);
                 await _context.SaveChangesAsync();
 
+                // Actualizar la entidad correspondiente con la URL
+                if (productoId.HasValue)
+                {
+                    var producto = await _context.Productos.FindAsync(productoId.Value);
+                    if (producto != null)
+                    {
+                        producto.ImagenUrls.Add(nuevaImagen.Url); // Agregar la URL a la lista de URLs del producto
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                else if (!string.IsNullOrEmpty(usuarioId))
+                {
+                    var usuario = await _context.Users.FindAsync(usuarioId);
+                    if (usuario != null)
+                    {
+                        usuario.ImagenUrl = nuevaImagen.Url; // Asignar la URL directamente
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                else if (categoriaId.HasValue)
+                {
+                    var categoria = await _context.Categorias.FindAsync(categoriaId.Value);
+                    if (categoria != null)
+                    {
+                        categoria.ImagenUrl = nuevaImagen.Url; // Asignar la URL directamente
+                        await _context.SaveChangesAsync();
+                    }
+                }
+
                 return nuevaImagen;
             }
             else

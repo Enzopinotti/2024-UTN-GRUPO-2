@@ -6,7 +6,6 @@ namespace antigal.server.Models
     public class User : IdentityUser
     {
         public string? FullName { get; set; }
-        public int? ImagenId { get; set; }
-        public Imagen? imagen { get; set; }
+        public string? ImagenUrl { get; set; }
     }
 }
