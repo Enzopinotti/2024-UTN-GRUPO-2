@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MathNet.Numerics.Interpolation;
 using CloudinaryDotNet;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+
 
 namespace antigal.server
 {
@@ -39,16 +39,16 @@ namespace antigal.server
             })
             .AddJwtBearer(options =>
             {
-                options.Authority = "https://TU_DOMINIO_AUTH0/"; // Reemplaza con tu dominio de Auth0
-                options.Audience = "TU_API_AUDIENCE"; // Reemplaza con el Identifier de tu API en Auth0
+                options.Authority = $"https://{builder.Configuration["Auth0:Domain"]}/"; // Reemplaza con tu dominio de Auth0
+                options.Audience = builder.Configuration["Auth0:Audience"]; // Reemplaza con el Identifier de tu API en Auth0
 
                 // Configurar validaciones adicionales si es necesario
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = "https://TU_DOMINIO_AUTH0/",
+                    ValidIssuer = $"https://{builder.Configuration["Auth0:Domain"]}/",
                     ValidateAudience = true,
-                    ValidAudience = "TU_API_AUDIENCE",
+                    ValidAudience = builder.Configuration["Auth0:Audience"],
                     ValidateLifetime = true,
                 };
             });

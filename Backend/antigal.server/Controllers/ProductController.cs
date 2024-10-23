@@ -2,6 +2,7 @@
 using antigal.server.Models;
 using antigal.server.Models.Dto;
 using antigal.server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace antigal.server.Controllers
@@ -17,6 +18,7 @@ namespace antigal.server.Controllers
             _productService = productService;
         }
 
+        [AllowAnonymous]
         [HttpGet("getProducts")]
         public ResponseDto GetProduct()
         {
@@ -36,6 +38,7 @@ namespace antigal.server.Controllers
             return _productService.GetProductByTitle(nombre);
         }
 
+        [Authorize]
         [HttpPost("addProduct")]
         public ResponseDto PostProduct([FromBody] Producto producto)
         {
