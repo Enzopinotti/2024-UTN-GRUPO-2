@@ -2,40 +2,6 @@
   "version": 3,
   "targets": {
     "net8.0": {
-      "Auth0.AuthenticationApi/7.27.0": {
-        "type": "package",
-        "dependencies": {
-          "Auth0.Core": "7.27.0",
-          "Microsoft.IdentityModel.Protocols.OpenIdConnect": "6.5.0",
-          "System.IdentityModel.Tokens.Jwt": "6.34.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/Auth0.AuthenticationApi.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/netstandard2.0/Auth0.AuthenticationApi.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "Auth0.Core/7.27.0": {
-        "type": "package",
-        "dependencies": {
-          "Newtonsoft.Json": "13.0.1"
-        },
-        "compile": {
-          "lib/netstandard2.0/Auth0.Core.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/netstandard2.0/Auth0.Core.dll": {
-            "related": ".xml"
-          }
-        }
-      },
       "Azure.Core/1.35.0": {
         "type": "package",
         "dependencies": {
@@ -3958,38 +3924,6 @@
     }
   },
   "libraries": {
-    "Auth0.AuthenticationApi/7.27.0": {
-      "sha512": "9ZESFRrM+pn+aWMrryxa+OxWXworF8umNymoC25TSCN177UMwP0x37LRko59uZVztHWrCwsk3FncbfTNny7a/Q==",
-      "type": "package",
-      "path": "auth0.authenticationapi/7.27.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Auth0Icon.png",
-        "auth0.authenticationapi.7.27.0.nupkg.sha512",
-        "auth0.authenticationapi.nuspec",
-        "lib/net462/Auth0.AuthenticationApi.dll",
-        "lib/net462/Auth0.AuthenticationApi.xml",
-        "lib/netstandard2.0/Auth0.AuthenticationApi.dll",
-        "lib/netstandard2.0/Auth0.AuthenticationApi.xml"
-      ]
-    },
-    "Auth0.Core/7.27.0": {
-      "sha512": "bIteWJKddD0UGxOnKVhsmhsgcAKlLGqbI3LB814I4W0k7ahPxnfaeoD9mfY8pCar/xRB3hB5YPFU6TykuqhJFA==",
-      "type": "package",
-      "path": "auth0.core/7.27.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Auth0Icon.png",
-        "auth0.core.7.27.0.nupkg.sha512",
-        "auth0.core.nuspec",
-        "lib/net462/Auth0.Core.dll",
-        "lib/net462/Auth0.Core.xml",
-        "lib/netstandard2.0/Auth0.Core.dll",
-        "lib/netstandard2.0/Auth0.Core.xml"
-      ]
-    },
     "Azure.Core/1.35.0": {
       "sha512": "hENcx03Jyuqv05F4RBEPbxz29UrM3Nbhnr6Wl6NQpoU9BCIbL3XLentrxDCTrH54NLS11Exxi/o8MYgT/cnKFA==",
       "type": "package",
@@ -11625,7 +11559,6 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "Auth0.AuthenticationApi >= 7.27.0",
       "CloudinaryDotNet >= 1.26.2",
       "FluentValidation.DependencyInjectionExtensions >= 11.10.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 8.0.10",
@@ -11691,10 +11624,6 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
-          "Auth0.AuthenticationApi": {
-            "target": "Package",
-            "version": "[7.27.0, )"
-          },
           "CloudinaryDotNet": {
             "target": "Package",
             "version": "[1.26.2, )"

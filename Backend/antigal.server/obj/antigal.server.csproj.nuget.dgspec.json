@@ -50,10 +50,6 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "Auth0.AuthenticationApi": {
-              "target": "Package",
-              "version": "[7.27.0, )"
-            },
             "CloudinaryDotNet": {
               "target": "Package",
               "version": "[1.26.2, )"
