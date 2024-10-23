@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("antigal.server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+80d4a8453f31518905c3291dfa8cf1501bc71242")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+db3847df02518bb366af30d7ae5ca136c38a1da9")]
 [assembly: System.Reflection.AssemblyProductAttribute("antigal.server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("antigal.server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

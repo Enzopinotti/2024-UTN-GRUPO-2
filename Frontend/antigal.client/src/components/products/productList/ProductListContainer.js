@@ -32,6 +32,7 @@ const ProductListContainer = () => {
           throw new Error('Error al obtener productos');
         }
         const data = await response.json();
+        console.log("la data es:  ", data);
 
         if (data.data && Array.isArray(data.data)) {
           // Adaptar los datos de los productos
@@ -45,7 +46,7 @@ const ProductListContainer = () => {
             featured: item.destacado,      // Mapear destacado a featured
             price: item.precio,            // Mapear precio a price
             stock: item.stock,             // Mapear stock a stock
-            images: item.imagenes,         // Mapear imagenes a images
+            images: item.imagenUrls[0],         // Mapear imagenes a images
             categories: [],                // Inicializar categorías vacías
           }));
 
@@ -73,6 +74,7 @@ const ProductListContainer = () => {
               }
             })
           );
+          console.log("los productos con  categorias son: ", productsWithCategories);
 
           // Actualizar el estado de productos
           setProducts(productsWithCategories);

@@ -54,10 +54,8 @@ const Product = ({ product }) => {
         <img
           className="imagesProducto"
           src={
-            product.images && product.images.length > 0
-              ? product.images[0]
-              : "/images/product/default.png"
-          }
+            product.images
+            }
           onClick={handleImageClick}
           alt={product.name}
         />

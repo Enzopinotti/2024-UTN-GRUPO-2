@@ -18,12 +18,7 @@ const AdminProductListContainer = () => {
       try {
         if (useBackend) {
           // Obtener productos desde el backend
-<<<<<<< HEAD
           const response = await fetch('https://localhost:7255/api/Product/getProducts');
-=======
-          console.log('Entre a useBackend');
-          const response = await fetch('http://localhost:5279/api/Product/getProduct');
->>>>>>> origin/FrontEnd
           if (!response.ok) {
             throw new Error('Error al obtener productos del backend');
           }
