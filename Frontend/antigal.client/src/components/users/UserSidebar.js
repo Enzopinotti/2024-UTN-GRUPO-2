@@ -39,7 +39,7 @@ const UserSidebar = ({user}) => {
           <ul>
             <li>
               <NavLink
-                to="/perfil"
+                to="/profile"
                 className={({ isActive }) => (isActive ? "active" : undefined)}
               >
                 Mi Perfil
