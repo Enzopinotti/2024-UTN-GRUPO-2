@@ -18,6 +18,7 @@ import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Registro from './pages/Registro';
 import Logout from './pages/Logout';
+import SobreNosotros from './pages/SobreNosotros'; // Importa el nuevo componente
 
 function App() {
   return (
@@ -58,7 +59,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Registro />} />
             <Route path="/logout" element={<Logout />} />
-
+            <Route path="/sobre-nosotros" element={<SobreNosotros />} />
           </Routes>
         </Main>
         <Footer />

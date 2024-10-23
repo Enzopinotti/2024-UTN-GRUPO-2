@@ -1,3 +1,4 @@
+// src/components/common/NavBar.js
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -38,16 +39,17 @@ const NavBar = ({ vertical = false, onLinkClick = () => {} }) => {
           </NavLink>
         </li>
         <li>
-          {/* Mantener NavLink pero con alerta de desarrollo */}
+          {/* Actualizar el enlace a "Sobre Nosotros" */}
           <NavLink 
-            to="/about" 
+            to="/sobre-nosotros" 
             className={({ isActive }) => isActive ? 'active' : undefined}
-            onClick={showDevelopmentAlert}  // Mostrar mensaje de desarrollo
+            onClick={onLinkClick}
           >
             Sobre Nosotros
           </NavLink>
         </li>
         <li>
+          {/* Mantener NavLink pero con alerta de desarrollo */}
           <NavLink 
             to="/store" 
             className={({ isActive }) => isActive ? 'active' : undefined}

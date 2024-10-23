@@ -3,6 +3,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+/*SobreNosotros.scss*/
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
@@ -2270,6 +2272,78 @@ footer .footer-bottom img {
     width: 100% !important;
   }
 }
+.sobre-nosotros {
+  font-family: "Roboto", sans-serif;
+  padding: 2rem;
+}
+.sobre-nosotros .about-section {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.sobre-nosotros .about-section h1 {
+  font-size: 2.5rem;
+  color: #74873D;
+  margin-bottom: 1.5rem;
+}
+.sobre-nosotros .about-section .about-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+.sobre-nosotros .about-section .about-content .about-image {
+  width: 300px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(47, 56, 20, 0.2);
+}
+.sobre-nosotros .about-section .about-content p {
+  max-width: 600px;
+  font-size: 1rem;
+  color: #222222;
+  line-height: 1.6;
+}
+.sobre-nosotros .instagram-section {
+  text-align: center;
+}
+.sobre-nosotros .instagram-section h2 {
+  font-size: 2rem;
+  color: #ED8B00;
+  margin-bottom: 1rem;
+}
+.sobre-nosotros .instagram-section .instagram-feed {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Ajusta el tamaño del widget según tus necesidades */
+}
+.sobre-nosotros .instagram-section .instagram-feed iframe.lightwidget-widget {
+  max-width: 600px;
+  width: 100%;
+  height: 400px; /* Ajusta la altura según el número de posts */
+}
+@media (max-width: 800px) {
+  .sobre-nosotros .about-content {
+    flex-direction: column;
+  }
+  .sobre-nosotros .about-content .about-image {
+    width: 100%;
+    max-width: 300px;
+  }
+  .sobre-nosotros .about-content p {
+    max-width: 100%;
+  }
+  .sobre-nosotros .instagram-section .instagram-feed iframe.lightwidget-widget {
+    height: 300px;
+  }
+}
+@media (max-width: 500px) {
+  .sobre-nosotros .instagram-section .instagram-feed iframe.lightwidget-widget {
+    height: 250px;
+  }
+}
+
 .admin-page .content {
   padding: 2rem;
 }

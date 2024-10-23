@@ -11,12 +11,14 @@
 @use './components/home';
 @use './components/products//products';
 @use './components/productDetail';
+@use './components/sobreNosotros';
 
 @use './components/admin/categoryListContainer';
 @use './components/admin/categoryForm';
 @use './components/admin/productListContainer';
 @use './components/admin/adminNav';
 @use './components/admin/productForm';
+
 @import './abstract/variables';
 
 *{
