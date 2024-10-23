@@ -1,6 +1,6 @@
 // src/App.js
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/layout/Header';
 import Main from './components/layout/Main';
 import Footer from './components/layout/Footer';
@@ -11,13 +11,15 @@ import AdminDashboard from './components/admin/dashboard/AdminDashboard';
 import CategoryListContainer from './components/admin/categories/CategoryListContainer';
 import AdminProductListContainer from './components/admin/products/ProductListContainer';
 import { CartProvider } from './contexts/CartContext';
-import { ToastContainer, toast } from "react-toastify"; // Importación de toast y ToastContainer
-import "react-toastify/dist/ReactToastify.css"; // Estilos de react-toastify
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ProtectedRoute from './components/common/ProtectedRoute';
+import Profile from './pages/Profile';
+import Login from './pages/Login';
+import Registro from './pages/Registro';
+import Logout from './pages/Logout';
 
 function App() {
-  const isAuthenticated = true; // Cambia esto según tu lógica de autenticación
-
   return (
     <CartProvider>
       <Router>
@@ -28,15 +30,35 @@ function App() {
             <Route path="/products" element={<ProductListContainer />} />
             <Route path="/products/:id" element={<ProductDetailContainer />} />
 
+            {/* Ruta protegida para el perfil */}
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Ruta protegida para el admin */}
             <Route
               path="/admin/*"
               element={
-                isAuthenticated ? <AdminDashboard /> : <Navigate to="/" replace />
+                
+                  <AdminDashboard />
+                
               }
             >
+              {/* Subrutas del dashboard */}
               <Route path="categories" element={<CategoryListContainer />} />
               <Route path="products" element={<AdminProductListContainer />} />
             </Route>
+
+            {/* Rutas de autenticación */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Registro />} />
+            <Route path="/logout" element={<Logout />} />
+
           </Routes>
         </Main>
         <Footer />
@@ -47,3 +69,4 @@ function App() {
 }
 
 export default App;
+

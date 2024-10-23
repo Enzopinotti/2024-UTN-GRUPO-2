@@ -9,11 +9,7 @@ const Login = () => {
     loginWithRedirect();
   }, [loginWithRedirect]);
 
-  return (
-    <div>
-      <p>Redirigiendo al inicio de sesión...</p>
-    </div>
-  );
+  return <div>Redirigiendo al inicio de sesión...</div>;
 };
 
 export default Login;

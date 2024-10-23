@@ -16,6 +16,46 @@
   .cart-preview-container{
     display: none;
   }
+  .mobile-filters{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    .filter-button{
+      background-color: transparent;
+      border: 0;
+      img{
+        width: 2rem;
+
+      }
+    }
+    .breadcrumb{
+      p{
+        a{
+          color: $primary-black-color;
+          text-decoration: none;
+
+        }
+        span{
+          color: $primary-black-color;
+          text-decoration: none;
+          img{
+            width: 0.7rem;
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+            position: relative;
+            top: 0.3rem;
+          }
+        }
+        .active{
+          color: $secondary-color;
+          font-weight: 900;
+        }
+      }
+    }
+  }
   .categories-dropdown {
     padding: 10px 2rem;
     background-color: #f8f9fa;
@@ -308,11 +348,33 @@
       display: flex;
       .categories-aside {
         display: block;
-        width: 20%; // Ajustamos el ancho del aside
+        width: 20%; 
         padding-left: 1.5rem;
         .breadcrumb{
           margin-bottom: 2rem;
           user-select: none;
+          p{
+            a{
+              color: $primary-black-color;
+              text-decoration: none;
+    
+            }
+            span{
+              color: $primary-black-color;
+              text-decoration: none;
+              img{
+                width: 0.7rem;
+                margin-left: 0.5rem;
+                margin-right: 0.5rem;
+                position: relative;
+                top: 0.3rem;
+              }
+            }
+            .active{
+              color: $secondary-color;
+              font-weight: 900;
+            }
+          }
           .imgBread{
             width: 0.54rem;
             margin-left: 0.5rem;
