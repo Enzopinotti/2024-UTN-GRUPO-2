@@ -7,6 +7,8 @@ footer{
     justify-content: space-between;
     min-height: 70vh;
     padding-top:50PX ;
+    z-index: 3000;
+    position: absolute;
     a{
         color: rgba(255, 255, 255, 0.70);
         text-decoration: none;

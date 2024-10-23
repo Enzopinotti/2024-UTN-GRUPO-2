@@ -17,7 +17,11 @@
 @use './components/admin/productListContainer';
 @use './components/admin/adminNav';
 @use './components/admin/productForm';
+
+@use './components/users/user';
+
 @import './abstract/variables';
+
 
 *{
   font-family: $font;

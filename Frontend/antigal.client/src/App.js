@@ -1,24 +1,25 @@
 // src/App.js
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Header from './components/layout/Header';
-import Main from './components/layout/Main';
-import Footer from './components/layout/Footer';
-import Home from './pages/Home';
-import ProductListContainer from './components/products/productList/ProductListContainer';
-import ProductDetailContainer from './components/products/productDetail/ProductDetailContainer';
-import AdminDashboard from './components/admin/dashboard/AdminDashboard';
-import CategoryListContainer from './components/admin/categories/CategoryListContainer';
-import AdminProductListContainer from './components/admin/products/ProductListContainer';
-import { CartProvider } from './contexts/CartContext';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Header from "./components/layout/Header";
+import Main from "./components/layout/Main";
+import Footer from "./components/layout/Footer";
+import Home from "./pages/Home";
+import ProductListContainer from "./components/products/productList/ProductListContainer";
+import ProductDetailContainer from "./components/products/productDetail/ProductDetailContainer";
+import AdminDashboard from "./components/admin/dashboard/AdminDashboard";
+import CategoryListContainer from "./components/admin/categories/CategoryListContainer";
+import AdminProductListContainer from "./components/admin/products/ProductListContainer";
+import { CartProvider } from "./contexts/CartContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ProtectedRoute from './components/common/ProtectedRoute';
-import Profile from './pages/Profile';
-import Login from './pages/Login';
-import Registro from './pages/Registro';
-import Logout from './pages/Logout';
-
+import ProtectedRoute from "./components/common/ProtectedRoute";
+import Profile from "./pages/Profile";
+import Login from "./pages/Login";
+import Registro from "./pages/Registro";
+import Logout from "./pages/Logout";
+import Perfil from "./pages/Perfil"; ///lo tengo que borrar despues
+import UserLayout from "./components/users/UserLayout";
 function App() {
   return (
     <CartProvider>
@@ -35,20 +36,20 @@ function App() {
               path="/profile"
               element={
                 <ProtectedRoute>
-                  <Profile />
+                  <UserLayout />
                 </ProtectedRoute>
               }
-            />
+            >
+              <Route index element={<Profile />} />
+              {/* <Route path="/orders" element={<UserOrders />} />
+                <Route path="/addresses" element={<UserAddresses />} /> */}
+            </Route>
+           
+          
+            
 
             {/* Ruta protegida para el admin */}
-            <Route
-              path="/admin/*"
-              element={
-                
-                  <AdminDashboard />
-                
-              }
-            >
+            <Route path="/admin/*" element={<AdminDashboard />}>
               {/* Subrutas del dashboard */}
               <Route path="categories" element={<CategoryListContainer />} />
               <Route path="products" element={<AdminProductListContainer />} />
@@ -58,7 +59,6 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Registro />} />
             <Route path="/logout" element={<Logout />} />
-
           </Routes>
         </Main>
         <Footer />
@@ -69,4 +69,3 @@ function App() {
 }
 
 export default App;
-
