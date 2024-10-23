@@ -18,7 +18,6 @@ import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import Registro from "./pages/Registro";
 import Logout from "./pages/Logout";
-import Perfil from "./pages/Perfil"; ///lo tengo que borrar despues
 import UserLayout from "./components/users/UserLayout";
 function App() {
   return (
@@ -41,8 +40,9 @@ function App() {
               }
             >
               <Route index element={<Profile />} />
-              {/* <Route path="/orders" element={<UserOrders />} />
-                <Route path="/addresses" element={<UserAddresses />} /> */}
+              {/* 
+              <Route path="/orders" element={<UserOrders />} />
+              <Route path="/addresses" element={<UserAddresses />} /> */}
             </Route>
            
           
