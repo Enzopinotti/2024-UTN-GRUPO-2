@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MathNet.Numerics.Interpolation;
 using CloudinaryDotNet;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Net.Http.Headers;
 
 
 namespace antigal.server
@@ -30,6 +31,13 @@ namespace antigal.server
             builder.Services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
+
+            //Configuración de HttpClient
+            builder.Services.AddHttpClient<IAuthService, AuthService>(client =>
+            {
+                client.BaseAddress = new Uri("https://your-auth0-domain/");
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "YOUR_API_TOKEN"); // Si es necesario
+            });
 
             // Configurar la autenticación JWT
             builder.Services.AddAuthentication(options =>

@@ -2,33 +2,47 @@
 using antigal.server.Models.Dto;
 using antigal.server.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace antigal.server.Services
 {
     public class AuthService : IAuthService
     {
         private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly HttpClient _httpClient;
 
-        public AuthService(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AuthService(UserManager<User> userManager, HttpClient httpClient)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
+            _httpClient = httpClient;
         }
 
         public async Task<bool> RegisterUserAsync(RegisterDto registerDto)
         {
-            var user = new User
+            // Crea el objeto de usuario que se enviará a Auth0
+            var user = new
             {
-                UserName = registerDto.UserName,
-                Email = registerDto.Email,
-                FullName = registerDto.FullName,
+                email = registerDto.Email,
+                password = registerDto.Password,
+                connection = "Username-Password-Authentication" // Asegúrate de usar la conexión correcta
             };
 
+            // Serializa el objeto a JSON
+            var json = JsonConvert.SerializeObject(user);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var result = await _userManager.CreateAsync(user, registerDto.Password);
+            // Establece la autenticación en el cliente HTTP (si es necesario)
+            // Si la API requiere un token de acceso, puedes agregarlo aquí.
 
-            return result.Succeeded;
+            // Realiza la solicitud POST a la API de Auth0
+            var response = await _httpClient.PostAsync("Auth0:Domain", content);
+
+            // Verifica si la respuesta fue exitosa
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<string> LoginUserAsync(LoginDto loginDto)
