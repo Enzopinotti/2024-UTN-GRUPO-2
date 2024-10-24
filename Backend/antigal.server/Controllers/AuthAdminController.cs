@@ -20,7 +20,7 @@ namespace antigal.server.Controllers
             _signInManager = signInManager;
             _roleManager = roleManager;
         }
-
+        /*
         [HttpPost("register-admin")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterDto registerDto)
         {
@@ -62,6 +62,7 @@ namespace antigal.server.Controllers
 
             return Unauthorized();
         }
+        */
 
         [HttpPost("create-role")]
         public async Task<IActionResult> CreateRoleAsync([FromBody] CreateRoleDto createRoleDto)

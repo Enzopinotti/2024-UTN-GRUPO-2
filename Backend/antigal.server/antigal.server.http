@@ -5,12 +5,11 @@ Accept: application/json
 
 ###
 
-POST {{antigal.server_HostAddress}}/api/Category/addCategory
+POST {{antigal.server_HostAddress}}/api/login
 Accept: application/json
 Content-Type: application/json
 
 {
-"nombre": "aaaaaaa",
-"descripcion": "aaaaaaa";
-"imagen": "aaaaaaaaaa";
+    email: 'tu_email@example.com',
+    password: 'tu_contraseña'
 }

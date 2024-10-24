@@ -48,38 +48,6 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "antigal.server.Controllers.AuthAdminController",
-    "Method": "LoginAsync",
-    "RelativePath": "api/AuthAdmin/login-admin",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "loginDto",
-        "Type": "antigal.server.Models.Dto.LoginDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.AuthAdminController",
-    "Method": "RegisterAsync",
-    "RelativePath": "api/AuthAdmin/register-admin",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "registerDto",
-        "Type": "antigal.server.Models.Dto.RegisterDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
     "ContainingType": "antigal.server.Controllers.CategoryController",
     "Method": "AddCategory",
     "RelativePath": "api/Category/addCategory",
@@ -549,5 +517,15 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.UsersController",
+    "Method": "GetUsers",
+    "RelativePath": "api/Users",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   }
 ]

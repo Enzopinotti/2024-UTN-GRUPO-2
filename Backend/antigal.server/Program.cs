@@ -54,10 +54,10 @@ namespace antigal.server
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = $"https://{builder.Configuration["Auth0:Domain"]}/",
-                    ValidateAudience = true,
-                    ValidAudience = builder.Configuration["Auth0:Audience"],
-                    ValidateLifetime = true,
+                    //ValidIssuer = $"https://{builder.Configuration["Auth0:Domain"]}/",
+                    //ValidateAudience = true,
+                    //ValidAudience = builder.Configuration["Auth0:Audience"],
+                    //ValidateLifetime = true,
                 };
             });
 

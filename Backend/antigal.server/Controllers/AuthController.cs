@@ -2,7 +2,6 @@
 using antigal.server.Models.Dto;
 using antigal.server.Services;
 using System.Threading.Tasks;
-using antigal.server.Models;
 
 namespace antigal.server.Controllers
 {
@@ -31,27 +30,30 @@ namespace antigal.server.Controllers
                 return BadRequest("Error al registrarse");
             }
 
-            // asignar token
-            //var token = await _tokenService.CreateToken(user);
-
-            return Ok("Usuario reegistrado con exito!");
+            return Ok("Usuario registrado con éxito!");
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginAsync(LoginDto loginDto)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginDto loginDto)
         {
-            if (!ModelState.IsValid)
+            if (loginDto == null || string.IsNullOrEmpty(loginDto.Email) || string.IsNullOrEmpty(loginDto.Password))
             {
-                return BadRequest(ModelState);
+                return BadRequest("Credenciales no proporcionadas");
             }
 
-            var token = await _authService.LoginUserAsync(loginDto);
-            if (string.IsNullOrEmpty(token))
+            var accessToken = await _authService.LoginUserAsync(loginDto);
+            if (string.IsNullOrEmpty(accessToken))
             {
                 return Unauthorized();
             }
 
-            return Ok(new { Token = token });
+            var user = await _authService.ValidateUserAsync(accessToken);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(new { Token = accessToken, User = user });
         }
     }
 }
