@@ -35,22 +35,9 @@
     "ContainingType": "antigal.server.Controllers.AuthAdminController",
     "Method": "CreateRoleAsync",
     "RelativePath": "api/AuthAdmin/create-role",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "createRoleDto",
-        "Type": "antigal.server.Models.Dto.CreateRoleDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.AuthAdminController",
+    "ContainingType": "antigal.server.Controllers.AuthController",
     "Method": "LoginAsync",
-    "RelativePath": "api/AuthAdmin/login-admin",
+    "RelativePath": "api/Auth/login",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -65,8 +52,11 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.AuthAdminController",
+    "Method": "LoginAsync",
+    "RelativePath": "api/AuthAdmin/login-admin",
+    "ContainingType": "antigal.server.Controllers.AuthController",
     "Method": "RegisterAsync",
-    "RelativePath": "api/AuthAdmin/register-admin",
+    "RelativePath": "api/Auth/register",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -74,6 +64,25 @@
       {
         "Name": "registerDto",
         "Type": "antigal.server.Models.Dto.RegisterDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AuthAdminController",
+    "Method": "RegisterAsync",
+    "RelativePath": "api/AuthAdmin/register-admin",
+    "ContainingType": "antigal.server.Controllers.AuthAdminController",
+    "Method": "CreateRoleAsync",
+    "RelativePath": "api/AuthAdmin/create-role",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "createRoleDto",
+        "Type": "antigal.server.Models.Dto.CreateRoleDto",
         "IsRequired": true
       }
     ],
@@ -109,6 +118,9 @@
     "ContainingType": "antigal.server.Controllers.CartController",
     "Method": "CreateCart",
     "RelativePath": "api/Cart/{userId}",
+    "ContainingType": "antigal.server.Controllers.AuthAdminController",
+    "Method": "LoginAsync",
+    "RelativePath": "api/AuthAdmin/login-admin",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -161,6 +173,9 @@
     "ContainingType": "antigal.server.Controllers.CartController",
     "Method": "AddItemToCart",
     "RelativePath": "api/Cart/{userId}/items",
+    "ContainingType": "antigal.server.Controllers.AuthAdminController",
+    "Method": "RegisterAsync",
+    "RelativePath": "api/AuthAdmin/register-admin",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -368,6 +383,69 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.ImageController",
+    "Method": "DeleteImage",
+    "RelativePath": "api/Image/{imageId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "imageId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.ImageController",
+    "Method": "DeleteImageByUrl",
+    "RelativePath": "api/Image/eliminar-por-url",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "imageUrl",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.ImageController",
+    "Method": "Upload",
+    "RelativePath": "api/Image/upload",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "productoId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "usuarioId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "categoriaId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "antigal.server.Controllers.ProductController",

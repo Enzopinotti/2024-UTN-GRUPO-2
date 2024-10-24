@@ -29,8 +29,9 @@ namespace antigal.server.Services
             {
                 UserName = registerDto.UserName,
                 Email = registerDto.Email,
-                FullName = registerDto.FullName
+                FullName = registerDto.FullName,
             };
+
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
