@@ -20,7 +20,8 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import SobreNosotros from './pages/SobreNosotros'; 
-import CartPage from './pages/CartPage'; 
+import CartPage from './pages/CartPage';
+import TiendaFisica from './pages/TiendaFisica'; 
 
 function App() {
   return (
@@ -33,7 +34,8 @@ function App() {
             <Route path="/products" element={<ProductListContainer />} />
             <Route path="/products/:id" element={<ProductDetailContainer />} />
             <Route path="/cart" element={<CartPage />} />
-            {/* Ruta protegida para el perfil */}
+            
+
             <Route
               path="/profile"
               element={
@@ -63,6 +65,7 @@ function App() {
             <Route path="/register" element={<Registro />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/sobre-nosotros" element={<SobreNosotros />} />
+            <Route path="/tienda-fisica" element={<TiendaFisica />} />
           </Routes>
         </Main>
         <Footer />

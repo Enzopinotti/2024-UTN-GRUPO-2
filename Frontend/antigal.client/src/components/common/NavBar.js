@@ -49,16 +49,17 @@ const NavBar = ({ vertical = false, onLinkClick = () => {} }) => {
           </NavLink>
         </li>
         <li>
-          {/* Mantener NavLink pero con alerta de desarrollo */}
+          {/* Enlace a "Tienda Física" */}
           <NavLink 
-            to="/store" 
+            to="/tienda-fisica" 
             className={({ isActive }) => isActive ? 'active' : undefined}
-            onClick={showDevelopmentAlert}  // Mostrar mensaje de desarrollo
+            onClick={onLinkClick}
           >
             Tienda Física
           </NavLink>
         </li>
         <li>
+          {/* Mantener NavLink pero con alerta de desarrollo */}
           <NavLink 
             to="/contact" 
             className={({ isActive }) => isActive ? 'active' : undefined}
