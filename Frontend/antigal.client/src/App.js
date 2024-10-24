@@ -19,7 +19,9 @@ import Registro from "./pages/Registro";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/common/ProtectedRoute";
-import SobreNosotros from './pages/SobreNosotros'; // Importa el nuevo componente
+import SobreNosotros from './pages/SobreNosotros'; 
+import CartPage from './pages/CartPage'; 
+
 function App() {
   return (
     <CartProvider>
@@ -30,7 +32,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<ProductListContainer />} />
             <Route path="/products/:id" element={<ProductDetailContainer />} />
-
+            <Route path="/cart" element={<CartPage />} />
             {/* Ruta protegida para el perfil */}
             <Route
               path="/profile"
