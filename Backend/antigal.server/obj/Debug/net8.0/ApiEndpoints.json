@@ -290,6 +290,22 @@
     ]
   },
   {
+    "ContainingType": "antigal.server.Controllers.EmailController",
+    "Method": "SendTestEmail",
+    "RelativePath": "api/Email/send-test-email",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "emailRequest",
+        "Type": "antigal.server.Models.Dto.TestEmailDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "antigal.server.Controllers.ImageController",
     "Method": "DeleteImage",
     "RelativePath": "api/Image/{imageId}",
