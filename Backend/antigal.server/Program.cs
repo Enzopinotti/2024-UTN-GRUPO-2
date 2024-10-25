@@ -11,6 +11,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MathNet.Numerics.Interpolation;
 using CloudinaryDotNet;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace antigal.server
 {
@@ -25,29 +26,9 @@ namespace antigal.server
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Configurar Identity
-            builder.Services.AddIdentity<User, Role>()
+            builder.Services.AddIdentityApiEndpoints<User>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
-
-            // Configuración de JWT
-            builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                    ValidAudience = builder.Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-                };
-            });
 
             //Cloudinary para imagenes
             var cloudinaryConfig = builder.Configuration.GetSection("Cloudinary");
@@ -73,12 +54,6 @@ namespace antigal.server
             builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
             // Inyección del servicio ICartService y su implementación CartService
             builder.Services.AddScoped<ICartService, CartService>();
-
-
-
-            // Registra el AuthService
-            builder.Services.AddScoped<IAuthService, AuthService>();
-            builder.Services.AddScoped<ServiceToken>();
 
             //*********** REPOSITORIES ***********//
 
@@ -121,21 +96,14 @@ namespace antigal.server
                 app.UseSwaggerUI();
             }
 
+            app.MapGroup("/identity").MapIdentityApi<User>();
+
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
-
-            // Crear roles
-            using (var scope = app.Services.CreateScope())
-            {
-                var serviceProvider = scope.ServiceProvider;
-                await CreateRoles(serviceProvider);
-
-            }
-
 
             app.Run();
         }
@@ -154,6 +122,7 @@ namespace antigal.server
                 }
             }
         }
+
 
     }
 }
