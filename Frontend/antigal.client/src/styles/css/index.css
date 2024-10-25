@@ -2714,23 +2714,24 @@ footer .footer-bottom img {
   position: relative;
   margin-bottom: 20px;
   /* Opcional: Añadir un overlay con información adicional */
-  /* .map-overlay {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 1em;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  transition: background 0.3s ease;
-  color: $primary-color;
+  /* 
+  .map-overlay {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 1em;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      transition: background 0.3s ease;
+      color: $primary-color;
 
-  &:hover {
-      background: rgba(255, 255, 255, 1);
-  }
+      &:hover {
+          background: rgba(255, 255, 255, 1);
+      }
 
   @media (max-width: 768px) {
       font-size: 0.95em;
