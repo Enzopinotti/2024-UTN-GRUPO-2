@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MathNet.Numerics.Interpolation;
 using CloudinaryDotNet;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace antigal.server
 {
@@ -25,10 +26,16 @@ namespace antigal.server
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // Configurar Identity
-            builder.Services.AddIdentityApiEndpoints<User>()
-                .AddEntityFrameworkStores<AppDbContext>()
-                .AddDefaultTokenProviders();
+            
+
+            // Crear instancia de IdentityConfigurationService
+            var identityConfigService = new IdentityConfigurationService();
+            identityConfigService.ConfigureIdentity(builder.Services);
+
+            builder.Services.ConfigureApplicationCookie(options => 
+                                { options.Cookie.SameSite = SameSiteMode.None; });
+            
+            builder.Services.AddAuthorization();
 
             //Cloudinary para imagenes
             var cloudinaryConfig = builder.Configuration.GetSection("Cloudinary");
@@ -97,6 +104,11 @@ namespace antigal.server
             }
 
             app.MapGroup("/identity").MapIdentityApi<User>();
+
+            app.MapPost("/logout", async (SignInManager<User> signInManager) =>
+            {
+                await signInManager.SignOutAsync().ConfigureAwait(false);
+            }).RequireAuthorization(); // So that only authorized users can use this endpoint
 
             app.UseHttpsRedirection();
 
