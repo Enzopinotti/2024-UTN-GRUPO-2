@@ -47,7 +47,8 @@ function App() {
               <Route index element={<Profile />} />
               {/* 
               <Route path="/orders" element={<UserOrders />} />
-              <Route path="/addresses" element={<UserAddresses />} /> */}
+              <Route path="/addresses" element={<UserAddresses />
+              <Route path="/security" element={<UserSecurity />} /> */}
             </Route>
            
           

@@ -3827,7 +3827,8 @@ main .admin-dashboard .admin-page .content .product-list .product-item .product-
   display: flex;
   flex-direction: column;
   width: 70%;
-  height: 70%;
+  height: fit-content;
+  min-height: 70%;
   background-color: #f0f1f6;
   border-radius: 20px;
   align-items: flex-start;
@@ -3929,6 +3930,7 @@ main .admin-dashboard .admin-page .content .product-list .product-item .product-
   color: #222222;
   font-size: 13pt;
   width: 70%;
+  padding-bottom: 5px;
 }
 .user-layout .content-container .user-background .profile-page .profile-detail .user-detail input {
   border: none;

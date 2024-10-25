@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// src/pages/Profile.js
+import React, { useEffect, useState } from "react";
 import UserDetail from "../components/users/UserDetail";
 import Swal from "sweetalert2";
 import ProfilePictureModal from "../components/users/ProfilePictureModal";
@@ -7,10 +8,11 @@ import { useOutletContext } from "react-router-dom";
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { user: currentUser } = useOutletContext();
-
-
-
+  const { user: currentUser, setUser: setUserData } = useOutletContext();
+  const [userData, setUserDataState] = useState(currentUser);
+  useEffect(() => {
+    setUserDataState(currentUser);
+  }, [currentUser]);
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
     if (isEditing) {
@@ -19,19 +21,23 @@ const Profile = () => {
   };
 
   const handleChange = (key) => (value) => {
-  }
+    setUserDataState((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
 
-  
-  const handleSave = () => {
-   
+  const validateForm = () => {
+    const { fechaNacimiento, dni, user, name, email, telefono, genero } =
+      userData;
     if (
-      !currentUser.fechaNacimiento.trim() ||
-      !currentUser.dni.trim() ||
-      !currentUser.user.trim() ||
-      !currentUser.name.trim() ||
-      !currentUser.email.trim() ||
-      !currentUser.telefono.trim() ||
-      !currentUser.genero.trim()
+      !fechaNacimiento.trim() ||
+      !dni.trim() ||
+      !user.trim() ||
+      !name.trim() ||
+      !email.trim() ||
+      !telefono.trim() ||
+      !genero.trim()
     ) {
       Swal.fire({
         icon: "error",
@@ -39,31 +45,42 @@ const Profile = () => {
         text: "No pueden guardarse campos vacíos.",
         confirmButtonText: "Aceptar",
       });
+      return false;
+    }
+    return true;
+  };
+  const handleUploadComplete = (imageUrl) => {
+    setUserDataState((prev) => ({ ...prev, picture: imageUrl }));
+    setUserData((prev) => ({ ...prev, picture: imageUrl }));
+  };
+  const handleSave = () => {
+    //Aca falta logica para guardar en backend
+    if (!validateForm()) {
       return;
     }
+    setUserData(userData);
     setIsEditing(false);
   };
-
-
 
   return (
     <div className="profile-page">
       <ProfilePictureModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        onUploadComplete={handleUploadComplete}
       />
 
       <div className="profile-header">
-        <div className="header-data" >
+        <div className="header-data">
           <div className="img-container" onClick={() => setIsModalOpen(true)}>
-            <img src={currentUser.picture} alt="" />
+            <img src={userData.picture} alt="" />
             <div className="overlay">
               <img src="/icons/pencil.svg" alt="Edit" className="edit-icon" />
             </div>
           </div>
           <div className="header-info">
-            <h2>{currentUser.name}</h2>
-            <p>{currentUser.user}</p>
+            <h2>{userData.name}</h2>
+            <p>{userData.user}</p>
           </div>
         </div>
         <div className="btn-container">
@@ -83,44 +100,44 @@ const Profile = () => {
       <div className="profile-detail">
         <UserDetail
           label="Nombre y apellido"
-          value={currentUser.name}
+          value={userData.name}
           isEditing={isEditing}
           onChange={handleChange("name")}
         />
         <UserDetail
           label="Nombre de usuario"
-          value={currentUser.user}
+          value={userData.user}
           isEditing={isEditing}
           onChange={handleChange("user")}
         />
         <UserDetail
           label="Correo electrónico"
-          value={currentUser.email}
+          value={userData.email}
           isEditing={isEditing}
           onChange={handleChange("email")}
         />
         <UserDetail
           label="Número de teléfono"
-          value={currentUser.telefono}
+          value={userData.telefono}
           isEditing={isEditing}
           onChange={handleChange("telefono")}
         />
         <UserDetail
           label="Fecha de nacimiento"
-          value={currentUser.fechaNacimiento}
+          value={userData.fechaNacimiento}
           isEditing={isEditing}
           onChange={handleChange("fechaNacimiento")}
         />
 
         <UserDetail
           label="Dni"
-          value={currentUser.dni}
+          value={userData.dni}
           isEditing={isEditing}
           onChange={handleChange("dni")}
         />
         <UserDetail
           label="Género"
-          value={currentUser.genero}
+          value={userData.genero}
           isEditing={isEditing}
           onChange={handleChange("genero")}
         />

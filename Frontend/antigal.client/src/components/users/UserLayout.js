@@ -1,11 +1,13 @@
 import UserSidebar from "./UserSidebar";
 import { Outlet } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useState } from "react";
 const UserLayout = () => {
   const { user: authUser, isAuthenticated, isLoading } = useAuth0();
-  //si no hay backend usa esto: 
+  //si no hay backend usa esto:
   const usingBackend = false;
-  const fakeUser ={
+
+  const fakeUser = {
     id: 1,
     user: "usuario1",
     name: "Lucas Martinez",
@@ -16,16 +18,18 @@ const UserLayout = () => {
     genero: "Masculino", // Añadido: género
     dni: "12345678", // Añadido: DNI
   };
-  
-  const user = usingBackend && isAuthenticated ? authUser : fakeUser;
- 
+
+  const [userData, setUserData] = useState(
+    usingBackend && isAuthenticated ? authUser : fakeUser
+  );
+
   if (isLoading) {
     return <div>Cargando...</div>;
   }
 
   return (
     <div className="user-layout">
-      <UserSidebar user={user} />
+      <UserSidebar user={userData} />
       <div className="content-container">
         <div
           className="user-background"
@@ -37,7 +41,7 @@ const UserLayout = () => {
             backgroundPosition: "center",
           }}
         >
-          <Outlet context={{ user }}  />
+          <Outlet context={{ user: userData, setUser: setUserData }} />
         </div>
       </div>
     </div>
