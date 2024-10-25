@@ -12,6 +12,8 @@ namespace antigal.server.Services
         {
             services.ConfigureApplicationCookie(options => { options.Cookie.SameSite = SameSiteMode.None; });
 
+            services.AddTransient<IEmailSender, EmailSender>();
+
             services.AddIdentityApiEndpoints<User>(opt =>
             {
                 // Configuraciones de Contraseña
@@ -33,7 +35,7 @@ namespace antigal.server.Services
                 opt.Lockout.AllowedForNewUsers = true;                         // Permitir bloqueos de cuenta para nuevos usuarios
 
                 // Configuraciones de Sesión e Inicio de Sesión
-                opt.SignIn.RequireConfirmedEmail = false;               // Requiere que el correo esté confirmado antes de iniciar sesión
+                opt.SignIn.RequireConfirmedEmail = true;               // Requiere que el correo esté confirmado antes de iniciar sesión
                 opt.SignIn.RequireConfirmedPhoneNumber = false;        // Requiere que el teléfono esté confirmado antes de iniciar sesión
                 opt.SignIn.RequireConfirmedAccount = false;            // Requiere confirmación completa de la cuenta antes de iniciar sesión
 
