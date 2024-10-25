@@ -17,6 +17,22 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.AuthController",
+    "Method": "RefreshTokenAsync",
+    "RelativePath": "api/Auth/refresh-token",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "refreshTokenDto",
+        "Type": "antigal.server.Models.Dto.RefreshTokenDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AuthController",
     "Method": "RegisterAsync",
     "RelativePath": "api/Auth/register",
     "HttpMethod": "POST",
@@ -35,9 +51,22 @@
     "ContainingType": "antigal.server.Controllers.AuthAdminController",
     "Method": "CreateRoleAsync",
     "RelativePath": "api/AuthAdmin/create-role",
-    "ContainingType": "antigal.server.Controllers.AuthController",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "createRoleDto",
+        "Type": "antigal.server.Models.Dto.CreateRoleDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AuthAdminController",
     "Method": "LoginAsync",
-    "RelativePath": "api/Auth/login",
+    "RelativePath": "api/AuthAdmin/login-admin",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -52,11 +81,8 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.AuthAdminController",
-    "Method": "LoginAsync",
-    "RelativePath": "api/AuthAdmin/login-admin",
-    "ContainingType": "antigal.server.Controllers.AuthController",
     "Method": "RegisterAsync",
-    "RelativePath": "api/Auth/register",
+    "RelativePath": "api/AuthAdmin/register-admin",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -64,25 +90,6 @@
       {
         "Name": "registerDto",
         "Type": "antigal.server.Models.Dto.RegisterDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.AuthAdminController",
-    "Method": "RegisterAsync",
-    "RelativePath": "api/AuthAdmin/register-admin",
-    "ContainingType": "antigal.server.Controllers.AuthAdminController",
-    "Method": "CreateRoleAsync",
-    "RelativePath": "api/AuthAdmin/create-role",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "createRoleDto",
-        "Type": "antigal.server.Models.Dto.CreateRoleDto",
         "IsRequired": true
       }
     ],
@@ -118,9 +125,6 @@
     "ContainingType": "antigal.server.Controllers.CartController",
     "Method": "CreateCart",
     "RelativePath": "api/Cart/{userId}",
-    "ContainingType": "antigal.server.Controllers.AuthAdminController",
-    "Method": "LoginAsync",
-    "RelativePath": "api/AuthAdmin/login-admin",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -173,9 +177,6 @@
     "ContainingType": "antigal.server.Controllers.CartController",
     "Method": "AddItemToCart",
     "RelativePath": "api/Cart/{userId}/items",
-    "ContainingType": "antigal.server.Controllers.AuthAdminController",
-    "Method": "RegisterAsync",
-    "RelativePath": "api/AuthAdmin/register-admin",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,

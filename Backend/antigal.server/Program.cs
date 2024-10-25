@@ -29,7 +29,7 @@ namespace antigal.server
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
-            // Configurar la autenticación JWT
+            // Configuración de JWT
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -37,18 +37,15 @@ namespace antigal.server
             })
             .AddJwtBearer(options =>
             {
-                options.Authority = "https://TU_DOMINIO_AUTH0/"; // Reemplaza con tu dominio de Auth0
-                options.Audience = "TU_API_AUDIENCE"; // Reemplaza con el Identifier de tu API en Auth0
-
-             
-            // Configurar validaciones adicionales si es necesario
-            options.TokenValidationParameters = new TokenValidationParameters
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = "https://TU_DOMINIO_AUTH0/",
                     ValidateAudience = true,
-                    ValidAudience = "TU_API_AUDIENCE",
                     ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
                 };
             });
 
@@ -81,6 +78,7 @@ namespace antigal.server
 
             // Registra el AuthService
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<ServiceToken>();
 
             //*********** REPOSITORIES ***********//
 
