@@ -1107,3 +1107,5 @@ C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.s
 C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.FileProviders.Embedded.dll
 C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\FluentEmail.Core.dll
 C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\FluentEmail.Smtp.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\MailKit.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\MimeKit.dll

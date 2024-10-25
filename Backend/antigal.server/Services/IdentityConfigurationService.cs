@@ -10,6 +10,8 @@ namespace antigal.server.Services
     {
         public void ConfigureIdentity(IServiceCollection services)
         {
+            services.ConfigureApplicationCookie(options => { options.Cookie.SameSite = SameSiteMode.None; });
+
             services.AddIdentityApiEndpoints<User>(opt =>
             {
                 // Configuraciones de Contraseña
@@ -31,7 +33,7 @@ namespace antigal.server.Services
                 opt.Lockout.AllowedForNewUsers = true;                         // Permitir bloqueos de cuenta para nuevos usuarios
 
                 // Configuraciones de Sesión e Inicio de Sesión
-                opt.SignIn.RequireConfirmedEmail = true;               // Requiere que el correo esté confirmado antes de iniciar sesión
+                opt.SignIn.RequireConfirmedEmail = false;               // Requiere que el correo esté confirmado antes de iniciar sesión
                 opt.SignIn.RequireConfirmedPhoneNumber = false;        // Requiere que el teléfono esté confirmado antes de iniciar sesión
                 opt.SignIn.RequireConfirmedAccount = false;            // Requiere confirmación completa de la cuenta antes de iniciar sesión
 
@@ -49,6 +51,7 @@ namespace antigal.server.Services
                 opt.User.RequireUniqueEmail = true;                     // Requiere que el correo electrónico sea único por usuario
 
             })
+            .AddRoles<Role>()                                     // Agrega soporte de roles
             .AddDefaultUI()                                               // Añade la interfaz de usuario predeterminada para Identity
             .AddEntityFrameworkStores<AppDbContext>()                     // Usa Entity Framework para almacenar los datos de identidad
             .AddDefaultTokenProviders();                                  // Proveedores de token para restablecimiento de contraseña y autenticación de dos factores

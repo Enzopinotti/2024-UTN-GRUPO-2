@@ -13,6 +13,9 @@ using MathNet.Numerics.Interpolation;
 using CloudinaryDotNet;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Security.Claims;
+using NPOI.SS.Formula.Functions;
+using NPOI.HPSF;
 
 namespace antigal.server
 {
@@ -31,9 +34,6 @@ namespace antigal.server
             // Crear instancia de IdentityConfigurationService
             var identityConfigService = new IdentityConfigurationService();
             identityConfigService.ConfigureIdentity(builder.Services);
-
-            builder.Services.ConfigureApplicationCookie(options => 
-                                { options.Cookie.SameSite = SameSiteMode.None; });
             
             builder.Services.AddAuthorization();
 
@@ -50,7 +50,7 @@ namespace antigal.server
 
             builder.Services.AddScoped<IImageService, ImageService>();
 
-
+            builder.Services.AddTransient<DbInitializer>();
             //*********** SERVICES ***********//
 
             // Inyección del servicio IProductService y su implementación ProductService
@@ -108,7 +108,13 @@ namespace antigal.server
             app.MapPost("/logout", async (SignInManager<User> signInManager) =>
             {
                 await signInManager.SignOutAsync().ConfigureAwait(false);
-            }).RequireAuthorization(); // So that only authorized users can use this endpoint
+            }).RequireAuthorization(); // mata el token
+
+            app.MapGet("/pingauth", (ClaimsPrincipal user) =>
+            {
+                var email = user.FindFirstValue(ClaimTypes.Email);
+                return Results.Json(new { Email = email }); ;
+            }).RequireAuthorization();  //comprueba si esta autentificado
 
             app.UseHttpsRedirection();
 
@@ -117,24 +123,20 @@ namespace antigal.server
 
             app.MapControllers();
 
+            // Llamar al inicializador de base de datos
+            await InitializeDatabase(app.Services);
+
             app.Run();
         }
 
-        private static async Task CreateRoles(IServiceProvider serviceProvider)
+        private static async Task InitializeDatabase(IServiceProvider services)
         {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
-            string[] roleNames = { "Admin", "Usuario" };
-
-            foreach (var roleName in roleNames)
+            using (var scope = services.CreateScope())
             {
-                var roleExist = await roleManager.RoleExistsAsync(roleName);
-                if (!roleExist)
-                {
-                    await roleManager.CreateAsync(new Role { Name = roleName });
-                }
+                var dbInitializer = scope.ServiceProvider.GetRequiredService<DbInitializer>();
+                await dbInitializer.InitializeAsync();
             }
         }
-
 
     }
 }
