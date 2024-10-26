@@ -36,7 +36,8 @@ const UserLayout = () => {
           style={{
             backgroundImage: "url('/images/user-background.png')",
             width: "100%",
-            height: "calc(100vh - 120px)",
+            height: "auto",
+            minHeight:"100vh",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}

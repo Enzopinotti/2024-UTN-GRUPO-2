@@ -1,9 +1,8 @@
 // src/pages/Profile.js
 import React, { useEffect, useState } from "react";
-import UserDetail from "../components/users/UserDetail";
+import UserDetail from "../../components/users/UserDetail";
 import Swal from "sweetalert2";
-import ProfilePictureModal from "../components/users/ProfilePictureModal";
-
+import ProfilePictureModal from "../../components/users/ProfilePictureModal";
 import { useOutletContext } from "react-router-dom";
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
