@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
 import { CartContext } from "../../../contexts/CartContext"; // Importar el contexto del carrito
+import { useFavorites } from "../../../contexts/FavoriteContext";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import formatCamelCase from "../../../utils/formatCamelCase"; // Importamos la función para formatear
 
 const Product = ({ product }) => {
   const navigate = useNavigate();
+  const { favorites, addFavorite, removeFavorite } = useFavorites();
+  const isFavorited = favorites.some((item) => item.id === product.id);
 
-  const [liked, setLiked] = useState(
-    () => JSON.parse(localStorage.getItem(`liked-${product.id}`)) || false
-  );
-
+  const [liked, setLiked] = useState(isFavorited);
   const [cartCount, setCartCount] = useState(() => {
     const savedCount = JSON.parse(localStorage.getItem(`cart-${product.id}`));
     return savedCount || 0;
@@ -20,7 +20,13 @@ const Product = ({ product }) => {
 
   useEffect(() => {
     localStorage.setItem(`liked-${product.id}`, JSON.stringify(liked));
-  }, [liked, product.id]);
+    if(liked){
+      addFavorite(product);
+    }else{
+      removeFavorite(product.id);
+    }
+
+  }, [liked, product.id, addFavorite,removeFavorite, product]);
 
   useEffect(() => {
     localStorage.setItem(`cart-${product.id}`, JSON.stringify(cartCount));
@@ -44,7 +50,7 @@ const Product = ({ product }) => {
   };
 
   const handleLike = () => {
-    setLiked(!liked);
+    setLiked((prev) => !prev);
   };
 
   return (
@@ -68,7 +74,7 @@ const Product = ({ product }) => {
           >
             <img
               src={
-                liked ? "./icons/likeRellenoIcon.png" : "./icons/likeIcon.png"
+                liked ? "/icons/likeRellenoIcon.png" : "/icons/likeIcon.png"
               }
               alt="like icon"
             />
@@ -112,7 +118,7 @@ const Product = ({ product }) => {
           <article className="cartButton" onClick={handleAddToCart}>
             <div>Agregar al Carrito</div>
             <img
-              src="./icons/cartCardIcon.svg"
+              src="/icons/cartCardIcon.svg"
               alt="Icono de carrito de Antigal"
             />
           </article>

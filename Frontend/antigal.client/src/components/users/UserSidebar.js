@@ -55,6 +55,14 @@ const UserSidebar = ({user}) => {
             </li>
             <li>
               <NavLink
+                to="favorites"
+                className={({ isActive }) => (isActive ? "active" : undefined)}
+              >
+                Mis Favoritos
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
                 to="adresses"
                 className={({ isActive }) => (isActive ? "active" : undefined)}
                 onClick={showDevelopmentAlert}

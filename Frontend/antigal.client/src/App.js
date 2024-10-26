@@ -19,61 +19,62 @@ import Registro from "./pages/Registro";
 import Login from "./pages/Login";
 import Profile from "./pages/profile/Profile";
 import ProtectedRoute from "./components/common/ProtectedRoute";
-import SobreNosotros from './pages/SobreNosotros'; 
-import CartPage from './pages/CartPage';
-import TiendaFisica from './pages/TiendaFisica'; 
+import SobreNosotros from "./pages/SobreNosotros";
+import CartPage from "./pages/CartPage";
+import TiendaFisica from "./pages/TiendaFisica";
 import Orders from "./pages/profile/Orders";
-
+import Favorites from "./pages/profile/Favorites";
+import { FavoriteProvider } from "./contexts/FavoriteContext";
 function App() {
   return (
     <CartProvider>
-      <Router>
-        <Header />
-        <Main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/products" element={<ProductListContainer />} />
-            <Route path="/products/:id" element={<ProductDetailContainer />} />
-            <Route path="/cart" element={<CartPage />} />
-            
+      <FavoriteProvider>
+        <Router>
+          <Header />
+          <Main>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/products" element={<ProductListContainer />} />
+              <Route
+                path="/products/:id"
+                element={<ProductDetailContainer />}
+              />
+              <Route path="/cart" element={<CartPage />} />
 
-            <Route
-              path="/profile"
-              element={
-                
-                  <UserLayout />
-              
-              }
-            >
-              <Route index element={<Profile />} />
-              <Route path="orders" element={<Orders />} />
+              {/* Rutas de usuario */}
+              <Route path="/profile" element={<UserLayout />}>
+                <Route index element={<Profile />} />
+                <Route path="orders" element={<Orders />} />
+                <Route path="favorites" element={<Favorites />} />
 
-              {/* 
+                {/* 
               <Route path="/addresses" element={<UserAddresses />
               <Route path="/security" element={<UserSecurity />} /> */}
-            </Route>
-           
-          
-            
+              </Route>
 
-            {/* Ruta protegida para el admin */}
-            <Route path="/admin/*" element={<AdminDashboard />}>
-              {/* Subrutas del dashboard */}
-              <Route path="categories" element={<CategoryListContainer />} />
-              <Route path="products" element={<AdminProductListContainer />} />
-            </Route>
+              {/* Ruta protegida para el admin */}
+              <Route path="/admin/*" element={<AdminDashboard />}>
+                {/* Subrutas del dashboard */}
+                <Route path="categories" element={<CategoryListContainer />} />
+                <Route
+                  path="products"
+                  element={<AdminProductListContainer />}
+                />
+              </Route>
 
-            {/* Rutas de autenticación */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Registro />} />
-            <Route path="/logout" element={<Logout />} />
-            <Route path="/sobre-nosotros" element={<SobreNosotros />} />
-            <Route path="/tienda-fisica" element={<TiendaFisica />} />
-          </Routes>
-        </Main>
-        <Footer />
-      </Router>
-      <ToastContainer />
+              {/* Rutas de autenticación */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Registro />} />
+              <Route path="/logout" element={<Logout />} />
+              <Route path="/sobre-nosotros" element={<SobreNosotros />} />
+              <Route path="/tienda-fisica" element={<TiendaFisica />} />
+            </Routes>
+          </Main>
+          <Footer />
+        </Router>
+
+        <ToastContainer />
+      </FavoriteProvider>
     </CartProvider>
   );
 }

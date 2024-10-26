@@ -290,11 +290,12 @@
   
   // Media Queries para ajustar la disposición de los productos según el tamaño de pantalla
   @media (min-width: 480px) { // Dos productos por fila en tabletas pequeñas
+    .products-page {
     .product-list {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
-    }
+    }}
   
     
   }
@@ -305,7 +306,6 @@
         padding-right: 3.3rem;
       }
       .product-list-container{
-       
         .product-list{
           padding-left: 2.6rem;
           padding-right: 2.6rem;
@@ -318,9 +318,10 @@
   }
   
   @media (min-width: 768px) { // Tres productos por fila en tabletas grandes
+    .products-page {
     .product-item {
       width: calc(50% - 20px); // Se ajusta para tres productos por fila
-    }
+    }}
   }
   
   @media (min-width: 1080px) { // Cuatro productos por fila en pantallas grandes

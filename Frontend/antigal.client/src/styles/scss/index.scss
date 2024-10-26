@@ -24,6 +24,8 @@
 
 @use './components/users/user';
 @use './components/users/orders';
+@use './components/users/favorites';
+
 @import './abstract/variables';
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
