@@ -71,6 +71,8 @@ namespace antigal.server
 
             builder.Services.AddScoped<IImageService, ImageService>();
 
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
+
             builder.Services.AddTransient<DbInitializer>();
 
             // Registra el AuthService

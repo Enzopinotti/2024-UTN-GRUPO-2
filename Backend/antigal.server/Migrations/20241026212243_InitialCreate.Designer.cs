@@ -12,7 +12,7 @@ using antigal.server.Data;
 namespace antigal.server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241025215500_InitialCreate")]
+    [Migration("20241026212243_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -276,6 +276,30 @@ namespace antigal.server.Migrations
                     b.HasKey("idProducto");
 
                     b.ToTable("Productos");
+                });
+
+            modelBuilder.Entity("antigal.server.Models.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("antigal.server.Models.Role", b =>

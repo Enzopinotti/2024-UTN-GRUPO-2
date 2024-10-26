@@ -104,11 +104,11 @@ namespace antigal.server.Services
 
         public async Task<(string AccessToken, string RefreshToken)> LoginUserAsync(LoginDto loginDto)
         {
-            var result = await _signInManager.PasswordSignInAsync(loginDto.UserName, loginDto.Password, false, false);
+            var result = await _signInManager.PasswordSignInAsync(loginDto.Email, loginDto.Password, false, false);
 
             if (result.Succeeded)
             {
-                var user = await _userManager.FindByNameAsync(loginDto.UserName);
+                var user = await _userManager.FindByNameAsync(loginDto.Email);
                 var accessToken = _serviceToken.GenerateToken(user); // Genera el token de acceso
                 var refreshToken = _serviceToken.GenerateRefreshToken(); // Genera el refresh token
 

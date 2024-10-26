@@ -1,5 +1,53 @@
 [
   {
+    "ContainingType": "antigal.server.Controllers.AuthController",
+    "Method": "LoginAsync",
+    "RelativePath": "api/Auth/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loginDto",
+        "Type": "antigal.server.Models.Dto.LoginDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AuthController",
+    "Method": "RefreshTokenAsync",
+    "RelativePath": "api/Auth/refresh-token",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "refreshTokenDto",
+        "Type": "antigal.server.Models.Dto.RefreshTokenDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AuthController",
+    "Method": "RegisterAsync",
+    "RelativePath": "api/Auth/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "registerDto",
+        "Type": "antigal.server.Models.Dto.RegisterDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "antigal.server.Controllers.CartController",
     "Method": "GetCartByUserId",
     "RelativePath": "api/Cart/{userId}",
@@ -692,7 +740,7 @@
   },
   {
     "ContainingType": "antigal.server.Program\u002B\u003C\u003Ec",
-    "Method": "\u003CMain\u003Eb__0_3",
+    "Method": "\u003CMain\u003Eb__0_4",
     "RelativePath": "confirmar-email-antigal",
     "HttpMethod": "GET",
     "IsController": false,
@@ -718,310 +766,8 @@
     ]
   },
   {
-    "ContainingType": "Microsoft.AspNetCore.Routing.IdentityApiEndpointRouteBuilderExtensions\u002B\u003C\u003Ec__1\u00601[[antigal.server.Models.User, antigal.server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "\u003CMapIdentityApi\u003Eb__1_3",
-    "RelativePath": "identity/confirmEmail",
-    "HttpMethod": "GET",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "userId",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "code",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "changedEmail",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ],
-    "EndpointName": "MapIdentityApi-/identity/confirmEmail"
-  },
-  {
-    "ContainingType": "Microsoft.AspNetCore.Routing.IdentityApiEndpointRouteBuilderExtensions\u002B\u003C\u003Ec__DisplayClass1_0\u00601[[antigal.server.Models.User, antigal.server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "\u003CMapIdentityApi\u003Eb__6",
-    "RelativePath": "identity/forgotPassword",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "resetRequest",
-        "Type": "Microsoft.AspNetCore.Identity.Data.ForgotPasswordRequest",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Http.HttpValidationProblemDetails",
-        "MediaTypes": [
-          "application/problem\u002Bjson"
-        ],
-        "StatusCode": 400
-      }
-    ]
-  },
-  {
-    "ContainingType": "Microsoft.AspNetCore.Routing.IdentityApiEndpointRouteBuilderExtensions\u002B\u003C\u003Ec__1\u00601[[antigal.server.Models.User, antigal.server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "\u003CMapIdentityApi\u003Eb__1_1",
-    "RelativePath": "identity/login",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "login",
-        "Type": "Microsoft.AspNetCore.Identity.Data.LoginRequest",
-        "IsRequired": false
-      },
-      {
-        "Name": "useCookies",
-        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "IsRequired": false
-      },
-      {
-        "Name": "useSessionCookies",
-        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "Microsoft.AspNetCore.Authentication.BearerToken.AccessTokenResponse",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Microsoft.AspNetCore.Routing.IdentityApiEndpointRouteBuilderExtensions\u002B\u003C\u003Ec__1\u00601[[antigal.server.Models.User, antigal.server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "\u003CMapIdentityApi\u003Eb__1_8",
-    "RelativePath": "identity/manage/2fa",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "tfaRequest",
-        "Type": "Microsoft.AspNetCore.Identity.Data.TwoFactorRequest",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "Microsoft.AspNetCore.Identity.Data.TwoFactorResponse",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Http.HttpValidationProblemDetails",
-        "MediaTypes": [
-          "application/problem\u002Bjson"
-        ],
-        "StatusCode": 400
-      },
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 404
-      }
-    ]
-  },
-  {
-    "ContainingType": "Microsoft.AspNetCore.Routing.IdentityApiEndpointRouteBuilderExtensions\u002B\u003C\u003Ec__1\u00601[[antigal.server.Models.User, antigal.server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "\u003CMapIdentityApi\u003Eb__1_9",
-    "RelativePath": "identity/manage/info",
-    "HttpMethod": "GET",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "Microsoft.AspNetCore.Identity.Data.InfoResponse",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Http.HttpValidationProblemDetails",
-        "MediaTypes": [
-          "application/problem\u002Bjson"
-        ],
-        "StatusCode": 400
-      },
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 404
-      }
-    ]
-  },
-  {
-    "ContainingType": "Microsoft.AspNetCore.Routing.IdentityApiEndpointRouteBuilderExtensions\u002B\u003C\u003Ec__DisplayClass1_0\u00601[[antigal.server.Models.User, antigal.server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "\u003CMapIdentityApi\u003Eb__10",
-    "RelativePath": "identity/manage/info",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "infoRequest",
-        "Type": "Microsoft.AspNetCore.Identity.Data.InfoRequest",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "Microsoft.AspNetCore.Identity.Data.InfoResponse",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Http.HttpValidationProblemDetails",
-        "MediaTypes": [
-          "application/problem\u002Bjson"
-        ],
-        "StatusCode": 400
-      },
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 404
-      }
-    ]
-  },
-  {
-    "ContainingType": "Microsoft.AspNetCore.Routing.IdentityApiEndpointRouteBuilderExtensions\u002B\u003C\u003Ec__DisplayClass1_0\u00601[[antigal.server.Models.User, antigal.server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "\u003CMapIdentityApi\u003Eb__2",
-    "RelativePath": "identity/refresh",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "refreshRequest",
-        "Type": "Microsoft.AspNetCore.Identity.Data.RefreshRequest",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "Microsoft.AspNetCore.Authentication.BearerToken.AccessTokenResponse",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Microsoft.AspNetCore.Routing.IdentityApiEndpointRouteBuilderExtensions\u002B\u003C\u003Ec__DisplayClass1_0\u00601[[antigal.server.Models.User, antigal.server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "\u003CMapIdentityApi\u003Eb__0",
-    "RelativePath": "identity/register",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "registration",
-        "Type": "Microsoft.AspNetCore.Identity.Data.RegisterRequest",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Http.HttpValidationProblemDetails",
-        "MediaTypes": [
-          "application/problem\u002Bjson"
-        ],
-        "StatusCode": 400
-      }
-    ]
-  },
-  {
-    "ContainingType": "Microsoft.AspNetCore.Routing.IdentityApiEndpointRouteBuilderExtensions\u002B\u003C\u003Ec__DisplayClass1_0\u00601[[antigal.server.Models.User, antigal.server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "\u003CMapIdentityApi\u003Eb__5",
-    "RelativePath": "identity/resendConfirmationEmail",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "resendRequest",
-        "Type": "Microsoft.AspNetCore.Identity.Data.ResendConfirmationEmailRequest",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Microsoft.AspNetCore.Routing.IdentityApiEndpointRouteBuilderExtensions\u002B\u003C\u003Ec__1\u00601[[antigal.server.Models.User, antigal.server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "\u003CMapIdentityApi\u003Eb__1_7",
-    "RelativePath": "identity/resetPassword",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "resetRequest",
-        "Type": "Microsoft.AspNetCore.Identity.Data.ResetPasswordRequest",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Http.HttpValidationProblemDetails",
-        "MediaTypes": [
-          "application/problem\u002Bjson"
-        ],
-        "StatusCode": 400
-      }
-    ]
-  },
-  {
     "ContainingType": "antigal.server.Program\u002B\u003C\u003Ec",
-    "Method": "\u003CMain\u003Eb__0_4",
+    "Method": "\u003CMain\u003Eb__0_5",
     "RelativePath": "logout-antigal",
     "HttpMethod": "POST",
     "IsController": false,
@@ -1037,34 +783,12 @@
   },
   {
     "ContainingType": "antigal.server.Program\u002B\u003C\u003Ec",
-    "Method": "\u003CMain\u003Eb__0_5",
+    "Method": "\u003CMain\u003Eb__0_6",
     "RelativePath": "pingauth-antigal",
     "HttpMethod": "GET",
     "IsController": false,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "antigal.server.Program\u002B\u003C\u003Ec",
-    "Method": "\u003CMain\u003Eb__0_2",
-    "RelativePath": "register-antigal",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "registerDto",
-        "Type": "antigal.server.Models.Dto.RegisterDto",
-        "IsRequired": true
-      }
-    ],
     "ReturnTypes": [
       {
         "Type": "System.Void",
