@@ -25,6 +25,7 @@ import TiendaFisica from "./pages/TiendaFisica";
 import Orders from "./pages/profile/Orders";
 import Favorites from "./pages/profile/Favorites";
 import { FavoriteProvider } from "./contexts/FavoriteContext";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 function App() {
   return (
     <CartProvider>
@@ -68,6 +69,8 @@ function App() {
               <Route path="/logout" element={<Logout />} />
               <Route path="/sobre-nosotros" element={<SobreNosotros />} />
               <Route path="/tienda-fisica" element={<TiendaFisica />} />
+
+              <Route path="/politica-de-privacidad" element={< PrivacyPolicy/>} />
             </Routes>
           </Main>
           <Footer />
