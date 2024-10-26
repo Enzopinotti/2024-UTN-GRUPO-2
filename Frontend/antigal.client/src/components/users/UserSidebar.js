@@ -40,23 +40,22 @@ const UserSidebar = ({user}) => {
             <li>
               <NavLink
                 to="/profile"
-                className={({ isActive }) => (isActive ? "active" : undefined)}
+                className={({ isActive }) =>(isActive && window.location.pathname === "/profile" ? "active" : undefined)}
               >
                 Mi Perfil
               </NavLink>
             </li>
             <li>
               <NavLink
-                to="/pedidos"
+                to="orders"
                 className={({ isActive }) => (isActive ? "active" : undefined)}
-                onClick={showDevelopmentAlert}
               >
                 Mis Pedidos
               </NavLink>
             </li>
             <li>
               <NavLink
-                to="/direcciones"
+                to="adresses"
                 className={({ isActive }) => (isActive ? "active" : undefined)}
                 onClick={showDevelopmentAlert}
               >
@@ -65,7 +64,7 @@ const UserSidebar = ({user}) => {
             </li>
             <li>
               <NavLink
-                to="/account-security"
+                to="account-security"
                 className={({ isActive }) => (isActive ? "active" : undefined)}
                 onClick={showDevelopmentAlert}
               >

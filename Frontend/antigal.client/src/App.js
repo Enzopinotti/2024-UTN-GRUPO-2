@@ -17,11 +17,12 @@ import UserLayout from "./components/users/UserLayout";
 import Logout from "./pages/Logout";
 import Registro from "./pages/Registro";
 import Login from "./pages/Login";
-import Profile from "./pages/Profile";
+import Profile from "./pages/profile/Profile";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import SobreNosotros from './pages/SobreNosotros'; 
 import CartPage from './pages/CartPage';
 import TiendaFisica from './pages/TiendaFisica'; 
+import Orders from "./pages/profile/Orders";
 
 function App() {
   return (
@@ -45,8 +46,9 @@ function App() {
               }
             >
               <Route index element={<Profile />} />
+              <Route path="orders" element={<Orders />} />
+
               {/* 
-              <Route path="/orders" element={<UserOrders />} />
               <Route path="/addresses" element={<UserAddresses />
               <Route path="/security" element={<UserSecurity />} /> */}
             </Route>
