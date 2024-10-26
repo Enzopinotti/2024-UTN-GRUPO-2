@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging; // Para usar ILogger
 using antigal.server.Data;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Configuration;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace antigal.server.Services
 {
@@ -18,11 +19,12 @@ namespace antigal.server.Services
         private readonly ILogger<AuthService> _logger; // Agregar ILogger
         private readonly ServiceToken _serviceToken;
         private readonly AppDbContext _context;
+        private readonly IEmailSender _emailSender;
 
         // Modificar el constructor para inyectar ILogger<AuthService>
         public AuthService(UserManager<User> userManager, SignInManager<User> signInManager, 
                             ICartService cartService, ILogger<AuthService> logger, 
-                            ServiceToken serviceToken, AppDbContext context)
+                            ServiceToken serviceToken, AppDbContext context, IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -30,17 +32,37 @@ namespace antigal.server.Services
             _logger = logger;
             _serviceToken = serviceToken;
             _context = context;
+            _emailSender = emailSender;
         }
+
+        /*
+         app.MapPost("/register-antigal", async(UserManager<User> userManager, IEmailSender emailSender, RegisterDto registerDto) =>
+            {
+                var user = new User { UserName = registerDto.Email, Email = registerDto.Email };
+                var result = await userManager.CreateAsync(user, registerDto.Password);
+                if (result.Succeeded)
+                {
+                    // Generar el token de confirmación
+                    var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var confirmationLink = $"https://localhost:5000/confirm-email?userId={user.Id}&token={token}";
+
+                    // Enviar el correo de confirmación
+                    await emailSender.SendEmailAsync(user.Email, "Confirm your email",
+                        $"Please confirm your account by clicking this link: <a href='{confirmationLink}'>link</a>");
+
+                    return Results.Ok("Registration successful. Please check your email to confirm.");
+                }
+
+                return Results.BadRequest(result.Errors);
+            });
+        */
 
         public async Task<bool> RegisterUserAsync(RegisterDto registerDto)
         {
             var user = new User
             {
-                UserName = registerDto.UserName,
-                Email = registerDto.Email,
-                FullName = registerDto.FullName,
+                Email = registerDto.Email
             };
-
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
@@ -54,10 +76,30 @@ namespace antigal.server.Services
                     _logger.LogError($"No se pudo crear el carrito para el usuario con ID: {user.Id}. Error: {cartResponse.Message}");
                 }
 
+                // Generar el token de confirmación
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var confirmationLink = $"https://localhost:5000/confirm-email?userId={user.Id}&token={token}";
+                // Enviar el correo de confirmación
+                try
+                {
+                    await _emailSender.SendEmailAsync(user.Email, "Confirma tu correo",
+                        $"Por favor, confirma tu cuenta haciendo clic en el siguiente enlace: <a href='{confirmationLink}'>Confirmar cuenta</a>");
+                    _logger.LogInformation($"Correo de confirmación enviado a {user.Email}");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error al enviar el correo de confirmación al usuario con ID: {user.Id}. Error: {ex.Message}");
+                }
                 return true; // Registro exitoso
             }
 
-            return false; // Registro fallido
+            // Registrar los errores de creación de usuario
+            foreach (var error in result.Errors)
+            {
+                _logger.LogError($"Error en el registro de usuario: {error.Description}");
+            }
+
+            return false; 
         }
 
         public async Task<(string AccessToken, string RefreshToken)> LoginUserAsync(LoginDto loginDto)

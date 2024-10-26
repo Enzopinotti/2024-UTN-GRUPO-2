@@ -127,7 +127,7 @@ namespace antigal.server
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            /*
             // Extender los endpoints
             app.MapPost("/register-antigal", async(UserManager<User> userManager, IEmailSender emailSender, RegisterDto registerDto) =>
             {
@@ -148,6 +148,7 @@ namespace antigal.server
 
                 return Results.BadRequest(result.Errors);
             });
+            */
 
             app.MapGet("/confirmar-email-antigal", async(UserManager<User> userManager, string userId, string token) =>
             {
