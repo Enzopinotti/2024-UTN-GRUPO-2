@@ -33,13 +33,30 @@ namespace antigal.server
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            
+            // Configurar Identity
+            builder.Services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
 
-            // Crear instancia de IdentityConfigurationService
-            var identityConfigService = new IdentityConfigurationService();
-            identityConfigService.ConfigureIdentity(builder.Services);
-            
-            builder.Services.AddAuthorization();
+            // Configuración de JWT
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                };
+            });
 
             //Cloudinary para imagenes
             var cloudinaryConfig = builder.Configuration.GetSection("Cloudinary");
@@ -55,6 +72,10 @@ namespace antigal.server
             builder.Services.AddScoped<IImageService, ImageService>();
 
             builder.Services.AddTransient<DbInitializer>();
+
+            // Registra el AuthService
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<ServiceToken>();
             //*********** SERVICES ***********//
 
             // Inyección del servicio IProductService y su implementación ProductService
@@ -106,8 +127,6 @@ namespace antigal.server
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
-            app.MapGroup("/identity").MapIdentityApi<User>();
 
             // Extender los endpoints
             app.MapPost("/register-antigal", async(UserManager<User> userManager, IEmailSender emailSender, RegisterDto registerDto) =>
