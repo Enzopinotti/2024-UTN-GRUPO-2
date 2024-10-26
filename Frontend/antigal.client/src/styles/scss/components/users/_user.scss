@@ -3,20 +3,21 @@
 
 .user-layout {
   width: 100%;
+  height: fit-content;
+  position: relative;
   display: flex;
-  
+  overflow: hidden;
   .mobile-sidebar {
     position: absolute;
     top: 0;
     left: 0;
     width: 60px;
-    height: calc(100vh - 120px);
+    height: auto;
     background-color: $primary-color;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 100;
-    margin-top: 117.28px;
     visibility: hidden;
     button {
       background-color: $primary-color;
@@ -314,7 +315,7 @@
 }
 @media (max-width: 1024px) {
   .user-layout {
-    height: auto;
+    
     .mobile-sidebar {
       height: 100%;
     }
@@ -322,6 +323,7 @@
       width: 30%;
 
       .user-content {
+        
         .user-profile-text {
           h2 {
             font-size: 18pt !important;
@@ -344,7 +346,7 @@
 
 @media (max-width: 768px) {
   .user-layout {
-    height: auto;
+    
     .overlay {
       position: fixed;
       top: 0;
@@ -355,8 +357,14 @@
       z-index: 2000;
     }
     .mobile-sidebar {
+      position: absolute; // para que se superponga en el mismo espacio
+      top: 0;
+      right: 0; // ajuste según la posición deseada
+       // ocupa el ancho completo si es necesario
+       // toma todo el alto de la pantalla
+      height: 100%; // asegura que no sobrepase la pantalla
       visibility: visible;
-      height: 100%;
+      z-index: 1999; 
     }
     .user-sidebar {
       position: fixed;
@@ -377,12 +385,12 @@
     .content-container {
       .user-background {
         height: fit-content !important;
-        padding: 20px;
+        margin-left: 30px;
       }
       .profile-page {
         height: fit-content !important;
-        margin-left: 65px;
         padding: 5px;
+        margin: 0px!important;
         width: 80% !important;
         .profile-header {
           flex-direction: column-reverse;
@@ -416,10 +424,7 @@
 
 @media (max-width: 480px) {
   .user-layout {
-    height: auto !important;
-    .mobile-sidebar {
-      height: 100%;
-    }
+    
     .user-sidebar {
       .user-profile-img {
         width: 80px;
@@ -428,7 +433,7 @@
     }
     .content-container {
       .profile-page {
-        margin-left: 65px;
+     
         width: 80% !important;
         .profile-header {
           .header-data {

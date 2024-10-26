@@ -3720,20 +3720,22 @@ main .admin-dashboard .admin-page .content .product-list .product-item .product-
 
 .user-layout {
   width: 100%;
+  height: fit-content;
+  position: relative;
   display: flex;
+  overflow: hidden;
 }
 .user-layout .mobile-sidebar {
   position: absolute;
   top: 0;
   left: 0;
   width: 60px;
-  height: calc(100vh - 120px);
+  height: auto;
   background-color: #74873D;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 100;
-  margin-top: 117.28px;
   visibility: hidden;
 }
 .user-layout .mobile-sidebar button {
@@ -4016,9 +4018,6 @@ main .admin-dashboard .admin-page .content .product-list .product-item .product-
 }
 
 @media (max-width: 1024px) {
-  .user-layout {
-    height: auto;
-  }
   .user-layout .mobile-sidebar {
     height: 100%;
   }
@@ -4040,9 +4039,6 @@ main .admin-dashboard .admin-page .content .product-list .product-item .product-
   }
 }
 @media (max-width: 768px) {
-  .user-layout {
-    height: auto;
-  }
   .user-layout .overlay {
     position: fixed;
     top: 0;
@@ -4053,8 +4049,12 @@ main .admin-dashboard .admin-page .content .product-list .product-item .product-
     z-index: 2000;
   }
   .user-layout .mobile-sidebar {
-    visibility: visible;
+    position: absolute;
+    top: 0;
+    right: 0;
     height: 100%;
+    visibility: visible;
+    z-index: 1999;
   }
   .user-layout .user-sidebar {
     position: fixed;
@@ -4074,12 +4074,12 @@ main .admin-dashboard .admin-page .content .product-list .product-item .product-
   }
   .user-layout .content-container .user-background {
     height: fit-content !important;
-    padding: 20px;
+    margin-left: 30px;
   }
   .user-layout .content-container .profile-page {
     height: fit-content !important;
-    margin-left: 65px;
     padding: 5px;
+    margin: 0px !important;
     width: 80% !important;
   }
   .user-layout .content-container .profile-page .profile-header {
@@ -4107,18 +4107,11 @@ main .admin-dashboard .admin-page .content .product-list .product-item .product-
   }
 }
 @media (max-width: 480px) {
-  .user-layout {
-    height: auto !important;
-  }
-  .user-layout .mobile-sidebar {
-    height: 100%;
-  }
   .user-layout .user-sidebar .user-profile-img {
     width: 80px;
     height: 80px;
   }
   .user-layout .content-container .profile-page {
-    margin-left: 65px;
     width: 80% !important;
   }
   .user-layout .content-container .profile-page .profile-header .header-data .img-container {
@@ -4262,6 +4255,19 @@ main .admin-dashboard .admin-page .content .product-list .product-item .product-
   content: url("/public/icons/repeat-white.svg");
 }
 
+@media (max-width: 768px) {
+  .order-footer button {
+    width: 120px !important;
+    font-weight: 500 !important;
+    font-size: 0.8em !important;
+  }
+  .order-footer a {
+    width: 120px !important;
+    font-weight: 500 !important;
+    font-size: 0.8em !important;
+    text-align: center;
+  }
+}
 * {
   font-family: "Roboto", sans-serif;
 }

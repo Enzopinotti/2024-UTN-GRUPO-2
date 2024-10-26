@@ -139,3 +139,24 @@
     }
   }
 }
+
+@media (max-width: 768px) {
+    .order-footer {
+        button{
+            width: 120px!important;
+            font-weight: 500!important;
+            font-size: 0.8em!important;
+        }
+        a{
+            width: 120px!important;
+            font-weight: 500!important;
+            font-size: 0.8em!important;
+            text-align: center;
+        }
+    }
+}
+
+
+@media (max-width: 480px) {
+    
+}
