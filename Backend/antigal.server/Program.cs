@@ -110,7 +110,7 @@ namespace antigal.server
             app.MapGroup("/identity").MapIdentityApi<User>();
 
             // Extender los endpoints
-            app.MapPost("/register", async(UserManager<User> userManager, IEmailSender emailSender, RegisterDto registerDto) =>
+            app.MapPost("/register-antigal", async(UserManager<User> userManager, IEmailSender emailSender, RegisterDto registerDto) =>
             {
                 var user = new User { UserName = registerDto.Email, Email = registerDto.Email };
                 var result = await userManager.CreateAsync(user, registerDto.Password);
@@ -130,7 +130,7 @@ namespace antigal.server
                 return Results.BadRequest(result.Errors);
             });
 
-            app.MapGet("/confirm-email", async(UserManager<User> userManager, string userId, string token) =>
+            app.MapGet("/confirmar-email-antigal", async(UserManager<User> userManager, string userId, string token) =>
             {
                 var user = await userManager.FindByIdAsync(userId);
                 if (user == null) return Results.NotFound();
@@ -139,12 +139,12 @@ namespace antigal.server
                 return result.Succeeded ? Results.Ok("Email confirmed successfully.") : Results.BadRequest("Email confirmation failed.");
             });
 
-            app.MapPost("/logout", async (SignInManager<User> signInManager) =>
+            app.MapPost("/logout-antigal", async (SignInManager<User> signInManager) =>
             {
                 await signInManager.SignOutAsync().ConfigureAwait(false);
             }).RequireAuthorization(); // mata el token
 
-            app.MapGet("/pingauth", (ClaimsPrincipal user) =>
+            app.MapGet("/pingauth-antigal", (ClaimsPrincipal user) =>
             {
                 var email = user.FindFirstValue(ClaimTypes.Email);
                 return Results.Json(new { Email = email }); ;

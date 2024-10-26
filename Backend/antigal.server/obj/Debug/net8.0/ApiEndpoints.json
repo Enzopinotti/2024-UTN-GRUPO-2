@@ -693,7 +693,7 @@
   {
     "ContainingType": "antigal.server.Program\u002B\u003C\u003Ec",
     "Method": "\u003CMain\u003Eb__0_3",
-    "RelativePath": "confirm-email",
+    "RelativePath": "confirmar-email-antigal",
     "HttpMethod": "GET",
     "IsController": false,
     "Order": 0,
@@ -1022,7 +1022,7 @@
   {
     "ContainingType": "antigal.server.Program\u002B\u003C\u003Ec",
     "Method": "\u003CMain\u003Eb__0_4",
-    "RelativePath": "logout",
+    "RelativePath": "logout-antigal",
     "HttpMethod": "POST",
     "IsController": false,
     "Order": 0,
@@ -1038,7 +1038,7 @@
   {
     "ContainingType": "antigal.server.Program\u002B\u003C\u003Ec",
     "Method": "\u003CMain\u003Eb__0_5",
-    "RelativePath": "pingauth",
+    "RelativePath": "pingauth-antigal",
     "HttpMethod": "GET",
     "IsController": false,
     "Order": 0,
@@ -1054,7 +1054,7 @@
   {
     "ContainingType": "antigal.server.Program\u002B\u003C\u003Ec",
     "Method": "\u003CMain\u003Eb__0_2",
-    "RelativePath": "register",
+    "RelativePath": "register-antigal",
     "HttpMethod": "POST",
     "IsController": false,
     "Order": 0,
