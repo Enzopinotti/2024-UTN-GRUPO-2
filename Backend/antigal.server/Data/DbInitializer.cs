@@ -22,7 +22,7 @@ namespace antigal.server.Data
 
         private async Task CreateRoles()
         {
-            string[] roleNames = { "Admin", "User " };
+            string[] roleNames = { "Admin", "User" };
             foreach (var roleName in roleNames)
             {
                 var roleExists = await _roleManager.RoleExistsAsync(roleName);
