@@ -62,6 +62,7 @@ namespace antigal.server
 
             builder.Services.AddScoped<IImageService, ImageService>();
 
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
 
             //*********** SERVICES ***********//
 
