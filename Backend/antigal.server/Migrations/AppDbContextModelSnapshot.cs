@@ -205,10 +205,10 @@ namespace antigal.server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idCategoria"));
 
-                    b.Property<string>("descripcion")
+                    b.Property<string>("ImagenUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("imagen")
+                    b.Property<string>("descripcion")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("nombre")
@@ -222,22 +222,38 @@ namespace antigal.server.Migrations
 
             modelBuilder.Entity("antigal.server.Models.Imagen", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("idProducto")
+                    b.Property<int?>("CategoriaId")
                         .HasColumnType("int");
 
-                    b.Property<string>("url")
+                    b.Property<DateTime>("FechaSubida")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ProductoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PublicId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.Property<string>("UsuarioId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasIndex("idProducto");
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoriaId");
+
+                    b.HasIndex("ProductoId");
+
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Imagenes");
                 });
@@ -276,6 +292,10 @@ namespace antigal.server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idProducto"));
 
+                    b.Property<string>("ImagenUrls")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("codigoBarras")
                         .HasColumnType("int");
 
@@ -285,7 +305,7 @@ namespace antigal.server.Migrations
                     b.Property<int?>("destacado")
                         .HasColumnType("int");
 
-                    b.Property<int>("disponible")
+                    b.Property<int?>("disponible")
                         .HasColumnType("int");
 
                     b.Property<string>("marca")
@@ -305,6 +325,30 @@ namespace antigal.server.Migrations
                     b.HasKey("idProducto");
 
                     b.ToTable("Productos");
+                });
+
+            modelBuilder.Entity("antigal.server.Models.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("antigal.server.Models.Role", b =>
@@ -357,6 +401,9 @@ namespace antigal.server.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagenUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -501,13 +548,20 @@ namespace antigal.server.Migrations
 
             modelBuilder.Entity("antigal.server.Models.Imagen", b =>
                 {
-                    b.HasOne("antigal.server.Models.Producto", "Producto")
-                        .WithMany("imagenes")
-                        .HasForeignKey("idProducto")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("antigal.server.Models.Categoria", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Producto");
+                    b.HasOne("antigal.server.Models.Producto", null)
+                        .WithMany()
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("antigal.server.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("antigal.server.Models.OrderItem", b =>
@@ -566,8 +620,6 @@ namespace antigal.server.Migrations
             modelBuilder.Entity("antigal.server.Models.Producto", b =>
                 {
                     b.Navigation("CategoriaProductos");
-
-                    b.Navigation("imagenes");
                 });
 #pragma warning restore 612, 618
         }

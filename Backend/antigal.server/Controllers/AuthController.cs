@@ -2,6 +2,7 @@
 using antigal.server.Models.Dto;
 using antigal.server.Services;
 using System.Threading.Tasks;
+using antigal.server.Models;
 
 namespace antigal.server.Controllers
 {
@@ -19,6 +20,7 @@ namespace antigal.server.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync(RegisterDto registerDto)
         {
+            
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -41,13 +43,30 @@ namespace antigal.server.Controllers
                 return BadRequest(ModelState);
             }
 
-            var token = await _authService.LoginUserAsync(loginDto);
-            if (string.IsNullOrEmpty(token))
+            var tokens = await _authService.LoginUserAsync(loginDto);
+            if (tokens.AccessToken == null || tokens.RefreshToken == null)
             {
                 return Unauthorized();
             }
 
-            return Ok(new { Token = token });
+            return Ok(new { AccessToken = tokens.AccessToken, RefreshToken = tokens.RefreshToken });
+        }
+
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshTokenAsync([FromBody] RefreshTokenDto refreshTokenDto)
+        {
+            if (string.IsNullOrEmpty(refreshTokenDto.RefreshToken))
+            {
+                return BadRequest("Refresh token no puede estar vacío.");
+            }
+
+            var newAccessToken = await _authService.RefreshTokenAsync(refreshTokenDto.RefreshToken);
+            if (string.IsNullOrEmpty(newAccessToken))
+            {
+                return Unauthorized();
+            }
+
+            return Ok(new { AccessToken = newAccessToken });
         }
     }
 }

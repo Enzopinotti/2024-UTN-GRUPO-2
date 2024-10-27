@@ -18,18 +18,18 @@ namespace antigal.server.Data
         public DbSet<CarritoItem> CarritoItems { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; } // Para almacenar refresh tokens
 
         //OnModelCreating se utiliza para establecer las asociaciones entre dos clases para que impacten en la base de datos desde .NET
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder); // Llama al m�todo base
 
-            modelBuilder.Entity<Producto>()
-                .HasMany(p => p.imagenes)  //Un producto tiene muchas imagenes
-                .WithOne(i => i.Producto)  //Una imagen pertenece a un producto
-                .HasForeignKey(i => i.idProducto) //Establece la FK
-                .OnDelete(DeleteBehavior.Cascade); //Establece la regla la cual dice que si se elimina un Producto, se elmininaran las imagenes de dicho producto.
-       
+            modelBuilder.Entity<Categoria>()
+                .HasMany(c => c.CategoriaProductos)
+                .WithOne()
+                .HasForeignKey(cp => cp.idCategoria); 
+
             // Relacion muchos a muchos usando la tabla intermedia. ProductoCategoria
             modelBuilder.Entity<ProductoCategoria>()
                 .HasKey(pc => new { pc.idProducto, pc.idCategoria });
@@ -44,12 +44,31 @@ namespace antigal.server.Data
                 .WithMany(c => c.CategoriaProductos)
                 .HasForeignKey(pc => pc.idCategoria);
 
+            ///////////////////////Imagenes/////////////////////////
+            modelBuilder.Entity<Imagen>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(i => i.UsuarioId)
+                .OnDelete(DeleteBehavior.Restrict);
             // Relación uno a muchos entre Carrito y CarritoItem
             modelBuilder.Entity<Carrito>()
                 .HasMany(c => c.Items) // Un carrito tiene muchos items
                 .WithOne()
                 .HasForeignKey(ci => ci.idCarrito) // FK en CarritoItem
                 .OnDelete(DeleteBehavior.Cascade); // Si se elimina el carrito, se eliminan sus items
+
+            modelBuilder.Entity<Imagen>()
+                .HasOne<Categoria>()
+                .WithMany()
+                .HasForeignKey(i => i.CategoriaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Imagen>()
+                .HasOne<Producto>()
+                .WithMany()
+                .HasForeignKey(i => i.ProductoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
 
             // Relación uno a muchos entre CarritoItem y Producto
             modelBuilder.Entity<CarritoItem>()
