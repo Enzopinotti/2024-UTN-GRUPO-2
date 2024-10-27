@@ -15,12 +15,16 @@ public class AuthController : ControllerBase
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly IEmailSender _emailSender;
+    private readonly ICartService _cartService;
+    private readonly ILogger _logger;
 
-    public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, IEmailSender emailSender)
+    public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, IEmailSender emailSender, ICartService cartService, ILogger logger)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _emailSender = emailSender;
+        _cartService = cartService;
+        _logger = logger;
     }
 
     [HttpPost("register")]
@@ -37,6 +41,14 @@ public class AuthController : ControllerBase
             // Enviar el correo de confirmación
             await _emailSender.SendEmailAsync(user.Email, "Confirm your email",
                 $"Please confirm your account by clicking this link: <a href='{confirmationLink}'>link</a>");
+
+            // Crear un carrito vacío para el nuevo usuario
+            var cartResponse = _cartService.CreateCart(user.Id);
+            if (!cartResponse.IsSuccess)
+            {
+                // Registrar un mensaje de error si la creación del carrito falla
+                _logger.LogError($"No se pudo crear el carrito para el usuario con ID: {user.Id}. Error: {cartResponse.Message}");
+            }
 
             return Ok("Registration successful. Please check your email to confirm.");
         }
