@@ -136,17 +136,26 @@ namespace antigal.server
 
             app.MapControllers();
 
-            // Llamar al inicializador de base de datos
-            await InitializeDatabase(app.Services);
+            // Llama a DbInitializer
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var dbInitializer = services.GetRequiredService<DbInitializer>();
+                    await dbInitializer.InitializeAsync();
+                }
+                catch (Exception ex)
+                {
+                    // Manejo de excepciones si ocurre algún error durante la inicialización
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "no se pudo pre-cargar la base de datos");
+                }
+            }
 
             app.Run();
         }
-        private static async Task InitializeDatabase(IServiceProvider services)
-        {
-            using var scope = services.CreateScope();
-            var dbInitializer = scope.ServiceProvider.GetRequiredService<DbInitializer>();
-            await dbInitializer.InitializeAsync();
-        }
-
+        
     }
+
 }

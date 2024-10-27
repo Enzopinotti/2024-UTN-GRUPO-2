@@ -1116,3 +1116,9 @@ D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\SharpGrip.FluentValidation.AutoValidation.Mvc.dll
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\SharpGrip.FluentValidation.AutoValidation.Shared.dll
 C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\appsettings.json
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\FluentEmail.Core.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\FluentEmail.SendGrid.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\MailKit.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\MimeKit.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\SendGrid.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\StarkbankEcdsa.dll
