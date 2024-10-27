@@ -519,7 +519,6 @@ D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.genruntimeconfig.cache
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\ref\antigal.server.dll
 C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\appsettings.Development.json
-C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\appsettings.json
 C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\antigal.server.exe
 C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\antigal.server.deps.json
 C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\antigal.server.runtimeconfig.json

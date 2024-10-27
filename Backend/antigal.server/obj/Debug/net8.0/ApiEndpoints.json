@@ -386,46 +386,22 @@
     ]
   },
   {
-<<<<<<< HEAD
-    "ContainingType": "antigal.server.Controllers.OrdersController",
-    "Method": "GetAllOrders",
-    "RelativePath": "api/Orders/all",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.OrdersController",
-    "Method": "ConfirmOrder",
-    "RelativePath": "api/Orders/confirm",
-    "HttpMethod": "POST",
-=======
     "ContainingType": "antigal.server.Controllers.ImageController",
     "Method": "DeleteImage",
     "RelativePath": "api/Image/{imageId}",
     "HttpMethod": "DELETE",
->>>>>>> images-and-tokens
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-<<<<<<< HEAD
-        "Name": "orderDto",
-        "Type": "antigal.server.Models.Dto.OrderDto",
-=======
         "Name": "imageId",
         "Type": "System.Int32",
->>>>>>> images-and-tokens
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-<<<<<<< HEAD
-=======
     "ContainingType": "antigal.server.Controllers.ImageController",
     "Method": "DeleteImageByUrl",
     "RelativePath": "api/Image/eliminar-por-url",
@@ -473,7 +449,32 @@
     "ReturnTypes": []
   },
   {
->>>>>>> images-and-tokens
+    "ContainingType": "antigal.server.Controllers.OrdersController",
+    "Method": "GetAllOrders",
+    "RelativePath": "api/Orders/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.OrdersController",
+    "Method": "ConfirmOrder",
+    "RelativePath": "api/Orders/confirm",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderDto",
+        "Type": "antigal.server.Models.Dto.OrderDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "antigal.server.Controllers.ProductController",
     "Method": "PostProduct",
     "RelativePath": "api/Product/addProduct",
