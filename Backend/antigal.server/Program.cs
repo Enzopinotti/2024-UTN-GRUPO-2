@@ -6,20 +6,8 @@ using FluentValidation;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using Microsoft.AspNetCore.Identity;
 using antigal.server.Models;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using MathNet.Numerics.Interpolation;
 using CloudinaryDotNet;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using System.Security.Claims;
-using NPOI.SS.Formula.Functions;
-using NPOI.HPSF;
-using Humanizer;
-using NuGet.Common;
 using antigal.server.Models.Dto;
-using IEmailSender = antigal.server.Services.IEmailSender;
 
 namespace antigal.server
 {
@@ -108,48 +96,7 @@ namespace antigal.server
             }
 
             app.MapGroup("/identity").MapIdentityApi<User>();
-
-            // Extender los endpoints
-            app.MapPost("/register-antigal", async(UserManager<User> userManager, IEmailSender emailSender, RegisterDto registerDto) =>
-            {
-                var user = new User { UserName = registerDto.Email, Email = registerDto.Email };
-                var result = await userManager.CreateAsync(user, registerDto.Password);
-                if (result.Succeeded)
-                {
-                    // Generar el token de confirmación
-                    var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var confirmationLink = $"https://localhost:5000/confirm-email?userId={user.Id}&token={token}";
-
-                    // Enviar el correo de confirmación
-                    await emailSender.SendEmailAsync(user.Email, "Confirm your email",
-                        $"Please confirm your account by clicking this link: <a href='{confirmationLink}'>link</a>");
-
-                    return Results.Ok("Registration successful. Please check your email to confirm.");
-                }
-
-                return Results.BadRequest(result.Errors);
-            });
-
-            app.MapGet("/confirmar-email-antigal", async(UserManager<User> userManager, string userId, string token) =>
-            {
-                var user = await userManager.FindByIdAsync(userId);
-                if (user == null) return Results.NotFound();
-
-                var result = await userManager.ConfirmEmailAsync(user, token);
-                return result.Succeeded ? Results.Ok("Email confirmed successfully.") : Results.BadRequest("Email confirmation failed.");
-            });
-
-            app.MapPost("/logout-antigal", async (SignInManager<User> signInManager) =>
-            {
-                await signInManager.SignOutAsync().ConfigureAwait(false);
-            }).RequireAuthorization(); // mata el token
-
-            app.MapGet("/pingauth-antigal", (ClaimsPrincipal user) =>
-            {
-                var email = user.FindFirstValue(ClaimTypes.Email);
-                return Results.Json(new { Email = email }); ;
-            }).RequireAuthorization();  //comprueba si esta autentificado
-
+            
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
