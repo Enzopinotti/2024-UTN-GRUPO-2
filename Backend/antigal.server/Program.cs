@@ -138,32 +138,16 @@ namespace antigal.server
 
             app.MapControllers();
 
-
-            // Crear roles
-            using (var scope = app.Services.CreateScope())
-            {
-                var serviceProvider = scope.ServiceProvider;
-                await CreateRoles(serviceProvider);
-
-            }
-
+            // Llamar al inicializador de base de datos
+            await InitializeDatabase(app.Services);
 
             app.Run();
         }
-
-        private static async Task CreateRoles(IServiceProvider serviceProvider)
+        private static async Task InitializeDatabase(IServiceProvider services)
         {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
-            string[] roleNames = { "Admin", "Usuario" };
-
-            foreach (var roleName in roleNames)
-            {
-                var roleExist = await roleManager.RoleExistsAsync(roleName);
-                if (!roleExist)
-                {
-                    await roleManager.CreateAsync(new Role { Name = roleName });
-                }
-            }
+            using var scope = services.CreateScope();
+            var dbInitializer = scope.ServiceProvider.GetRequiredService<DbInitializer>();
+            await dbInitializer.InitializeAsync();
         }
 
     }
