@@ -18,9 +18,9 @@ public class AuthController : ControllerBase
     private readonly IEmailSender _emailSender;
     private readonly ICartService _cartService;
     private readonly ILogger<AuthController> _logger;
-    private readonly ITokenService _tokenService;
+    private readonly TokenService _tokenService;
 
-    public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, IEmailSender emailSender, ICartService cartService, ILogger<AuthController> logger, ITokenService tokenService)
+    public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, IEmailSender emailSender, ICartService cartService, ILogger<AuthController> logger, TokenService tokenService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -84,7 +84,7 @@ public class AuthController : ControllerBase
         {
             var user = await _userManager.FindByNameAsync(loginDto.Email);
             var tokenService = HttpContext.RequestServices.GetRequiredService<TokenService>();
-            var token = await tokenService.GenerateJwtToken(_userManager, user);
+            var token = _tokenService.GenerateToken(user);
 
             if (loginDto.RememberMe)
             {

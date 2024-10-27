@@ -44,7 +44,7 @@ namespace antigal.server
 
             builder.Services.AddScoped<IImageService, ImageService>();
 
-            builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<TokenService>();
 
             builder.Services.AddTransient<DbInitializer>();
 
