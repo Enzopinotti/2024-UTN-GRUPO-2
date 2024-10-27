@@ -36,7 +36,7 @@ public class AuthController : ControllerBase
         {
             // Generar el token de confirmación
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmationLink = $"https://localhost:5000/api/auth/confirmar-email-antigal?userId={user.Id}&token={token}";
+            var confirmationLink = $"https://localhost:5000/api/auth/confirmar-email?userId={user.Id}&token={token}";
 
             // Enviar el correo de confirmación
             await _emailSender.SendEmailAsync(user.Email, "Confirm your email",
