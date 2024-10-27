@@ -1098,3 +1098,19 @@ D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debu
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\FluentValidation.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\FluentValidation.DependencyInjectionExtensions.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\SharpGrip.FluentValidation.AutoValidation.Mvc.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\SharpGrip.FluentValidation.AutoValidation.Shared.dll

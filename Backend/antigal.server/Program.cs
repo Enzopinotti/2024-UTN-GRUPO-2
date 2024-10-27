@@ -51,6 +51,10 @@ namespace antigal.server
             builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
             // Inyección del repositorio ICartRepository y su implementación CartRepository
             builder.Services.AddScoped<ICartRepository, CartRepository>();
+            // Inyección del servicio IOrderService y su implementación OrderService
+            builder.Services.AddScoped<IOrderService, OrderService>();
+            // Inyección del repositorio IOrderRepository y su implementación OrderRepository
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
             // Agregar servicios de CORS (sirve para restringir metodos, origen de solicitudes, etc) SEGURIDAD
             builder.Services.AddCors(options =>
@@ -62,7 +66,12 @@ namespace antigal.server
             });
 
             // Controllers
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+        .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+    });
 
             // Validaciones
             builder.Services.AddValidatorsFromAssemblyContaining<Program>();
@@ -90,6 +99,7 @@ namespace antigal.server
             app.UseAuthorization();
 
             app.MapControllers();
+
 
             // Crear roles
             using (var scope = app.Services.CreateScope())

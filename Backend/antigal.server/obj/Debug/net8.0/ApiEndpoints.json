@@ -370,6 +370,32 @@
     ]
   },
   {
+    "ContainingType": "antigal.server.Controllers.OrdersController",
+    "Method": "GetAllOrders",
+    "RelativePath": "api/Orders/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.OrdersController",
+    "Method": "ConfirmOrder",
+    "RelativePath": "api/Orders/confirm",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderDto",
+        "Type": "antigal.server.Models.Dto.OrderDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "antigal.server.Controllers.ProductController",
     "Method": "PostProduct",
     "RelativePath": "api/Product/addProduct",
