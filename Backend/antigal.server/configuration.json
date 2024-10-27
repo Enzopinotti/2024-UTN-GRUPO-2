@@ -12,8 +12,8 @@
 
   "Jwt": {
     "Key": "496BB2A7-8B49-4494-9858-3A27A4CB1548",
-    "Issuer": "TuEmisor", // Por ejemplo, el nombre de tu aplicaci√≥n
-    "Audience": "TuAudiencia" // Por ejemplo, el nombre de los clientes que consumir√°n el token
+    "Issuer": "TuEmisor", // Por ejemplo, el nombre de tu aplicaciÛn
+    "Audience": "TuAudiencia" // Por ejemplo, el nombre de los clientes que consumir·n el token
   },
 
   "AllowedHosts": "*",

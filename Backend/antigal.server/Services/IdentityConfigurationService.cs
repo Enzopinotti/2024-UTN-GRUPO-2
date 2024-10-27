@@ -1,62 +1,53 @@
 ﻿using antigal.server.Data;
 using antigal.server.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Text;
 
 namespace antigal.server.Services
 {
     public class IdentityConfigurationService
     {
+       
         public void ConfigureIdentity(IServiceCollection services)
         {
-            services.ConfigureApplicationCookie(options => { options.Cookie.SameSite = SameSiteMode.None; });
 
             services.AddTransient<IEmailSender, EmailSender>();
 
-            services.AddIdentityApiEndpoints<User>(opt =>
+           
+            services.AddIdentity<User, Role>(options =>
             {
-                // Configuraciones de Contraseña
-                opt.Password.RequiredLength = 8;                        // Longitud mínima de la contraseña
-                opt.Password.RequireDigit = true;                       // Requiere al menos un número
-                opt.Password.RequireLowercase = true;                   // Requiere al menos una minúscula
-                opt.Password.RequireUppercase = true;                   // Requiere al menos una mayúscula
-                opt.Password.RequireNonAlphanumeric = false;            // Requiere caracteres especiales como símbolos
-                opt.Password.RequiredUniqueChars = 1;                   // Requiere al menos un carácter único en la contraseña
+                // Configuraciones de contraseña
+                options.Password.RequiredLength = 8;
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = false;
 
-                // Configuraciones de Usuario
-                opt.User.RequireUniqueEmail = true;                     // El correo electrónico debe ser único para cada usuario
-                opt.User.AllowedUserNameCharacters =                    // Caracteres permitidos para el nombre de usuario
-                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                // Configuraciones de usuario
+                options.User.RequireUniqueEmail = true;
 
-                // Configuraciones de Bloqueo de Cuenta
-                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);  // Duración del bloqueo
-                opt.Lockout.MaxFailedAccessAttempts = 5;                       // Intentos fallidos antes del bloqueo
-                opt.Lockout.AllowedForNewUsers = true;                         // Permitir bloqueos de cuenta para nuevos usuarios
+                // Configuraciones de bloqueo
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
 
-                // Configuraciones de Sesión e Inicio de Sesión
-                opt.SignIn.RequireConfirmedEmail = true;               // Requiere que el correo esté confirmado antes de iniciar sesión
-                opt.SignIn.RequireConfirmedPhoneNumber = false;        // Requiere que el teléfono esté confirmado antes de iniciar sesión
-                opt.SignIn.RequireConfirmedAccount = false;            // Requiere confirmación completa de la cuenta antes de iniciar sesión
-
-                // Configuraciones de Tokens
-                opt.Tokens.AuthenticatorIssuer = "MyApp";               // Emisor de tokens de autenticación
-                opt.Tokens.ChangeEmailTokenProvider = "Default";        // Proveedor de tokens para cambio de correo
-                opt.Tokens.ChangePhoneNumberTokenProvider = "Default";  // Proveedor de tokens para cambio de teléfono
-                opt.Tokens.EmailConfirmationTokenProvider = "Default";  // Proveedor de tokens para confirmación de correo
-                opt.Tokens.PasswordResetTokenProvider = "Default";      // Proveedor de tokens para restablecimiento de contraseña
-                opt.Tokens.AuthenticatorTokenProvider = "Default";      // Proveedor de tokens para autenticador de dos factores
-
-                // Configuraciones de Cuenta
-                opt.User.AllowedUserNameCharacters =                    // Define los caracteres permitidos para el nombre de usuario
-                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                opt.User.RequireUniqueEmail = true;                     // Requiere que el correo electrónico sea único por usuario
-
+                // Configuraciones de sesión
+                options.SignIn.RequireConfirmedEmail = true;
             })
-            .AddRoles<Role>()                                     // Agrega soporte de roles
-            .AddDefaultUI()                                               // Añade la interfaz de usuario predeterminada para Identity
-            .AddEntityFrameworkStores<AppDbContext>()                     // Usa Entity Framework para almacenar los datos de identidad
-            .AddDefaultTokenProviders();                                  // Proveedores de token para restablecimiento de contraseña y autenticación de dos factores
+                   .AddEntityFrameworkStores<AppDbContext>()
+                   .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.LoginPath = "/Auth/Login"; // Define tu ruta de inicio de sesión personalizada
+                options.LogoutPath = "/Auth/Logout"; // Define tu ruta de cierre de sesión personalizada
+                options.AccessDeniedPath = "/Auth/AccessDenied"; // Define tu ruta de acceso denegado personalizada
+            });
         }
     }
 }

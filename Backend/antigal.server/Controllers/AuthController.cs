@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using antigal.server.Models.Dto;
 using antigal.server.Models;
 using antigal.server.Services;
+using Microsoft.Extensions.Logging;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -16,15 +17,17 @@ public class AuthController : ControllerBase
     private readonly SignInManager<User> _signInManager;
     private readonly IEmailSender _emailSender;
     private readonly ICartService _cartService;
-    private readonly ILogger _logger;
+    private readonly ILogger<AuthController> _logger;
+    private readonly ITokenService _tokenService;
 
-    public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, IEmailSender emailSender, ICartService cartService, ILogger logger)
+    public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, IEmailSender emailSender, ICartService cartService, ILogger<AuthController> logger, ITokenService tokenService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _emailSender = emailSender;
         _cartService = cartService;
         _logger = logger;
+        _tokenService = tokenService;
     }
 
     [HttpPost("register")]
@@ -35,8 +38,8 @@ public class AuthController : ControllerBase
         if (result.Succeeded)
         {
             // Generar el token de confirmación
-            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmationLink = $"https://localhost:5000/api/auth/confirmar-email?userId={user.Id}&token={token}";
+            var token = await _tokenService.GenerateEmailConfirmationTokenAsync(user); // Usar TokenService
+            var confirmationLink = $"https://localhost:7255/api/auth/confirmar-email?userId={user.Id}&token={token}";
 
             // Enviar el correo de confirmación
             await _emailSender.SendEmailAsync(user.Email, "Confirm your email",
@@ -71,6 +74,36 @@ public class AuthController : ControllerBase
         }
         return BadRequest("Email confirmation failed.");
     }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+    {
+        var result = await _signInManager.PasswordSignInAsync(loginDto.Email, loginDto.Password, loginDto.RememberMe, lockoutOnFailure: false);
+
+        if (result.Succeeded)
+        {
+            var user = await _userManager.FindByNameAsync(loginDto.Email);
+            var tokenService = HttpContext.RequestServices.GetRequiredService<TokenService>();
+            var token = await tokenService.GenerateJwtToken(_userManager, user);
+
+            if (loginDto.RememberMe)
+            {
+                // Si el usuario desea ser recordado, establece una cookie persistente
+                var cookieOptions = new CookieOptions
+                {
+                    HttpOnly = true,
+                    Expires = DateTimeOffset.UtcNow.AddDays(30) // Configura la duración de la cookie
+                };
+                Response.Cookies.Append("CookieName", token, cookieOptions);
+            }
+
+            return Ok(new { Token = token, Message = "Login successful." });
+        }
+
+        return Unauthorized(new { Message = "Invalid login attempt." });
+    }
+
+
 
     [HttpPost("logout")]
     [Authorize]

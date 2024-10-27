@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Identity;
 using antigal.server.Models;
 using CloudinaryDotNet;
 using antigal.server.Models.Dto;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace antigal.server
 {
@@ -15,13 +18,12 @@ namespace antigal.server
     {
         public static async Task Main(string[] args) // Cambiar a Task
         {
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Agregar el contexto de la base de datos al contenedor de servicios
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-            
 
             // Crear instancia de IdentityConfigurationService
             var identityConfigService = new IdentityConfigurationService();
@@ -42,7 +44,30 @@ namespace antigal.server
 
             builder.Services.AddScoped<IImageService, ImageService>();
 
+            builder.Services.AddScoped<ITokenService, TokenService>();
+
             builder.Services.AddTransient<DbInitializer>();
+
+            // Configuración de JWT
+            var secretKey = builder.Configuration["Jwt:Key"];
+            var key = Encoding.UTF8.GetBytes(secretKey);
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false; // Cambia a true en producción
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
             //*********** SERVICES ***********//
 
             // Inyección del servicio IProductService y su implementación ProductService
@@ -95,7 +120,7 @@ namespace antigal.server
                 app.UseSwaggerUI();
             }
 
-            app.MapGroup("/identity").MapIdentityApi<User>();
+           
             
             app.UseHttpsRedirection();
 
