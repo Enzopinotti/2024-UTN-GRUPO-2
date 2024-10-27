@@ -75,8 +75,6 @@ namespace antigal.server
             // Inyección del servicio ICartService y su implementación CartService
             builder.Services.AddScoped<ICartService, CartService>();
 
-
-
             // Registra el AuthService
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ServiceToken>();
