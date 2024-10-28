@@ -6,11 +6,12 @@ Accept: application/json
 ###
 
 POST {{antigal.server_HostAddress}}/api/Category/addCategory
-Accept: application/json
-Content-Type: application/json
-
-{
-"nombre": "aaaaaaa",
-"descripcion": "aaaaaaa";
-"imagen": "aaaaaaaaaa";
-}
+[
+    { "nombre": "Suplementos Proteicos" },
+    { "nombre": "Vitaminas y Minerales" },
+    { "nombre": "Snacks Saludables" },
+    { "nombre": "Alimentos Orgánicos" },
+    { "nombre": "Bebidas Naturales" },
+    { "nombre": "Semillas y Granos" },
+    { "nombre": "Cuidado Digestivo" }
+]

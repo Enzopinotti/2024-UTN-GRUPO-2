@@ -118,6 +118,7 @@ namespace antigal.server
 
             var app = builder.Build();
 
+            // Inicializar la base de datos
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
@@ -147,7 +148,7 @@ namespace antigal.server
             app.UseAuthorization();
 
             app.MapControllers();
-
+            
             app.Run();
         }
         

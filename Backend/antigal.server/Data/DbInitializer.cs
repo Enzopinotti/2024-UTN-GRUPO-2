@@ -40,7 +40,7 @@ public class DbInitializer
         }
 
         // Crear el usuario administrador si no existe
-        string adminEmail = "admin@ejemplo.com";
+        string adminEmail = "admin@gmail.com";
         string adminPassword = "Admin123!";
 
         var existingAdmin = await userManager.FindByEmailAsync(adminEmail);
@@ -56,6 +56,10 @@ public class DbInitializer
             var result = await userManager.CreateAsync(adminUser, adminPassword);
             if (result.Succeeded)
             {
+                // Confirmar el correo electrónico
+                adminUser.EmailConfirmed = true; // Marcar el correo como confirmado
+                await userManager.UpdateAsync(adminUser); // Actualizar el usuario en la base de datos
+
                 await userManager.AddToRoleAsync(adminUser, "Admin"); // Asignar rol de administrador
                 Console.WriteLine($"Usuario administrador '{adminUser.UserName}' creado con éxito.");
             }
