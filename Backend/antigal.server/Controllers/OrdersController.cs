@@ -1,10 +1,12 @@
 ﻿// OrdersController.cs
 using antigal.server.Models.Dto;
 using antigal.server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace antigal.server.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/[controller]")]
     public class OrdersController : ControllerBase

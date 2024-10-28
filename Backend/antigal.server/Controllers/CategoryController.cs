@@ -1,10 +1,12 @@
 ﻿using antigal.server.Models;
 using antigal.server.Models.Dto;
 using antigal.server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace antigal.server.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
@@ -15,25 +17,6 @@ namespace antigal.server.Controllers
         {
             _categoryService = categoryService;
         }
-
-        [HttpGet("getCategories")]
-        public ResponseDto GetCategories()
-        {
-            return _categoryService.GetCategories();
-        }
-
-        [HttpGet("getCategoryById/{id}")]
-        public ResponseDto GetCategoryById(int id)
-        {
-            return _categoryService.GetCategoryById(id);
-        }
-
-        [HttpGet("getCategoryByTitle/{nombre}")]
-        public ResponseDto GetCategoryByTitle(string nombre)
-        {
-            return _categoryService.GetCategoryByTitle(nombre);
-        }
-
         [HttpPost("addCategory")]
         public ResponseDto AddCategory([FromBody] Categoria categoria)
         {
@@ -50,6 +33,24 @@ namespace antigal.server.Controllers
         public ResponseDto DeleteCategory(int id)
         {
             return _categoryService.DeleteCategory(id);
+        }
+        [AllowAnonymous]
+        [HttpGet("getCategories")]
+        public ResponseDto GetCategories()
+        {
+            return _categoryService.GetCategories();
+        }
+        [AllowAnonymous]
+        [HttpGet("getCategoryById/{id}")]
+        public ResponseDto GetCategoryById(int id)
+        {
+            return _categoryService.GetCategoryById(id);
+        }
+        [AllowAnonymous]
+        [HttpGet("getCategoryByTitle/{nombre}")]
+        public ResponseDto GetCategoryByTitle(string nombre)
+        {
+            return _categoryService.GetCategoryByTitle(nombre);
         }
     }
 }

@@ -2,10 +2,12 @@
 using antigal.server.Models;
 using antigal.server.Models.Dto;
 using antigal.server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace antigal.server.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : Controller
@@ -16,26 +18,6 @@ namespace antigal.server.Controllers
         {
             _productService = productService;
         }
-
-        [HttpGet("getProducts")]
-        public ResponseDto GetProduct()
-        {
-            Console.WriteLine("funciona");
-            return _productService.GetProducts();
-        }
-
-        [HttpGet("getProductById/{id}")]
-        public ResponseDto GetProductById(int id)
-        {
-            return _productService.GetProductById(id);
-        }
-
-        [HttpGet("getProductByTitle/{nombre}")]
-        public ResponseDto GetProductByTitle(string nombre)
-        {
-            return _productService.GetProductByTitle(nombre);
-        }
-
         [HttpPost("addProduct")]
         public ResponseDto PostProduct([FromBody] Producto producto)
         {
@@ -59,6 +41,24 @@ namespace antigal.server.Controllers
         {
             return _productService.ImportProductsFromExcel(file);
         }
-
+        [AllowAnonymous]
+        [HttpGet("getProducts")]
+        public ResponseDto GetProduct()
+        {
+            Console.WriteLine("funciona");
+            return _productService.GetProducts();
+        }
+        [AllowAnonymous]
+        [HttpGet("getProductById/{id}")]
+        public ResponseDto GetProductById(int id)
+        {
+            return _productService.GetProductById(id);
+        }
+        [AllowAnonymous]
+        [HttpGet("getProductByTitle/{nombre}")]
+        public ResponseDto GetProductByTitle(string nombre)
+        {
+            return _productService.GetProductByTitle(nombre);
+        }
     }
 }

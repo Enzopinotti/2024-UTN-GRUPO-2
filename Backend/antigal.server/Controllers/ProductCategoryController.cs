@@ -4,6 +4,7 @@ using antigal.server.Models.Dto; // Asegúrate de incluir el espacio de nombres 
 
 namespace antigal.server.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class ProductCategoryController : ControllerBase
