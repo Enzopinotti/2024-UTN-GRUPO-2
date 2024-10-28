@@ -1,6 +1,22 @@
 [
   {
     "ContainingType": "antigal.server.Controllers.AuthController",
+    "Method": "ConfirmEmail",
+    "RelativePath": "api/Auth/confirmemail",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AuthController",
     "Method": "LoginAsync",
     "RelativePath": "api/Auth/login",
     "HttpMethod": "POST",

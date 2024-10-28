@@ -11,6 +11,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MathNet.Numerics.Interpolation;
 using CloudinaryDotNet;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace antigal.server
 {
@@ -62,8 +63,6 @@ namespace antigal.server
 
             builder.Services.AddScoped<IImageService, ImageService>();
 
-            builder.Services.AddScoped<IEmailSender, EmailSender>();
-
             //*********** SERVICES ***********//
 
             // Inyección del servicio IProductService y su implementación ProductService
@@ -75,7 +74,7 @@ namespace antigal.server
             // Inyección del servicio ICartService y su implementación CartService
             builder.Services.AddScoped<ICartService, CartService>();
 
-            // Registra el AuthService
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ServiceToken>();
 
@@ -103,11 +102,11 @@ namespace antigal.server
 
             // Controllers
             builder.Services.AddControllers()
-        .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
-    });
+                .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+                options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+            });
 
             // Validaciones
             builder.Services.AddValidatorsFromAssemblyContaining<Program>();
@@ -118,6 +117,19 @@ namespace antigal.server
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    await DbInitializer.Initialize(services);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error al inicializar la base de datos: {ex.Message}");
+                }
+            }
 
             // Usar la política de CORS
             app.UseCors("AllowLocalhost");
@@ -135,23 +147,6 @@ namespace antigal.server
             app.UseAuthorization();
 
             app.MapControllers();
-
-            // Llama a DbInitializer
-            using (var scope = app.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                try
-                {
-                    var dbInitializer = services.GetRequiredService<DbInitializer>();
-                    await dbInitializer.InitializeAsync();
-                }
-                catch (Exception ex)
-                {
-                    // Manejo de excepciones si ocurre algún error durante la inicialización
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "no se pudo pre-cargar la base de datos");
-                }
-            }
 
             app.Run();
         }

@@ -1,64 +1,72 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using antigal.server.Models;
-
-namespace antigal.server.Data
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Threading.Tasks;
+using antigal.server.Models; 
+using antigal.server.Models.Dto;
+using System.Linq;
+public class DbInitializer
 {
-    public class DbInitializer
+    public static async Task Initialize(IServiceProvider serviceProvider)
     {
-        private readonly RoleManager<Role> _roleManager;
-        private readonly UserManager<User> _userManager;
+        var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
+        var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
 
-        public DbInitializer(RoleManager<Role> roleManager, UserManager<User> userManager)
-        {
-            _roleManager = roleManager;
-            _userManager = userManager;
-        }
+        // Crear los roles si no existen
+        string[] roleNames = { "Admin", "User  " };
+        string[] roleDescriptions = { "Administradores del sistema", "Usuarios regulares" };
 
-        public async Task InitializeAsync()
+        for (int i = 0; i < roleNames.Length; i++)
         {
-            await CreateRoles();
-            await CreateAdminUser();
-        }
-
-        private async Task CreateRoles()
-        {
-            string[] roleNames = { "Admin", "User " };
-            foreach (var roleName in roleNames)
+            var roleExist = await roleManager.RoleExistsAsync(roleNames[i]);
+            if (!roleExist)
             {
-                var roleExists = await _roleManager.RoleExistsAsync(roleName);
-                if (!roleExists)
+                var role = new Role
                 {
-                    await _roleManager.CreateAsync(new Role { Name = roleName });
-                }
-            }
-        }
-
-        private async Task CreateAdminUser()
-        {
-            var adminUser = await _userManager.FindByNameAsync("admin");
-            if (adminUser == null)
-            {
-                var user = new User
-                {
-                    UserName = "admin",
-                    Email = "admin@admin.com",
-                    EmailConfirmed = true // Confirma el email para simplificar pruebas
+                    Name = roleNames[i],
+                    Description = roleDescriptions[i] // Asignar descripción
                 };
 
-                var result = await _userManager.CreateAsync(user, "Admin123#");
+                var result = await roleManager.CreateAsync(role);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, "Admin"); // Asigna el rol Admin al usuario
+                    Console.WriteLine($"Rol '{roleNames[i]}' creado con éxito.");
                 }
                 else
                 {
-                    // Manejar errores de creación del usuario
-                    foreach (var error in result.Errors)
-                    {
-                        Console.WriteLine(error.Description);
-                    }
+                    Console.WriteLine($"Error al crear el rol '{roleNames[i]}': {string.Join(", ", result.Errors.Select(e => e.Description))}");
                 }
             }
+        }
+
+        // Crear el usuario administrador si no existe
+        string adminEmail = "admin@ejemplo.com";
+        string adminPassword = "Admin123!";
+
+        var existingAdmin = await userManager.FindByEmailAsync(adminEmail);
+        if (existingAdmin == null)
+        {
+            var adminUser = new User // Asegúrate de que User sea tu clase de usuario
+            {
+                UserName = "admin",
+                Email = adminEmail,
+                FullName = "Administrador del Sistema",
+            };
+
+            var result = await userManager.CreateAsync(adminUser, adminPassword);
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(adminUser, "Admin"); // Asignar rol de administrador
+                Console.WriteLine($"Usuario administrador '{adminUser.UserName}' creado con éxito.");
+            }
+            else
+            {
+                Console.WriteLine($"Error al crear el usuario administrador: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+            }
+        }
+        else
+        {
+            Console.WriteLine($"El usuario administrador '{adminEmail}' ya existe.");
         }
     }
 }
