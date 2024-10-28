@@ -2472,16 +2472,20 @@ footer .footer-bottom img {
 }
 .cart-page .cart-products .cart-item .delete-button {
   background: none;
+  justify-content: center;
   border: none;
   cursor: pointer;
   padding: 5px;
-  transition: transform 0.2s;
+  transition: transform 0.3s;
 }
 .cart-page .cart-products .cart-item .delete-button:hover {
-  transform: scale(1.2);
+  transform: scale(1.1);
 }
 .cart-page .cart-products .cart-item .delete-button img {
-  filter: invert(35%) sepia(20%) saturate(500%) hue-rotate(320deg) brightness(90%) contrast(85%);
+  width: 2rem; /* Ajusta el tamaño del ícono */
+  height: 2rem; /* Ajusta el tamaño del ícono */
+  margin-left: 1.5rem; /* Espacio entre el ícono y el texto */
+  filter: brightness(0) saturate(500%) invert(35%) sepia(200%) saturate(500%) hue-rotate(-50deg) brightness(100%) contrast(100%);
 }
 .cart-page .cart-products .cart-item .quantity-controls {
   display: flex;

@@ -1,4 +1,3 @@
-// src/components/admin/products/AdminProductListContainer.js
 import React, { useState, useEffect } from 'react';
 import AdminNav from '../AdminNav';
 import ProductList from './ProductList';
@@ -18,13 +17,12 @@ const AdminProductListContainer = () => {
       try {
         if (useBackend) {
           // Obtener productos desde el backend
-          console.log('Entre a useBackend');
-          const response = await fetch('http://localhost:5279/api/Product/getProduct');
+          const response = await fetch('https://localhost:7255/api/Product/getProducts');
           if (!response.ok) {
             throw new Error('Error al obtener productos del backend');
           }
           const data = await response.json();
-          setProducts(data);
+          setProducts(data.data.$values);
         } else {
           // Cargar productos desde localStorage o desde los datos iniciales
           const storedProducts = localStorage.getItem('products');

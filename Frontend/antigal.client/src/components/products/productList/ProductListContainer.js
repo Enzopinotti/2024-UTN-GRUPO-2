@@ -22,11 +22,9 @@ const ProductListContainer = () => {
 
   useEffect(() => {
     const fetchProductsAndCategories = async () => {
-      const useBackend = false; // Cambia este flag a true para conectar con el backend
-      const fetchURL = useBackend
-        ? 'https://localhost:7255/api/Product/getProducts'
-        : 'https://fakestoreapi.com/products';
-  
+      const useBackend = true; // Cambia este flag a true para conectar con el backend
+      const fetchURL = useBackend ? 'https://localhost:7255/api/Product/getProducts' : 'https://fakestoreapi.com/products';
+
       try {
         // Primera llamada: Obtener productos
         const response = await fetch(fetchURL);
@@ -35,52 +33,26 @@ const ProductListContainer = () => {
         }
         const data = await response.json();
         console.log("la data es:  ", data);
-  
-        // Adaptar los datos según la API utilizada
-        let adaptedData;
-        if (useBackend) {
-          if (data.data && Array.isArray(data.data)) {
-            // Adaptar los datos de los productos
-            adaptedData = data.data.map(item => ({
-              id: item.idProducto,           // Mapear idProducto a id
-              name: item.nombre,             // Mapear nombre a name
-              brand: item.marca,             // Mapear marca a brand
-              description: item.descripcion, // Mapear descripcion a description
-              barcode: item.codigoBarras,    // Mapear codigoBarras a barcode
-              available: item.disponible,    // Mapear disponible a available
-              featured: item.destacado,      // Mapear destacado a featured
-              price: item.precio,            // Mapear precio a price
-              stock: item.stock,             // Mapear stock a stock
-              images: item.imagenUrls[0],    // Mapear imagenes a images
-              categories: [],                // Inicializar categorías vacías
-            }));
-          } else {
-            throw new Error('Formato de datos incorrecto');
-          }
-        } else {
-          if (data && Array.isArray(data)) {
-            // Adaptar los datos de los productos de fakestore
-            adaptedData = data.map(item => ({
-              id: item.id,                   // Mapear id a id
-              name: item.title,              // Mapear título a nombre
-              brand: 'Marca',                // Valor fijo para marca
-              description: item.description,  // Mapear descripción
-              barcode: '123',                // Valor fijo para código de barras
-              available: true,               // Valor fijo para disponibilidad
-              featured: false,               // Valor fijo para destacado
-              price: item.price,             // Mapear precio
-              stock: 10,                     // Valor fijo para stock
-              images: item.image,            // Mapear imagen
-              categories: [item.category],   // Mapear categoría a un array
-            }));
-          } else {
-            throw new Error('Formato de datos incorrecto');
-          }
-        }
-  
-        const productsWithCategories = await Promise.all(
-          adaptedData.map(async (product) => {
-            if (useBackend) {
+
+        if (data.data && data.data.$values && Array.isArray(data.data.$values)) {
+          // Adaptar los datos de los productos
+          const adaptedData = data.data.$values.map(item => ({
+            id: item.idProducto,           // Mapear idProducto a id
+            name: item.nombre,             // Mapear nombre a name
+            brand: item.marca,             // Mapear marca a brand
+            description: item.descripcion, // Mapear descripcion a description
+            barcode: item.codigoBarras,    // Mapear codigoBarras a barcode
+            available: item.disponible,    // Mapear disponible a available
+            featured: item.destacado,      // Mapear destacado a featured
+            price: item.precio,            // Mapear precio a price
+            stock: item.stock,             // Mapear stock a stock
+            images: item.imagenUrls.$values[0] || '',         // Mapear imagenes a images
+            categories: [],                // Inicializar categorías vacías
+          }));
+
+          // Segunda llamada: Obtener categorías para cada producto
+          const productsWithCategories = await Promise.all(
+            adaptedData.map(async (product) => {
               const fetchURLCategory = `https://localhost:7255/api/ProductCategory/categorias/${product.id}`;
               try {
                 const responseCategory = await fetch(fetchURLCategory);
@@ -88,9 +60,11 @@ const ProductListContainer = () => {
                   throw new Error(`Error al obtener categorías para el producto ${product.id}`);
                 }
                 const dataCategory = await responseCategory.json();
-  
-                if (dataCategory.data && Array.isArray(dataCategory.data)) {
-                  const formattedCategories = dataCategory.data.map(cat => formatCamelCase(cat.nombre));
+
+                // Acceso a la estructura de la respuesta
+                if (dataCategory.data && dataCategory.data.$values && Array.isArray(dataCategory.data.$values)) {
+                  // Asumimos que cada categoría tiene un campo 'nombre'
+                  const formattedCategories = dataCategory.data.$values.map(cat => formatCamelCase(cat.nombre));
                   return { ...product, categories: formattedCategories };
                 } else {
                   return { ...product, categories: [] };
@@ -99,40 +73,42 @@ const ProductListContainer = () => {
                 console.error(`Error al obtener categorías para el producto ${product.id}: `, errorCategory);
                 return { ...product, categories: [] };
               }
-            } else {
-              return product; 
-            }
-          })
-        );
-  
-        // Actualizar el estado de productos
-        setProducts(productsWithCategories);
-        setFilteredProducts(productsWithCategories); // Inicialmente todos los productos
-  
-        // Generar un objeto para contar productos por categoría
-        const categoryCount = {};
-        productsWithCategories.forEach(product => {
-          product.categories.forEach(category => {
-            categoryCount[category] = (categoryCount[category] || 0) + 1;
+            })
+          );
+          console.log("los productos con  categorias son: ", productsWithCategories);
+
+          // Actualizar el estado de productos
+          setProducts(productsWithCategories);
+          setFilteredProducts(productsWithCategories); // Inicialmente todos los productos
+
+          // Generar un objeto para contar productos por categoría
+          const categoryCount = {};
+
+          productsWithCategories.forEach(product => {
+            product.categories.forEach(category => {
+              categoryCount[category] = (categoryCount[category] || 0) + 1;
+            });
           });
-        });
-  
-        // Formatear las categorías como {name, count} para el componente CategoryList
-        const formattedCategories = Object.entries(categoryCount).map(([name, count]) => ({
-          name,
-          count,
-        }));
-  
-        setCategories(formattedCategories); // Actualizar el estado con las categorías formateadas
-        setLoading(false);
-        setError(false);
+
+          // Formatear las categorías como {name, count} para el componente CategoryList
+          const formattedCategories = Object.entries(categoryCount).map(([name, count]) => ({
+            name,
+            count,
+          }));
+          console.log("formato",formattedCategories);
+          setCategories(formattedCategories);  // Actualizar el estado con las categorías formateadas
+          setLoading(false); 
+          setError(false); 
+        } else {
+          throw new Error('Formato de datos incorrecto');
+        }
       } catch (err) {
         console.error('Error al obtener productos:', err);
-        setLoading(false); // Ya no está cargando
-        setError(true);    // Ha ocurrido un error
+        setLoading(false);  // Ya no está cargando
+        setError(true);     // Ha ocurrido un error
       }
     };
-  
+
     fetchProductsAndCategories();
   }, []);
 
@@ -142,16 +118,19 @@ const ProductListContainer = () => {
   };
 
   // Función para manejar el filtrado de categorías
-  const handleCategoryClick = (categoryName) => {
-    if (categoryName === selectedCategory) {
-      setFilteredProducts(products); // Mostrar todos los productos si se deselecciona la categoría
-      setSelectedCategory(null);
-    } else {
-      const filtered = products.filter(product => product.category === categoryName);
-      setFilteredProducts(filtered);
-      setSelectedCategory(categoryName); // Establecer la categoría seleccionada
-    }
-  };
+const handleCategoryClick = (categoryName) => {
+  if (categoryName === selectedCategory) {
+    setFilteredProducts(products); // Mostrar todos los productos si se deselecciona la categoría
+    setSelectedCategory(null);
+  } else {
+    // Filtrar productos si la categoría seleccionada está en el arreglo de categorías del producto
+    const filtered = products.filter(product => 
+      product.categories && product.categories.includes(categoryName)
+    );
+    setFilteredProducts(filtered);
+    setSelectedCategory(categoryName); // Establecer la categoría seleccionada
+  }
+};
 
   return (
     <div className="products-page">
