@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using antigal.server.Data;
 using antigal.server.Services;
 using antigal.server.Repositories;
