@@ -252,7 +252,6 @@ D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debu
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.pdb
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.genruntimeconfig.cache
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\ref\antigal.server.dll
-D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\appsettings.Development.json
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\appsettings.json
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\antigal.server.exe
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\antigal.server.deps.json
@@ -1122,3 +1121,12 @@ C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.s
 C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\MimeKit.dll
 C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\SendGrid.dll
 C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\StarkbankEcdsa.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\CloudinaryDotNet.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\dotenv.net.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\FluentEmail.Core.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\FluentEmail.SendGrid.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\MailKit.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.OpenIdConnect.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\MimeKit.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\SendGrid.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\StarkbankEcdsa.dll

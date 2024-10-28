@@ -3,7 +3,10 @@ using antigal.server.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.Extensions.Configuration; // Asegúrate de agregar esta línea
 
 namespace antigal.server.Controllers
 {
@@ -14,11 +17,18 @@ namespace antigal.server.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<Role> _roleManager;
-        public AuthAdminController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager)
+        private readonly IConfiguration _configuration; // Inyectamos IConfiguration
+
+        public AuthAdminController(
+            UserManager<User> userManager,
+            SignInManager<User> signInManager,
+            RoleManager<Role> roleManager,
+            IConfiguration configuration) // Agregamos IConfiguration al constructor
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _configuration = configuration; // Asignamos la instancia inyectada
         }
 
         [HttpPost("register-admin")]
@@ -49,19 +59,35 @@ namespace antigal.server.Controllers
         [HttpPost("login-admin")]
         public async Task<IActionResult> LoginAsync([FromBody] LoginDto loginDto)
         {
-            if (!ModelState.IsValid)
+            var user = await _userManager.FindByNameAsync(loginDto.UserName);
+            if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
             {
-                return BadRequest(ModelState);
+                return Unauthorized("Usuario o contraseña incorrectos.");
             }
 
-            var result = await _signInManager.PasswordSignInAsync(loginDto.UserName, loginDto.Password, false, false);
-            if (result.Succeeded)
-            {
-                return Ok();
-            }
+            var roles = await _userManager.GetRolesAsync(user);
+            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
 
-            return Unauthorized();
+            var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+            new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(ClaimTypes.Role, roles.FirstOrDefault() ?? "User")
+        }),
+                Expires = DateTime.UtcNow.AddHours(1),
+                Issuer = _configuration["Jwt:Issuer"],  // Incluye el emisor
+                Audience = _configuration["Jwt:Audience"],  // Incluye la audiencia
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            return Ok(new { Token = tokenString });
         }
+
 
         [HttpPost("create-role")]
         public async Task<IActionResult> CreateRoleAsync([FromBody] CreateRoleDto createRoleDto)

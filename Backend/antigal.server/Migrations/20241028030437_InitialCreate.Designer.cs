@@ -12,7 +12,7 @@ using antigal.server.Data;
 namespace antigal.server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241028003744_InitialCreate")]
+    [Migration("20241028030437_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
