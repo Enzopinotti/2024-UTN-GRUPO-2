@@ -2632,7 +2632,7 @@ footer .footer-bottom img {
   height: 200px;
   object-fit: contain;
   margin-bottom: 20px;
-  animation: bounce 2s infinite;
+  animation: bounce 7s ease-in-out infinite;
   /* Media Query para Móviles */
 }
 @media (max-width: 480px) {
@@ -2666,10 +2666,10 @@ footer .footer-bottom img {
     transform: translateY(0);
   }
   40% {
-    transform: translateY(-20px);
+    transform: translateY(-15px);
   }
   60% {
-    transform: translateY(-10px);
+    transform: translateY(-7px);
   }
 }
 
