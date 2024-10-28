@@ -45,14 +45,15 @@
         }
         .product-img {
           width: 100%;
-          height: 200px;
+          height: 400px;
           background-color: $primary-white-color;
           position: relative;
-
+          overflow-y: hidden;
           img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            aspect-ratio: 4/3;
           }
 
           .no-image {

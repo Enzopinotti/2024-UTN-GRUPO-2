@@ -42,8 +42,8 @@ const AdminProductItem = ({ product, onEdit, onDelete }) => {
   return (
     <div className="product-item">
       <div className="product-img">
-        {imageSrc && !imageError ? (
-          <img src={imageSrc} alt={nombre} onError={handleImageError} />
+        {imagenUrls && !imageError ? (
+          <img src={imagenUrls.$values[0]} alt={nombre} onError={handleImageError} />
         ) : (
           <div className="no-image">Sin Imagen</div>
         )}

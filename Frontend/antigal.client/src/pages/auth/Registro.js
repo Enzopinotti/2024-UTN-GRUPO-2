@@ -26,7 +26,7 @@ const Registro = () => {
     setMensaje('');
 
     try {
-      const response = await fetch('https://tu-backend.com/api/auth/register', {
+      const response = await fetch('https://localhost:7255/api/Auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

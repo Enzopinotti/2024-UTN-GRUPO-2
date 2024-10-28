@@ -33,6 +33,7 @@ namespace antigal.server.Controllers
         [HttpGet("getProductByTitle/{nombre}")]
         public ResponseDto GetProductByTitle(string nombre)
         {
+            Console.WriteLine("El nombre es: " + nombre);
             return _productService.GetProductByTitle(nombre);
         }
 

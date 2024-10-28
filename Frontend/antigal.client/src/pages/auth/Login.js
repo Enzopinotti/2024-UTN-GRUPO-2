@@ -24,7 +24,7 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await fetch('https://tu-backend.com/api/auth/login', {
+      const response = await fetch('https://localhost:7255/api/Auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,7 +40,8 @@ const Login = () => {
         const { accessToken, refreshToken } = data;
         login(accessToken, refreshToken); // Si implementas Refresh Tokens
         toast.success('¡Inicio de sesión exitoso!');
-        navigate('/');
+        //navigate('/');    
+        console.log(data)
       } else {
         const errorData = await response.json();
         setError(errorData.message || 'Credenciales inválidas');
