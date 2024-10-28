@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using antigal.server.Models.Dto;
-using antigal.server.Services;
-using System.Threading.Tasks;
 using antigal.server.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace antigal.server.Controllers
 {
@@ -12,93 +16,79 @@ namespace antigal.server.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthService _authService;
         private readonly UserManager<User> _userManager;
-        private readonly ServiceToken _serviceToken;
+        private readonly SignInManager<User> _signInManager;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(IAuthService authService, UserManager<User> userManager, ServiceToken serviceToken)
+        public AuthController(
+            UserManager<User> userManager,
+            SignInManager<User> signInManager,
+            IConfiguration configuration)
         {
-            _authService = authService;
             _userManager = userManager;
-            _serviceToken = serviceToken;
+            _signInManager = signInManager;
+            _configuration = configuration;
         }
 
+        // Registro de usuario regular (rol predeterminado: "User")
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterAsync(RegisterDto registerDto)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterDto registerDto)
         {
-            
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _authService.RegisterUserAsync(registerDto);
-            if (!result)
+            var user = new User
             {
-                return BadRequest("Error al registrarse");
+                UserName = registerDto.UserName,
+                Email = registerDto.Email,
+                FullName = registerDto.FullName
+            };
+
+            var result = await _userManager.CreateAsync(user, registerDto.Password);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
             }
 
-            return Ok("Usuario reegistrado con exito!");
+            // Asignar automáticamente el rol "User"
+            await _userManager.AddToRoleAsync(user, "User");
+
+            return Ok(new { Message = "Usuario registrado exitosamente" });
         }
 
-        [HttpGet("confirmemail")]
-        public async Task<IActionResult> ConfirmEmail(string token)
-        {
-            var principal = _serviceToken.GetPrincipalFromExpiredToken(token); // Llama el método desde ServiceToken
-            if (principal == null)
-            {
-                return BadRequest("Token inválido.");
-            }
-
-            var userId = principal.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
-            var user = await _authService.GetUserByIdAsync(userId); // Asegúrate de tener este método en tu servicio
-            if (user == null)
-            {
-                return BadRequest("Usuario no encontrado.");
-            }
-
-            // Confirmar el correo electrónico
-            var result = await _authService.ConfirmEmailAsync(userId, token); // Cambia el método de acuerdo a tu implementación
-            if (result)
-            {
-                return Ok("Email confirmado con éxito.");
-            }
-
-            return BadRequest("Error al confirmar el correo electrónico.");
-        }
-
+        // Login de usuario
         [HttpPost("login")]
-        public async Task<IActionResult> LoginAsync(LoginDto loginDto)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginDto loginDto)
         {
-            if (!ModelState.IsValid)
+            var user = await _userManager.FindByNameAsync(loginDto.UserName);
+            if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
             {
-                return BadRequest(ModelState);
+                return Unauthorized("Usuario o contraseña incorrectos.");
             }
 
-            var tokens = await _authService.LoginUserAsync(loginDto);
-            if (tokens.AccessToken == null || tokens.RefreshToken == null)
+            var roles = await _userManager.GetRolesAsync(user);
+            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
-                return Unauthorized();
-            }
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Role, roles.FirstOrDefault() ?? "User")
+                }),
+                Expires = DateTime.UtcNow.AddHours(1),
+                Issuer = _configuration["Jwt:Issuer"],
+                Audience = _configuration["Jwt:Audience"],
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
 
-            return Ok(new { AccessToken = tokens.AccessToken, RefreshToken = tokens.RefreshToken });
-        }
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
 
-        [HttpPost("refresh-token")]
-        public async Task<IActionResult> RefreshTokenAsync([FromBody] RefreshTokenDto refreshTokenDto)
-        {
-            if (string.IsNullOrEmpty(refreshTokenDto.RefreshToken))
-            {
-                return BadRequest("Refresh token no puede estar vacío.");
-            }
-
-            var newAccessToken = await _authService.RefreshTokenAsync(refreshTokenDto.RefreshToken);
-            if (string.IsNullOrEmpty(newAccessToken))
-            {
-                return Unauthorized();
-            }
-
-            return Ok(new { AccessToken = newAccessToken });
+            return Ok(new { Token = tokenString });
         }
     }
 }

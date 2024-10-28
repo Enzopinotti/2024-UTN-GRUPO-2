@@ -1,28 +1,28 @@
 [
   {
     "ContainingType": "antigal.server.Controllers.AdminController",
+    "Method": "CreateRoleAsync",
+    "RelativePath": "api/Admin/CreateRole",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "createRoleDto",
+        "Type": "antigal.server.Models.Dto.CreateRoleDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AdminController",
     "Method": "GetUsers",
     "RelativePath": "api/Admin/Users",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.AuthController",
-    "Method": "ConfirmEmail",
-    "RelativePath": "api/Auth/confirmemail",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "token",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
     "ReturnTypes": []
   },
   {
@@ -43,72 +43,8 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.AuthController",
-    "Method": "RefreshTokenAsync",
-    "RelativePath": "api/Auth/refresh-token",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "refreshTokenDto",
-        "Type": "antigal.server.Models.Dto.RefreshTokenDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.AuthController",
     "Method": "RegisterAsync",
     "RelativePath": "api/Auth/register",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "registerDto",
-        "Type": "antigal.server.Models.Dto.RegisterDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.AuthAdminController",
-    "Method": "CreateRoleAsync",
-    "RelativePath": "api/AuthAdmin/create-role",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "createRoleDto",
-        "Type": "antigal.server.Models.Dto.CreateRoleDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.AuthAdminController",
-    "Method": "LoginAsync",
-    "RelativePath": "api/AuthAdmin/login-admin",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "loginDto",
-        "Type": "antigal.server.Models.Dto.LoginDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.AuthAdminController",
-    "Method": "RegisterAsync",
-    "RelativePath": "api/AuthAdmin/register-admin",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
