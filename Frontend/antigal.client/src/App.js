@@ -14,20 +14,25 @@ import { CartProvider } from "./contexts/CartContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UserLayout from "./components/users/UserLayout";
-import Logout from "./pages/Logout";
-import Registro from "./pages/Registro";
-import Login from "./pages/Login";
+import Logout from "./pages/auth/Logout";
+import Registro from "./pages/auth/Registro";
+import Login from "./pages/auth/Login";
 import Profile from "./pages/profile/Profile";
 import ProtectedRoute from "./components/common/ProtectedRoute";
-import SobreNosotros from "./pages/SobreNosotros";
-import CartPage from "./pages/CartPage";
-import TiendaFisica from "./pages/TiendaFisica";
 import Orders from "./pages/profile/Orders";
 import Favorites from "./pages/profile/Favorites";
 import { FavoriteProvider } from "./contexts/FavoriteContext";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TiendaFisica from "./pages/TiendaFisica"
+import CartPage from "./pages/CartPage"
+import SobreNosotros from "./pages/SobreNosotros"
+import ResetearContrasenia from "./pages/auth/ResetearContrasenia";
+import RecuperarContrasenia from "./pages/auth/RecuperarContrasenia";
+
+
 function App() {
   return (
+    
     <CartProvider>
       <FavoriteProvider>
         <Router>
@@ -65,6 +70,8 @@ function App() {
 
               {/* Rutas de autenticación */}
               <Route path="/login" element={<Login />} />
+              <Route path="/resetearContrasenia" element={<ResetearContrasenia />}  />
+              <Route path="/recuperarContrasenia" element={<RecuperarContrasenia />}  />
               <Route path="/register" element={<Registro />} />
               <Route path="/logout" element={<Logout />} />
               <Route path="/sobre-nosotros" element={<SobreNosotros />} />
