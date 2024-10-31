@@ -1,4 +1,3 @@
-D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\appsettings.Development.json
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\appsettings.json
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\antigal.server.exe
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\antigal.server.deps.json
@@ -1131,3 +1130,13 @@ D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.pdb
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.genruntimeconfig.cache
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\ref\antigal.server.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\AutoMapper.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\CloudinaryDotNet.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\dotenv.net.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\FluentEmail.Core.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\FluentEmail.SendGrid.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\MailKit.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.OpenIdConnect.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\MimeKit.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\SendGrid.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\StarkbankEcdsa.dll

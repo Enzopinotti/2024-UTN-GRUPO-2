@@ -17,11 +17,16 @@ namespace antigal.server.Services
 
         public EmailSender(IConfiguration configuration)
         {
-            _smtpServer = configuration["EmailSettings:SmtpServer"];
-            _smtpUser = configuration["EmailSettings:SmtpUser"];
-            _smtpPass = configuration["EmailSettings:SmtpPass"];
-            _smtpPort = int.Parse(configuration["EmailSettings:SmtpPort"]);
+            _smtpServer = configuration["EmailSettings:SmtpServer"] ?? throw new ArgumentNullException("SmtpServer setting is required");
+            _smtpUser = configuration["EmailSettings:SmtpUser"] ?? throw new ArgumentNullException("SmtpUser setting is required");
+            _smtpPass = configuration["EmailSettings:SmtpPass"] ?? throw new ArgumentNullException("SmtpPass setting is required");
+
+            if (!int.TryParse(configuration["EmailSettings:SmtpPort"], out _smtpPort))
+            {
+                throw new ArgumentNullException("SmtpPort setting is required");
+            }
         }
+
 
         public async Task SendEmailAsync(string email, string subject, string message)
         {

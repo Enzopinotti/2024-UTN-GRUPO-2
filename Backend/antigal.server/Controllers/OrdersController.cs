@@ -19,7 +19,7 @@ namespace antigal.server.Controllers
         }
 
         [HttpPost("confirm")]
-        public async Task<IActionResult> ConfirmOrder([FromBody] OrderDto orderDto)
+        public async Task<IActionResult> ConfirmOrder([FromBody] OrdenDto orderDto)
         {
             await _orderService.ConfirmOrder(orderDto);
             return Ok("Pedido confirmado con éxito.");

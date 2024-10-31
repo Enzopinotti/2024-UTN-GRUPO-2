@@ -41,6 +41,12 @@ namespace antigal.server
             })
             .AddJwtBearer(options =>
             {
+                var securityKey = jwtSettings["securityKey"];
+                if (string.IsNullOrWhiteSpace(securityKey))
+                {
+                    throw new InvalidOperationException("La clave de seguridad JWT no está configurada.");
+                }
+
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -49,9 +55,10 @@ namespace antigal.server
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = jwtSettings["validIssuer"],
                     ValidAudience = jwtSettings["validAudience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("securityKey").Value))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey))
                 };
             });
+
 
             // Configuración de Cloudinary
             var cloudinaryConfig = builder.Configuration.GetSection("Cloudinary");
@@ -73,12 +80,14 @@ namespace antigal.server
             builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ServiceToken>();
             builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
             builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
             builder.Services.AddScoped<ICartRepository, CartRepository>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
 
             // Configuración de CORS
             builder.Services.AddCors(options =>

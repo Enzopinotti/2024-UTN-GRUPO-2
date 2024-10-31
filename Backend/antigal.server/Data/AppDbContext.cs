@@ -16,8 +16,8 @@ namespace antigal.server.Data
         public DbSet <ProductoCategoria> ProductoCategoria { get; set; }
         public DbSet<Carrito> Carritos { get; set; }
         public DbSet<CarritoItem> CarritoItems { get; set; }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Orden> Ordenes { get; set; }
+        public DbSet<OrdenDetalle> OrdenDetalle { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; } // Para almacenar refresh tokens
 
         //OnModelCreating se utiliza para establecer las asociaciones entre dos clases para que impacten en la base de datos desde .NET
@@ -69,34 +69,39 @@ namespace antigal.server.Data
                 .HasForeignKey(i => i.ProductoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-
             // Relación uno a muchos entre CarritoItem y Producto
             modelBuilder.Entity<CarritoItem>()
                 .HasOne(ci => ci.Producto) // Cada CarritoItem tiene un Producto
                 .WithMany() // Un Producto puede estar en muchos CarritoItems
                 .HasForeignKey(ci => ci.idProducto) // FK en CarritoItem
                 .OnDelete(DeleteBehavior.Restrict); // No eliminar el producto si tiene items en carritos
-                                                    // Relación uno a muchos: Order -> OrderItems
-                                                    // Relación uno a muchos: User -> Orders
-            modelBuilder.Entity<Order>()
+                                                    // Relación uno a muchos: Orden -> OrdenItems
+                                                    // Relación uno a muchos: User -> Ordenes
+            modelBuilder.Entity<Orden>()
                  .HasOne(o => o.User)  // Una orden tiene un usuario
                  .WithMany()  // Un usuario puede tener muchas órdenes
-                 .HasForeignKey(o => o.UserId)  // FK en Order
+                 .HasForeignKey(o => o.idUsuario)  // FK en Orden
                  .OnDelete(DeleteBehavior.Restrict);  // No permitir eliminar un usuario con órdenes
 
-            // Relación uno a muchos: Order -> OrderItems
-            modelBuilder.Entity<Order>()
+            // Relación uno a muchos: Orden -> OrdenItems
+            modelBuilder.Entity<Orden>()
                 .HasMany(o => o.Items)  // Una orden tiene muchos ítems
-                .WithOne(oi => oi.Order)  // Cada ítem pertenece a una orden
-                .HasForeignKey(oi => oi.OrderId)  // FK en OrderItem
+                .WithOne(oi => oi.Orden)  // Cada ítem pertenece a una orden
+                .HasForeignKey(oi => oi.idOrdenDetalle)  // FK en OrdenItem
                 .OnDelete(DeleteBehavior.Cascade);  // Si se elimina la orden, se eliminan sus ítems
 
-            // Relación uno a muchos: Producto -> OrderItems
-            modelBuilder.Entity<OrderItem>()
-                .HasOne(oi => oi.Product)  // Cada ítem tiene un producto
+            // Relación uno a muchos: Producto -> OrdenDetalle
+            modelBuilder.Entity<OrdenDetalle>()
+                .HasOne(oi => oi.Producto)  // Cada ítem tiene un producto
                 .WithMany()  // Un producto puede estar en muchos ítems
-                .HasForeignKey(oi => oi.ProductId)  // FK en OrderItem
+                .HasForeignKey(oi => oi.idProducto)  // FK en OrdenDetalle
                 .OnDelete(DeleteBehavior.Restrict);  // No eliminar producto si está asociado a ítems
+
+
+            // Configuración para la propiedad precio en OrderDetail
+            modelBuilder.Entity<OrdenDetalle>()
+                .Property(od => od.precio)
+                .HasColumnType("decimal(18,2)");
         }
     }
 

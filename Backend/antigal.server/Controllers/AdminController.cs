@@ -1,4 +1,4 @@
-﻿/*using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -29,7 +29,8 @@ namespace antigal.server.Controllers
             var users = _userManager.Users
                 .Select(user => new
                 {
-                    user.FullName,
+                    user.FirstName,
+                    user.LastName,
                     user.Email,
                     user.ImagenUrl // Asegúrate de tener esta propiedad en tu modelo User
                 })
@@ -65,4 +66,3 @@ namespace antigal.server.Controllers
         }
     }
 }
-*/

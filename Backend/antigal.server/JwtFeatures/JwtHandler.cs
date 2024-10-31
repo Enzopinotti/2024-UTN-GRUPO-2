@@ -24,17 +24,31 @@ namespace antigal.server.JwtFeatures
         }
         private SigningCredentials GetSigningCredentials()
         {
-            var key = Encoding.UTF8.GetBytes(_jwtSettings["securityKey"]);
+            var keyString = _jwtSettings["securityKey"];
+
+            if (string.IsNullOrWhiteSpace(keyString))
+            {
+                throw new InvalidOperationException("La clave de seguridad JWT no está configurada.");
+            }
+
+            var key = Encoding.UTF8.GetBytes(keyString);
             var secret = new SymmetricSecurityKey(key);
 
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
-        private List<Claim> GetClaims(User user) 
-        { 
+        private List<Claim> GetClaims(User user)
+        {
             var claims = new List<Claim>();
+
+            if (!string.IsNullOrWhiteSpace(user.UserName))
             {
-                new Claim(ClaimTypes.Name, user.UserName);
+                claims.Add(new Claim(ClaimTypes.Name, user.UserName));
             }
+            else
+            {
+                throw new InvalidOperationException("El nombre de usuario no puede ser nulo o vacío.");
+            }
+
             return claims;
         }
         private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
