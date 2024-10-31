@@ -10,8 +10,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using CloudinaryDotNet;
-using Microsoft.Extensions.DependencyInjection;
-
+using antigal.server.Mapping;
+using antigal.server.JwtFeatures;
 namespace antigal.server
 {
     public class Program
@@ -20,40 +20,40 @@ namespace antigal.server
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // 1. Agregar el contexto de la base de datos
+            // Agregar el contexto de la base de datos
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // 2. Configurar Identity
-            builder.Services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<AppDbContext>()
-                .AddDefaultTokenProviders();
-
-            // 3. Configuración de JWT
-            builder.Services.AddAuthentication(options =>
+            // Configurar Identity
+            builder.Services.AddIdentity<User, Role>(options =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.SignIn.RequireConfirmedEmail = false;
+            })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+
+            // Configuración de JWT
+            var jwtSettings = builder.Configuration.GetSection("JWTSettings");
+            builder.Services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(options =>
             {
-                var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
-
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                    ValidAudience = builder.Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(key)  // Usar la clave nueva aquí
+                    ValidIssuer = jwtSettings["validIssuer"],
+                    ValidAudience = jwtSettings["validAudience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("securityKey").Value))
                 };
             });
 
-
-
-            // 4. Configuración de Cloudinary
+            // Configuración de Cloudinary
             var cloudinaryConfig = builder.Configuration.GetSection("Cloudinary");
             var cloudinary = new Cloudinary(new Account(
                 cloudinaryConfig["CloudName"],
@@ -61,24 +61,26 @@ namespace antigal.server
                 cloudinaryConfig["ApiSecret"]
             ));
             builder.Services.AddSingleton(cloudinary);
+            builder.Services.AddSingleton<JwtHandler>();
 
-            // 5. Registrar servicios y repositorios
+            // Configuración de AutoMapper
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+            // Registrar servicios y repositorios
             builder.Services.AddScoped<IImageService, ImageService>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
-            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ServiceToken>();
-
             builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
             builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
             builder.Services.AddScoped<ICartRepository, CartRepository>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
-            // 6. Configuración de CORS
+            // Configuración de CORS
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowLocalhost", policy =>
@@ -87,7 +89,7 @@ namespace antigal.server
                           .AllowAnyHeader());
             });
 
-            // 7. Configuración de Swagger con soporte JWT
+            // Configuración de Swagger con soporte JWT
             builder.Services.AddSwaggerGen(c =>
             {
                 c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
@@ -117,7 +119,7 @@ namespace antigal.server
 
             builder.Services.AddEndpointsApiExplorer();
 
-            // 8. Controladores y JSON
+            // Controladores y JSON
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
                 {
@@ -125,13 +127,13 @@ namespace antigal.server
                     options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
                 });
 
-            // 9. Validaciones
+            // Validaciones
             builder.Services.AddValidatorsFromAssemblyContaining<Program>();
             builder.Services.AddFluentValidationAutoValidation();
 
             var app = builder.Build();
 
-            // 10. Inicialización de la base de datos
+            // Inicialización de la base de datos
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
@@ -145,23 +147,23 @@ namespace antigal.server
                 }
             }
 
-            // 11. Middleware de CORS y autenticación
+            // Middleware de CORS y autenticación
             app.UseCors("AllowLocalhost");
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // 12. Configuración de Swagger
+            // Configuración de Swagger
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
-            // 13. Mapear controladores
+            // Mapear controladores
             app.MapControllers();
 
-            // 14. Ejecutar la aplicación
+            // Ejecutar la aplicación
             app.Run();
         }
     }

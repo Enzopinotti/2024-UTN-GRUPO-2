@@ -50,7 +50,7 @@ public class DbInitializer
             {
                 UserName = "admin",
                 Email = adminEmail,
-                FullName = "Administrador del Sistema",
+                //FullName = "Administrador del Sistema",
             };
 
             var result = await userManager.CreateAsync(adminUser, adminPassword);

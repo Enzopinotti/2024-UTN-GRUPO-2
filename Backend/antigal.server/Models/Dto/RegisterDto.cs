@@ -4,6 +4,9 @@ namespace antigal.server.Models.Dto
 {
     public class RegisterDto
     {
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+
         [Required(ErrorMessage = "El nombre de usuario es requerido.")]
         public required string UserName { get; set; }
 
@@ -15,7 +18,5 @@ namespace antigal.server.Models.Dto
         [MinLength(6, ErrorMessage = "La contraseña debe tener al menos 6 caracteres.")]
         public required string Password { get; set; }
 
-        [Required(ErrorMessage = "El nombre completo es requerido.")]
-        public required string FullName { get; set; }
     }
 }

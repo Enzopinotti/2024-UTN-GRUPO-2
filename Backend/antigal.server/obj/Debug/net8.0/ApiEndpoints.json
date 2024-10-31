@@ -1,63 +1,5 @@
 [
   {
-    "ContainingType": "antigal.server.Controllers.AdminController",
-    "Method": "CreateRoleAsync",
-    "RelativePath": "api/Admin/CreateRole",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "createRoleDto",
-        "Type": "antigal.server.Models.Dto.CreateRoleDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.AdminController",
-    "Method": "GetUsers",
-    "RelativePath": "api/Admin/Users",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.AuthController",
-    "Method": "LoginAsync",
-    "RelativePath": "api/Auth/login",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "loginDto",
-        "Type": "antigal.server.Models.Dto.LoginDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.AuthController",
-    "Method": "RegisterAsync",
-    "RelativePath": "api/Auth/register",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "registerDto",
-        "Type": "antigal.server.Models.Dto.RegisterDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
     "ContainingType": "antigal.server.Controllers.CartController",
     "Method": "GetCartByUserId",
     "RelativePath": "api/Cart/{userId}",
@@ -741,5 +683,37 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.RegisterController",
+    "Method": "Authtenticate",
+    "RelativePath": "api/Register/authenticate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "authenticationResponse",
+        "Type": "antigal.server.Models.Dto.UseForAuthenticationDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.RegisterController",
+    "Method": "RegisterAsync",
+    "RelativePath": "api/Register/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "registerDto",
+        "Type": "antigal.server.Models.Dto.RegisterDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]
