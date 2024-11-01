@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace antigal.server.Migrations
 {
     /// <inheritdoc />
@@ -31,7 +33,7 @@ namespace antigal.server.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FistName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ImagenUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -225,21 +227,21 @@ namespace antigal.server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
+                name: "Ordenes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    idOrden = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    idUsuario = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    fechaOrden = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    estado = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.PrimaryKey("PK_Ordenes", x => x.idOrden);
                     table.ForeignKey(
-                        name: "FK_Orders_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Ordenes_AspNetUsers_idUsuario",
+                        column: x => x.idUsuario,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -333,30 +335,41 @@ namespace antigal.server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderItems",
+                name: "OrdenDetalle",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    idDetalle = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false)
+                    idOrdenDetalle = table.Column<int>(type: "int", nullable: false),
+                    idProducto = table.Column<int>(type: "int", nullable: false),
+                    cantidad = table.Column<int>(type: "int", nullable: false),
+                    precio = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderItems", x => x.Id);
+                    table.PrimaryKey("PK_OrdenDetalle", x => x.idDetalle);
                     table.ForeignKey(
-                        name: "FK_OrderItems_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
-                        principalColumn: "Id",
+                        name: "FK_OrdenDetalle_Ordenes_idOrdenDetalle",
+                        column: x => x.idOrdenDetalle,
+                        principalTable: "Ordenes",
+                        principalColumn: "idOrden",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrderItems_Productos_ProductId",
-                        column: x => x.ProductId,
+                        name: "FK_OrdenDetalle_Productos_idProducto",
+                        column: x => x.idProducto,
                         principalTable: "Productos",
                         principalColumn: "idProducto",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "639de93f-7876-4fff-96ec-37f8bd3bf180", null, "The visitor role for the user", "Visitor", "VISITOR" },
+                    { "a9b5f83e-92c3-4c5e-94de-4d6a6e4f82a9", null, "The admin role for the user", "Admin", "ADMIN" },
+                    { "d8a9f8f8-3d65-4b2a-9b2f-3a1c4b2c1234", null, "The regular user role", "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -424,19 +437,19 @@ namespace antigal.server.Migrations
                 column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_OrderId",
-                table: "OrderItems",
-                column: "OrderId");
+                name: "IX_OrdenDetalle_idOrdenDetalle",
+                table: "OrdenDetalle",
+                column: "idOrdenDetalle");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_ProductId",
-                table: "OrderItems",
-                column: "ProductId");
+                name: "IX_OrdenDetalle_idProducto",
+                table: "OrdenDetalle",
+                column: "idProducto");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_UserId",
-                table: "Orders",
-                column: "UserId");
+                name: "IX_Ordenes_idUsuario",
+                table: "Ordenes",
+                column: "idUsuario");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductoCategoria_idCategoria",
@@ -469,7 +482,7 @@ namespace antigal.server.Migrations
                 name: "Imagenes");
 
             migrationBuilder.DropTable(
-                name: "OrderItems");
+                name: "OrdenDetalle");
 
             migrationBuilder.DropTable(
                 name: "ProductoCategoria");
@@ -484,7 +497,7 @@ namespace antigal.server.Migrations
                 name: "Carritos");
 
             migrationBuilder.DropTable(
-                name: "Orders");
+                name: "Ordenes");
 
             migrationBuilder.DropTable(
                 name: "Categorias");

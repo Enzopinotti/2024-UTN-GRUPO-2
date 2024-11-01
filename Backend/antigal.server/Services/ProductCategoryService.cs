@@ -2,6 +2,7 @@
 using antigal.server.Models;
 using antigal.server.Models.Dto;
 using antigal.server.Repositories;
+using System.Threading.Tasks;
 
 namespace antigal.server.Services
 {
@@ -17,12 +18,12 @@ namespace antigal.server.Services
         }
 
         // Método privado para verificar la existencia de producto y categoría
-        private ResponseDto VerificarExistencia(int idProducto, int idCategoria)
+        private async Task<ResponseDto> VerificarExistenciaAsync(int idProducto, int idCategoria)
         {
             var response = new ResponseDto(); // Nueva instancia de ResponseDto
 
-            var producto = _context.Productos.Find(idProducto);
-            var categoria = _context.Categorias.Find(idCategoria);
+            var producto = await _context.Productos.FindAsync(idProducto);
+            var categoria = await _context.Categorias.FindAsync(idCategoria);
 
             if (producto == null || categoria == null)
             {
@@ -38,9 +39,9 @@ namespace antigal.server.Services
         }
 
         // Asigna una categoría a un producto
-        public ResponseDto AsignarCategoriaAProducto(int idProducto, int idCategoria)
+        public async Task<ResponseDto> AsignarCategoriaAProductoAsync(int idProducto, int idCategoria)
         {
-            var verificationResponse = VerificarExistencia(idProducto, idCategoria);
+            var verificationResponse = await VerificarExistenciaAsync(idProducto, idCategoria);
 
             if (!verificationResponse.IsSuccess)
             {
@@ -48,14 +49,14 @@ namespace antigal.server.Services
             }
 
             // Llamar al repositorio para asignar la categoría
-            var resultResponse = _repository.AsignarCategoriaAProducto(idProducto, idCategoria);
+            var resultResponse = await _repository.AsignarCategoriaAProductoAsync(idProducto, idCategoria);
             return resultResponse;
         }
 
         // Desasigna una categoría de un producto
-        public ResponseDto DesasignarCategoriaDeProducto(int idProducto, int idCategoria)
+        public async Task<ResponseDto> DesasignarCategoriaDeProductoAsync(int idProducto, int idCategoria)
         {
-            var verificationResponse = VerificarExistencia(idProducto, idCategoria);
+            var verificationResponse = await VerificarExistenciaAsync(idProducto, idCategoria);
 
             if (!verificationResponse.IsSuccess)
             {
@@ -63,20 +64,20 @@ namespace antigal.server.Services
             }
 
             // Llamar al repositorio para desasignar la categoría
-            var resultResponse = _repository.DesasignarCategoriaDeProducto(idProducto, idCategoria);
+            var resultResponse = await _repository.DesasignarCategoriaDeProductoAsync(idProducto, idCategoria);
             return resultResponse;
         }
 
         // Obtiene las categorías de un producto
-        public ResponseDto ObtenerCategoriasDeProducto(int idProducto)
+        public async Task<ResponseDto> ObtenerCategoriasDeProductoAsync(int idProducto)
         {
-            return _repository.ObtenerCategoriasDeProducto(idProducto);
+            return await _repository.ObtenerCategoriasDeProductoAsync(idProducto);
         }
 
         // Obtiene los productos de una categoría
-        public ResponseDto ObtenerProductosDeCategoria(int idCategoria)
+        public async Task<ResponseDto> ObtenerProductosDeCategoriaAsync(int idCategoria)
         {
-            return _repository.ObtenerProductosDeCategoria(idCategoria);
+            return await _repository.ObtenerProductosDeCategoriaAsync(idCategoria);
         }
     }
 }

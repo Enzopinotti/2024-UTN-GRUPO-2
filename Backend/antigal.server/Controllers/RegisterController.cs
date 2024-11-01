@@ -2,16 +2,11 @@
 using antigal.server.Models.Dto;
 using antigal.server.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 using System.Linq;
 using AutoMapper;
 using antigal.server.JwtFeatures;
-using CloudinaryDotNet.Actions;
+using antigal.server.Services;
 
 namespace antigal.server.Controllers
 {
@@ -24,18 +19,22 @@ namespace antigal.server.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly JwtHandler _jwtHandler;
+        private readonly IEmailSender _emailSender; // Servicio de email agregado
+
         public RegisterController(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IConfiguration configuration,
             IMapper mapper,
-            JwtHandler jwtHandler)
+            JwtHandler jwtHandler,
+            IEmailSender emailSender) // Constructor modificado
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
             _mapper = mapper;
             _jwtHandler = jwtHandler;
+            _emailSender = emailSender; // Inicialización del servicio de email
         }
 
         // Registro de usuario regular (rol predeterminado: "User")
@@ -48,8 +47,8 @@ namespace antigal.server.Controllers
             }
 
             var user = _mapper.Map<User>(registerDto);
-
             var result = await _userManager.CreateAsync(user, registerDto.Password);
+
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(e => e.Description);
@@ -58,49 +57,57 @@ namespace antigal.server.Controllers
 
             await _userManager.AddToRoleAsync(user, "User");
 
-            return Ok(new { Message = "Usuario registrado exitosamente" });
-        }
+            // Generar el token de confirmación de email
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationLink = Url.Action(nameof(ConfirmEmail), "Register", new { userId = user.Id, token }, Request.Scheme);
 
-        /* Login de usuario
-        [HttpPost("login")]
-        public async Task<IActionResult> LoginAsync([FromBody] LoginDto loginDto)
-        {
-            var user = await _userManager.FindByNameAsync(loginDto.Email);
-            if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
+            // Verificar si el email no es nulo antes de enviar el correo
+            if (string.IsNullOrEmpty(user.Email))
             {
-                return Unauthorized("Usuario o contraseña incorrectos.");
+                return BadRequest("No se pudo enviar el correo de confirmación porque el email es nulo.");
             }
 
-            var roles = await _userManager.GetRolesAsync(user);
-            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+            await _emailSender.SendEmailAsync(user.Email, "Confirma tu email", $"Por favor confirma tu cuenta haciendo clic en el enlace: <a href='{confirmationLink}'>Confirmar email</a>");
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, roles.FirstOrDefault() ?? "User")
-                }),
-                Expires = DateTime.UtcNow.AddHours(1),
-                Issuer = _configuration["Jwt:Issuer"],
-                Audience = _configuration["Jwt:Audience"],
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
-
-            return Ok(new { Token = tokenString });
+            return Ok(new { Message = "Usuario registrado exitosamente. Por favor verifica tu email para confirmar tu cuenta." });
         }
-        */
+
+        // Método para confirmar el email
+        [HttpGet("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(token))
+            {
+                return BadRequest("Datos inválidos.");
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound("Usuario no encontrado.");
+            }
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                return Ok(new { Message = "Email confirmado exitosamente. Ahora puedes iniciar sesión." });
+            }
+
+            return BadRequest("Error al confirmar el email.");
+        }
+
         [HttpPost("authenticate")]
-        public async Task<IActionResult> Authtenticate([FromBody] UseForAuthenticationDto authenticationResponse)
+        public async Task<IActionResult> Authenticate([FromBody] UseForAuthenticationDto authenticationResponse)
         {
             var user = await _userManager.FindByNameAsync(authenticationResponse.Email!);
             if (user is null || !await _userManager.CheckPasswordAsync(user, authenticationResponse.Password!))
-                return Unauthorized(new AuthenticationResponseDto { ErrorMessage = "Autenticacion invalida." });
-            var token = _jwtHandler.CreateToken(user);
+                return Unauthorized(new AuthenticationResponseDto { ErrorMessage = "Autenticación inválida." });
+
+            if (!await _userManager.IsEmailConfirmedAsync(user))
+                return Unauthorized(new AuthenticationResponseDto { ErrorMessage = "El email no fue confirmado." });
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var token = _jwtHandler.CreateToken(user, roles);
             return Ok(new AuthenticationResponseDto { IsAuthSuccesful = true, Token = token });
         }
     }

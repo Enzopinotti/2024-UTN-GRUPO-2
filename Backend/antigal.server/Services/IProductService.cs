@@ -1,19 +1,19 @@
-﻿
-//
-using antigal.server.Models;
+﻿using antigal.server.Models;
 using antigal.server.Models.Dto;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace antigal.server.Services
 {
     public interface IProductService
     {
-        ResponseDto GetProducts();
-        ResponseDto GetProductById(int id);
-        ResponseDto GetProductByTitle(string nombre);
-        ResponseDto AddProduct(Producto producto);
-        ResponseDto DeleteProduct(int id);
-        ResponseDto PutProduct(Producto producto);
-        ResponseDto ImportProductsFromExcel(IFormFile file);
+        Task<ResponseDto> GetProductsAsync();
+        Task<ResponseDto> GetProductByIdAsync(int id);
+        Task<ResponseDto> GetProductByTitleAsync(string nombre);
+        Task<ResponseDto> AddProductAsync(Producto producto);
+        Task<ResponseDto> DeleteProductAsync(int id);
+        Task<ResponseDto> PutProductAsync(Producto producto);
+        Task<ResponseDto> ImportProductsFromExcelAsync(IFormFile file);
+        Task<ResponseDto> GetProductsByCategoryIdAsync(int categoriaId); // Este método falta en ProductService
     }
 }

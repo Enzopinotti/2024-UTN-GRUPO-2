@@ -19,46 +19,46 @@ namespace antigal.server.Controllers
             _productService = productService;
         }
         [HttpPost("addProduct")]
-        public ResponseDto PostProduct([FromBody] Producto producto)
+        public Task<ResponseDto> PostProduct([FromBody] Producto producto)
         {
-            return _productService.AddProduct(producto);
+            return _productService.AddProductAsync(producto);
         }
 
         [HttpPut("updateProduct")]
-        public ResponseDto PutProduct([FromBody] Producto producto)
+        public Task<ResponseDto> PutProductAsync([FromBody] Producto producto)
         {
-            return _productService.PutProduct(producto);
+            return _productService.PutProductAsync(producto);
         }
 
         [HttpDelete("deleteProduct/{id}")]
-        public ResponseDto DeleteProduct(int id)
+        public Task<ResponseDto> DeleteProductAsync(int id)
         {
-            return _productService.DeleteProduct(id);
+            return _productService.DeleteProductAsync(id);
         }
 
         [HttpPost("uploadProductsFromExcel")]
-        public ResponseDto UploadProductsFromExcel(IFormFile file)
+        public Task<ResponseDto> ImportProductsFromExcelAsync(IFormFile file)
         {
-            return _productService.ImportProductsFromExcel(file);
+            return _productService.ImportProductsFromExcelAsync(file);
         }
         [AllowAnonymous]
         [HttpGet("getProducts")]
-        public ResponseDto GetProduct()
+        public Task<ResponseDto> GetProductsAsync()
         {
             Console.WriteLine("funciona");
-            return _productService.GetProducts();
+            return _productService.GetProductsAsync();
         }
         [AllowAnonymous]
         [HttpGet("getProductById/{id}")]
-        public ResponseDto GetProductById(int id)
+        public Task<ResponseDto> GetProductByIdAsync(int id)
         {
-            return _productService.GetProductById(id);
+            return _productService.GetProductByIdAsync(id);
         }
         [AllowAnonymous]
         [HttpGet("getProductByTitle/{nombre}")]
-        public ResponseDto GetProductByTitle(string nombre)
+        public Task<ResponseDto> GetProductByTitleAsync(string nombre)
         {
-            return _productService.GetProductByTitle(nombre);
+            return _productService.GetProductByTitleAsync(nombre);
         }
     }
 }

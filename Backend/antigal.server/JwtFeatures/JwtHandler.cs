@@ -14,26 +14,42 @@ namespace antigal.server.JwtFeatures
             _configuration = configuration;
             _jwtSettings = _configuration.GetSection("JwtSettings");
         }
-        public string CreateToken(User user)
+        public string CreateToken(User user, IList<string> roles)
         {
             var signingCredentials = GetSigningCredentials();
-            var claims = GetClaims(user);
+            var claims = GetClaims(user, roles);
             var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
 
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         }
         private SigningCredentials GetSigningCredentials()
         {
-            var key = Encoding.UTF8.GetBytes(_jwtSettings["securityKey"]);
+            var keyString = _jwtSettings["securityKey"];
+
+            if (string.IsNullOrWhiteSpace(keyString))
+            {
+                throw new InvalidOperationException("La clave de seguridad JWT no está configurada.");
+            }
+
+            var key = Encoding.UTF8.GetBytes(keyString);
             var secret = new SymmetricSecurityKey(key);
 
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
-        private List<Claim> GetClaims(User user) 
-        { 
+        private List<Claim> GetClaims(User user, IList<string> roles)
+        {
             var claims = new List<Claim>();
+
+            if (!string.IsNullOrWhiteSpace(user.UserName))
             {
-                new Claim(ClaimTypes.Name, user.UserName);
+                claims.Add(new Claim(ClaimTypes.Name, user.UserName));
+            }
+            else
+            {
+                throw new InvalidOperationException("El nombre de usuario no puede ser nulo o vacío.");
+            }
+            foreach (var role in roles) {
+                claims.Add(new Claim(ClaimTypes.Role, role));
             }
             return claims;
         }

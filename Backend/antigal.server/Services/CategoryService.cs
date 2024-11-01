@@ -1,6 +1,7 @@
 ﻿using antigal.server.Models;
 using antigal.server.Models.Dto;
 using antigal.server.Repositories;
+using System.Threading.Tasks;
 
 namespace antigal.server.Services
 {
@@ -13,34 +14,34 @@ namespace antigal.server.Services
             _categoriaRepository = categoriaRepository;
         }
 
-        public ResponseDto GetCategories()
+        public async Task<ResponseDto> GetCategoriesAsync()
         {
-            return _categoriaRepository.GetCategories();
+            return await _categoriaRepository.GetCategoriesAsync();
         }
 
-        public ResponseDto GetCategoryById(int id)
+        public async Task<ResponseDto> GetCategoryByIdAsync(int id)
         {
-            return _categoriaRepository.GetCategoryById(id);
+            return await _categoriaRepository.GetCategoryByIdAsync(id);
         }
 
-        public ResponseDto GetCategoryByTitle(string nombre)
+        public async Task<ResponseDto> GetCategoryByTitleAsync(string nombre)
         {
-            return _categoriaRepository.GetCategoriesByTitle(nombre);
+            return await _categoriaRepository.GetCategoriesByTitleAsync(nombre);
         }
 
-        public ResponseDto AddCategory(Categoria categoria)
+        public async Task<ResponseDto> AddCategoryAsync(Categoria categoria)
         {
-            return _categoriaRepository.AddCategory(categoria);
+            return await _categoriaRepository.AddCategoryAsync(categoria);
         }
 
-        public ResponseDto UpdateCategory(Categoria categoria)
+        public async Task<ResponseDto> UpdateCategoryAsync(Categoria categoria)
         {
-            return _categoriaRepository.UpdateCategory(categoria);
+            return await _categoriaRepository.UpdateCategoryAsync(categoria);
         }
 
-        public ResponseDto DeleteCategory(int id)
+        public async Task<ResponseDto> DeleteCategoryAsync(int id)
         {
-            return _categoriaRepository.DeleteCategory(id);
+            return await _categoriaRepository.DeleteCategoryAsync(id);
         }
     }
 }
