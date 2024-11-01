@@ -1,11 +1,12 @@
 using antigal.server.Models;
 using antigal.server.Relationships;
+using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
+using antigal.server.SeedConfiguration;
 namespace antigal.server.Data
 {
-    public class AppDbContext : IdentityDbContext<User, Role, string>
+    public class AppDbContext : IdentityDbContext<User, Models.Role, string>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }  // Esta l�nea es el constructor del contexto de la base de datos (AppDbContext).
 
@@ -25,6 +26,8 @@ namespace antigal.server.Data
         {
             base.OnModelCreating(modelBuilder); // Llama al m�todo base
 
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+          //  modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
             modelBuilder.Entity<Categoria>()
                 .HasMany(c => c.CategoriaProductos)
                 .WithOne()

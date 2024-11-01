@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace antigal.server.Migrations
 {
     /// <inheritdoc />
@@ -358,6 +360,16 @@ namespace antigal.server.Migrations
                         principalTable: "Productos",
                         principalColumn: "idProducto",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "639de93f-7876-4fff-96ec-37f8bd3bf180", null, "The visitor role for the user", "Visitor", "VISITOR" },
+                    { "a9b5f83e-92c3-4c5e-94de-4d6a6e4f82a9", null, "The admin role for the user", "Admin", "ADMIN" },
+                    { "d8a9f8f8-3d65-4b2a-9b2f-3a1c4b2c1234", null, "The regular user role", "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(

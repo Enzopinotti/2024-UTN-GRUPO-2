@@ -12,7 +12,7 @@ using antigal.server.Data;
 namespace antigal.server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241031093937_InitialCreate")]
+    [Migration("20241101001919_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -385,6 +385,29 @@ namespace antigal.server.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "639de93f-7876-4fff-96ec-37f8bd3bf180",
+                            Description = "The visitor role for the user",
+                            Name = "Visitor",
+                            NormalizedName = "VISITOR"
+                        },
+                        new
+                        {
+                            Id = "d8a9f8f8-3d65-4b2a-9b2f-3a1c4b2c1234",
+                            Description = "The regular user role",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        },
+                        new
+                        {
+                            Id = "a9b5f83e-92c3-4c5e-94de-4d6a6e4f82a9",
+                            Description = "The admin role for the user",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        });
                 });
 
             modelBuilder.Entity("antigal.server.Models.User", b =>

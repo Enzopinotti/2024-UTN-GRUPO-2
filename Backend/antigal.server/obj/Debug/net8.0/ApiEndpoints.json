@@ -712,7 +712,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.RegisterController",
-    "Method": "Authtenticate",
+    "Method": "Authenticate",
     "RelativePath": "api/Register/authenticate",
     "HttpMethod": "POST",
     "IsController": true,
@@ -722,6 +722,27 @@
         "Name": "authenticationResponse",
         "Type": "antigal.server.Models.Dto.UseForAuthenticationDto",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.RegisterController",
+    "Method": "ConfirmEmail",
+    "RelativePath": "api/Register/confirm-email",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
