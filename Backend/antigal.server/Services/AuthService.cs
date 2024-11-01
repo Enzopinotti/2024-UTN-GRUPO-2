@@ -33,59 +33,7 @@ namespace antigal.server.Services
             _emailSender = emailSender;
         }
 
-        public async Task<bool> RegisterUserAsync(RegisterDto registerDto)
-        {
-            try
-            {
-                var user = new User
-                {
-                    UserName = registerDto.UserName,
-                    Email = registerDto.Email,
-                    FirstName = registerDto.FirstName,
-                };
-
-                var result = await _userManager.CreateAsync(user, registerDto.Password);
-
-                if (result.Succeeded)
-                {
-                    var token = _serviceToken.GenerateEmailConfirmationToken(user);
-                    var confirmationLink = $"https://localhost:7255/api/auth/confirmemail?userId={user.Id}&token={token}";
-
-                    try
-                    {
-                        await _emailSender.SendEmailAsync(
-                            registerDto.Email,
-                            "Confirma tu cuenta",
-                            $"Por favor confirma tu cuenta haciendo clic aquí: <a href='{confirmationLink}'>link</a>");
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError($"Error al enviar correo de confirmación al usuario con ID: {user.Id}. Excepción: {ex.Message}");
-                    }
-
-                    var cartResponse = _cartService.CreateCart(user.Id);
-                    if (!cartResponse.IsSuccess)
-                    {
-                        _logger.LogError($"No se pudo crear el carrito para el usuario con ID: {user.Id}. Error: {cartResponse.Message}");
-                    }
-
-                    return true;
-                }
-
-                _logger.LogWarning("Error al registrar usuario: " + string.Join(", ", result.Errors.Select(e => e.Description)));
-                return false;
-            }
-            catch (DbUpdateException ex)
-            {
-                _logger.LogError($"Error al interactuar con la base de datos en el registro de usuario. Excepción: {ex.Message}");
-                throw new InvalidOperationException("Error al registrar el usuario en la base de datos.", ex);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Excepción no controlada al registrar usuario. Excepción: {ex.Message}");
-                throw;
-            }
-        }
+       
 
         public async Task<(string AccessToken, string RefreshToken)> LoginUserAsync(LoginDto loginDto)
         {
@@ -219,40 +167,6 @@ namespace antigal.server.Services
             }
         }
 
-
-
-        public async Task<bool> ConfirmEmailAsync(string userId, string token)
-        {
-            // Verificar si userId es nulo o vacío
-            if (string.IsNullOrWhiteSpace(userId))
-            {
-                _logger.LogWarning("userId es nulo o vacío.");
-                return false; // O lanzar una excepción, según tu lógica
-            }
-
-            try
-            {
-                var user = await _userManager.FindByIdAsync(userId);
-                if (user == null)
-                {
-                    _logger.LogWarning($"Usuario con ID {userId} no encontrado para confirmación de correo.");
-                    return false;
-                }
-
-                var result = await _userManager.ConfirmEmailAsync(user, token);
-                return result.Succeeded;
-            }
-            catch (InvalidOperationException ex)
-            {
-                _logger.LogError($"Token de confirmación inválido para el usuario con ID: {userId}. Excepción: {ex.Message}");
-                return false;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error al confirmar el correo electrónico para el usuario con ID: {userId}. Excepción: {ex.Message}");
-                throw;
-            }
-        }
 
     }
 }

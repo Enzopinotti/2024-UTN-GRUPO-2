@@ -1,7 +1,8 @@
 ﻿using antigal.server.Models.Dto;
-using antigal.server.Models;
+using antigal.server.Models.Dto.CarritoDtos;
 using antigal.server.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace antigal.server.Controllers
 {
@@ -18,37 +19,83 @@ namespace antigal.server.Controllers
 
         // Obtener el carrito de un usuario por su ID
         [HttpGet("{userId}")]
-        public ResponseDto GetCartByUserId(string userId)
+        public async Task<ActionResult<CarritoDto>> GetCartByUserIdAsync(string userId)
         {
-            return _cartService.GetCartByUserId(userId);
+            // Llamada al servicio para obtener el carrito
+            var response = await _cartService.GetCartByUserIdAsync(userId);
+
+            // Verifica si la operación fue exitosa
+            if (!response.IsSuccess)
+            {
+                return NotFound(new { response.Message });
+            }
+
+            // Aquí asumimos que `response.Data` contiene el CarritoDto.
+            // Asegúrate de que `response.Data` sea de tipo CarritoDto
+            if (response.Data is CarritoDto carritoDto)
+            {
+                return Ok(carritoDto); // Devuelve el CarritoDto
+            }
+
+            // En caso de que `response.Data` no sea del tipo esperado
+            return StatusCode(500, "Error inesperado al recuperar el carrito.");
         }
+
 
         // Crear un carrito vacío para un usuario
         [HttpPost("{userId}")]
-        public ResponseDto CreateCart(string userId)
+        public async Task<ActionResult<CarritoDto>> CreateCartAsync(string userId)
         {
-            return _cartService.CreateCart(userId);
+            var response = await _cartService.CreateCartAsync(userId);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(new { response.Message });
+            }
+
+            return Ok(response);
         }
 
         // Agregar un ítem al carrito de un usuario
         [HttpPost("{userId}/items")]
-        public ResponseDto AddItemToCart(string userId, [FromBody] AddItemToCartDto addItemDto)
+        public async Task<ActionResult<CarritoItemDto>> AddItemToCartAsync(string userId, [FromBody] CarritoItemDto addItemDto)
         {
-            return _cartService.AddItemToCart(userId, addItemDto);
+            var response = await _cartService.AddItemToCartAsync(userId, addItemDto);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(new { response.Message });
+            }
+
+            return Ok(response);
         }
 
         // Eliminar un ítem del carrito de un usuario
         [HttpDelete("{userId}/items/{itemId}")]
-        public ResponseDto RemoveItemFromCart(string userId, int itemId)
+        public async Task<ActionResult<EliminarCarritoItemDto>> RemoveItemFromCartAsync(string userId, int itemId)
         {
-            return _cartService.RemoveItemFromCart(userId, itemId);
+            var response = await _cartService.RemoveItemFromCartAsync(userId, itemId);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(new { response.Message });
+            }
+
+            return Ok(response);
         }
 
         // Vaciar el carrito de un usuario
         [HttpDelete("{userId}/clear")]
-        public ResponseDto ClearCart(string userId)
+        public async Task<ActionResult<VaciarCarritoDto>> ClearCartAsync(string userId)
         {
-            return _cartService.ClearCart(userId);
+            var response = await _cartService.ClearCartAsync(userId);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(new { response.Message });
+            }
+
+            return Ok(response);
         }
     }
 }

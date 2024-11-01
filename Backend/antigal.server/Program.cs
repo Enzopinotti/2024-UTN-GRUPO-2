@@ -87,7 +87,7 @@ namespace antigal.server
             builder.Services.AddScoped<ICartRepository, CartRepository>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-
+            builder.Services.AddScoped<CarritoMapper>();
 
             // Configuración de CORS
             builder.Services.AddCors(options =>

@@ -20,6 +20,7 @@ namespace antigal.server.Controllers
         private readonly IConfiguration _configuration;
         private readonly JwtHandler _jwtHandler;
         private readonly IEmailSender _emailSender; // Servicio de email agregado
+        private readonly ICartService _cartService;
 
         public RegisterController(
             UserManager<User> userManager,
@@ -27,7 +28,7 @@ namespace antigal.server.Controllers
             IConfiguration configuration,
             IMapper mapper,
             JwtHandler jwtHandler,
-            IEmailSender emailSender) // Constructor modificado
+            IEmailSender emailSender, ICartService cartService) // Constructor modificado
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -35,6 +36,7 @@ namespace antigal.server.Controllers
             _mapper = mapper;
             _jwtHandler = jwtHandler;
             _emailSender = emailSender; // Inicialización del servicio de email
+            _cartService = cartService;
         }
 
         // Registro de usuario regular (rol predeterminado: "User")
@@ -72,7 +74,6 @@ namespace antigal.server.Controllers
             return Ok(new { Message = "Usuario registrado exitosamente. Por favor verifica tu email para confirmar tu cuenta." });
         }
 
-        // Método para confirmar el email
         [HttpGet("confirm-email")]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
@@ -90,11 +91,20 @@ namespace antigal.server.Controllers
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if (result.Succeeded)
             {
+                // Create an empty cart for the user after confirming the email
+                var cartResponse = await _cartService.CreateCartAsync(user.Id);
+                if (!cartResponse.IsSuccess)
+                {
+                    // Handle the case where cart creation fails
+                    return BadRequest(new { Message = "Email confirmado, pero no se pudo crear el carrito." });
+                }
+
                 return Ok(new { Message = "Email confirmado exitosamente. Ahora puedes iniciar sesión." });
             }
 
             return BadRequest("Error al confirmar el email.");
         }
+
 
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] UseForAuthenticationDto authenticationResponse)

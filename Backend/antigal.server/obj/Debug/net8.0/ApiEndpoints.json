@@ -27,7 +27,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.CartController",
-    "Method": "GetCartByUserId",
+    "Method": "GetCartByUserIdAsync",
     "RelativePath": "api/Cart/{userId}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -41,7 +41,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "antigal.server.Models.Dto.ResponseDto",
+        "Type": "antigal.server.Models.Dto.CarritoDto",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -53,7 +53,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.CartController",
-    "Method": "CreateCart",
+    "Method": "CreateCartAsync",
     "RelativePath": "api/Cart/{userId}",
     "HttpMethod": "POST",
     "IsController": true,
@@ -67,7 +67,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "antigal.server.Models.Dto.ResponseDto",
+        "Type": "antigal.server.Models.Dto.CarritoDto",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -79,7 +79,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.CartController",
-    "Method": "ClearCart",
+    "Method": "ClearCartAsync",
     "RelativePath": "api/Cart/{userId}/clear",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -93,7 +93,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "antigal.server.Models.Dto.ResponseDto",
+        "Type": "antigal.server.Models.Dto.CarritoDtos.VaciarCarritoDto",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -105,7 +105,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.CartController",
-    "Method": "AddItemToCart",
+    "Method": "AddItemToCartAsync",
     "RelativePath": "api/Cart/{userId}/items",
     "HttpMethod": "POST",
     "IsController": true,
@@ -118,13 +118,13 @@
       },
       {
         "Name": "addItemDto",
-        "Type": "antigal.server.Models.Dto.AddItemToCartDto",
+        "Type": "antigal.server.Models.Dto.CarritoItemDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "antigal.server.Models.Dto.ResponseDto",
+        "Type": "antigal.server.Models.Dto.CarritoItemDto",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -136,7 +136,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.CartController",
-    "Method": "RemoveItemFromCart",
+    "Method": "RemoveItemFromCartAsync",
     "RelativePath": "api/Cart/{userId}/items/{itemId}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -155,7 +155,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "antigal.server.Models.Dto.ResponseDto",
+        "Type": "antigal.server.Models.Dto.CarritoDtos.EliminarCarritoItemDto",
         "MediaTypes": [
           "text/plain",
           "application/json",
