@@ -258,6 +258,22 @@ namespace antigal.server.Migrations
                     b.ToTable("Imagenes");
                 });
 
+            modelBuilder.Entity("antigal.server.Models.Like", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ProductoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "ProductoId");
+
+                    b.ToTable("Likes");
+                });
+
             modelBuilder.Entity("antigal.server.Models.OrderItem", b =>
                 {
                     b.Property<int>("Id")

@@ -63,6 +63,7 @@ namespace antigal.server
 
             builder.Services.AddScoped<IImageService, ImageService>();
 
+            builder.Services.AddScoped<LikeService>();
             //*********** SERVICES ***********//
 
             // Inyección del servicio IProductService y su implementación ProductService
