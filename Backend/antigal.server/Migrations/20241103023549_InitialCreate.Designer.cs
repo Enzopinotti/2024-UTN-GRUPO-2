@@ -12,7 +12,7 @@ using antigal.server.Data;
 namespace antigal.server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241101001919_InitialCreate")]
+    [Migration("20241103023549_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -233,6 +233,22 @@ namespace antigal.server.Migrations
                     b.HasIndex("UsuarioId");
 
                     b.ToTable("Imagenes");
+                });
+
+            modelBuilder.Entity("antigal.server.Models.Like", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ProductoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "ProductoId");
+
+                    b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("antigal.server.Models.Orden", b =>

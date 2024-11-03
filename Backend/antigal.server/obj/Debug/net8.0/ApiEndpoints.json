@@ -395,6 +395,48 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "antigal.server.Controllers.LikesController",
+    "Method": "AddLike",
+    "RelativePath": "api/Likes/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "productoId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.LikesController",
+    "Method": "GetUserLikes",
+    "RelativePath": "api/Likes/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.LikesController",
+    "Method": "RemoveLike",
+    "RelativePath": "api/Likes/remove",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "productoId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "antigal.server.Controllers.OrdersController",
     "Method": "GetAllOrders",
     "RelativePath": "api/Orders/all",

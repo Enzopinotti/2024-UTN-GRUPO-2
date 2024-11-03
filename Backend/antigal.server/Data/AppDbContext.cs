@@ -20,7 +20,7 @@ namespace antigal.server.Data
         public DbSet<Orden> Ordenes { get; set; }
         public DbSet<OrdenDetalle> OrdenDetalle { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; } // Para almacenar refresh tokens
-
+        public DbSet<Like> Likes { get; set; }
         //OnModelCreating se utiliza para establecer las asociaciones entre dos clases para que impacten en la base de datos desde .NET
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -53,6 +53,9 @@ namespace antigal.server.Data
                 .WithMany()
                 .HasForeignKey(i => i.UsuarioId)
                 .OnDelete(DeleteBehavior.Restrict);
+            //likes
+            modelBuilder.Entity<Like>()
+            .HasKey(l => new { l.UserId, l.ProductoId });
             // Relación uno a muchos entre Carrito y CarritoItem
             modelBuilder.Entity<Carrito>()
                 .HasMany(c => c.Items) // Un carrito tiene muchos items

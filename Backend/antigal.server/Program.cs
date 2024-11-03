@@ -74,6 +74,7 @@ namespace antigal.server
             builder.Services.AddAutoMapper(typeof(MappingProfile));
 
             // Registrar servicios y repositorios
+            builder.Services.AddScoped<LikeService>();
             builder.Services.AddScoped<IImageService, ImageService>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();

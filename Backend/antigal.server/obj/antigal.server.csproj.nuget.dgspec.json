@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj": {}
+    "C:\\Users\\beker\\OneDrive\\Escritorio\\DESARROLLO\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj": {}
   },
   "projects": {
-    "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj": {
+    "C:\\Users\\beker\\OneDrive\\Escritorio\\DESARROLLO\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
+        "projectUniqueName": "C:\\Users\\beker\\OneDrive\\Escritorio\\DESARROLLO\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
         "projectName": "antigal.server",
-        "projectPath": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
-        "packagesPath": "C:\\Users\\Pato\\.nuget\\packages\\",
-        "outputPath": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\obj\\",
+        "projectPath": "C:\\Users\\beker\\OneDrive\\Escritorio\\DESARROLLO\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
+        "packagesPath": "C:\\Users\\beker\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\beker\\OneDrive\\Escritorio\\DESARROLLO\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Pato\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\beker\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -148,7 +152,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
