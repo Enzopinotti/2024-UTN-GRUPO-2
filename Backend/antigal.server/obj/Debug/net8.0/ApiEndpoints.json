@@ -1,5 +1,90 @@
 [
   {
+    "ContainingType": "antigal.server.Controllers.AccountControler",
+    "Method": "Authenticate",
+    "RelativePath": "api/AccountControler/authenticate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "authenticationResponse",
+        "Type": "antigal.server.Models.Dto.UseForAuthenticationDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AccountControler",
+    "Method": "ConfirmEmail",
+    "RelativePath": "api/AccountControler/confirm-email",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AccountControler",
+    "Method": "ForgotPassword",
+    "RelativePath": "api/AccountControler/forgotpassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "forgotPassword",
+        "Type": "antigal.server.Models.Dto.ForgotPasswordDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AccountControler",
+    "Method": "RegisterAsync",
+    "RelativePath": "api/AccountControler/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "useForAuthentication",
+        "Type": "antigal.server.Models.Dto.UseForAuthenticationDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AccountControler",
+    "Method": "ResetPassword",
+    "RelativePath": "api/AccountControler/resetpassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "resetPassword",
+        "Type": "antigal.server.Models.Dto.ResetPasswordDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "antigal.server.Controllers.AdminController",
     "Method": "CreateRoleAsync",
     "RelativePath": "api/Admin/CreateRole",
@@ -318,17 +403,11 @@
   {
     "ContainingType": "antigal.server.Controllers.EmailController",
     "Method": "SendTestEmail",
-    "RelativePath": "api/Email/send-test-email",
-    "HttpMethod": "POST",
+    "RelativePath": "api/Email",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "emailRequest",
-        "Type": "antigal.server.Models.Dto.TestEmailDto",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -390,32 +469,6 @@
         "Name": "categoriaId",
         "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.OrdersController",
-    "Method": "GetAllOrders",
-    "RelativePath": "api/Orders/all",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.OrdersController",
-    "Method": "ConfirmOrder",
-    "RelativePath": "api/Orders/confirm",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "orderDto",
-        "Type": "antigal.server.Models.Dto.OrdenDto",
-        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -709,58 +762,5 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.RegisterController",
-    "Method": "Authenticate",
-    "RelativePath": "api/Register/authenticate",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "authenticationResponse",
-        "Type": "antigal.server.Models.Dto.UseForAuthenticationDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.RegisterController",
-    "Method": "ConfirmEmail",
-    "RelativePath": "api/Register/confirm-email",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "userId",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "token",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.RegisterController",
-    "Method": "RegisterAsync",
-    "RelativePath": "api/Register/register",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "registerDto",
-        "Type": "antigal.server.Models.Dto.RegisterDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   }
 ]

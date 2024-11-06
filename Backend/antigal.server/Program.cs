@@ -12,6 +12,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using CloudinaryDotNet;
 using antigal.server.Mapping;
 using antigal.server.JwtFeatures;
+using System.Security.Cryptography.X509Certificates;
+using EmailService;
+
 namespace antigal.server
 {
     public class Program
@@ -59,7 +62,8 @@ namespace antigal.server
                 };
             });
 
-
+            builder.Services.Configure<DataProtectionTokenProviderOptions>(opt =>
+           opt.TokenLifespan = TimeSpan.FromHours(2));
             // Configuración de Cloudinary
             var cloudinaryConfig = builder.Configuration.GetSection("Cloudinary");
             var cloudinary = new Cloudinary(new Account(
@@ -68,26 +72,28 @@ namespace antigal.server
                 cloudinaryConfig["ApiSecret"]
             ));
             builder.Services.AddSingleton(cloudinary);
+
+            // Configuración de EmailConfiguration
+            var emailConfig = builder.Configuration.GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>()!;
+            builder.Services.AddSingleton(emailConfig);
+
+            // Registrar servicios y otros componentes
             builder.Services.AddSingleton<JwtHandler>();
-
-            // Configuración de AutoMapper
             builder.Services.AddAutoMapper(typeof(MappingProfile));
-
-            // Registrar servicios y repositorios
             builder.Services.AddScoped<IImageService, ImageService>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
-            builder.Services.AddScoped<IAuthService, AuthService>();
+          //  builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ServiceToken>();
             builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
             builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
             builder.Services.AddScoped<ICartRepository, CartRepository>();
-            builder.Services.AddScoped<IOrderService, OrderService>();
+         //   builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-
 
             // Configuración de CORS
             builder.Services.AddCors(options =>
@@ -127,7 +133,8 @@ namespace antigal.server
             });
 
             builder.Services.AddEndpointsApiExplorer();
-
+            builder.Services.AddLogging();
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
             // Controladores y JSON
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>

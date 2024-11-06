@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/*using System.ComponentModel.DataAnnotations;
 
 namespace antigal.server.Models.Dto
 {
@@ -20,3 +20,4 @@ namespace antigal.server.Models.Dto
 
     }
 }
+*/
