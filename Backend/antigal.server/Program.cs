@@ -26,6 +26,9 @@ namespace antigal.server
             // Inyección del servicio IProductCategoryService y su implementación ProductCategoryService
             builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
 
+            builder.Services.AddScoped<IEnvioRepository, EnvioRepository>();
+            builder.Services.AddScoped<EnvioService>();
+
             //*********** REPOSITORIES ***********//
 
             // Inyección del repositorio IProductCategoryRepository y su implementación ProductCategoryRepository
