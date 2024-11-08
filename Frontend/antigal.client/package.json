@@ -27,7 +27,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "sass": "sass --watch src/styles/scss:src/styles/css",
-    "dev": "concurrently \"npm run sass\" \"npm start\""
+    "dev": "concurrently \"npm run sass\" \"npm start\"",
+    "json-server": "json-server --watch backend-temp/db.json --port 5000"
   },
   "eslintConfig": {
     "extends": [

@@ -19,6 +19,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
 * {
@@ -3050,6 +3051,133 @@ footer .footer-bottom img {
 .tienda-fisica .carousel-section .cta-button:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(116, 135, 61, 0.5);
+}
+
+.contacto {
+  font-family: "Roboto", sans-serif;
+  padding: 2rem;
+  background-color: #f9f9f9;
+}
+.contacto .contacto-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #FFFFFF;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(47, 56, 20, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.contacto .contacto-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(47, 56, 20, 0.2);
+}
+.contacto .contacto-container h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #74873D;
+  margin-bottom: 2rem;
+  position: relative;
+}
+.contacto .contacto-container h1::after {
+  content: "";
+  width: 50px;
+  height: 4px;
+  background-color: #74873D;
+  display: block;
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+.contacto .contacto-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.contacto .contacto-container form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+.contacto .contacto-container form .form-group label {
+  font-size: 1.1rem;
+  color: #222222;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+.contacto .contacto-container form .form-group input,
+.contacto .contacto-container form .form-group textarea {
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.contacto .contacto-container form .form-group input:focus,
+.contacto .contacto-container form .form-group textarea:focus {
+  border-color: #74873D;
+  box-shadow: 0 0 5px rgba(116, 135, 61, 0.5);
+  outline: none;
+}
+.contacto .contacto-container form .form-group input.error,
+.contacto .contacto-container form .form-group textarea.error {
+  border-color: red;
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+}
+.contacto .contacto-container form .form-group .error-message {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+.contacto .contacto-container form .cta-button.primary {
+  align-self: center;
+  background-color: #74873D;
+  color: #fff;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.1em;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.contacto .contacto-container form .cta-button.primary:hover {
+  background-color: #56642d;
+  transform: translateY(-3px);
+}
+.contacto .contacto-container form .cta-button.primary:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(116, 135, 61, 0.5);
+}
+@media (max-width: 768px) {
+  .contacto .contacto-container form .cta-button.primary {
+    padding: 12px 25px;
+    font-size: 1em;
+  }
+}
+@media (max-width: 480px) {
+  .contacto .contacto-container form .cta-button.primary {
+    padding: 10px 20px;
+    font-size: 0.9em;
+  }
+}
+@media (max-width: 768px) {
+  .contacto {
+    padding: 1.5rem;
+  }
+  .contacto .contacto-container {
+    padding: 1.5rem;
+  }
+}
+@media (max-width: 480px) {
+  .contacto {
+    padding: 1rem;
+  }
+  .contacto .contacto-container {
+    padding: 1rem;
+  }
+  .contacto h1 {
+    font-size: 2rem;
+  }
 }
 
 .auth-page {
