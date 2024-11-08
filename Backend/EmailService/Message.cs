@@ -8,15 +8,15 @@ public class Message
     public string Subject { get; set; }
     public string Content { get; set; }
 
-    public Message(IEnumerable<string> to, string subject, string content, object value)
+    public Message(IEnumerable<string> to, string subject, string content)
     {
         To = new List<MailboxAddress>();
-        // Agregar cada dirección de correo al objeto MailboxAddress
         foreach (var email in to)
         {
-            To.Add(new MailboxAddress(string.Empty, email)); // Nombre vacío y correo
+            To.Add(new MailboxAddress(string.Empty, email));
         }
         Subject = subject;
         Content = content;
     }
+
 }

@@ -8,7 +8,7 @@ namespace antigal.server.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<UseForAuthenticationDto, User>()
+            CreateMap<UserForRegistrationDto, User>()
                 .ForMember(u => u.UserName, opt => opt.MapFrom(x => x.Email));
         }
     }

@@ -8,8 +8,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "authenticationResponse",
-        "Type": "antigal.server.Models.Dto.UseForAuthenticationDto",
+        "Name": "userForAuthentication",
+        "Type": "antigal.server.Models.Dto.UserForAuthenticationDto",
         "IsRequired": true
       }
     ],
@@ -61,8 +61,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "useForAuthentication",
-        "Type": "antigal.server.Models.Dto.UseForAuthenticationDto",
+        "Name": "userForRegistration",
+        "Type": "antigal.server.Models.Dto.UserForRegistrationDto",
         "IsRequired": true
       }
     ],

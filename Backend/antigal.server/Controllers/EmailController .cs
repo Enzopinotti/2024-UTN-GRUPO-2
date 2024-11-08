@@ -25,8 +25,7 @@ namespace antigal.server.Controllers
                 var message = new Message(
                     new string[] { "sdfsdfffasdffsddfsdf@gmail.com" }, // Dirección de destinatario
                     "Test email",                          // Asunto
-                    "This is content from our email.", // Cuerpo del mensaje
-                    null
+                    "This is content from our email." // Cuerpo del mensaje
                 );
 
                 // Enviar el correo

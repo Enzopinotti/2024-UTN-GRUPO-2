@@ -2,7 +2,7 @@
 
 namespace antigal.server.Models.Dto
 {
-    public class UseForAuthenticationDto
+    public class UserForRegistrationDto
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
@@ -14,7 +14,6 @@ namespace antigal.server.Models.Dto
         public string? Password { get; set; }
 
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-
         public string? ConfirmPassword { get; set; }
 
         public string? ClientUri { get; set; }

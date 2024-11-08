@@ -39,63 +39,66 @@ namespace antigal.server.Controllers
             _emailSender = emailSender; // Inicialización del servicio de email
         }
 
-        // Registro de usuario regular (rol predeterminado: "User")
-   [HttpPost("register")]
-        public async Task<IActionResult> RegisterAsync([FromBody] UseForAuthenticationDto useForAuthentication)
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterAsync([FromBody] UserForRegistrationDto userForRegistration)
         {
-            if (useForAuthentication is null)
-            {
+            if (userForRegistration is null)
                 return BadRequest();
-            }
 
-            var user = _mapper.Map<User>(useForAuthentication);
-            var result = await _userManager.CreateAsync(user, useForAuthentication.Password!);
+            var user = _mapper.Map<User>(userForRegistration);
+            var result = await _userManager.CreateAsync(user, userForRegistration.Password!);
 
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(e => e.Description);
-                return BadRequest(new RegisterResponseDto { Errors = errors });
+                return BadRequest(new RegistrationResponseDto { Errors = errors });
             }
 
-    
             // Generar el token de confirmación de email
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var param = new Dictionary<string, string?>
-            {
-                { "token", token },
-                { "email", user.Email }
-            };
-            var callback = QueryHelpers.AddQueryString(useForAuthentication.ClientUri!, param);
-            var message = new Message([user.Email!], "Email confirmation token", callback, null);
+    {
+        { "token", token },
+        { "userId", user.Id },  // Agregamos userId aquí
+        { "email", user.Email }
+    };
+
+            // Configurar ClientUri con un valor predeterminado si está vacío
+            var clientUri = !string.IsNullOrWhiteSpace(userForRegistration.ClientUri)
+                ? userForRegistration.ClientUri
+                : "http://localhost:7255/authentication/confirm-email";  // Puedes cambiar a backend si prefieres
+
+            var callback = QueryHelpers.AddQueryString(clientUri, param);
+            var message = new Message(new string[] { user.Email! }, "Email Confirmation",
+                $"<p>Por favor confirma tu cuenta haciendo clic en el siguiente enlace: <a href='{callback}'>Confirmar email</a></p>");
 
             await _emailSender.SendEmailAsync(message);
             await _userManager.AddToRoleAsync(user, "User");
-            return StatusCode(201);
-            /*
-            var confirmationLink = Url.Action(nameof(ConfirmEmail), "Register", new { userId = user.Id, token }, Request.Scheme);
 
-            // Verificar si el email no es nulo antes de enviar el correo
-            if (string.IsNullOrEmpty(user.Email))
-            {
-                return BadRequest("No se pudo enviar el correo de confirmación porque el email es nulo.");
-            }
-
-            // Enviar correo de confirmación utilizando el servicio de EmailSender
-            // Suponiendo que la función en el servicio de correo sea `SendEmail` (ajustalo según corresponda)
-            var emailSubject = "Confirma tu email";
-            var emailBody = $"Por favor confirma tu cuenta haciendo clic en el enlace: <a href='{confirmationLink}'>Confirmar email</a>";
-
-            var sendEmailResult = await _emailSender.SendEmailAsync(user.Email, emailSubject, emailBody); // Ajusta esta llamada
-
-            if (!sendEmailResult)
-            {
-                return BadRequest("Hubo un problema al enviar el correo de confirmación.");
-            }
-
-            return Ok(new { Message = "Usuario registrado exitosamente. Por favor verifica tu email para confirmar tu cuenta." });
-        */
+            return StatusCode(201, new { Message = "Usuario registrado exitosamente. Revisa tu email para confirmar tu cuenta." });
         }
-     
+
+
+        [HttpPost("authenticate")]
+        public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDto userForAuthentication)
+        {
+            var user = await _userManager.FindByNameAsync(userForAuthentication.Email!);
+
+            if (user is null)
+            {
+                return BadRequest("Invalid request.");
+            }
+
+            if (!await _userManager.IsEmailConfirmedAsync(user))
+                return Unauthorized(new AuthResponseDto { ErrorMessage = "El email no fue confirmado." });
+
+            if (!await _userManager.CheckPasswordAsync(user, userForAuthentication.Password!))
+                return Unauthorized(new AuthResponseDto { ErrorMessage = "Autenticación inválida." });
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var token = _jwtHandler.CreateToken(user, roles);
+            return Ok(new AuthResponseDto { IsAuthSuccesful = true, Token = token });
+        }
         // Método para confirmar el email
         [HttpGet("confirm-email")]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
@@ -120,49 +123,37 @@ namespace antigal.server.Controllers
             return BadRequest("Error al confirmar el email.");
         }
 
-        [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate([FromBody] UseForAuthenticationDto authenticationResponse)
-        {
-            var user = await _userManager.FindByNameAsync(authenticationResponse.Email!);
-
-            if (user is null)
-            {
-                return BadRequest("Invalid request.");
-            }
-
-            if (!await _userManager.IsEmailConfirmedAsync(user))
-                return Unauthorized(new AuthenticationResponseDto { ErrorMessage = "El email no fue confirmado." });
-
-            if (!await _userManager.CheckPasswordAsync(user, authenticationResponse.Password!))
-                return Unauthorized(new AuthenticationResponseDto { ErrorMessage = "Autenticación inválida." });
-
-            var roles = await _userManager.GetRolesAsync(user);
-            var token = _jwtHandler.CreateToken(user, roles);
-            return Ok(new AuthenticationResponseDto { IsAuthSuccesful = true, Token = token });
-        }
 
         [HttpPost("forgotpassword")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto forgotPassword)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
+
             var user = await _userManager.FindByEmailAsync(forgotPassword.Email!);
-            if (user is null)
-                return BadRequest("Invalid request.");
+            if (user == null)
+                return BadRequest("Usuario no encontrado.");
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             var param = new Dictionary<string, string?>
-            {
-                { "token", token },
-                { "email", forgotPassword.Email! }
-            };
-            var callback = QueryHelpers.AddQueryString(forgotPassword.ClientUri!, param); 
-            
-            var message = new Message([user.Email!], "Reset passwrod token", callback, null);
+    {
+        { "token", token },
+        { "email", forgotPassword.Email }
+    };
+
+            // Configurar ClientUri con un valor predeterminado para restablecimiento de contraseña
+            var clientUri = !string.IsNullOrWhiteSpace(forgotPassword.ClientUri)
+                ? forgotPassword.ClientUri
+                : "http://localhost:7255/resetpassword";  // Valor predeterminado para frontend (cambia si es backend)
+
+            var callback = QueryHelpers.AddQueryString(clientUri, param);
+            var message = new Message(new string[] { user.Email! }, "Password Reset",
+                $"<p>Para restablecer tu contraseña, haz clic en el siguiente enlace: <a href='{callback}'>Restablecer contraseña</a></p>");
 
             await _emailSender.SendEmailAsync(message);
-            return Ok();
+            return Ok(new { Message = "Enlace de restablecimiento de contraseña enviado. Revisa tu correo electrónico." });
         }
+
         [HttpPost("resetpassword")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPassword)
         {
@@ -173,8 +164,6 @@ namespace antigal.server.Controllers
             if (user is null)
                 return BadRequest("Invalid request");
 
-
-            
             var result = await _userManager.ResetPasswordAsync(user, resetPassword.Token!, resetPassword.Password!);
             if (!result.Succeeded)
             {
@@ -183,5 +172,6 @@ namespace antigal.server.Controllers
             }
             return Ok();
         }
+
     }
 }
