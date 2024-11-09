@@ -34,7 +34,6 @@ const ProductListContainer = () => {
           throw new Error('Error al obtener productos');
         }
         const data = await response.json();
-        console.log("la data es:  ", data);
   
         // Adaptar los datos según la API utilizada
         let adaptedData;
@@ -42,17 +41,17 @@ const ProductListContainer = () => {
           if (data.data && Array.isArray(data.data)) {
             // Adaptar los datos de los productos
             adaptedData = data.data.map(item => ({
-              id: item.idProducto,           // Mapear idProducto a id
-              name: item.nombre,             // Mapear nombre a name
-              brand: item.marca,             // Mapear marca a brand
-              description: item.descripcion, // Mapear descripcion a description
-              barcode: item.codigoBarras,    // Mapear codigoBarras a barcode
-              available: item.disponible,    // Mapear disponible a available
-              featured: item.destacado,      // Mapear destacado a featured
-              price: item.precio,            // Mapear precio a price
-              stock: item.stock,             // Mapear stock a stock
-              images: item.imagenUrls[0],    // Mapear imagenes a images
-              categories: [],                // Inicializar categorías vacías
+              id: item.idProducto,           
+              name: item.nombre,            
+              brand: item.marca,             
+              description: item.descripcion, 
+              barcode: item.codigoBarras,   
+              available: item.disponible,    
+              featured: item.destacado,      
+              price: item.precio,            
+              stock: item.stock,             
+              images: item.imagenUrls[0],   
+              categories: [],                
             }));
           } else {
             throw new Error('Formato de datos incorrecto');
@@ -61,17 +60,17 @@ const ProductListContainer = () => {
           if (data && Array.isArray(data)) {
             // Adaptar los datos de los productos de fakestore
             adaptedData = data.map(item => ({
-              id: item.id,                   // Mapear id a id
-              name: item.title,              // Mapear título a nombre
-              brand: 'Marca',                // Valor fijo para marca
-              description: item.description,  // Mapear descripción
-              barcode: '123',                // Valor fijo para código de barras
-              available: true,               // Valor fijo para disponibilidad
-              featured: false,               // Valor fijo para destacado
-              price: item.price,             // Mapear precio
-              stock: 10,                     // Valor fijo para stock
-              images: item.image,            // Mapear imagen
-              categories: [item.category],   // Mapear categoría a un array
+              id: item.id,                   
+              name: item.title,             
+              brand: 'Marca',               
+              description: item.description,  
+              barcode: '123',                
+              available: true,              
+              featured: false,              
+              price: item.price,             
+              stock: 10,                     
+              images: item.image,            
+              categories: [item.category],   
             }));
           } else {
             throw new Error('Formato de datos incorrecto');

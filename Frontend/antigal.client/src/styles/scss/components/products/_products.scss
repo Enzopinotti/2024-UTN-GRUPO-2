@@ -1,4 +1,7 @@
+@use 'sass:color';
 @import '../../abstract/variables';
+
+
 .page-detail-container{
   min-height: 80vh;
   display: flex;
@@ -26,6 +29,7 @@
     .filter-button{
       background-color: transparent;
       border: 0;
+      cursor: pointer;
       img{
         width: 2rem;
 
@@ -574,7 +578,8 @@
                   -ms-border-radius: 10px;
                   -o-border-radius: 10px;
                   &:hover {
-                    color: darken($secondary-color, 10%);
+                    color: color.adjust($secondary-color, $lightness: -10%);
+                   
                   }
                 }
               }

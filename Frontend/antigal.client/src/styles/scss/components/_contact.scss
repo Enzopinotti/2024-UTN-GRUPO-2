@@ -97,7 +97,7 @@
         letter-spacing: 1px;
 
         &:hover {
-          background-color: darken($primary-color, 10%);
+          background-color: adjust-color($primary-color, $lightness: -10%);
           transform: translateY(-3px);
         }
 

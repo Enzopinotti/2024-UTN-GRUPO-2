@@ -1,5 +1,5 @@
 // src/pages/resetearContrasenia.scss
-
+@use 'sass:color';
 @import '../abstract/variables';
 @import '../abstract/mixins';
 
@@ -104,6 +104,28 @@
       text-align: center;
     }
   }
+  .password-input-wrapper {
+    position: relative;
+  }
+  
+  .password-input-wrapper input {
+    padding-right: 40px; /* Espacio para el botón del ojo */
+  }
+  
+  .password-input-wrapper .toggle-password {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .toggle-password img {
+    width: 30px;
+  }
+  
 }
 
 @keyframes fadeInUp {

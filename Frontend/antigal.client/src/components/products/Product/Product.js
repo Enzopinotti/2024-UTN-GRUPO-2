@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import { CartContext } from "../../../contexts/CartContext"; // Importar el contexto del carrito
+import { CartContext } from "../../../contexts/CartContext";
 import { useFavorites } from "../../../contexts/FavoriteContext";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import formatCamelCase from "../../../utils/formatCamelCase"; // Importamos la función para formatear
+import formatCamelCase from "../../../utils/formatCamelCase";
 
 const Product = ({ product }) => {
   const navigate = useNavigate();
@@ -16,17 +16,16 @@ const Product = ({ product }) => {
     return savedCount || 0;
   });
 
-  const { addToCart } = useContext(CartContext); // Usar el contexto del carrito
+  const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
     localStorage.setItem(`liked-${product.id}`, JSON.stringify(liked));
-    if(liked){
+    if (liked) {
       addFavorite(product);
-    }else{
+    } else {
       removeFavorite(product.id);
     }
-
-  }, [liked, product.id, addFavorite,removeFavorite, product]);
+  }, [liked, product.id]);
 
   useEffect(() => {
     localStorage.setItem(`cart-${product.id}`, JSON.stringify(cartCount));
@@ -59,23 +58,18 @@ const Product = ({ product }) => {
       <article className="imageAndIcons">
         <img
           className="imagesProducto"
-          src={
-            product.images
-            }
+          src={product.images}
           onClick={handleImageClick}
           alt={product.name}
         />
         <div className="actions">
-          
           <button
             className="like-button"
             onClick={handleLike}
             key={liked ? "liked" : "not-liked"}
           >
             <img
-              src={
-                liked ? "/icons/likeRellenoIcon.png" : "/icons/likeIcon.png"
-              }
+              src={liked ? "/icons/likeRellenoIcon.png" : "/icons/likeIcon.png"}
               alt="like icon"
             />
           </button>
@@ -83,10 +77,7 @@ const Product = ({ product }) => {
       </article>
 
       <div className="info">
-        {/* Aplicamos la función formatCamelCase al nombre del producto */}
         <h3>{formatCamelCase(product.name)}</h3>
-
-        {/* Mostrar categorías */}
         <p className="category">
           {product.categories && product.categories.length > 0 ? (
             product.categories.map((category, index) => (
@@ -98,7 +89,6 @@ const Product = ({ product }) => {
             <span className="category-tag"></span>
           )}
         </p>
-
         <p className="offerPrice">
           {product.onSale && (
             <span className="precioAnterior">

@@ -1,27 +1,39 @@
-// src/pages/Login.jsx
-import React, { useState, useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import { toast } from 'react-toastify';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { loginSchema } from '../../validations/validationSchemas';
+import DOMPurify from 'dompurify';
 
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
-  const [formData, setFormData] = useState({
-    userName: '',
-    password: '',
+  const [showPassword, setShowPassword] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(loginSchema),
   });
-  const [error, setError] = useState('');
 
-  const { userName, password } = formData;
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  // Función para mostrar mensajes de éxito o error
+  const showToast = (message, type = 'success') => {
+    if (type === 'success') {
+      toast.success(message);
+    } else {
+      toast.error(message);
+    }
   };
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError('');
+  // Enviar datos del formulario de inicio de sesión
+  const onSubmit = async (data) => {
+    const sanitizedData = Object.fromEntries(
+      Object.entries(data).map(([key, value]) => [key, DOMPurify.sanitize(value)])
+    );
 
     try {
       const response = await fetch('https://tu-backend.com/api/auth/login', {
@@ -29,67 +41,77 @@ const Login = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          userName,
-          password,
-        }),
+        body: JSON.stringify(sanitizedData),
       });
 
       if (response.ok) {
-        const data = await response.json();
-        const { accessToken, refreshToken } = data;
-        login(accessToken, refreshToken); // Si implementas Refresh Tokens
-        toast.success('¡Inicio de sesión exitoso!');
+        const { accessToken, refreshToken } = await response.json();
+        login(accessToken, refreshToken); // Manejo de sesión si se usan tokens de actualización
+        showToast('¡Inicio de sesión exitoso!');
         navigate('/');
       } else {
         const errorData = await response.json();
-        setError(errorData.message || 'Credenciales inválidas');
-        toast.error(errorData.message || 'Credenciales inválidas');
+        showToast(errorData.message || 'Credenciales inválidas', 'error');
       }
     } catch (err) {
       console.error('Error al iniciar sesión:', err);
-      setError('Error al iniciar sesión. Inténtalo de nuevo más tarde.');
-      toast.error('Error al iniciar sesión. Inténtalo de nuevo más tarde.');
+      showToast('Error al iniciar sesión. Inténtalo de nuevo más tarde.', 'error');
     }
+  };
+
+  // Alternar visibilidad de la contraseña
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevState) => !prevState);
   };
 
   return (
     <div className="auth-page fondoAuth">
       <div className="auth-container">
-        <img  src='./icons/iconoAntigal.png' alt="Logo" />
-
+        <img src="./icons/iconoAntigal.png" alt="Logo" />
         <h2>Inicio de Sesión</h2>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-group">
             <label htmlFor="userName">Nombre de Usuario:</label>
             <input
               type="text"
               id="userName"
-              name="userName"
-              value={userName}
-              onChange={handleChange}
-              required
+              {...register('userName')}
               placeholder="Ingresa tu nombre de usuario"
+              autoComplete="username"
             />
+            {errors.userName && <p className="error-message">{errors.userName.message}</p>}
           </div>
           <div className="form-group">
             <label htmlFor="password">Contraseña:</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={password}
-              onChange={handleChange}
-              required
-              placeholder="Ingresa tu contraseña"
-            />
+            <div className="password-input-wrapper">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                {...register('password')}
+                placeholder="Ingresa tu contraseña"
+                autoComplete="current-password"
+              />
+              <div
+                onClick={togglePasswordVisibility}
+                className="toggle-password ojo"
+                aria-label="Mostrar u ocultar contraseña"
+              >
+                {showPassword ? (
+                  <img src="/icons/ojo-cerrado.png" alt="Ocultar contraseña" />
+                ) : (
+                  <img src="/icons/ojoAbierto.png" alt="Mostrar contraseña" />
+                )}
+              </div>
+            </div>
+            {errors.password && <p className="error-message">{errors.password.message}</p>}
           </div>
-          <button type="submit" className="cta-button primary">Iniciar Sesión</button>
+          <button type="submit" className="cta-button primary">
+            Iniciar Sesión
+          </button>
         </form>
         <div className="auth-links">
-          <Link to="/recuperar-contrasena">¿Olvidaste tu contraseña?</Link>
+          <Link to="/recuperarContrasenia">¿Olvidaste tu contraseña?</Link>
         </div>
-        {error && <p className="mensaje-error">{error}</p>}
       </div>
     </div>
   );

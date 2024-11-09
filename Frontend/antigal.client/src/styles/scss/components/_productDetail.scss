@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import "../abstract/variables";
 
 .productDetail {
@@ -53,7 +54,7 @@
           padding: 10px;
           cursor: pointer;
           &:hover {
-            background-color: darken($primary-color, 15%);
+            background-color: color.adjust($primary-color, $lightness: -15%);
           }
         }
 
@@ -61,7 +62,7 @@
           background-color: lightgrey;
           cursor: not-allowed;
           &:hover {
-            background-color: darken(lightgrey, 15%);
+            background-color: color.adjust(lightgrey, $lightness: -15%);
           }
         }
 
@@ -108,7 +109,7 @@
       .info {
         height: auto;
         width: 100%;
-        background-color: lighten($primary-color, 55%);
+        background-color: color.adjust($primary-color, $lightness: 55%);
         padding: 10px;
         border-radius: 5px;
         font-size: 8pt;
@@ -148,7 +149,7 @@
             padding: 5px;
             cursor: pointer;
             &:hover{
-              background-color: darken($primary-color, 15%);
+              background-color: color.adjust($primary-color, $lightness: -15%);
 
             }
           }

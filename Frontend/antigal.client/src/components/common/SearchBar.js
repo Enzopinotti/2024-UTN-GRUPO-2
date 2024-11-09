@@ -43,7 +43,7 @@ const SearchBar = ({isVisible, onClose,isMobile  }) => {
             onChange={handleSearchChange}
           />
           <button className="clear-searchbar" onClick={handleClearSearch}>
-            <i class="fa-solid fa-circle-xmark"></i>
+            <i className="fa-solid fa-circle-xmark"></i>
           </button>
           <LupaWidget onClick={handleSearch}/>
         </div>

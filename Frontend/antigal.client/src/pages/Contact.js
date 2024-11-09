@@ -1,85 +1,56 @@
-// src/pages/Contact.jsx
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { contactSchema } from '../validations/validationSchemas';
+import DOMPurify from 'dompurify';
 import { toast } from 'react-toastify';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    nombre: '',
-    email: '',
-    asunto: '',
-    mensaje: '',
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(contactSchema),
   });
 
-  const [errors, setErrors] = useState({});
-
-  // Manejar cambios en los campos del formulario
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-
-    // Limpiar errores al modificar los campos
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: '',
-    }));
+  // Función para mostrar mensajes de éxito o error con toast
+  const showToast = (message, type = 'success') => {
+    type === 'success' ? toast.success(message) : toast.error(message);
   };
 
-  // Validar el formulario
-  const validate = () => {
-    const newErrors = {};
-
-    if (!formData.nombre.trim()) newErrors.nombre = 'El nombre es obligatorio.';
-    if (!formData.email.trim()) {
-      newErrors.email = 'El correo electrónico es obligatorio.';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'El correo electrónico es inválido.';
-    }
-    if (!formData.asunto.trim()) newErrors.asunto = 'El asunto es obligatorio.';
-    if (!formData.mensaje.trim()) newErrors.mensaje = 'El mensaje es obligatorio.';
-
-    return newErrors;
-  };
-
-  // Manejar el envío del formulario
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
+  // Enviar datos del formulario de contacto
+  const onSubmit = async (data) => {
+    const sanitizedData = Object.fromEntries(
+      Object.entries(data).map(([key, value]) => [key, DOMPurify.sanitize(value)])
+    );
 
     try {
-      // Enviar los datos a json-server
       const response = await fetch(`http://localhost:5000/contacto`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ...formData, fecha: new Date().toISOString() }),
+        body: JSON.stringify({ ...sanitizedData, fecha: new Date().toISOString() }),
       });
 
       if (response.ok) {
-        // Limpiar el formulario
-        setFormData({
-          nombre: '',
-          email: '',
+        showToast('¡Tu mensaje ha sido enviado exitosamente!');
+        // Solo restablece los campos de "asunto" y "mensaje"
+        reset({
+          nombre: data.nombre,
+          email: data.email,
           asunto: '',
           mensaje: '',
         });
-        toast.success('¡Tu mensaje ha sido enviado exitosamente!');
       } else {
         const errorData = await response.json();
-        toast.error(errorData.message || 'Hubo un error al enviar tu mensaje.');
+        showToast(errorData.message || 'Hubo un error al enviar tu mensaje.', 'error');
       }
     } catch (error) {
       console.error('Error al enviar el mensaje:', error);
-      toast.error('Hubo un error al enviar tu mensaje. Inténtalo de nuevo más tarde.');
+      showToast('Hubo un error al enviar tu mensaje. Inténtalo de nuevo más tarde.', 'error');
     }
   };
 
@@ -87,19 +58,17 @@ const Contact = () => {
     <div className="contacto">
       <div className="contacto-container">
         <h1>Contacto</h1>
-        <form onSubmit={handleSubmit} noValidate>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div className="form-group">
             <label htmlFor="nombre">Nombre:</label>
             <input
               type="text"
               id="nombre"
-              name="nombre"
-              value={formData.nombre}
-              onChange={handleChange}
+              {...register('nombre')}
               placeholder="Ingresa tu nombre"
               className={errors.nombre ? 'error' : ''}
             />
-            {errors.nombre && <span className="error-message">{errors.nombre}</span>}
+            {errors.nombre && <span className="error-message">{errors.nombre.message}</span>}
           </div>
 
           <div className="form-group">
@@ -107,13 +76,11 @@ const Contact = () => {
             <input
               type="email"
               id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
+              {...register('email')}
               placeholder="Ingresa tu correo electrónico"
               className={errors.email ? 'error' : ''}
             />
-            {errors.email && <span className="error-message">{errors.email}</span>}
+            {errors.email && <span className="error-message">{errors.email.message}</span>}
           </div>
 
           <div className="form-group">
@@ -121,27 +88,23 @@ const Contact = () => {
             <input
               type="text"
               id="asunto"
-              name="asunto"
-              value={formData.asunto}
-              onChange={handleChange}
+              {...register('asunto')}
               placeholder="Asunto de tu mensaje"
               className={errors.asunto ? 'error' : ''}
             />
-            {errors.asunto && <span className="error-message">{errors.asunto}</span>}
+            {errors.asunto && <span className="error-message">{errors.asunto.message}</span>}
           </div>
 
           <div className="form-group">
             <label htmlFor="mensaje">Mensaje:</label>
             <textarea
               id="mensaje"
-              name="mensaje"
-              value={formData.mensaje}
-              onChange={handleChange}
+              {...register('mensaje')}
               placeholder="Escribe tu mensaje aquí"
               className={errors.mensaje ? 'error' : ''}
               rows="5"
             ></textarea>
-            {errors.mensaje && <span className="error-message">{errors.mensaje}</span>}
+            {errors.mensaje && <span className="error-message">{errors.mensaje.message}</span>}
           </div>
 
           <button type="submit" className="cta-button primary">

@@ -40,7 +40,7 @@ const SobreNosotros = () => {
             src="//lightwidget.com/widgets/39722489d2fb5cffafd1ed21f6bc1f9d.html" 
             scrolling="no" 
             allowtransparency="true" 
-            class="lightwidget-widget" 
+            className="lightwidget-widget" 
           ></iframe>
          
         </div>
