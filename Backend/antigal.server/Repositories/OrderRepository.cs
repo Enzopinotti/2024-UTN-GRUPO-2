@@ -27,7 +27,7 @@ namespace antigal.server.Repositories
         {
             return await _context.Ordenes
                 .Include(o => o.Items) // Incluye ítems de la orden
-                .Where(o => o.idUsuario == userId) // Filtra por UserId
+                .Where(o => o.idUsuario == userId) // Filtra por idUsuario
                 .ToListAsync();
         }
 

@@ -6,7 +6,7 @@ namespace antigal.server.Repositories
 {
     public interface ICartRepository
     {
-        Task<ResponseDto> GetCartByUserIdAsync(string userId);  // Obtener el carrito por UserId
+        Task<ResponseDto> GetCartByUserIdAsync(string userId);  // Obtener el carrito por idUsuario
         Task<ResponseDto> CreateCartAsync(string userId);  // Crear un carrito vacío para el usuario
         Task<ResponseDto> AddItemToCartAsync(string userId, CarritoItemDto addItemDto);  // Agregar un ítem al carrito
         Task<ResponseDto> RemoveItemFromCartAsync(string userId, int itemId);  // Eliminar un ítem del carrito

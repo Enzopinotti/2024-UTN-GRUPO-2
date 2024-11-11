@@ -21,6 +21,7 @@ namespace antigal.server.Data
         public DbSet<OrdenDetalle> OrdenDetalle { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; } // Para almacenar refresh tokens
         public DbSet<Like> Likes { get; set; }
+        public DbSet<Sale> Sales { get; set; } // DbSet para la entidad Sale
         //OnModelCreating se utiliza para establecer las asociaciones entre dos clases para que impacten en la base de datos desde .NET
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -108,6 +109,12 @@ namespace antigal.server.Data
             modelBuilder.Entity<OrdenDetalle>()
                 .Property(od => od.precio)
                 .HasColumnType("decimal(18,2)");
+
+            // Relación uno a uno entre Orden y Venta
+            modelBuilder.Entity<Orden>()
+                .HasOne(o => o.Sale)  // Una orden tiene una venta asociada
+                .WithOne(s => s.Orden)  // Una venta tiene una orden asociada
+                .HasForeignKey<Sale>(s => s.idOrden);  // La clave foránea está en Sale
         }
     }
 

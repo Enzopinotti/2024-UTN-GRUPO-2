@@ -12,7 +12,7 @@ using antigal.server.Data;
 namespace antigal.server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241103023549_InitialCreate")]
+    [Migration("20241106031001_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -64,13 +64,13 @@ namespace antigal.server.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("idUsuario")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("idUsuario");
 
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
@@ -86,26 +86,26 @@ namespace antigal.server.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("idUsuario")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("idUsuario");
 
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.Property<string>("UserId")
+                    b.Property<string>("idUsuario")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RoleId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("UserId", "RoleId");
+                    b.HasKey("idUsuario", "RoleId");
 
                     b.HasIndex("RoleId");
 
@@ -114,7 +114,7 @@ namespace antigal.server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.Property<string>("UserId")
+                    b.Property<string>("idUsuario")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
@@ -126,7 +126,7 @@ namespace antigal.server.Migrations
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId", "LoginProvider", "Name");
+                    b.HasKey("idUsuario", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
@@ -237,7 +237,7 @@ namespace antigal.server.Migrations
 
             modelBuilder.Entity("antigal.server.Models.Like", b =>
                 {
-                    b.Property<string>("UserId")
+                    b.Property<string>("idUsuario")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("ProductoId")
@@ -246,7 +246,7 @@ namespace antigal.server.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId", "ProductoId");
+                    b.HasKey("idUsuario", "ProductoId");
 
                     b.ToTable("Likes");
                 });
@@ -364,7 +364,7 @@ namespace antigal.server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("idUsuario")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -528,7 +528,7 @@ namespace antigal.server.Migrations
                 {
                     b.HasOne("antigal.server.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("idUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -537,7 +537,7 @@ namespace antigal.server.Migrations
                 {
                     b.HasOne("antigal.server.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("idUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -552,7 +552,7 @@ namespace antigal.server.Migrations
 
                     b.HasOne("antigal.server.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("idUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -561,7 +561,7 @@ namespace antigal.server.Migrations
                 {
                     b.HasOne("antigal.server.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("idUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -18,5 +18,8 @@ namespace antigal.server.Models
         public string estado { get; set; } = "Pendiente";
 
         public List<OrdenDetalle> Items { get; set; } = new List<OrdenDetalle>();  // Relación con los ítems de la orden
+
+        // Relación uno a uno con Sale
+        public Sale ?Sale { get; set; } // Una orden tiene una venta asociada
     }
 }

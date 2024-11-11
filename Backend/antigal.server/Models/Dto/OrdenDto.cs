@@ -20,6 +20,6 @@ namespace antigal.server.Models.Dto
 
         [Required(ErrorMessage = "cantidad es requerido.")]
         [Range(1, int.MaxValue, ErrorMessage = "La cantidad debe ser al menos 1.")]
-        public int cantidad { get; set; }
+        public int cantidad { get; set; } = 1; // Valor por defecto de ejemplo
     }
 }

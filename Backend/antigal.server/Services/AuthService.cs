@@ -99,19 +99,19 @@ namespace antigal.server.Services
                     return string.Empty; // Retorna una cadena vacía
                 }
 
-                // Verificar que tokenEntity.UserId no sea nulo
-                var userId = tokenEntity.UserId; // Asegúrate de que UserId no sea nulo
+                // Verificar que tokenEntity.idUsuario no sea nulo
+                var userId = tokenEntity.UserId; // Asegúrate de que idUsuario no sea nulo
                 if (string.IsNullOrWhiteSpace(userId))
                 {
-                    _logger.LogWarning("UserId asociado al token de refresco es nulo o vacío.");
+                    _logger.LogWarning("idUsuario asociado al token de refresco es nulo o vacío.");
                     return string.Empty; // Retorna una cadena vacía
                 }
 
-                // Buscar el usuario asociado al UserId
+                // Buscar el usuario asociado al idUsuario
                 var user = await _userManager.FindByIdAsync(userId);
                 if (user == null)
                 {
-                    _logger.LogWarning($"Usuario asociado al token de refresco no encontrado para UserId: {userId}.");
+                    _logger.LogWarning($"Usuario asociado al token de refresco no encontrado para idUsuario: {userId}.");
                     return string.Empty; // Retorna una cadena vacía
                 }
 

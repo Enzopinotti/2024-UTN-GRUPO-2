@@ -804,5 +804,37 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SaleController",
+    "Method": "GetSaleById",
+    "RelativePath": "api/Sale/{idVenta}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idVenta",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SaleController",
+    "Method": "RealizarVenta",
+    "RelativePath": "api/Sale/realizar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "antigal.server.Models.Dto.VentaDtos.SaleRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

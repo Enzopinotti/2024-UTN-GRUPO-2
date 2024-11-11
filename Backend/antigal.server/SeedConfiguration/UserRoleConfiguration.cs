@@ -11,7 +11,7 @@ namespace antigal.server.SeedConfiguration
             builder.HasData(
                 new IdentityUserRole<string>
                 {
-                    UserId = "", // Reemplaza con el ID del usuario admin
+                    idUsuario = "", // Reemplaza con el ID del usuario admin
                     RoleId = "" // Reemplaza con el ID del rol de Admin
                 }
             );
