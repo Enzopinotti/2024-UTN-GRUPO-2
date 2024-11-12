@@ -27,6 +27,16 @@ namespace antigal.server
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+
+
+
+
+
+
+
+
+
+
             // Configurar Identity
             builder.Services.AddIdentity<User, Role>(options =>
             {
@@ -34,6 +44,15 @@ namespace antigal.server
             })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
+
+            builder.Services.Configure<DataProtectionTokenProviderOptions>(opt =>
+            opt.TokenLifespan = TimeSpan.FromHours(2));
+
+
+
+
+
+
 
             // Configuración de JWT
             var jwtSettings = builder.Configuration.GetSection("JWTSettings");

@@ -9,10 +9,11 @@ using antigal.server.JwtFeatures;
 using antigal.server.Services;
 using EmailService;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.VisualBasic;
+using System.Text;
+
 namespace antigal.server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/accounts")]
     [ApiController]
     public class AccountControler : ControllerBase
     {
@@ -21,7 +22,7 @@ namespace antigal.server.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly JwtHandler _jwtHandler;
-        private readonly IEmailSender _emailSender; // Servicio de email agregado
+        private readonly IEmailSender _emailSender;
 
         public AccountControler(
             UserManager<User> userManager,
@@ -29,14 +30,14 @@ namespace antigal.server.Controllers
             IConfiguration configuration,
             IMapper mapper,
             JwtHandler jwtHandler,
-            IEmailSender emailSender) // Constructor modificado
+            IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
             _mapper = mapper;
             _jwtHandler = jwtHandler;
-            _emailSender = emailSender; // Inicialización del servicio de email
+            _emailSender = emailSender;
         }
 
         [HttpPost("register")]
@@ -54,21 +55,18 @@ namespace antigal.server.Controllers
                 return BadRequest(new RegistrationResponseDto { Errors = errors });
             }
 
-            // Generar el token de confirmación de email
+            // Generar y codificar el token de confirmación de email
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var param = new Dictionary<string, string?>
-    {
-        { "token", token },
-        { "userId", user.Id },  // Agregamos userId aquí
-        { "email", user.Email }
-    };
+            var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-            // Configurar ClientUri con un valor predeterminado si está vacío
+            // Configurar URL de confirmación
             var clientUri = !string.IsNullOrWhiteSpace(userForRegistration.ClientUri)
                 ? userForRegistration.ClientUri
-                : "http://localhost:7255/authentication/confirm-email";  // Puedes cambiar a backend si prefieres
+                : "http://localhost:7255/authentication/confirm-email";
 
-            var callback = QueryHelpers.AddQueryString(clientUri, param);
+            var callback = $"{clientUri}?userId={user.Id}&token={encodedToken}";
+
+            // Enviar email de confirmación
             var message = new Message(new string[] { user.Email! }, "Email Confirmation",
                 $"<p>Por favor confirma tu cuenta haciendo clic en el siguiente enlace: <a href='{callback}'>Confirmar email</a></p>");
 
@@ -77,7 +75,6 @@ namespace antigal.server.Controllers
 
             return StatusCode(201, new { Message = "Usuario registrado exitosamente. Revisa tu email para confirmar tu cuenta." });
         }
-
 
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDto userForAuthentication)
@@ -99,6 +96,7 @@ namespace antigal.server.Controllers
             var token = _jwtHandler.CreateToken(user, roles);
             return Ok(new AuthResponseDto { IsAuthSuccesful = true, Token = token });
         }
+
         // Método para confirmar el email
         [HttpGet("confirm-email")]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
@@ -114,7 +112,9 @@ namespace antigal.server.Controllers
                 return NotFound("Usuario no encontrado.");
             }
 
-            var result = await _userManager.ConfirmEmailAsync(user, token);
+            // Decodificar el token antes de confirmar
+            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+            var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
             if (result.Succeeded)
             {
                 return Ok(new { Message = "Email confirmado exitosamente. Ahora puedes iniciar sesión." });
@@ -122,7 +122,6 @@ namespace antigal.server.Controllers
 
             return BadRequest("Error al confirmar el email.");
         }
-
 
         [HttpPost("forgotpassword")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto forgotPassword)
@@ -134,19 +133,12 @@ namespace antigal.server.Controllers
             if (user == null)
                 return BadRequest("Usuario no encontrado.");
 
+            // Generar y codificar el token de restablecimiento de contraseña
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var param = new Dictionary<string, string?>
-    {
-        { "token", token },
-        { "email", forgotPassword.Email }
-    };
+            var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-            // Configurar ClientUri con un valor predeterminado para restablecimiento de contraseña
-            var clientUri = !string.IsNullOrWhiteSpace(forgotPassword.ClientUri)
-                ? forgotPassword.ClientUri
-                : "http://localhost:7255/resetpassword";  // Valor predeterminado para frontend (cambia si es backend)
-
-            var callback = QueryHelpers.AddQueryString(clientUri, param);
+            // Crear enlace de restablecimiento de contraseña
+            var callback = $"{forgotPassword.ClientUri}?token={encodedToken}&email={forgotPassword.Email}";
             var message = new Message(new string[] { user.Email! }, "Password Reset",
                 $"<p>Para restablecer tu contraseña, haz clic en el siguiente enlace: <a href='{callback}'>Restablecer contraseña</a></p>");
 
@@ -164,7 +156,10 @@ namespace antigal.server.Controllers
             if (user is null)
                 return BadRequest("Invalid request");
 
-            var result = await _userManager.ResetPasswordAsync(user, resetPassword.Token!, resetPassword.Password!);
+            // Decodificar el token antes de usarlo
+            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(resetPassword.Token!));
+            var result = await _userManager.ResetPasswordAsync(user, decodedToken, resetPassword.Password!);
+
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(e => e.Description);
@@ -172,6 +167,5 @@ namespace antigal.server.Controllers
             }
             return Ok();
         }
-
     }
 }

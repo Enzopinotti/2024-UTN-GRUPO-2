@@ -4430,6 +4430,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.10",
           "MimeKit": "4.8.0",
           "NETCore.MailKit": "2.1.0"
         },

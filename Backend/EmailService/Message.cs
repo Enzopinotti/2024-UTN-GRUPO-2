@@ -11,10 +11,9 @@ public class Message
     public Message(IEnumerable<string> to, string subject, string content)
     {
         To = new List<MailboxAddress>();
-        foreach (var email in to)
-        {
-            To.Add(new MailboxAddress(string.Empty, email));
-        }
+
+        To.AddRange(to.Select(x => new MailboxAddress(string.Empty, x)));
+
         Subject = subject;
         Content = content;
     }

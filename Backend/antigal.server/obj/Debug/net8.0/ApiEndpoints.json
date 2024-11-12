@@ -2,7 +2,7 @@
   {
     "ContainingType": "antigal.server.Controllers.AccountControler",
     "Method": "Authenticate",
-    "RelativePath": "api/AccountControler/authenticate",
+    "RelativePath": "api/accounts/authenticate",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -18,7 +18,7 @@
   {
     "ContainingType": "antigal.server.Controllers.AccountControler",
     "Method": "ConfirmEmail",
-    "RelativePath": "api/AccountControler/confirm-email",
+    "RelativePath": "api/accounts/confirm-email",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -39,7 +39,7 @@
   {
     "ContainingType": "antigal.server.Controllers.AccountControler",
     "Method": "ForgotPassword",
-    "RelativePath": "api/AccountControler/forgotpassword",
+    "RelativePath": "api/accounts/forgotpassword",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -55,7 +55,7 @@
   {
     "ContainingType": "antigal.server.Controllers.AccountControler",
     "Method": "RegisterAsync",
-    "RelativePath": "api/AccountControler/register",
+    "RelativePath": "api/accounts/register",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -71,7 +71,7 @@
   {
     "ContainingType": "antigal.server.Controllers.AccountControler",
     "Method": "ResetPassword",
-    "RelativePath": "api/AccountControler/resetpassword",
+    "RelativePath": "api/accounts/resetpassword",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
