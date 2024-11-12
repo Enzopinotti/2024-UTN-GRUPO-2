@@ -807,6 +807,23 @@
           }
         }
       },
+      "mercadopago-sdk/2.4.1": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.1",
+          "System.Configuration.ConfigurationManager": "6.0.0"
+        },
+        "compile": {
+          "lib/net6.0/MercadoPago.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/MercadoPago.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authentication/2.2.0": {
         "type": "package",
         "dependencies": {
@@ -5499,6 +5516,23 @@
         "lib/netstandard2.0/MathNet.Numerics.xml",
         "mathnet.numerics.signed.5.0.0.nupkg.sha512",
         "mathnet.numerics.signed.nuspec"
+      ]
+    },
+    "mercadopago-sdk/2.4.1": {
+      "sha512": "ewCzveC9kqjUuFAZbtAZL/9PS+4wGjfzH6/zEyXqr4WR16M9CmJn0KFulSY0mtAl3yq7E6wfllZjij6apA6yYQ==",
+      "type": "package",
+      "path": "mercadopago-sdk/2.4.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net6.0/MercadoPago.dll",
+        "lib/net6.0/MercadoPago.pdb",
+        "lib/net6.0/MercadoPago.xml",
+        "lib/netstandard2.1/MercadoPago.dll",
+        "lib/netstandard2.1/MercadoPago.pdb",
+        "lib/netstandard2.1/MercadoPago.xml",
+        "mercadopago-sdk.2.4.1.nupkg.sha512",
+        "mercadopago-sdk.nuspec"
       ]
     },
     "Microsoft.AspNetCore.Authentication/2.2.0": {
@@ -12616,28 +12650,24 @@
       "SendGrid >= 9.29.3",
       "SharpGrip.FluentValidation.AutoValidation.Mvc >= 1.4.0",
       "Swashbuckle.AspNetCore >= 6.9.0",
-      "dotenv.net >= 3.2.1"
+      "dotenv.net >= 3.2.1",
+      "mercadopago-sdk >= 2.4.1"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\lucho\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Pato\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\repositorio\\facultad\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
+      "projectUniqueName": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
       "projectName": "antigal.server",
-      "projectPath": "D:\\repositorio\\facultad\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
-      "packagesPath": "C:\\Users\\lucho\\.nuget\\packages\\",
-      "outputPath": "D:\\repositorio\\facultad\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\obj\\",
+      "projectPath": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
+      "packagesPath": "C:\\Users\\Pato\\.nuget\\packages\\",
+      "outputPath": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\lucho\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\Pato\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -12652,8 +12682,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\repositorio\\facultad\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj": {
-              "projectPath": "D:\\repositorio\\facultad\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj"
+            "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj": {
+              "projectPath": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj"
             }
           }
         }
@@ -12766,6 +12796,10 @@
           "dotenv.net": {
             "target": "Package",
             "version": "[3.2.1, )"
+          },
+          "mercadopago-sdk": {
+            "target": "Package",
+            "version": "[2.4.1, )"
           }
         },
         "imports": [

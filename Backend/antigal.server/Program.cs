@@ -14,6 +14,8 @@ using antigal.server.Mapping;
 using antigal.server.JwtFeatures;
 using System.Security.Cryptography.X509Certificates;
 using EmailService;
+using MercadoPago.Config;
+
 
 namespace antigal.server
 {
@@ -28,12 +30,15 @@ namespace antigal.server
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
+            // Cargar las credenciales de Mercado Pago desde appsettings.json
+            var mercadoPagoAccessToken = builder.Configuration["MercadoPago:AccessToken"];
+            if (string.IsNullOrEmpty(mercadoPagoAccessToken))
+            {
+                throw new InvalidOperationException("El AccessToken de Mercado Pago no está configurado en appsettings.json.");
+            }
 
-
-
-
-
-
+            // Inicializar Mercado Pago SDK
+            MercadoPagoConfig.AccessToken = mercadoPagoAccessToken;
 
 
 
@@ -98,6 +103,7 @@ namespace antigal.server
             builder.Services.AddSingleton(emailConfig);
 
             // Registrar servicios y otros componentes
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddSingleton<JwtHandler>();
             builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder.Services.AddScoped<IImageService, ImageService>();
@@ -106,13 +112,15 @@ namespace antigal.server
             builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
-          //  builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
+            //  builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ServiceToken>();
             builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
             builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
             builder.Services.AddScoped<ICartRepository, CartRepository>();
          //   builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 
             // Configuración de CORS
             builder.Services.AddCors(options =>
