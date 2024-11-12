@@ -96,7 +96,6 @@
         .offerCard {
             flex-grow: 1;
             max-width: calc(100% / 1 - 10px); 
-            background-color: #fff;
             border-radius: 8px;
             padding: 15px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -118,11 +117,15 @@
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                color: mixins.theme(primary-black-color);
             }
-    
+            .offerDescription{
+                color: mixins.theme(primary-black-color);
+                
+            }
             .offerBrand {
                 font-size: 0.9rem;
-                color: #777;
+                color: mixins.theme(primary-black-color-hover);
                 margin-bottom: 10px;
             }
     
@@ -131,7 +134,7 @@
         
                 .precioAnterior {
                     text-decoration: line-through;
-                    color: #999;
+                    color: mixins.theme(primary-black-color-hover);
                     margin-right: 10px;
                 }
         
@@ -154,7 +157,7 @@
     
             .comprarButton {
                 background-color: mixins.theme(primary-color);
-                color: #fff;
+                color: mixins.theme(primary-black-color);
                 padding: 10px;
                 border: none;
                 border-radius: 4px;

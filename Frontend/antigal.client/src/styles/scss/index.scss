@@ -46,6 +46,7 @@ body.dark-mode {
 }
 body{
   font-family: mixins.theme(font);
+  background-color: mixins.theme(background-color);
 }
 
 @keyframes likeAnimation {

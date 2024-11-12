@@ -3,6 +3,7 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from '../../contexts/ThemeContext';
 
+
 const ThemeSlider = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
 
@@ -15,9 +16,8 @@ const ThemeSlider = () => {
         onChange={toggleTheme}
       />
       <label htmlFor="theme-toggle" className="slider">
-        <span className="slider-icon">
-          {theme === 'dark' ? '🌙' : '☀️'}
-        </span>
+        <span className="icon sun-icon">☀️</span>
+        <span className="icon moon-icon">🌙</span>
       </label>
     </div>
   );
