@@ -1,5 +1,8 @@
 // src/components/admin/products/ProductList.scss
-@import '../../abstract/variables';
+@use "../../abstract/variables" as variables;
+@use '../../abstract/mixins' as mixins;
+
+
 
 .admin-page {
   .content {
@@ -12,8 +15,8 @@
 
       button {
         padding: 10px 20px;
-        background-color: $primary-color;
-        color: $primary-white-color;
+        background-color: mixins.theme(primary-color);
+        color: mixins.theme(primary-white-color);
         border: none;
         border-radius: 6px;
         cursor: pointer;
@@ -21,7 +24,7 @@
         transition: background-color 0.3s;
 
         &:hover {
-          background-color: darken($primary-color, 10%);
+          background-color: mixins.theme(primary-color-hover);
         }
       }
     }
@@ -32,21 +35,21 @@
       grid-template-columns: 1fr; // Mobile first: 1 columna
 
       .product-item {
-        background-color: lighten($primary-color, 40%);
+        background-color: mixins.theme(primary-color-hover);
         display: flex;
         flex-direction: column;
-        border: 1px solid $primary-black-color;
+        border: 1px solid mixins.theme(primary-black-color);
         border-radius: 8px;
         overflow: hidden;
         width: 100%;
-        box-shadow: 0 2px 5px rgba($primary-black-color, 0.1);
+        box-shadow: 0 2px 5px rgba(mixins.theme(primary-black-color), 0.1);
         &:hover {
           transform: translateY(-2px);
         }
         .product-img {
           width: 100%;
           height: 200px;
-          background-color: $primary-white-color;
+          background-color: mixins.theme(primary-white-color);
           position: relative;
 
           img {
@@ -85,12 +88,12 @@
           h2 {
             font-size: 1.2rem;
             margin: 0 0 10px 0;
-            color: $primary-black-color;
+            color: mixins.theme(primary-black-color);
           }
 
           p {
             margin: 0 0 5px 0;
-            color: $primary-black-color;
+            color: mixins.theme(primary-black-color);
             font-size: 0.95rem;
           }
 
@@ -103,17 +106,16 @@
               padding: 8px 12px;
               border: none;
               border-radius: 4px;
-              font-family: $font;
               cursor: pointer;
               transition: background-color 0.3s;
-              color: $primary-white-color;
+              color: mixins.theme(primary-white-color);
               font-size: 0.9rem;
 
               &.mod-btn {
-                background-color: $secondary-color;
+                background-color: mixins.theme(secondary-color);
 
                 &:hover {
-                  background-color: darken($secondary-color, 10%);
+                  background-color: mixins.theme(secondary-color-hover);
                 }
               }
 

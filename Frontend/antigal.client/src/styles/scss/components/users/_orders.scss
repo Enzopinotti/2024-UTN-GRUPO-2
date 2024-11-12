@@ -1,4 +1,6 @@
-@import "../../abstract/variables";
+@use "../../abstract/variables" as variables;
+@use '../../abstract/mixins' as mixins;
+
 
 .orders-page {
   width: 100%;
@@ -71,11 +73,11 @@
             flex-direction: column;
             justify-content: space-evenly;
             a {
-              color: $primary-black-color;
+              color: mixins.theme(primary-black-color);
               font-weight: 500;
               text-decoration: none;
               &:hover {
-                color: $primary-color;
+                color: mixins.theme(primary-color);
               }
             }
           }
@@ -94,7 +96,7 @@
         a {
           height: 40px;
           width: auto;
-          background-color: $primary-color;
+          background-color: mixins.theme(primary-color);
           display: flex;
           align-items: center;
           border-radius: 8px;
@@ -105,8 +107,8 @@
           text-decoration: none;
           cursor: pointer;
           &:hover {
-            background-color: lighten($primary-color, 60%);
-            color: $primary-color;
+            background-color: mixins.theme(primary-color-hover);
+            color: mixins.theme(primary-color);
           }
         }
         button {
@@ -116,8 +118,8 @@
           align-items: center;
           justify-content: space-evenly;
           border: none;
-          background-color: lighten($primary-color, 60%);
-          color: $primary-color;
+          background-color: mixins.theme(primary-color-hover);
+          color: mixins.theme(primary-color);
           font-weight: 600;
           font-size: 11pt;
           border-radius: 8px;
@@ -128,8 +130,8 @@
             height: 20px;
           }
           &:hover {
-            background-color: $primary-color;
-            color: lighten($primary-color, 60%);
+            background-color: mixins.theme(primary-color);
+            color: mixins.theme(primary-color-hover);
             .repeat-icon {
               content: url("/public/icons/repeat-white.svg");
             }

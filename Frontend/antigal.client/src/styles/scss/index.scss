@@ -1,10 +1,9 @@
+// src/styles/scss/index.scss
 
-
-@use './abstract/mixins';
+@use './abstract/mixins' as mixins;
+@use './abstract/variables' as variables;
 @use './base/resets';
 @use './layout/media-queries';
-
-
 
 @use './components/header';
 @use './components/footer';
@@ -17,7 +16,7 @@
 @use './components/contact';
 @use './components/login';
 @use './components/registro';
-@use './components/resetearContrasenia.scss';
+@use './components/resetearContrasenia';
 
 @use './components/admin/categoryListContainer';
 @use './components/admin/categoryForm';
@@ -25,23 +24,29 @@
 @use './components/admin/adminNav';
 @use './components/admin/productForm';
 
-
 @use './components/users/user';
 @use './components/users/orders';
 @use './components/users/favorites';
 
 @use './components/privacyPolicy';
 
-@import './abstract/variables';
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
 
 
-*{
-  font-family: $font;
+/* Aplicar el tema claro por defecto dentro de :root */
+:root {
+  @include mixins.apply-theme(light);
+  
 }
 
-
+/* Aplicar el tema oscuro cuando el cuerpo tenga la clase `.dark-mode` */
+body.dark-mode {
+  @include mixins.apply-theme(dark);
+}
+body{
+  font-family: mixins.theme(font);
+}
 
 @keyframes likeAnimation {
     0% {
@@ -101,5 +106,4 @@
     -o-transform: scale(1);
 }
 }
-
 

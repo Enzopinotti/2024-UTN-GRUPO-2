@@ -1,5 +1,8 @@
 ///SCSS PARA LA VENTANA PERFIL
-@import "../../abstract/variables";
+@use "../../abstract/variables" as variables;
+@use '../../abstract/mixins' as mixins;
+
+
 
 .user-layout {
   width: 100%;
@@ -13,14 +16,14 @@
     left: 0;
     width: 60px;
     height: auto;
-    background-color: $primary-color;
+    background-color: mixins.theme(primary-color);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 100;
     visibility: hidden;
     button {
-      background-color: $primary-color;
+      background-color: mixins.theme(primary-color);
       border: none;
       cursor: pointer;
     }
@@ -34,7 +37,7 @@
     width: 25%;
     box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.2);
     z-index: 10;
-    background-color: #f0f1f6;
+    background-color: mixins.theme(primary-white-color);
     padding-top: 20px;
 
     .user-content {
@@ -49,7 +52,7 @@
         height: 120px;
         overflow: hidden;
         border-radius: 50%;
-        border: 5px solid $primary-color;
+        border: 5px solid mixins.theme(primary-color);
 
         img {
           width: 100%;
@@ -65,12 +68,12 @@
         padding-bottom: 20px;
         border-bottom: 1px solid darken(#f0f1f6, 5%);
         h2 {
-          color: lighten($primary-black-color, 5%);
+          color: mixins.theme(primary-black-color-hover);
           font-weight: 600;
           padding-bottom: 2px;
         }
         p {
-          color: lighten($primary-black-color, 40%);
+          color: mixins.theme(primary-black-color-hover);
           font-weight: 400;
         }
       }
@@ -93,10 +96,10 @@
           align-items: center;
           font-size: 16pt;
 
-          color: $primary-black-color;
+          color: mixins.theme(primary-black-color);
           &.active {
             font-size: 18pt;
-            color: $primary-color;
+            color: mixins.theme(primary-color);
             font-weight: 600;
           }
         }
@@ -118,7 +121,7 @@
         width: 70%;
         height: fit-content;
         min-height: 70%;
-        background-color: #f0f1f6;
+        background-color: mixins.theme(primary-white-color);
         border-radius: 20px;
         align-items: flex-start;
         box-shadow: 2px 0 3px rgba(0, 0, 0, 0.1),
@@ -142,7 +145,7 @@
               height: 120px;
               overflow: hidden;
               border-radius: 50%;
-              border: 5px solid $primary-color;
+              border: 5px solid theme(primary-color);
               position: relative;
               cursor: pointer;
               img {
@@ -183,7 +186,7 @@
             display: flex;
             justify-content: center;
             button {
-              background-color: $primary-color;
+              background-color: mixins.theme(primary-color);
               border: none;
               width: 100px;
               height: 40px;
@@ -192,7 +195,7 @@
               font-size: 11pt;
               cursor: pointer;
               &:hover {
-                background-color: darken($primary-color, 10%);
+                background-color: mixins.theme(primary-color-hover);
               }
             }
           }
@@ -212,20 +215,20 @@
             align-items: center;
             text-align: left;
             .user-label {
-              color: lighten($primary-black-color, 40%);
+              color: mixins.theme(primary-black-color-hover);
               font-weight: 500;
               width: 70%;
               padding-bottom: 5px;
             }
             .user-info {
-              color: $primary-black-color;
+              color: mixins.theme(primary-black-color);
               font-size: 13pt;
               width: 70%;
               padding-bottom: 5px;
             }
             input {
               border: none;
-              background-color: lighten($primary-black-color, 70%);
+              background-color: mixins.theme(primary-black-color-hover);
               border-radius: 8px;
               font-size: 13pt;
               width: 70%;
@@ -234,7 +237,7 @@
             }
             select {
               border: none;
-              background-color: lighten($primary-black-color, 70%);
+              background-color: mixins.theme(primary-black-color-hover);
               border-radius: 8px;
               font-size: 13pt;
               width: 70%;
@@ -294,7 +297,7 @@
               justify-content: space-around;
 
               button {
-                background-color: $primary-color;
+                background-color: mixins.theme(primary-color);
                 border: none;
                 width: 100px;
                 height: 40px;
@@ -303,7 +306,7 @@
                 font-size: 11pt;
                 cursor: pointer;
                 &:hover {
-                  background-color: darken($primary-color, 10%);
+                  background-color: mixins.theme(primary-color-hover);
                 }
               }
             }
@@ -407,7 +410,7 @@
             margin-left: auto;
             padding-top: 5px !important;
             .edit-profile-button {
-              background-color: $primary-color;
+              background-color: theme(primary-color);
               width: 100px !important;
             }
           }

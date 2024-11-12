@@ -1,4 +1,7 @@
-@import "../abstract/variables";
+@use "../abstract/variables" as variables;
+@use '../abstract/mixins' as mixins;
+
+
 
 /* Animación para abrir el menú desde la derecha */
 @keyframes slideInFromRight {
@@ -192,7 +195,7 @@
             text-align: center;
             font-size: 0.7rem;
             width: 48%;
-            border: solid 1px $primary-color;
+            border: solid 1px mixins.theme(primary-color);
             border-radius: 10px;
             -webkit-border-radius: 10px;
             -moz-border-radius: 10px;
@@ -206,7 +209,7 @@
           justify-content: end;
           align-items: center;
           cursor: pointer;
-          background-color: $primary-color;
+          background-color: mixins.theme(primary-color);
           padding: 0.5rem;
           width: fit-content;
           border-radius: 100%;
@@ -221,6 +224,7 @@
       }
     }
   }
+  
 }
 
 .cierreYlogo {
@@ -251,11 +255,11 @@
         color: #333;
         font-size: 1rem;
         &.active {
-          color: $primary-color;
+          color: mixins.theme(primary-color);
           font-weight: bold;
         }
         &:hover {
-          color: $primary-color;
+          color: mixins.theme(primary-color);
         }
       }
     }
@@ -282,11 +286,11 @@
         display: flex;
         justify-content: center;
         &.active {
-          color: $primary-color; /* Color distintivo para el enlace activo */
+          color: mixins.theme(primary-color); /* Color distintivo para el enlace activo */
           font-weight: bold; /* Negrita para destacar */
         }
         &:hover {
-          color: $primary-color;
+          color: mixins.theme(primary-color);
         }
       }
     }
@@ -331,7 +335,7 @@
       position: relative;
       display: inline-block;
       cursor: pointer;
-      background-color: $primary-color;
+      background-color: mixins.theme(primary-color);
       width: fit-content;
       border-radius: 100%;
       -webkit-border-radius: 100%;
@@ -339,8 +343,8 @@
       -ms-border-radius: 100%;
       -o-border-radius: 100%;
       &:hover {
-        background-color: $shadow-green-color;
-        box-shadow: $shadow-green-color 1px 1px 3px 1px;
+        background-color: mixins.theme(primary-color-hover);
+        box-shadow: mixins.theme(shadow-color) 1px 1px 3px 1px;
       }
 
       .user-icon {
@@ -549,5 +553,66 @@ ul {
     border-radius: 30px;
     outline: none;
    
+  }
+}
+
+.theme-slider {
+  position: relative;
+  width: 60px;
+  height: 30px;
+  margin-left: 15px;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: mixins.theme(primary-color);
+    transition: background-color 0.4s;
+    border-radius: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 5px;
+
+    .slider-icon {
+      font-size: 1.2rem;
+      color: mixins.theme(primary-white-color);
+      transition: transform 0.4s, color 0.4s;
+    }
+  }
+
+  input:checked + .slider {
+    background-color: mixins.theme(primary-black-color);
+    justify-content: flex-end;
+  }
+
+  .slider::before {
+    content: "";
+    position: absolute;
+    height: 26px;
+    width: 26px;
+    left: 2px;
+    bottom: 2px;
+    background-color: mixins.theme(primary-white-color);
+    transition: transform 0.4s;
+    border-radius: 50%;
+  }
+
+  input:checked + .slider::before {
+    transform: translateX(30px);
+  }
+
+  input:checked + .slider .slider-icon {
+    transform: translateX(-30px);
+    color: mixins.theme(primary-white-color);
   }
 }
