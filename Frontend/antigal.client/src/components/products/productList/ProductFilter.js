@@ -17,10 +17,10 @@ const ProductFilter = ({ onFilterChange }) => {
 
   return (
     <div className="product-filter">
-      <h3>Filtrar productos</h3>
+      <h3>Ordenar por</h3>
       <select value={selectedFilter} onChange={handleFilterChange}>
         <option value="recientes">Más Recientes</option>
-        <option value="antiguos">Antiguos</option>
+        <option value="antiguos">Mas Antiguos</option>
         <option value="precioAscendente">Precio Ascendente</option>
         <option value="precioDescendente">Precio Descendente</option>
       </select>

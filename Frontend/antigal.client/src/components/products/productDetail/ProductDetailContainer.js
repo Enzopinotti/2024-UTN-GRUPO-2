@@ -12,8 +12,8 @@ const ProductDetailContainer = () =>{
    
 
     useEffect(()=>{
-        const useBackend=false;
-        const fetchURL= useBackend ? `http://localhost:5000/api/products/${id}`: `https://fakestoreapi.com/products/${id}`;
+        const useBackend=true;
+        const fetchURL= useBackend ? `https://localhost:7255/api/Product/getProductById/${id}`: `https://fakestoreapi.com/products/${id}`;
         console.log(fetchURL);
 
         fetch (fetchURL)
@@ -25,28 +25,34 @@ const ProductDetailContainer = () =>{
                 }
                 return response.json();
             })
-            .then (data =>{
-    
-                const loadedProduct ={
-                    id: data.id,
-                    name: data.title,
-                    price: data.price,
-                    imageUrl: data.image,
-                    description: data.description,
-                    category: data.category,
-                    //setea un stock para cuando no se usa el backend porque fakestore no tiene
-                    stock: useBackend ? data.stock : (data.stock || 10),
-                };
-                setProduct(loadedProduct);
-                setLoading(false);
-                setError(false);
+            .then(data => {
+                if (data && data.data) { // Verifica que 'data' y 'data.data' existan
+                    const productData = data.data; // Accede a 'data.data'
+                    
+                    const loadedProduct = {
+                        id: productData.idProducto, // Asigna 'idProducto' a 'id'
+                        name: productData.nombre, // Asigna 'nombre'
+                        price: productData.precio, // Asigna 'precio'
+                        images: (productData.imagenUrls.$values && productData.imagenUrls.$values.length > 0) 
+                ? productData.imagenUrls.$values[0] 
+                : '/icons/por-defecto.svg',  // Ruta correcta, // Asigna todas las imágenes, o un array vacío si no hay
+                        description: productData.descripcion, // Asigna 'descripcion'
+                        category: productData.marca, // Asigna 'marca' a 'category'
+                        stock: productData.stock, // Asigna 'stock'
+                    };
+                    setProduct(loadedProduct); // Establece el producto en el estado
+                    setLoading(false);
+                    setError(false);
+                } else{
+                    throw new Error('Formato de datos incorrecto');
+                }
             })
-            .catch(()=>{
+            .catch(err => {
                 setLoading(false);
-                console.log('no encontre');  // Ya no está cargando
+                console.error('Error al obtener el producto:', err); // Proporciona más información sobre el error
                 setError(true);
             });
-    },[id]);
+    }, [id]);
 
     return(
         <div className="page-detail-container">

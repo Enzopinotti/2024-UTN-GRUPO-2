@@ -61,7 +61,9 @@ const ProductListContainer = () => {
               featured: item.destacado,      
               price: item.precio,            
               stock: item.stock,             
-              images: item.imagenUrls.$values[0],   
+              immages: (item.imagenUrls.$values && item.imagenUrls.$values.length > 0) 
+              ? item.imagenUrls.$values[0] 
+              : '/icons/por-defecto.svg',   
               categories: [],                
             }));
           } else {
@@ -99,8 +101,8 @@ const ProductListContainer = () => {
                 }
                 const dataCategory = await responseCategory.json();
   
-                if (dataCategory.data && Array.isArray(dataCategory.data)) {
-                  const formattedCategories = dataCategory.data.map(cat => formatCamelCase(cat.nombre));
+                if (dataCategory.data.$values && Array.isArray(dataCategory.data.$values)) {
+                  const formattedCategories = dataCategory.data.$values.map(cat => formatCamelCase(cat.nombre));
                   return { ...product, categories: formattedCategories };
                 } else {
                   return { ...product, categories: [] };
