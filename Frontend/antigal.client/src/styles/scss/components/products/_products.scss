@@ -243,7 +243,7 @@
           }
       
           .precioOferta {
-            color: black;
+            color: mixins.theme(primary-black-color);
             font-weight: bold;
       
             &.onSale {
@@ -338,6 +338,7 @@
     }
     .asideYProductos{
       display: flex;
+      color: mixins.theme(primary-black-color);
       .categories-aside {
         display: block;
         width: 20%; 

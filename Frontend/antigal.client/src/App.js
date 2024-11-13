@@ -30,7 +30,6 @@ import ResetearContrasenia from "./pages/auth/ResetearContrasenia";
 import RecuperarContrasenia from "./pages/auth/RecuperarContrasenia";
 import Contact from "./pages/Contact";
 
-
 function App() {
   return (
     
