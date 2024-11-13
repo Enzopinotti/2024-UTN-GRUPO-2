@@ -31,7 +31,12 @@
           "SendGrid": "9.29.3",
           "SharpGrip.FluentValidation.AutoValidation.Mvc": "1.4.0",
           "Swashbuckle.AspNetCore": "6.9.0",
+<<<<<<< HEAD
           "dotenv.net": "3.2.1"
+=======
+          "dotenv.net": "3.2.1",
+          "mercadopago-sdk": "2.4.1"
+>>>>>>> origin/prueba-identity
         },
         "runtime": {
           "antigal.server.dll": {}
@@ -730,6 +735,21 @@
           }
         }
       },
+<<<<<<< HEAD
+=======
+      "mercadopago-sdk/2.4.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3",
+          "System.Configuration.ConfigurationManager": "7.0.0"
+        },
+        "runtime": {
+          "lib/net6.0/MercadoPago.dll": {
+            "assemblyVersion": "2.4.1.0",
+            "fileVersion": "2.4.1.0"
+          }
+        }
+      },
+>>>>>>> origin/prueba-identity
       "Microsoft.AspNetCore.Authentication/2.2.0": {
         "dependencies": {
           "Microsoft.AspNetCore.Authentication.Core": "2.2.0",
@@ -3268,6 +3288,16 @@
       "path": "mathnet.numerics.signed/5.0.0",
       "hashPath": "mathnet.numerics.signed.5.0.0.nupkg.sha512"
     },
+<<<<<<< HEAD
+=======
+    "mercadopago-sdk/2.4.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ewCzveC9kqjUuFAZbtAZL/9PS+4wGjfzH6/zEyXqr4WR16M9CmJn0KFulSY0mtAl3yq7E6wfllZjij6apA6yYQ==",
+      "path": "mercadopago-sdk/2.4.1",
+      "hashPath": "mercadopago-sdk.2.4.1.nupkg.sha512"
+    },
+>>>>>>> origin/prueba-identity
     "Microsoft.AspNetCore.Authentication/2.2.0": {
       "type": "package",
       "serviceable": true,

@@ -11,3 +11,19 @@ D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\E
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\refint\EmailService.dll
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\EmailService.pdb
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\ref\EmailService.dll
+<<<<<<< HEAD
+=======
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\EmailService\bin\Debug\net8.0\EmailService.deps.json
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\EmailService\bin\Debug\net8.0\EmailService.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\EmailService\bin\Debug\net8.0\EmailService.pdb
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\EmailService.csproj.AssemblyReference.cache
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\EmailService.GeneratedMSBuildEditorConfig.editorconfig
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\EmailService.AssemblyInfoInputs.cache
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\EmailService.AssemblyInfo.cs
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\EmailService.csproj.CoreCompileInputs.cache
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\EmailService.sourcelink.json
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\EmailService.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\refint\EmailService.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\EmailService.pdb
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\ref\EmailService.dll
+>>>>>>> origin/prueba-identity

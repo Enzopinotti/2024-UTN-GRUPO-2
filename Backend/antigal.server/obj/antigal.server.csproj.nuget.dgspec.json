@@ -1,6 +1,7 @@
 {
   "format": 1,
   "restore": {
+<<<<<<< HEAD
     "D:\\repositorio\\facultad\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj": {}
   },
   "projects": {
@@ -19,6 +20,22 @@
         "configFilePaths": [
           "C:\\Users\\lucho\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+=======
+    "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj": {}
+  },
+  "projects": {
+    "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
+        "projectName": "antigal.server",
+        "projectPath": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
+        "packagesPath": "C:\\Users\\Pato\\.nuget\\packages\\",
+        "outputPath": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Pato\\AppData\\Roaming\\NuGet\\NuGet.Config",
+>>>>>>> origin/prueba-identity
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -33,8 +50,13 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
+<<<<<<< HEAD
               "D:\\repositorio\\facultad\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj": {
                 "projectPath": "D:\\repositorio\\facultad\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj"
+=======
+              "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj": {
+                "projectPath": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj"
+>>>>>>> origin/prueba-identity
               }
             }
           }
@@ -147,6 +169,13 @@
             "dotenv.net": {
               "target": "Package",
               "version": "[3.2.1, )"
+<<<<<<< HEAD
+=======
+            },
+            "mercadopago-sdk": {
+              "target": "Package",
+              "version": "[2.4.1, )"
+>>>>>>> origin/prueba-identity
             }
           },
           "imports": [
@@ -172,6 +201,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "D:\\repositorio\\facultad\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -187,6 +217,19 @@
         "configFilePaths": [
           "C:\\Users\\lucho\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+=======
+    "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj",
+        "projectName": "EmailService",
+        "projectPath": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj",
+        "packagesPath": "C:\\Users\\Pato\\.nuget\\packages\\",
+        "outputPath": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\EmailService\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Pato\\AppData\\Roaming\\NuGet\\NuGet.Config",
+>>>>>>> origin/prueba-identity
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

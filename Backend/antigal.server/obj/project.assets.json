@@ -807,6 +807,26 @@
           }
         }
       },
+<<<<<<< HEAD
+=======
+      "mercadopago-sdk/2.4.1": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.1",
+          "System.Configuration.ConfigurationManager": "6.0.0"
+        },
+        "compile": {
+          "lib/net6.0/MercadoPago.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/MercadoPago.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+>>>>>>> origin/prueba-identity
       "Microsoft.AspNetCore.Authentication/2.2.0": {
         "type": "package",
         "dependencies": {
@@ -5501,6 +5521,26 @@
         "mathnet.numerics.signed.nuspec"
       ]
     },
+<<<<<<< HEAD
+=======
+    "mercadopago-sdk/2.4.1": {
+      "sha512": "ewCzveC9kqjUuFAZbtAZL/9PS+4wGjfzH6/zEyXqr4WR16M9CmJn0KFulSY0mtAl3yq7E6wfllZjij6apA6yYQ==",
+      "type": "package",
+      "path": "mercadopago-sdk/2.4.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net6.0/MercadoPago.dll",
+        "lib/net6.0/MercadoPago.pdb",
+        "lib/net6.0/MercadoPago.xml",
+        "lib/netstandard2.1/MercadoPago.dll",
+        "lib/netstandard2.1/MercadoPago.pdb",
+        "lib/netstandard2.1/MercadoPago.xml",
+        "mercadopago-sdk.2.4.1.nupkg.sha512",
+        "mercadopago-sdk.nuspec"
+      ]
+    },
+>>>>>>> origin/prueba-identity
     "Microsoft.AspNetCore.Authentication/2.2.0": {
       "sha512": "b0R9X7L6zMqNsssKDvhYHuNi5x0s4DyHTeXybIAyGaitKiW1Q5aAGKdV2codHPiePv9yHfC9hAMyScXQ/xXhPw==",
       "type": "package",
@@ -12616,16 +12656,26 @@
       "SendGrid >= 9.29.3",
       "SharpGrip.FluentValidation.AutoValidation.Mvc >= 1.4.0",
       "Swashbuckle.AspNetCore >= 6.9.0",
+<<<<<<< HEAD
       "dotenv.net >= 3.2.1"
     ]
   },
   "packageFolders": {
     "C:\\Users\\lucho\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+=======
+      "dotenv.net >= 3.2.1",
+      "mercadopago-sdk >= 2.4.1"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\Pato\\.nuget\\packages\\": {}
+>>>>>>> origin/prueba-identity
   },
   "project": {
     "version": "1.0.0",
     "restore": {
+<<<<<<< HEAD
       "projectUniqueName": "D:\\repositorio\\facultad\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
       "projectName": "antigal.server",
       "projectPath": "D:\\repositorio\\facultad\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
@@ -12638,6 +12688,16 @@
       "configFilePaths": [
         "C:\\Users\\lucho\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+=======
+      "projectUniqueName": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
+      "projectName": "antigal.server",
+      "projectPath": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
+      "packagesPath": "C:\\Users\\Pato\\.nuget\\packages\\",
+      "outputPath": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\Pato\\AppData\\Roaming\\NuGet\\NuGet.Config",
+>>>>>>> origin/prueba-identity
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -12652,8 +12712,13 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
+<<<<<<< HEAD
             "D:\\repositorio\\facultad\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj": {
               "projectPath": "D:\\repositorio\\facultad\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj"
+=======
+            "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj": {
+              "projectPath": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj"
+>>>>>>> origin/prueba-identity
             }
           }
         }
@@ -12766,6 +12831,13 @@
           "dotenv.net": {
             "target": "Package",
             "version": "[3.2.1, )"
+<<<<<<< HEAD
+=======
+          },
+          "mercadopago-sdk": {
+            "target": "Package",
+            "version": "[2.4.1, )"
+>>>>>>> origin/prueba-identity
           }
         },
         "imports": [
