@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProductList from './ProductList';
+import ProductFilter from './ProductFilter';
 import CategoryList from '../../categories/CategoryList';
 import Breadcrumb from '../../breadcrumb/Breadcrumb';
 import CartPreview from '../../carts/CartPreview'; // Importamos el CartPreview
@@ -17,16 +18,26 @@ const ProductListContainer = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [loading, setLoading] = useState(true); // Estado de carga
   const [error, setError] = useState(false);    // Estado de error
+  const [filter, setFilter] = useState('');
 
   const location = useLocation();  // Para Breadcrumb dinámico
 
   useEffect(() => {
     const fetchProductsAndCategories = async () => {
-      const useBackend = false; // Cambia este flag a true para conectar con el backend
-      const fetchURL = useBackend
+      const useBackend = true; // Cambia este flag a true para conectar con el backend
+      let fetchURL = useBackend
         ? 'https://localhost:7255/api/Product/getProducts'
         : 'https://fakestoreapi.com/products';
   
+      // Modificar la URL según el filtro seleccionado
+      if (filter) {
+        if (filter === 'antiguos' || filter === 'recientes') {
+          fetchURL += `?orden=${filter}`;
+        } else if (filter === 'precioAscendente' || filter === 'precioDescendente') {
+          fetchURL += `?precio=${filter === 'precioAscendente' ? 'ascendente' : 'descendente'}`;
+        }
+      }
+
       try {
         // Primera llamada: Obtener productos
         const response = await fetch(fetchURL);
@@ -38,9 +49,9 @@ const ProductListContainer = () => {
         // Adaptar los datos según la API utilizada
         let adaptedData;
         if (useBackend) {
-          if (data.data && Array.isArray(data.data)) {
+          if (data.data.$values && Array.isArray(data.data.$values)) {
             // Adaptar los datos de los productos
-            adaptedData = data.data.map(item => ({
+            adaptedData = data.data.$values.map(item => ({
               id: item.idProducto,           
               name: item.nombre,            
               brand: item.marca,             
@@ -50,7 +61,7 @@ const ProductListContainer = () => {
               featured: item.destacado,      
               price: item.precio,            
               stock: item.stock,             
-              images: item.imagenUrls[0],   
+              images: item.imagenUrls.$values[0],   
               categories: [],                
             }));
           } else {
@@ -133,7 +144,7 @@ const ProductListContainer = () => {
     };
   
     fetchProductsAndCategories();
-  }, []);
+  }, [filter]);
 
   // Alternar el estado del dropdown de categorías en mobile
   const toggleDropdown = () => {
@@ -150,6 +161,10 @@ const ProductListContainer = () => {
       setFilteredProducts(filtered);
       setSelectedCategory(categoryName); // Establecer la categoría seleccionada
     }
+  };
+
+  const handleFilterChange = (selectedFilter) => {
+    setFilter(selectedFilter);
   };
 
   return (
@@ -198,6 +213,7 @@ const ProductListContainer = () => {
           ) : (
             <>
               <Banner />
+              <ProductFilter onFilterChange={handleFilterChange} />
               <ProductList products={filteredProducts} />
             </>
           )}
