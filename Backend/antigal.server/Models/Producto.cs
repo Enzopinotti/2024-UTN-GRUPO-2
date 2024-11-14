@@ -16,6 +16,7 @@ namespace antigal.server.Models
         public int? destacado { get; set; }
         public float precio { get; set; }
         public  int stock { get; set; }
+        public DateTime FechaCreacion { get; set; }
 
         //RELACION UNO A MUCHOS CON IMAGEN
         public List<string> ImagenUrls { get; set; } = new List<string>(); // Almacena solo las URLs

@@ -1,12 +1,10 @@
 ﻿// OrdersController.cs
-/*using antigal.server.Models.Dto;
+using antigal.server.Models.Dto;
 using antigal.server.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace antigal.server.Controllers
 {
-    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/[controller]")]
     public class OrdersController : ControllerBase
@@ -19,7 +17,7 @@ namespace antigal.server.Controllers
         }
 
         [HttpPost("confirm")]
-        public async Task<IActionResult> ConfirmOrder([FromBody] OrdenDto orderDto)
+        public async Task<IActionResult> ConfirmOrder([FromBody] OrderDto orderDto)
         {
             await _orderService.ConfirmOrder(orderDto);
             return Ok("Pedido confirmado con éxito.");
@@ -33,4 +31,3 @@ namespace antigal.server.Controllers
         }
     }
 }
-*/

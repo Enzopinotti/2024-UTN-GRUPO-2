@@ -1,7 +1,6 @@
-﻿using antigal.server.Models.Dto; // Asegúrate de incluir el espacio de nombres correcto para ResponseDto
-using antigal.server.Services;
+﻿using antigal.server.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks; // Importar para Task
+using antigal.server.Models.Dto; // Asegúrate de incluir el espacio de nombres correcto para ResponseDto
 
 namespace antigal.server.Controllers
 {
@@ -17,9 +16,9 @@ namespace antigal.server.Controllers
         }
 
         [HttpPost("asignar")]
-        public async Task<ActionResult<ResponseDto>> AsignarCategoriaAProductoAsync(int idProducto, int idCategoria)
+        public ActionResult<ResponseDto> AsignarCategoriaAProducto(int idProducto, int idCategoria)
         {
-            var response = await _productCategoryService.AsignarCategoriaAProductoAsync(idProducto, idCategoria);
+            var response = _productCategoryService.AsignarCategoriaAProducto(idProducto, idCategoria);
 
             if (!response.IsSuccess)
             {
@@ -32,13 +31,13 @@ namespace antigal.server.Controllers
             }
 
             // Retorna 201 (Created) cuando se asigna correctamente con ResponseDto
-            return CreatedAtAction(nameof(ObtenerCategoriasDeProductoAsync), new { idProducto }, response);
+            return CreatedAtAction(nameof(ObtenerCategoriasDeProducto), new { idProducto }, response);
         }
 
         [HttpDelete("desasignar")]
-        public async Task<ActionResult<ResponseDto>> DesasignarCategoriaDeProductoAsync(int idProducto, int idCategoria)
+        public ActionResult<ResponseDto> DesasignarCategoriaDeProducto(int idProducto, int idCategoria)
         {
-            var response = await _productCategoryService.DesasignarCategoriaDeProductoAsync(idProducto, idCategoria);
+            var response = _productCategoryService.DesasignarCategoriaDeProducto(idProducto, idCategoria);
 
             if (!response.IsSuccess)
             {
@@ -55,9 +54,9 @@ namespace antigal.server.Controllers
         }
 
         [HttpGet("categorias/{idProducto}")]
-        public async Task<ActionResult<ResponseDto>> ObtenerCategoriasDeProductoAsync(int idProducto)
+        public ActionResult<ResponseDto> ObtenerCategoriasDeProducto(int idProducto)
         {
-            var response = await _productCategoryService.ObtenerCategoriasDeProductoAsync(idProducto);
+            var response = _productCategoryService.ObtenerCategoriasDeProducto(idProducto);
 
             if (!response.IsSuccess)
             {
@@ -78,9 +77,9 @@ namespace antigal.server.Controllers
         }
 
         [HttpGet("productos/{idCategoria}")]
-        public async Task<ActionResult<ResponseDto>> ObtenerProductosDeCategoriaAsync(int idCategoria)
+        public ActionResult<ResponseDto> ObtenerProductosDeCategoria(int idCategoria)
         {
-            var response = await _productCategoryService.ObtenerProductosDeCategoriaAsync(idCategoria);
+            var response = _productCategoryService.ObtenerProductosDeCategoria(idCategoria);
 
             if (!response.IsSuccess)
             {

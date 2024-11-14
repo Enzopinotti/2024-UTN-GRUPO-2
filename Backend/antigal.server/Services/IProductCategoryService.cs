@@ -4,9 +4,9 @@ namespace antigal.server.Services
 {
     public interface IProductCategoryService
     {
-        Task<ResponseDto> AsignarCategoriaAProductoAsync(int idProducto, int idCategoria);
-        Task<ResponseDto> DesasignarCategoriaDeProductoAsync(int idProducto, int idCategoria);
-        Task<ResponseDto> ObtenerCategoriasDeProductoAsync(int idProducto);
-        Task<ResponseDto> ObtenerProductosDeCategoriaAsync(int idCategoria);
+        ResponseDto AsignarCategoriaAProducto(int idProducto, int idCategoria);
+        ResponseDto DesasignarCategoriaDeProducto(int idProducto, int idCategoria);
+        ResponseDto ObtenerCategoriasDeProducto(int idProducto);
+        ResponseDto ObtenerProductosDeCategoria(int idCategoria);
     }
 }

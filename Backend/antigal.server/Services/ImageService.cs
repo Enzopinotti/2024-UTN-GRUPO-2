@@ -205,7 +205,7 @@ namespace antigal.server.Services
                 return publicId;
             }
 
-            throw new InvalidOperationException("No se pudo extraer el Public ID de la URL proporcionada.");
+            return null;
         }
 
     }

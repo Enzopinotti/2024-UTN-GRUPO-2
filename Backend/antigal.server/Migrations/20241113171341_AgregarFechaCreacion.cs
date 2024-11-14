@@ -3,12 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace antigal.server.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class AgregarFechaCreacion : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,8 +31,7 @@ namespace antigal.server.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ImagenUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -85,19 +82,16 @@ namespace antigal.server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Payments",
+                name: "Likes",
                 columns: table => new
                 {
-                    PaymentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProductoId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Payments", x => x.PaymentId);
+                    table.PrimaryKey("PK_Likes", x => new { x.UserId, x.ProductoId });
                 });
 
             migrationBuilder.CreateTable(
@@ -114,6 +108,7 @@ namespace antigal.server.Migrations
                     destacado = table.Column<int>(type: "int", nullable: true),
                     precio = table.Column<float>(type: "real", nullable: false),
                     stock = table.Column<int>(type: "int", nullable: false),
+                    FechaCreacion = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ImagenUrls = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -243,21 +238,21 @@ namespace antigal.server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Ordenes",
+                name: "Orders",
                 columns: table => new
                 {
-                    idOrden = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    idUsuario = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    fechaOrden = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    estado = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Ordenes", x => x.idOrden);
+                    table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Ordenes_AspNetUsers_idUsuario",
-                        column: x => x.idUsuario,
+                        name: "FK_Orders_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -351,41 +346,30 @@ namespace antigal.server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrdenDetalle",
+                name: "OrderItems",
                 columns: table => new
                 {
-                    idDetalle = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    idOrdenDetalle = table.Column<int>(type: "int", nullable: false),
-                    idProducto = table.Column<int>(type: "int", nullable: false),
-                    cantidad = table.Column<int>(type: "int", nullable: false),
-                    precio = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    OrderId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrdenDetalle", x => x.idDetalle);
+                    table.PrimaryKey("PK_OrderItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrdenDetalle_Ordenes_idOrdenDetalle",
-                        column: x => x.idOrdenDetalle,
-                        principalTable: "Ordenes",
-                        principalColumn: "idOrden",
+                        name: "FK_OrderItems_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrdenDetalle_Productos_idProducto",
-                        column: x => x.idProducto,
+                        name: "FK_OrderItems_Productos_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Productos",
                         principalColumn: "idProducto",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
-                values: new object[,]
-                {
-                    { "639de93f-7876-4fff-96ec-37f8bd3bf180", null, "The visitor role for the user", "Visitor", "VISITOR" },
-                    { "a9b5f83e-92c3-4c5e-94de-4d6a6e4f82a9", null, "The admin role for the user", "Admin", "ADMIN" },
-                    { "d8a9f8f8-3d65-4b2a-9b2f-3a1c4b2c1234", null, "The regular user role", "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -453,19 +437,19 @@ namespace antigal.server.Migrations
                 column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrdenDetalle_idOrdenDetalle",
-                table: "OrdenDetalle",
-                column: "idOrdenDetalle");
+                name: "IX_OrderItems_OrderId",
+                table: "OrderItems",
+                column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrdenDetalle_idProducto",
-                table: "OrdenDetalle",
-                column: "idProducto");
+                name: "IX_OrderItems_ProductId",
+                table: "OrderItems",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ordenes_idUsuario",
-                table: "Ordenes",
-                column: "idUsuario");
+                name: "IX_Orders_UserId",
+                table: "Orders",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductoCategoria_idCategoria",
@@ -498,10 +482,10 @@ namespace antigal.server.Migrations
                 name: "Imagenes");
 
             migrationBuilder.DropTable(
-                name: "OrdenDetalle");
+                name: "Likes");
 
             migrationBuilder.DropTable(
-                name: "Payments");
+                name: "OrderItems");
 
             migrationBuilder.DropTable(
                 name: "ProductoCategoria");
@@ -516,7 +500,7 @@ namespace antigal.server.Migrations
                 name: "Carritos");
 
             migrationBuilder.DropTable(
-                name: "Ordenes");
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Categorias");

@@ -20,6 +20,7 @@ namespace antigal.server.Controllers
         [HttpPost("upload")]
         public async Task<IActionResult> Upload(IFormFile file, int? productoId = null, string? usuarioId = null, int? categoriaId = null)
         {
+            Console.WriteLine("llega: " + file + productoId);
             try
             {
                 var imagen = await _imageService.UploadImageAsync(file, productoId, usuarioId, categoriaId);
