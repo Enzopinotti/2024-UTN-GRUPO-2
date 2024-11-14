@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProductList from './ProductList';
+import ProductFilter from './ProductFilter';
 import CategoryList from '../../categories/CategoryList';
 import Breadcrumb from '../../breadcrumb/Breadcrumb';
 import CartPreview from '../../carts/CartPreview'; // Importamos el CartPreview
@@ -17,13 +18,25 @@ const ProductListContainer = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [loading, setLoading] = useState(true); // Estado de carga
   const [error, setError] = useState(false);    // Estado de error
+  const [filter, setFilter] = useState('');
 
   const location = useLocation();  // Para Breadcrumb dinámico
 
   useEffect(() => {
     const fetchProductsAndCategories = async () => {
       const useBackend = true; // Cambia este flag a true para conectar con el backend
-      const fetchURL = useBackend ? 'https://localhost:7255/api/Product/getProducts' : 'https://fakestoreapi.com/products';
+      let fetchURL = useBackend
+        ? 'https://localhost:7255/api/Product/getProducts'
+        : 'https://fakestoreapi.com/products';
+  
+      // Modificar la URL según el filtro seleccionado
+      if (filter) {
+        if (filter === 'antiguos' || filter === 'recientes') {
+          fetchURL += `?orden=${filter}`;
+        } else if (filter === 'precioAscendente' || filter === 'precioDescendente') {
+          fetchURL += `?precio=${filter === 'precioAscendente' ? 'ascendente' : 'descendente'}`;
+        }
+      }
 
       try {
         // Primera llamada: Obtener productos
@@ -110,7 +123,7 @@ const ProductListContainer = () => {
     };
 
     fetchProductsAndCategories();
-  }, []);
+  }, [filter]);
 
   // Alternar el estado del dropdown de categorías en mobile
   const toggleDropdown = () => {
@@ -131,6 +144,10 @@ const handleCategoryClick = (categoryName) => {
     setSelectedCategory(categoryName); // Establecer la categoría seleccionada
   }
 };
+
+  const handleFilterChange = (selectedFilter) => {
+    setFilter(selectedFilter);
+  };
 
   return (
     <div className="products-page">
@@ -178,6 +195,7 @@ const handleCategoryClick = (categoryName) => {
           ) : (
             <>
               <Banner />
+              <ProductFilter onFilterChange={handleFilterChange} />
               <ProductList products={filteredProducts} />
             </>
           )}
