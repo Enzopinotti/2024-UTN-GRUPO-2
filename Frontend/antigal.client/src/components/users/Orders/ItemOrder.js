@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
 
 const ItemOrder = ({ products }) => {
-  console.log(products);
   return (
     <>
       {products.map((product) => (
-        <div className="item-order">
+        <div className="item-order" key={product.productId}>
           <div className="img-container">
             <img src={product.image} alt={product.productName} />
           </div>
