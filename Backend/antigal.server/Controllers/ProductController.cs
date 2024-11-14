@@ -18,10 +18,10 @@ namespace antigal.server.Controllers
         }
 
         [HttpGet("getProducts")]
-        public ResponseDto GetProduct(string orden = null, string precio = null)
+        public ResponseDto GetProduct(string orden = null, string precio = null, int? categoriaId = null)
         {
             Console.WriteLine("funciona");
-            return _productService.GetProducts(orden, precio);
+            return _productService.GetProducts(orden, precio, categoriaId);
         }
 
         [HttpGet("home")]

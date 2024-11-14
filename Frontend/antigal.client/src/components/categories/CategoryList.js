@@ -7,18 +7,22 @@ const CategoryList = ({ categories, onCategoryClick, selectedCategory }) => {
     <div className="category-list">
       <h3>Categorías</h3>
       <ul>
-        {categories.map((category) => (
-          <React.Fragment key={category.name}>
-            <li
-              className={category.name === selectedCategory ? 'active' : ''}
-              onClick={() => onCategoryClick(category.name)}
-            >
-              <span>{formatCamelCase(category.name)}</span>
-              <span>({category.count})</span>
-            </li>
-            <hr />
-          </React.Fragment>
-        ))}
+        {categories.length > 0 ? (
+          categories.map((category) => (
+            <React.Fragment key={category.id}> {/* Cambiar a category.id */}
+              <li
+                className={category.name === selectedCategory ? 'active' : ''}
+                onClick={() => onCategoryClick(category.name, category.id)}
+              >
+                <span>{formatCamelCase(category.name)}</span>
+                <span>({category.count})</span>
+              </li>
+              <hr />
+            </React.Fragment>
+          ))
+        ) : (
+          <li>No hay categorías disponibles</li> // Mensaje si no hay categorías
+        )}
       </ul>
     </div>
   );
@@ -29,6 +33,7 @@ CategoryList.propTypes = {
     PropTypes.shape({
       name: PropTypes.string.isRequired,
       count: PropTypes.number.isRequired,
+      id: PropTypes.number.isRequired,
     })
   ).isRequired,
   onCategoryClick: PropTypes.func.isRequired,

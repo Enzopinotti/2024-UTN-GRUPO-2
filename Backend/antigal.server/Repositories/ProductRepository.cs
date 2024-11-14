@@ -23,12 +23,21 @@ namespace antigal.server.Services
             _response = new ResponseDto();
         }
 
-        public ResponseDto GetProducts(string orden = null, string precio = null)
+        public ResponseDto GetProducts(string orden = null, string precio = null, int? categoriaId = null)
         {
             try
             {
                 // Obtener la lista de productos
-                IEnumerable<Producto> productos = _context.Productos.AsQueryable();
+                IQueryable<Producto> productos = _context.Productos.AsQueryable();
+
+                // Filtrar por categoría si se proporciona
+                if (categoriaId.HasValue)
+                {
+                    productos = from p in productos
+                                join pc in _context.ProductoCategoria on p.idProducto equals pc.idProducto
+                                where pc.idCategoria == categoriaId.Value
+                                select p;
+                }
 
                 // Aplicar ordenamiento por fecha
                 if (orden == "antiguos")
