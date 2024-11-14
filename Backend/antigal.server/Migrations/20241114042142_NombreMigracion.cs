@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace antigal.server.Migrations
 {
     /// <inheritdoc />
-    public partial class AgregarFechaCreacion : Migration
+    public partial class NombreMigracion : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
