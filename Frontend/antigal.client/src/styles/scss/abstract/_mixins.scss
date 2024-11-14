@@ -1,3 +1,19 @@
+// src/abstract/mixins.scss
+
+@use 'variables' as variables; // Asegúrate de ajustar la ruta según tu estructura de carpetas
+
+// Función para obtener el valor de una variable de tema
+@function theme($property) {
+  @return var(--#{$property});
+}
+
+// Mixin para aplicar los colores del tema
+@mixin apply-theme($theme-name) {
+  @each $property, $value in map-get(variables.$themes, $theme-name) {
+    --#{$property}: #{$value};
+  }
+}
+
 @mixin boton($bg-color, $border-color, $text-color) {
     background-color: $bg-color;
     padding: 0.5rem 1.4rem;
@@ -18,4 +34,3 @@
         background-color: darken($bg-color, 10%);
     }
 }
-

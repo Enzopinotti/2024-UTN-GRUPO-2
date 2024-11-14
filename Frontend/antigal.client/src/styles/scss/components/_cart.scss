@@ -1,4 +1,7 @@
-@import "../abstract/variables";
+@use 'sass:color';
+@use "../abstract/variables" as variables;
+@use '../abstract/mixins' as mixins;
+
 
 .cart-page {
   padding: 40px 20px;
@@ -9,7 +12,7 @@
     text-align: center;
     font-size: 2em;
     margin-bottom: 30px;
-    color: $primary-color;
+    color: mixins.theme(primary-color);
   }
 
   &-container {
@@ -99,7 +102,7 @@
 
       &-price {
         font-size: 1em;
-        color: $secondary-color;
+        color: mixins.theme(secondary-color);
 
         /* Media Query para Móviles */
         @media (max-width: 480px) {
@@ -153,8 +156,8 @@
           transition: background-color 0.2s, border-color 0.2s;
 
           &:hover {
-            background-color: $primary-white-color;
-            border-color: $primary-color;
+            background-color: mixins.theme(primary-white-color);
+            border-color: mixins.theme(primary-color);
           }
 
           &:disabled {
@@ -201,7 +204,7 @@
       h2 {
         font-size: 1.5em;
         margin-bottom: 15px;
-        color: $primary-color;
+        color: mixins.theme(primary-color);
         text-align: center;
 
         /* Media Query para Móviles */
@@ -218,7 +221,7 @@
         &:last-child.total {
           font-weight: bold;
           font-size: 1.3em;
-          color: $secondary-color;
+          color: mixins.theme(secondary-color);
 
           /* Media Query para Móviles */
           @media (max-width: 480px) {
@@ -242,7 +245,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: $primary-color;
+      background-color: mixins.theme(primary-color);
       color: #fff;
       border: none;
       padding: 15px;
@@ -254,7 +257,7 @@
       transition: background-color 0.3s ease;
 
       &:hover {
-        background-color: darken($primary-color, 10%);
+        background-color: mixins.theme(shadow-color);
       }
 
       .arrow-icon {

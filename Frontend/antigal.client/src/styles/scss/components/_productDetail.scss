@@ -1,4 +1,7 @@
-@import "../abstract/variables";
+@use 'sass:color';
+@use "../abstract/variables" as variables;
+@use '../abstract/mixins' as mixins;
+
 
 .productDetail {
   width: 100%;
@@ -46,14 +49,14 @@
         justify-content: space-evenly;
         padding: 10px 0px;
         .add-to-cart {
-          background-color: $primary-color;
+          background-color: mixins.theme(primary-color);
           border: white;
           border-radius: 5px;
           color: white;
           padding: 10px;
           cursor: pointer;
           &:hover {
-            background-color: darken($primary-color, 15%);
+            background-color: mixins.theme(primary-color);
           }
         }
 
@@ -61,26 +64,26 @@
           background-color: lightgrey;
           cursor: not-allowed;
           &:hover {
-            background-color: darken(lightgrey, 15%);
+            background-color: color.adjust(lightgrey, $lightness: -15%);
           }
         }
 
         .quantity {
           button {
-            border: $primary-color;
+            border: mixins.theme(primary-color);
             background-color: white;
             padding: 10px 5px;
             width: 20px;
             cursor: pointer;
             &:hover {
-              color: $primary-color;
+              color: mixins.theme(primary-color);
             }
           }
           .hidden {
             display: none;
           }
           input {
-            border: 1px solid$primary-color;
+            border: 1px solidtheme(primary-color);
             border-radius: 5px;
             padding: 10px;
             width: 60px;
@@ -108,7 +111,7 @@
       .info {
         height: auto;
         width: 100%;
-        background-color: lighten($primary-color, 55%);
+        background-color: theme(primary-color);
         padding: 10px;
         border-radius: 5px;
         font-size: 8pt;
@@ -132,7 +135,7 @@
           input {
             max-width: 100px;
             padding: 5px;
-            border: 1px solid $primary-color;
+            border: 1px solid mixins.theme(primary-color);
             border-radius: 5px;
             text-align: center;
             &:focus {
@@ -141,21 +144,21 @@
             }
           }
           button {
-            background-color: $primary-color;
+            background-color: mixins.theme(primary-color);
             border: white;
             border-radius: 5px;
             color: white;
             padding: 5px;
             cursor: pointer;
             &:hover{
-              background-color: darken($primary-color, 15%);
+              background-color: mixins.theme(primary-color);
 
             }
           }
         }
       }
       i {
-        color: $primary-color;
+        color: mixins.theme(primary-color);
       }
     }
   }

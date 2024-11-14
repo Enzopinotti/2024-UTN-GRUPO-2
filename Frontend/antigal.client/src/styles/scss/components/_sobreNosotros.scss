@@ -1,6 +1,6 @@
 /*SobreNosotros.scss*/
-@import '../abstract/variables';
-@import '../abstract/mixins';
+@use "../abstract/variables" as variables;
+@use '../abstract/mixins' as mixins;
 
 .sobre-nosotros {
     font-family: 'Roboto', sans-serif;
@@ -12,7 +12,7 @@
   
       h1 {
         font-size: 2.5rem;
-        color: $primary-color;
+        color: mixins.theme(primary-color);
         margin-bottom: 1.5rem;
       }
   
@@ -33,7 +33,7 @@
         p {
           max-width: 600px;
           font-size: 1rem;
-          color: $primary-black-color;
+          color: mixins.theme(primary-black-color);
           line-height: 1.6;
         }
       }
@@ -44,7 +44,7 @@
   
       h2 {
         font-size: 2rem;
-        color: $secondary-color;
+        color: mixins.theme(secondary-color);
         margin-bottom: 1rem;
       }
   

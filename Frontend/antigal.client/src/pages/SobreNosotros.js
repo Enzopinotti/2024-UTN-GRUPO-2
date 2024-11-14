@@ -36,13 +36,13 @@ const SobreNosotros = () => {
         <h2>Síguenos en Instagram</h2>
         <div className="instagram-feed">
           {/* Aquí se insertará el widget de Instagram */}
-          <iframe
-            src="https://lightwidget.com/widgets/YOUR_WIDGET_CODE.html" // Reemplaza con tu código de widget
-            allowtransparency="true"
-            className="lightwidget-widget"
-            style={{ width: '100%', border: '0', overflow: 'hidden' }}
-            title="Instagram Feed"
+          <iframe 
+            src="//lightwidget.com/widgets/39722489d2fb5cffafd1ed21f6bc1f9d.html" 
+            scrolling="no" 
+            allowtransparency="true" 
+            className="lightwidget-widget" 
           ></iframe>
+         
         </div>
       </section>
     </div>

@@ -28,7 +28,7 @@ import CartPage from "./pages/CartPage"
 import SobreNosotros from "./pages/SobreNosotros"
 import ResetearContrasenia from "./pages/auth/ResetearContrasenia";
 import RecuperarContrasenia from "./pages/auth/RecuperarContrasenia";
-
+import Contact from "./pages/Contact";
 
 function App() {
   return (
@@ -76,7 +76,7 @@ function App() {
               <Route path="/logout" element={<Logout />} />
               <Route path="/sobre-nosotros" element={<SobreNosotros />} />
               <Route path="/tienda-fisica" element={<TiendaFisica />} />
-
+              <Route path="/contacto" element={<Contact />} />
               <Route path="/politica-de-privacidad" element={< PrivacyPolicy/>} />
             </Routes>
           </Main>

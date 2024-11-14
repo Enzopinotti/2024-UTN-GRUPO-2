@@ -1,18 +1,29 @@
-// src/pages/RecuperarContraseña.jsx
-import React, { useState } from 'react';
+// src/pages/RecuperarContrasenia.jsx
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { recoverPasswordSchema } from '../../validations/validationSchemas';
+import DOMPurify from 'dompurify';
+import { toast } from 'react-toastify';
 
 const RecuperarContrasenia = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [mensaje, setMensaje] = useState('');
-  const [error, setError] = useState('');
 
-  const handleRecuperar = async (e) => {
-    e.preventDefault();
-    setError('');
-    setMensaje('');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(recoverPasswordSchema),
+  });
+
+  const sanitizeInput = (input) => {
+    return DOMPurify.sanitize(input);
+  };
+
+  const onSubmit = async (data) => {
+    const sanitizedEmail = sanitizeInput(data.email);
 
     try {
       const response = await fetch('https://tu-backend.com/api/auth/recuperar', {
@@ -20,43 +31,42 @@ const RecuperarContrasenia = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email: sanitizedEmail }),
       });
 
       if (response.ok) {
-        setMensaje('Se ha enviado un enlace para restablecer tu contraseña a tu correo electrónico.');
+        toast.success('Se ha enviado un enlace para restablecer tu contraseña a tu correo electrónico.');
+        navigate('/login');
       } else {
         const errorData = await response.json();
-        setError(errorData.message || 'Error al solicitar recuperación de contraseña.');
+        toast.error(errorData.message || 'Error al solicitar recuperación de contraseña.');
       }
     } catch (err) {
       console.error('Error al solicitar recuperación de contraseña:', err);
-      setError('Error al solicitar recuperación de contraseña. Inténtalo de nuevo más tarde.');
+      toast.error('Error al solicitar recuperación de contraseña. Inténtalo de nuevo más tarde.');
     }
   };
 
   return (
     <div className="auth-page fondoAuth">
       <div className="auth-container">
-        <img  src='./icons/iconoAntigal.png' alt="Logo" />
+        <img src="./icons/iconoAntigal.png" alt="Logo" />
         <h2>Recuperar Contraseña</h2>
-        <form onSubmit={handleRecuperar}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-group">
             <label htmlFor="email">Correo Electrónico:</label>
             <input
               type="email"
               id="email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+              {...register('email')}
               placeholder="Ingresa tu correo electrónico"
             />
+            {errors.email && <p className="error-message">{errors.email.message}</p>}
           </div>
-          <button type="submit" className="cta-button primary">Enviar Enlace</button>
+          <button type="submit" className="cta-button primary">
+            Enviar Enlace
+          </button>
         </form>
-        {mensaje && <p className="mensaje-exito">{mensaje}</p>}
-        {error && <p className="mensaje-error">{error}</p>}
       </div>
     </div>
   );

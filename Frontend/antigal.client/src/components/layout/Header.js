@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import NavBar from '../common/NavBar';
 import Logo from '../common/Logo';
 import CartWidget from '../common/CartWidget';
@@ -10,13 +10,18 @@ import UserIcon from '../common/UserIconDos';
 import Swal from 'sweetalert2'; 
 import SearchBar from '../common/SearchBar';
 import SearchBarMobile from '../common/SearchBarMobile';
+import { ThemeContext } from '../../contexts/ThemeContext';
+import ThemeSlider from '../common/ThemeSlider';
+
+
+
 const Header = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 800);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
   
-  
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const showDevelopmentAlert = () => {
     Swal.fire({
       title: 'Funcionalidad en Desarrollo',
@@ -80,7 +85,8 @@ const Header = () => {
                 <Logo toggleMenu={toggleMenu} isMenuOpen={isMenuOpen} />
                 <CloseIcon onClick={toggleMenu} />
               </article>
-              <UserIcon />                  
+              <UserIcon />
+              <ThemeSlider />                
               <NavBar vertical={true} onLinkClick={toggleMenu} /> 
              <SearchBarMobile/>
               <SocialMedia />
@@ -95,6 +101,7 @@ const Header = () => {
             <LupaWidget onClick={toggleSearchBar} />
             <CartWidget onClick={showDevelopmentAlert} />
             <UserIcon />
+            <ThemeSlider /> 
           </div>
         </div>
       )}

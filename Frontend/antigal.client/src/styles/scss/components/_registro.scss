@@ -1,18 +1,19 @@
 // src/pages/registro.scss
+@use 'sass:color';
 
-@import '../abstract/variables';
-@import '../abstract/mixins';
+@use "../abstract/variables" as variables;
+@use '../abstract/mixins' as mixins;
 
 .auth-page {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  font-family: $font;
-    background-image: url('/public/images/fondoAuth.jpg');
-    background-size: cover;
+  background-image: url('/public/images/fondoAuth.jpg');
+  background-size: cover;
+
   .auth-container {
-    background-color: rgba($primary-white-color, 0.9);
+    background-color: rgba(mixins.theme(primary-white-color), 0.9);
     padding: 40px 30px;
     border-radius: 15px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -22,14 +23,17 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 4rem;
+    align-items: center; // Centrar contenido
 
-    img{
-        width: 30%;
+    img {
+      width: 30%;
+      margin-bottom: 20px; // Añadir espacio debajo de la imagen
     }
+
     h2 {
       text-align: center;
       margin-bottom: 30px;
-      color: $primary-black-color;
+      color: mixins.theme(primary-black-color);
       font-size: 2em;
       font-weight: 500;
     }
@@ -37,14 +41,17 @@
     form {
       display: flex;
       flex-direction: column;
-        width: 70%;
+      width: 100%; // Ajustar ancho al 100%
+      align-items: center; // Centrar contenido
+
       .form-group {
+        width: 80%; // Ajustar ancho de los grupos de formulario
         margin-bottom: 20px;
 
         label {
           display: block;
           margin-bottom: 8px;
-          color: $primary-black-color;
+          color: mixins.theme(primary-black-color);
           font-weight: 500;
         }
 
@@ -57,16 +64,60 @@
           transition: border-color 0.3s ease;
 
           &:focus {
-            border-color: $primary-color;
+            border-color: mixins.theme(primary-color);
             outline: none;
           }
+        }
+
+        .error-message {
+          color: red;
+          font-size: 0.9em;
+          margin-top: 5px;
+        }
+      }
+
+      .password-conditions {
+        width: 80%; // Ajustar ancho
+        margin-top: 10px;
+        transition: opacity 0.5s ease;
+
+        .condition {
+          color: red;
+          margin: 2px 0;
+          transition: color 0.3s;
+
+          &.met {
+            color: green;
+          }
+
+          &.unmet {
+            color: red;
+          }
+        }
+
+        &.conditions-met {
+          animation: fadeOut 1s forwards;
+        }
+      }
+
+      .password-secure-message {
+        color: green;
+        font-weight: bold;
+        margin-top: 10px;
+        opacity: 0;
+        animation: fadeIn 0.5s forwards;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
         }
       }
 
       .cta-button {
         &.primary {
-          background-color: $primary-color;
-          color: $primary-white-color;
+          background-color: mixins.theme(primary-color);
+          color: mixins.theme(primary-white-color);
           border: none;
           padding: 12px;
           border-radius: 8px;
@@ -74,9 +125,11 @@
           cursor: pointer;
           transition: background-color 0.3s ease, transform 0.3s ease;
           box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          width: 80%; // Ajustar ancho del botón
+          margin-top: 20px;
 
           &:hover {
-            background-color: darken($primary-color, 10%);
+            background-color: mixins.theme(shadow-color);
             transform: translateY(-2px);
           }
         }
@@ -88,13 +141,13 @@
       text-align: center;
 
       a {
-        color: $secondary-color;
+        color: mixins.theme(secondary-color);
         text-decoration: none;
         font-weight: 500;
         transition: color 0.3s ease;
 
         &:hover {
-          color: darken($secondary-color, 10%);
+          color: mixins.theme(shadow-color);
         }
       }
     }
@@ -111,6 +164,27 @@
       text-align: center;
     }
   }
+  .password-input-wrapper {
+    position: relative;
+  }
+  
+  .password-input-wrapper input {
+    padding-right: 40px; /* Espacio para el botón de ojo */
+  }
+  
+  .password-input-wrapper .toggle-password {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .toggle-password img {
+    width: 30px;
+  }
 }
 
 @keyframes fadeInUp {
@@ -121,5 +195,13 @@
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
   }
 }

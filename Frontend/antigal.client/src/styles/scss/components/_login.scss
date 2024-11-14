@@ -1,7 +1,7 @@
 // src/pages/login.scss
 
-@import '../abstract/variables';
-@import '../abstract/mixins';
+@use "../abstract/variables" as variables;
+@use '../abstract/mixins' as mixins;
 
 .auth-page {
   display: flex;
@@ -11,10 +11,9 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  font-family: $font;
 
   .auth-container {
-    background-color: rgba($primary-white-color, 0.9);
+    background-color: rgba(mixins.theme(primary-white-color), 0.9);
     padding: 40px 30px;
     border-radius: 15px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -31,7 +30,7 @@
     h2 {
       text-align: center;
       margin-bottom: 30px;
-      color: $primary-black-color;
+      color: mixins.theme(primary-black-color);
       font-size: 2em;
       font-weight: 500;
     }
@@ -46,7 +45,7 @@
         label {
           display: block;
           margin-bottom: 8px;
-          color: $primary-black-color;
+          color: mixins.theme(primary-black-color);
           font-weight: 500;
         }
 
@@ -59,7 +58,7 @@
           transition: border-color 0.3s ease;
 
           &:focus {
-            border-color: $primary-color;
+            border-color: mixins.theme(primary-color);
             outline: none;
           }
         }
@@ -67,8 +66,8 @@
 
       .cta-button {
         &.primary {
-          background-color: $primary-color;
-          color: $primary-white-color;
+          background-color: mixins.theme(primary-color);
+          color: mixins.theme(primary-white-color);
           border: none;
           padding: 12px;
           border-radius: 8px;
@@ -78,7 +77,7 @@
           box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
           &:hover {
-            background-color: darken($primary-color, 10%);
+            background-color: mixins.theme(shadow-color);
             transform: translateY(-2px);
           }
         }
@@ -90,13 +89,13 @@
         text-align: center;
 
         a {
-            color: $secondary-color;
+            color: mixins.theme(secondary-color);
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s ease;
 
             &:hover {
-            color: darken($secondary-color, 10%);
+              color: mixins.theme(shadow-color);
             }
         }
     }
@@ -112,6 +111,31 @@
       color: red;
       text-align: center;
     }
+  }
+  .password-input-wrapper {
+    position: relative;
+  }
+  
+  .password-input-wrapper input {
+    padding-right: 40px; 
+  }
+  
+  .password-input-wrapper .toggle-password {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    z-index: 2;
+  }
+  
+  .toggle-password.ojo img {
+    width: 30px;
+    margin: 0;
+    padding: 0;
   }
 }
 
