@@ -59,7 +59,7 @@ const ProductListContainer = () => {
             featured: item.destacado,      // Mapear destacado a featured
             price: item.precio,            // Mapear precio a price
             stock: item.stock,             // Mapear stock a stock
-            images: item.imagenUrls.$values[0] || 'icons/por-defecto.svg',         // Mapear imagenes a images
+            images: item.imagenUrls.$values[0] || 'icons/por-defecto.png',         // Mapear imagenes a images
             categories: [],                // Inicializar categorías vacías
           }));
 
