@@ -3679,6 +3679,36 @@ footer .footer-bottom img {
     transform: translateY(0);
   }
 }
+.not-found {
+  width: 100%;
+  height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.not-found h1, .not-found p {
+  color: var(--primary-black-color);
+  padding-bottom: 10px;
+}
+.not-found a {
+  background-color: var(--primary-color);
+  padding: 0.5rem 1.4rem;
+  border-radius: 20px;
+  border: none;
+  bottom: 4rem;
+  color: var(--primary-white-color);
+  font-weight: 900;
+  text-decoration: none;
+}
+.not-found a:hover {
+  background-color: var(--primary-color-hover);
+}
+.not-found video {
+  height: 150px;
+  width: auto;
+}
+
 .admin-page .content {
   padding: 2rem;
 }
@@ -4101,6 +4131,100 @@ main .admin-dashboard .admin-page .content .product-list .product-item .product-
     font-size: 2rem;
   }
 }
+.content h2 {
+  color: var(--primary-black-color);
+}
+
+.admin-user {
+  margin-top: 10px;
+}
+.admin-user .search-filter-container {
+  margin-left: auto;
+  justify-content: right;
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  padding-bottom: 20px;
+}
+.admin-user .search-filter-container input {
+  padding: 10px;
+}
+.admin-user .search-filter-container select {
+  padding: 10px;
+}
+.admin-user .user-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+.admin-user table {
+  width: 100%;
+  overflow-y: auto;
+}
+.admin-user table thead {
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+.admin-user table thead th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 1rem;
+}
+.admin-user table tbody tr {
+  background-color: white;
+}
+.admin-user table tbody tr:nth-child(even) {
+  background-color: #e3e3e3;
+}
+.admin-user table tbody tr:hover {
+  background-color: #c8c8c8;
+  cursor: pointer;
+}
+.admin-user table tbody td {
+  padding: 0.75rem;
+  text-align: left;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #ddd;
+  color: #333;
+}
+.admin-user table tbody td.action {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-evenly;
+}
+.admin-user table tbody td.action button {
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+.admin-user table tbody td.action button.role-toggle-btn {
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+.admin-user table tbody td.action button.role-toggle-btn.admin {
+  background-color: #ff7043;
+}
+.admin-user table tbody td.action button.role-toggle-btn.admin:hover {
+  background-color: #e64a19;
+}
+.admin-user table tbody td.action button.role-toggle-btn.user {
+  background-color: #4caf50;
+}
+.admin-user table tbody td.action button.role-toggle-btn.user:hover {
+  background-color: #388e3c;
+}
+.admin-user table tbody td.action button.delete-btn {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
 .form-overlay {
   position: fixed;
   top: 0;

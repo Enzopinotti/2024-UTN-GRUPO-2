@@ -17,11 +17,13 @@
 @use './components/login';
 @use './components/registro';
 @use './components/resetearContrasenia';
+@use './components/notFound';
 
 @use './components/admin/categoryListContainer';
 @use './components/admin/categoryForm';
 @use './components/admin/productListContainer';
 @use './components/admin/adminNav';
+@use './components/admin/adminUsers';
 @use './components/admin/productForm';
 
 @use './components/users/user';

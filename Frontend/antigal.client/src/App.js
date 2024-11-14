@@ -29,6 +29,8 @@ import SobreNosotros from "./pages/SobreNosotros"
 import ResetearContrasenia from "./pages/auth/ResetearContrasenia";
 import RecuperarContrasenia from "./pages/auth/RecuperarContrasenia";
 import Contact from "./pages/Contact";
+import NotFound from './components/NotFound'
+import AdminUserListContainer from "./components/admin/users/AdminUserListContainer";
 
 function App() {
   return (
@@ -66,6 +68,10 @@ function App() {
                   path="products"
                   element={<AdminProductListContainer />}
                 />
+                <Route
+                  path="users"
+                  element={<AdminUserListContainer />}
+                />
               </Route>
 
               {/* Rutas de autenticación */}
@@ -78,6 +84,7 @@ function App() {
               <Route path="/tienda-fisica" element={<TiendaFisica />} />
               <Route path="/contacto" element={<Contact />} />
               <Route path="/politica-de-privacidad" element={< PrivacyPolicy/>} />
+              <Route path="*" element={<NotFound />} /> 
             </Routes>
           </Main>
           <Footer />

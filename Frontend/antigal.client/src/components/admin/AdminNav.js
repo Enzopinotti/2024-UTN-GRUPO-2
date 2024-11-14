@@ -19,6 +19,12 @@ const AdminNav = () => {
         >
           Productos
         </NavLink>
+        <NavLink
+          to="/admin/users"
+          className={({ isActive }) => (isActive ? 'nav-button active' : 'nav-button')}
+        >
+          Usuarios
+        </NavLink>
       </nav>
     </div>
   );
