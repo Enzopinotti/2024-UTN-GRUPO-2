@@ -5,13 +5,15 @@ const OfferCard = ({ producto, isDesktop, reverse }) => {
   const {
     nombre,
     marca,
-    precioAnterior,
+    precio,
     precioOferta,
-    imagen,
-    estrellas,
-    totalReviews,
-    descripcion
+    imagenUrls,
+    descripcion,
+    estrellas = 0, // Valor por defecto si no se proporciona
+    totalReviews = 0 // Valor por defecto si no se proporciona
   } = producto;
+
+  const imagen = imagenUrls?.$values[0] || '';
 
   // Estado para manejar los likes
   const [likes, setLikes] = useState(0);
@@ -23,7 +25,6 @@ const OfferCard = ({ producto, isDesktop, reverse }) => {
 
   return (
     <div className={`offerCard ${isDesktop ? (reverse ? 'row-reverse' : 'row') : ''}`}>
-      {/* Imagen del producto */}
       <img src={imagen} alt={`Imagen de ${nombre}`} className="offerImage" />
 
       {/* Detalles del producto */}
@@ -34,7 +35,7 @@ const OfferCard = ({ producto, isDesktop, reverse }) => {
 
         {/* Precios */}
         <p className="offerPrice">
-          <span className="precioAnterior">${precioAnterior}</span>
+          <span className="precio">${precio}</span>
           <span className="precioOferta">${precioOferta}</span>
         </p>
 
@@ -62,12 +63,13 @@ OfferCard.propTypes = {
   producto: PropTypes.shape({
     nombre: PropTypes.string.isRequired,
     marca: PropTypes.string.isRequired,
-    precioAnterior: PropTypes.number.isRequired,
-    precioOferta: PropTypes.number.isRequired,
-    imagen: PropTypes.string.isRequired,
-    estrellas: PropTypes.number.isRequired,
-    totalReviews: PropTypes.number.isRequired,
+    precio: PropTypes.number.isRequired,
     descripcion: PropTypes.string.isRequired,
+    imagenUrls: PropTypes.shape({
+      $values: PropTypes.arrayOf(PropTypes.string).isRequired
+    }).isRequired,
+    estrellas: PropTypes.number, // Este campo puede ser opcional
+    totalReviews: PropTypes.number // Este campo puede ser opcional
   }).isRequired,
   isDesktop: PropTypes.bool.isRequired,
   reverse: PropTypes.bool.isRequired,
