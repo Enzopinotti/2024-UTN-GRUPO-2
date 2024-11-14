@@ -7,22 +7,18 @@ const CategoryList = ({ categories, onCategoryClick, selectedCategory }) => {
     <div className="category-list">
       <h3>Categorías</h3>
       <ul>
-        {categories.length > 0 ? (
-          categories.map((category) => (
-            <React.Fragment key={category.id}> {/* Cambiar a category.id */}
-              <li
-                className={category.name === selectedCategory ? 'active' : ''}
-                onClick={() => onCategoryClick(category.name, category.id)}
-              >
-                <span>{formatCamelCase(category.name)}</span>
-                <span>({category.count})</span>
-              </li>
-              <hr />
-            </React.Fragment>
-          ))
-        ) : (
-          <li>No hay categorías disponibles</li> // Mensaje si no hay categorías
-        )}
+        {categories.map((category) => (
+          <React.Fragment key={category.id}> {/* Cambiar a key={category.id} */}
+            <li
+              className={category.id === selectedCategory ? 'active' : ''} // Comparar con id
+              onClick={() => onCategoryClick(category.id)} // Pasar el id
+            >
+              <span>{formatCamelCase(category.name)}</span>
+              <span>({category.count})</span>
+            </li>
+            <hr />
+          </React.Fragment>
+        ))}
       </ul>
     </div>
   );
@@ -31,13 +27,13 @@ const CategoryList = ({ categories, onCategoryClick, selectedCategory }) => {
 CategoryList.propTypes = {
   categories: PropTypes.arrayOf(
     PropTypes.shape({
+      id: PropTypes.number.isRequired, // Asegúrate de incluir el id en la validación
       name: PropTypes.string.isRequired,
       count: PropTypes.number.isRequired,
-      id: PropTypes.number.isRequired,
     })
   ).isRequired,
   onCategoryClick: PropTypes.func.isRequired,
-  selectedCategory: PropTypes.string,
+  selectedCategory: PropTypes.number, // Cambiar a number
 };
 
 export default CategoryList;
