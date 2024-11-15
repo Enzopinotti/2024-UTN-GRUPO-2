@@ -288,3 +288,9 @@ C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.s
 C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Release\net8.0\antigal.server.pdb
 C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Release\net8.0\antigal.server.genruntimeconfig.cache
 C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Release\net8.0\ref\antigal.server.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Release\net8.0\AutoMapper.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Release\net8.0\MercadoPago.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Release\net8.0\Microsoft.Bcl.TimeProvider.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Release\net8.0\NETCore.MailKit.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Release\net8.0\EmailService.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Release\net8.0\EmailService.pdb

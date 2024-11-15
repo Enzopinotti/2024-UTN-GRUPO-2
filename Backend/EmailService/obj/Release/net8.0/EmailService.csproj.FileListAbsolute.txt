@@ -1,0 +1,13 @@
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\bin\Release\net8.0\EmailService.deps.json
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\bin\Release\net8.0\EmailService.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\bin\Release\net8.0\EmailService.pdb
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\obj\Release\net8.0\EmailService.csproj.AssemblyReference.cache
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\obj\Release\net8.0\EmailService.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\obj\Release\net8.0\EmailService.AssemblyInfoInputs.cache
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\obj\Release\net8.0\EmailService.AssemblyInfo.cs
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\obj\Release\net8.0\EmailService.csproj.CoreCompileInputs.cache
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\obj\Release\net8.0\EmailService.sourcelink.json
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\obj\Release\net8.0\EmailService.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\obj\Release\net8.0\refint\EmailService.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\obj\Release\net8.0\EmailService.pdb
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\obj\Release\net8.0\ref\EmailService.dll

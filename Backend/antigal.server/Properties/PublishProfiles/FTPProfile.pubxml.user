@@ -7,7 +7,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAJ/julikfW0ifpwmJ9ggR9gAAAAACAAAAAAAQZgAAAAEAACAAAAD5oGairdFCksRvikXsZzOmD5wRFoR0tggKbmnYfQzkyAAAAAAOgAAAAAIAACAAAAAeOkDjS77YXdn5SGt5vosiJS4eUxzPUK0MSiiYdX92eSAAAAArS4771cM6iw6tPoDwqI5d8hAa+ROtY0QxSV04lTNqrUAAAABTfS92Fm3NHe7lq5YktAoZx2uv4/Gv9bVjPsymQKxZxI2KR0NddEJjzw/9bNBghwsxx95lEYbI+dm694R9RTdb</EncryptedPassword>
     <_PublishTargetUrl>ftp://155.254.244.40/www.antigal.somee.com</_PublishTargetUrl>
-    <History>True|2024-11-15T00:55:05.9981654Z||;</History>
+    <History>True|2024-11-15T05:58:32.1245852Z||;True|2024-11-14T21:55:05.9981654-03:00||;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
@@ -15,25 +15,28 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/29/2022 12:04:06</publishTime>
     </File>
     <File Include="antigal.server.deps.json">
-      <publishTime>11/14/2024 21:40:46</publishTime>
+      <publishTime>11/15/2024 02:41:29</publishTime>
     </File>
     <File Include="antigal.server.dll">
-      <publishTime>11/14/2024 21:40:40</publishTime>
+      <publishTime>11/15/2024 02:41:23</publishTime>
     </File>
     <File Include="antigal.server.exe">
-      <publishTime>11/14/2024 21:40:40</publishTime>
+      <publishTime>11/15/2024 02:41:23</publishTime>
     </File>
     <File Include="antigal.server.pdb">
-      <publishTime>11/14/2024 21:40:40</publishTime>
+      <publishTime>11/15/2024 02:41:23</publishTime>
     </File>
     <File Include="antigal.server.runtimeconfig.json">
-      <publishTime>11/14/2024 21:40:41</publishTime>
+      <publishTime>11/15/2024 02:41:23</publishTime>
     </File>
     <File Include="appsettings.json">
-      <publishTime>11/14/2024 21:33:52</publishTime>
+      <publishTime>11/15/2024 02:19:24</publishTime>
     </File>
     <File Include="ar/Humanizer.resources.dll">
       <publishTime>01/29/2022 12:04:06</publishTime>
+    </File>
+    <File Include="AutoMapper.dll">
+      <publishTime>02/07/2024 18:45:30</publishTime>
     </File>
     <File Include="az/Humanizer.resources.dll">
       <publishTime>01/29/2022 12:04:08</publishTime>
@@ -115,6 +118,12 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     </File>
     <File Include="el/Humanizer.resources.dll">
       <publishTime>01/29/2022 12:04:10</publishTime>
+    </File>
+    <File Include="EmailService.dll">
+      <publishTime>11/15/2024 02:41:22</publishTime>
+    </File>
+    <File Include="EmailService.pdb">
+      <publishTime>11/15/2024 02:41:22</publishTime>
     </File>
     <File Include="Enums.NET.dll">
       <publishTime>11/18/2022 19:40:50</publishTime>
@@ -299,6 +308,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="MathNet.Numerics.dll">
       <publishTime>04/03/2022 11:02:08</publishTime>
     </File>
+    <File Include="MercadoPago.dll">
+      <publishTime>09/03/2024 09:43:00</publishTime>
+    </File>
     <File Include="Microsoft.AspNetCore.Authentication.JwtBearer.dll">
       <publishTime>09/18/2024 15:41:00</publishTime>
     </File>
@@ -322,6 +334,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     </File>
     <File Include="Microsoft.Bcl.AsyncInterfaces.dll">
       <publishTime>10/18/2022 13:14:58</publishTime>
+    </File>
+    <File Include="Microsoft.Bcl.TimeProvider.dll">
+      <publishTime>11/30/2023 05:24:58</publishTime>
     </File>
     <File Include="Microsoft.Build.dll">
       <publishTime>10/19/2023 17:53:52</publishTime>
@@ -414,13 +429,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/05/2023 15:31:58</publishTime>
     </File>
     <File Include="Microsoft.IdentityModel.Abstractions.dll">
-      <publishTime>11/20/2023 22:54:14</publishTime>
+      <publishTime>11/01/2024 20:45:56</publishTime>
     </File>
     <File Include="Microsoft.IdentityModel.JsonWebTokens.dll">
-      <publishTime>11/20/2023 22:11:54</publishTime>
+      <publishTime>11/01/2024 20:46:06</publishTime>
     </File>
     <File Include="Microsoft.IdentityModel.Logging.dll">
-      <publishTime>11/20/2023 22:14:30</publishTime>
+      <publishTime>11/01/2024 20:46:04</publishTime>
     </File>
     <File Include="Microsoft.IdentityModel.Protocols.dll">
       <publishTime>11/20/2023 22:17:02</publishTime>
@@ -429,7 +444,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>11/20/2023 22:30:36</publishTime>
     </File>
     <File Include="Microsoft.IdentityModel.Tokens.dll">
-      <publishTime>11/20/2023 22:23:16</publishTime>
+      <publishTime>11/01/2024 20:46:26</publishTime>
     </File>
     <File Include="Microsoft.IO.RecyclableMemoryStream.dll">
       <publishTime>12/11/2023 18:53:28</publishTime>
@@ -481,6 +496,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     </File>
     <File Include="nb/Humanizer.resources.dll">
       <publishTime>01/29/2022 12:04:08</publishTime>
+    </File>
+    <File Include="NETCore.MailKit.dll">
+      <publishTime>05/11/2022 09:20:30</publishTime>
     </File>
     <File Include="Newtonsoft.Json.dll">
       <publishTime>03/08/2023 04:09:54</publishTime>
@@ -702,7 +720,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>10/18/2022 13:17:04</publishTime>
     </File>
     <File Include="System.IdentityModel.Tokens.Jwt.dll">
-      <publishTime>11/20/2023 22:10:00</publishTime>
+      <publishTime>11/01/2024 20:46:06</publishTime>
     </File>
     <File Include="System.Memory.Data.dll">
       <publishTime>04/08/2021 13:45:54</publishTime>
@@ -762,7 +780,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/29/2022 12:04:12</publishTime>
     </File>
     <File Include="web.config">
-      <publishTime>11/14/2024 21:40:46</publishTime>
+      <publishTime>11/15/2024 02:41:29</publishTime>
     </File>
     <File Include="zh-CN/Humanizer.resources.dll">
       <publishTime>01/29/2022 12:04:12</publishTime>
