@@ -14,7 +14,7 @@ namespace antigal.server.Models
         public int?  codigoBarras { get; set; }
         public int? disponible { get; set; }
         public int? destacado { get; set; }
-        public float precio { get; set; }
+        public decimal precio { get; set; }
         public  int stock { get; set; }
 
         //RELACION UNO A MUCHOS CON IMAGEN
@@ -25,7 +25,7 @@ namespace antigal.server.Models
         public List<ProductoCategoria> CategoriaProductos { get; set; } = new List<ProductoCategoria>();
 
 
-        public Producto(int idProducto, string nombre, string marca, string? descripcion, int? codigoBarras, int disponible, int? destacado, float precio, int stock)
+        public Producto(int idProducto, string nombre, string marca, string? descripcion, int? codigoBarras, int disponible, int? destacado, decimal precio, int stock)
         {
             this.idProducto = idProducto;
             this.nombre = nombre;

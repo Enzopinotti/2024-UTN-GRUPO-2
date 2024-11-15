@@ -29,7 +29,8 @@ namespace antigal.server.Controllers
             var users = _userManager.Users
                 .Select(user => new
                 {
-                    user.FullName,
+                    user.FirstName,
+                    user.LastName,
                     user.Email,
                     user.ImagenUrl // Asegúrate de tener esta propiedad en tu modelo User
                 })

@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace antigal.server.Migrations
 {
     /// <inheritdoc />
@@ -31,7 +33,8 @@ namespace antigal.server.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ImagenUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -51,19 +54,6 @@ namespace antigal.server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Carritos",
-                columns: table => new
-                {
-                    idCarrito = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    idUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Carritos", x => x.idCarrito);
                 });
 
             migrationBuilder.CreateTable(
@@ -93,7 +83,7 @@ namespace antigal.server.Migrations
                     codigoBarras = table.Column<int>(type: "int", nullable: true),
                     disponible = table.Column<int>(type: "int", nullable: true),
                     destacado = table.Column<int>(type: "int", nullable: true),
-                    precio = table.Column<float>(type: "real", nullable: false),
+                    precio = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     stock = table.Column<int>(type: "int", nullable: false),
                     ImagenUrls = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -224,50 +214,62 @@ namespace antigal.server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
+                name: "Carritos",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    idCarrito = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    idUsuario = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.PrimaryKey("PK_Carritos", x => x.idCarrito);
                     table.ForeignKey(
-                        name: "FK_Orders_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Carritos_AspNetUsers_idUsuario",
+                        column: x => x.idUsuario,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CarritoItems",
+                name: "Likes",
                 columns: table => new
                 {
-                    idCarritoItem = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    idProducto = table.Column<int>(type: "int", nullable: false),
-                    idCarrito = table.Column<int>(type: "int", nullable: false),
-                    cantidad = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ProductoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CarritoItems", x => x.idCarritoItem);
+                    table.PrimaryKey("PK_Likes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CarritoItems_Carritos_idCarrito",
-                        column: x => x.idCarrito,
-                        principalTable: "Carritos",
-                        principalColumn: "idCarrito",
+                        name: "FK_Likes_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ordenes",
+                columns: table => new
+                {
+                    idOrden = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    idUsuario = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    fechaOrden = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    estado = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ordenes", x => x.idOrden);
                     table.ForeignKey(
-                        name: "FK_CarritoItems_Productos_idProducto",
-                        column: x => x.idProducto,
-                        principalTable: "Productos",
-                        principalColumn: "idProducto",
+                        name: "FK_Ordenes_AspNetUsers_idUsuario",
+                        column: x => x.idUsuario,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -332,30 +334,98 @@ namespace antigal.server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderItems",
+                name: "CarritoItems",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    idCarritoItem = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false)
+                    idProducto = table.Column<int>(type: "int", nullable: false),
+                    idCarrito = table.Column<int>(type: "int", nullable: false),
+                    cantidad = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderItems", x => x.Id);
+                    table.PrimaryKey("PK_CarritoItems", x => x.idCarritoItem);
                     table.ForeignKey(
-                        name: "FK_OrderItems_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
-                        principalColumn: "Id",
+                        name: "FK_CarritoItems_Carritos_idCarrito",
+                        column: x => x.idCarrito,
+                        principalTable: "Carritos",
+                        principalColumn: "idCarrito",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrderItems_Productos_ProductId",
-                        column: x => x.ProductId,
+                        name: "FK_CarritoItems_Productos_idProducto",
+                        column: x => x.idProducto,
                         principalTable: "Productos",
                         principalColumn: "idProducto",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrdenDetalle",
+                columns: table => new
+                {
+                    idDetalle = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    idOrdenDetalle = table.Column<int>(type: "int", nullable: false),
+                    idProducto = table.Column<int>(type: "int", nullable: false),
+                    cantidad = table.Column<int>(type: "int", nullable: false),
+                    precio = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrdenDetalle", x => x.idDetalle);
+                    table.ForeignKey(
+                        name: "FK_OrdenDetalle_Ordenes_idOrdenDetalle",
+                        column: x => x.idOrdenDetalle,
+                        principalTable: "Ordenes",
+                        principalColumn: "idOrden",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrdenDetalle_Productos_idProducto",
+                        column: x => x.idProducto,
+                        principalTable: "Productos",
+                        principalColumn: "idProducto",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Sales",
+                columns: table => new
+                {
+                    idVenta = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    idOrden = table.Column<int>(type: "int", nullable: false),
+                    fechaVenta = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    metodoPago = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EstadoVenta = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    idUsuario = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sales", x => x.idVenta);
+                    table.ForeignKey(
+                        name: "FK_Sales_AspNetUsers_idUsuario",
+                        column: x => x.idUsuario,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Sales_Ordenes_idOrden",
+                        column: x => x.idOrden,
+                        principalTable: "Ordenes",
+                        principalColumn: "idOrden",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "639de93f-7876-4fff-96ec-37f8bd3bf180", null, "The visitor role for the user", "Visitor", "VISITOR" },
+                    { "a9b5f83e-92c3-4c5e-94de-4d6a6e4f82a9", null, "The admin role for the user", "Admin", "ADMIN" },
+                    { "d8a9f8f8-3d65-4b2a-9b2f-3a1c4b2c1234", null, "The regular user role", "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -408,6 +478,11 @@ namespace antigal.server.Migrations
                 column: "idProducto");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Carritos_idUsuario",
+                table: "Carritos",
+                column: "idUsuario");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Imagenes_CategoriaId",
                 table: "Imagenes",
                 column: "CategoriaId");
@@ -423,24 +498,40 @@ namespace antigal.server.Migrations
                 column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_OrderId",
-                table: "OrderItems",
-                column: "OrderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_ProductId",
-                table: "OrderItems",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Orders_UserId",
-                table: "Orders",
+                name: "IX_Likes_UserId",
+                table: "Likes",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrdenDetalle_idOrdenDetalle",
+                table: "OrdenDetalle",
+                column: "idOrdenDetalle");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrdenDetalle_idProducto",
+                table: "OrdenDetalle",
+                column: "idProducto");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ordenes_idUsuario",
+                table: "Ordenes",
+                column: "idUsuario");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductoCategoria_idCategoria",
                 table: "ProductoCategoria",
                 column: "idCategoria");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sales_idOrden",
+                table: "Sales",
+                column: "idOrden",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sales_idUsuario",
+                table: "Sales",
+                column: "idUsuario");
         }
 
         /// <inheritdoc />
@@ -468,7 +559,10 @@ namespace antigal.server.Migrations
                 name: "Imagenes");
 
             migrationBuilder.DropTable(
-                name: "OrderItems");
+                name: "Likes");
+
+            migrationBuilder.DropTable(
+                name: "OrdenDetalle");
 
             migrationBuilder.DropTable(
                 name: "ProductoCategoria");
@@ -477,19 +571,22 @@ namespace antigal.server.Migrations
                 name: "RefreshTokens");
 
             migrationBuilder.DropTable(
+                name: "Sales");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Carritos");
 
             migrationBuilder.DropTable(
-                name: "Orders");
-
-            migrationBuilder.DropTable(
                 name: "Categorias");
 
             migrationBuilder.DropTable(
                 name: "Productos");
+
+            migrationBuilder.DropTable(
+                name: "Ordenes");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

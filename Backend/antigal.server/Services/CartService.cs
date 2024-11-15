@@ -1,41 +1,48 @@
-﻿using antigal.server.Models;
+﻿// Services/CartService.cs
 using antigal.server.Models.Dto;
+using antigal.server.Models.Dto.CarritoDtos;
 using antigal.server.Repositories;
+using System.Threading.Tasks;
 
 namespace antigal.server.Services
 {
     public class CartService : ICartService
     {
-        private readonly ICartRepository _cartRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CartService(ICartRepository cartRepository)
+        public CartService(IUnitOfWork unitOfWork)
         {
-            _cartRepository = cartRepository;
+            _unitOfWork = unitOfWork;
         }
 
-        public ResponseDto GetCartByUserId(string userId)
+        public async Task<ResponseDto> GetCartByUserIdAsync(string userId)
         {
-            return _cartRepository.GetCartByUserId(userId);
+            return await _unitOfWork.Carts.GetCartByUserIdAsync(userId);
         }
 
-        public ResponseDto CreateCart(string userId)
+        public async Task<ResponseDto> CreateCartAsync(string userId)
         {
-            return _cartRepository.CreateCart(userId);
+            return await _unitOfWork.Carts.CreateCartAsync(userId);
         }
 
-        public ResponseDto AddItemToCart(string userId, AddItemToCartDto addItemDto)
+        public async Task<ResponseDto> AddItemToCartAsync(string userId, CarritoItemDto addItemDto)
         {
-            return _cartRepository.AddItemToCart(userId, addItemDto);
+            return await _unitOfWork.Carts.AddItemToCartAsync(userId, addItemDto);
         }
 
-        public ResponseDto RemoveItemFromCart(string userId, int itemId)
+        public async Task<ResponseDto> RemoveItemFromCartAsync(string userId, int itemId)
         {
-            return _cartRepository.RemoveItemFromCart(userId, itemId);
+            return await _unitOfWork.Carts.RemoveItemFromCartAsync(userId, itemId);
         }
 
-        public ResponseDto ClearCart(string userId)
+        public async Task<ResponseDto> ClearCartAsync(string userId)
         {
-            return _cartRepository.ClearCart(userId);
+            return await _unitOfWork.Carts.ClearCartAsync(userId);
+        }
+
+        public async Task<ResponseDto> ConfirmCartAsOrderAsync(string userId)
+        {
+            return await _unitOfWork.Carts.ConfirmCartAsOrderAsync(userId);
         }
     }
 }

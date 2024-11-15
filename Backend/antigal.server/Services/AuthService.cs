@@ -1,12 +1,10 @@
 ﻿using System.Threading.Tasks;
 using antigal.server.Models.Dto;
 using antigal.server.Models;
-using antigal.server.Services; // Asegúrate de incluir este espacio de nombres
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging; // Para usar ILogger
+using Microsoft.Extensions.Logging;
 using antigal.server.Data;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Configuration;
 using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace antigal.server.Services
@@ -15,15 +13,14 @@ namespace antigal.server.Services
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly ICartService _cartService; // Agregar ICartService
-        private readonly ILogger<AuthService> _logger; // Agregar ILogger
+        private readonly ICartService _cartService;
+        private readonly ILogger<AuthService> _logger;
         private readonly ServiceToken _serviceToken;
         private readonly AppDbContext _context;
         private readonly IEmailSender _emailSender;
 
-        // Modificar el constructor para inyectar ILogger<AuthService>
-        public AuthService(UserManager<User> userManager, SignInManager<User> signInManager, 
-                            ICartService cartService, ILogger<AuthService> logger, 
+        public AuthService(UserManager<User> userManager, SignInManager<User> signInManager,
+                            ICartService cartService, ILogger<AuthService> logger,
                             ServiceToken serviceToken, AppDbContext context,
                             IEmailSender emailSender)
         {
@@ -36,117 +33,140 @@ namespace antigal.server.Services
             _emailSender = emailSender;
         }
 
-        public async Task<bool> RegisterUserAsync(RegisterDto registerDto)
-        {
-            var user = new User
-            {
-                UserName = registerDto.UserName,
-                Email = registerDto.Email,
-                FullName = registerDto.FullName,
-            };
-
-
-            var result = await _userManager.CreateAsync(user, registerDto.Password);
-
-            if (result.Succeeded)
-            {
-                // Generar el token JWT para la confirmación del correo electrónico
-                var token = _serviceToken.GenerateEmailConfirmationToken(user); // Método que deberás implementar
-                var confirmationLink = $"https://localhost:7255/api/auth/confirmemail?userId={user.Id}&token={token}";
-
-                // Enviar el correo electrónico de confirmación
-                await _emailSender.SendEmailAsync(
-                    registerDto.Email,
-                    "Confirma tu cuenta",
-                    $"Por favor confirma tu cuenta haciendo clic aquí: <a href='{confirmationLink}'>link</a>");
-
-                // Crear un carrito vacío para el nuevo usuario
-                var cartResponse = _cartService.CreateCart(user.Id);
-                if (!cartResponse.IsSuccess)
-                {
-                    // Registrar un mensaje de error si la creación del carrito falla
-                    _logger.LogError($"No se pudo crear el carrito para el usuario con ID: {user.Id}. Error: {cartResponse.Message}");
-                }
-
-                return true; // Registro exitoso
-            }
-
-            return false; // Registro fallido
-        }
+       
 
         public async Task<(string AccessToken, string RefreshToken)> LoginUserAsync(LoginDto loginDto)
         {
-            var result = await _signInManager.PasswordSignInAsync(loginDto.UserName, loginDto.Password, false, false);
-
-            if (result.Succeeded)
+            try
             {
-                var user = await _userManager.FindByNameAsync(loginDto.UserName);
-                var accessToken = _serviceToken.GenerateToken(user); // Genera el token de acceso
-                var refreshToken = _serviceToken.GenerateRefreshToken(); // Genera el refresh token
+                var result = await _signInManager.PasswordSignInAsync(loginDto.UserName, loginDto.Password, false, false);
 
-                // Almacenar el refresh token en la base de datos
+                if (!result.Succeeded)
+                {
+                    throw new UnauthorizedAccessException("El inicio de sesión ha fallado debido a credenciales inválidas.");
+                }
+
+                var user = await _userManager.FindByNameAsync(loginDto.UserName);
+                if (user == null)
+                {
+                    throw new KeyNotFoundException("Usuario no encontrado en la base de datos.");
+                }
+
+                var accessToken = _serviceToken.GenerateToken(user);
+                var refreshToken = _serviceToken.GenerateRefreshToken();
+
                 var tokenEntity = new RefreshToken
                 {
                     Token = refreshToken,
                     UserId = user.Id,
-                    Expiration = DateTime.UtcNow.AddDays(1) // Establecer una expiración (por ejemplo, 7 días)
+                    Expiration = DateTime.UtcNow.AddDays(1)
                 };
+
                 _context.RefreshTokens.Add(tokenEntity);
                 await _context.SaveChangesAsync();
 
                 return (accessToken, refreshToken);
             }
-
-            return (null, null); // Retornar null si el inicio de sesión falla
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError($"Error al interactuar con la base de datos en el inicio de sesión. Excepción: {ex.Message}");
+                throw new InvalidOperationException("Error al guardar el token de inicio de sesión en la base de datos.", ex);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Excepción no controlada durante el inicio de sesión para el usuario: {loginDto.UserName}. Excepción: {ex.Message}");
+                throw;
+            }
         }
 
         public async Task<string> RefreshTokenAsync(string refreshToken)
         {
-            // Busca el token de refresco en la base de datos
-            var tokenEntity = await _context.RefreshTokens.FirstOrDefaultAsync(t => t.Token == refreshToken);
-
-            // Verifica si el token no existe o ha expirado
-            if (tokenEntity == null || tokenEntity.Expiration < DateTime.UtcNow)
+            try
             {
-                return null; // El refresh token no es válido o ha expirado
-            }
+                // Buscar el token en la base de datos
+                var tokenEntity = await _context.RefreshTokens.FirstOrDefaultAsync(t => t.Token == refreshToken);
 
-            // Encuentra al usuario asociado al token
-            var user = await _userManager.FindByIdAsync(tokenEntity.UserId);
-            if (user == null)
+                // Verificar si el token es nulo o ha expirado
+                if (tokenEntity == null)
+                {
+                    _logger.LogWarning("El token de refresco no es válido o no existe.");
+                    return string.Empty; // Retorna una cadena vacía
+                }
+
+                if (tokenEntity.Expiration < DateTime.UtcNow)
+                {
+                    _logger.LogWarning("El token de refresco ha expirado.");
+                    return string.Empty; // Retorna una cadena vacía
+                }
+
+                // Verificar que tokenEntity.idUsuario no sea nulo
+                var userId = tokenEntity.UserId; // Asegúrate de que idUsuario no sea nulo
+                if (string.IsNullOrWhiteSpace(userId))
+                {
+                    _logger.LogWarning("idUsuario asociado al token de refresco es nulo o vacío.");
+                    return string.Empty; // Retorna una cadena vacía
+                }
+
+                // Buscar el usuario asociado al idUsuario
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                {
+                    _logger.LogWarning($"Usuario asociado al token de refresco no encontrado para idUsuario: {userId}.");
+                    return string.Empty; // Retorna una cadena vacía
+                }
+
+                // Generar nuevos tokens
+                var newAccessToken = _serviceToken.GenerateToken(user);
+                var newRefreshToken = _serviceToken.GenerateRefreshToken();
+
+                // Actualizar el token en la base de datos
+                tokenEntity.Token = newRefreshToken;
+                tokenEntity.Expiration = DateTime.UtcNow.AddDays(7);
+                await _context.SaveChangesAsync();
+
+                return newAccessToken;
+            }
+            catch (DbUpdateException ex)
             {
-                return null; // El usuario no existe
+                _logger.LogError($"Error al actualizar el token en la base de datos. Excepción: {ex.Message}");
+                throw new InvalidOperationException("Error al actualizar el token de acceso en la base de datos.", ex);
             }
-
-            // Genera un nuevo access token y un nuevo refresh token
-            var newAccessToken = _serviceToken.GenerateToken(user);
-            var newRefreshToken = _serviceToken.GenerateRefreshToken();
-
-            // Actualiza el refresh token en la base de datos
-            tokenEntity.Token = newRefreshToken;
-            tokenEntity.Expiration = DateTime.UtcNow.AddDays(7); // Actualizar la expiración
-            await _context.SaveChangesAsync();
-
-            // Retorna el nuevo token de acceso
-            return newAccessToken;
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error inesperado al actualizar el token de acceso con el token de refresco. Excepción: {ex.Message}");
+                throw;
+            }
         }
+
+
+
 
         public async Task<User> GetUserByIdAsync(string userId)
         {
-            return await _userManager.FindByIdAsync(userId);
-        }
-
-        public async Task<bool> ConfirmEmailAsync(string userId, string token)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            // Verificar si userId es nulo o vacío
+            if (string.IsNullOrWhiteSpace(userId))
             {
-                return false; // Usuario no encontrado
+                _logger.LogWarning("userId es nulo o vacío.");
+                throw new ArgumentNullException(nameof(userId), "El ID del usuario no puede ser nulo o vacío.");
             }
 
-            // Confirmar el correo electrónico
-            var result = await _userManager.ConfirmEmailAsync(user, token);
-            return result.Succeeded; // Retorna true si la confirmación fue exitosa
+            try
+            {
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                {
+                    _logger.LogWarning($"Usuario con ID {userId} no encontrado.");
+                    throw new KeyNotFoundException($"Usuario con ID {userId} no encontrado.");
+                }
+                return user;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Excepción al obtener el usuario con ID: {userId}. Excepción: {ex.Message}");
+                throw;
+            }
         }
+
+
     }
 }

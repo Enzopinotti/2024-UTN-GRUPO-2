@@ -13,7 +13,7 @@ namespace antigal.server.Models
 
 
         // Método para calcular el precio total del ítem
-        public float CalcularSubtotal()
+        public decimal CalcularSubtotal()
         {
             return (Producto != null) ? Producto.precio * cantidad : 0; // Retorna 0 si el producto es nulo
         }

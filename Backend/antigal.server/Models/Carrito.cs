@@ -22,9 +22,9 @@ namespace antigal.server.Models
         public Carrito() { }
 
         // Método para calcular el precio total del carrito
-        public float CalcularPrecioTotal()
+        public decimal CalcularPrecioTotal()
         {
-            float total = 0;
+            decimal total = 0;
             foreach (var item in Items)
             {
                 total += item.CalcularSubtotal(); // Llama al método de CarritoItem

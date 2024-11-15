@@ -1,128 +1,137 @@
-﻿using antigal.server.Data;
+﻿// Repositories/CategoriaRepository.cs
+using antigal.server.Data;
 using antigal.server.Models;
 using antigal.server.Models.Dto;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace antigal.server.Repositories
 {
     public class CategoriaRepository : ICategoriaRepository
     {
         private readonly AppDbContext _context;
-        private readonly ResponseDto _response;
 
         public CategoriaRepository(AppDbContext context)
         {
             _context = context;
-            _response = new ResponseDto();
         }
 
-        public ResponseDto GetCategories()
+        public async Task<ResponseDto> GetCategoriesAsync()
         {
+            var response = new ResponseDto();
             try
             {
-                var categorias = _context.Categorias.ToList();
-                _response.Data = categorias;
-                _response.IsSuccess = true;
+                var categorias = await _context.Categorias.ToListAsync();
+                response.Data = categorias;
+                response.IsSuccess = true;
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                response.IsSuccess = false;
+                response.Message = ex.Message;
             }
-            return _response;
+            return response;
         }
 
-        public ResponseDto GetCategoryById(int id)
+        public async Task<ResponseDto> GetCategoryByIdAsync(int id)
         {
+            var response = new ResponseDto();
             try
             {
-                var categoria = _context.Categorias.FirstOrDefault(c => c.idCategoria == id);
-                _response.Data = categoria;
-                _response.IsSuccess = true;
+                var categoria = await _context.Categorias.FindAsync(id);
+                response.Data = categoria;
+                response.IsSuccess = true;
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                response.IsSuccess = false;
+                response.Message = ex.Message;
             }
-            return _response;
+            return response;
         }
 
-        public ResponseDto GetCategoriesByTitle(string nombre)
+        public async Task<ResponseDto> GetCategoriesByTitleAsync(string nombre)
         {
+            var response = new ResponseDto();
             try
             {
-                var categorias = _context.Categorias
+                var categorias = await _context.Categorias
                     .Where(c => c.nombre.ToLower().Contains(nombre.ToLower()))
-                    .ToList();
-                _response.Data = categorias;
-                _response.IsSuccess = true;
+                    .ToListAsync();
+                response.Data = categorias;
+                response.IsSuccess = true;
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                response.IsSuccess = false;
+                response.Message = ex.Message;
             }
-            return _response;
+            return response;
         }
 
-        public ResponseDto AddCategory(Categoria categoria)
+        public async Task<ResponseDto> AddCategoryAsync(Categoria categoria)
         {
+            var response = new ResponseDto();
             try
             {
-                _context.Categorias.Add(categoria);
-                _context.SaveChanges();
-                _response.Data = categoria;
-                _response.IsSuccess = true;
+                await _context.Categorias.AddAsync(categoria);
+                await _context.SaveChangesAsync();
+                response.Data = categoria;
+                response.IsSuccess = true;
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                response.IsSuccess = false;
+                response.Message = ex.Message;
             }
-            return _response;
+            return response;
         }
 
-        public ResponseDto UpdateCategory(Categoria categoria)
+        public async Task<ResponseDto> UpdateCategoryAsync(Categoria categoria)
         {
+            var response = new ResponseDto();
             try
             {
                 _context.Categorias.Update(categoria);
-                _context.SaveChanges();
-                _response.Data = categoria;
-                _response.IsSuccess = true;
+                await _context.SaveChangesAsync();
+                response.Data = categoria;
+                response.IsSuccess = true;
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                response.IsSuccess = false;
+                response.Message = ex.Message;
             }
-            return _response;
+            return response;
         }
 
-        public ResponseDto DeleteCategory(int id)
+        public async Task<ResponseDto> DeleteCategoryAsync(int id)
         {
+            var response = new ResponseDto();
             try
             {
-                var categoria = _context.Categorias.Find(id);
+                var categoria = await _context.Categorias.FindAsync(id);
                 if (categoria != null)
                 {
                     _context.Categorias.Remove(categoria);
-                    _context.SaveChanges();
-                    _response.IsSuccess = true;
-                    _response.Message = "Categoría eliminada exitosamente.";
+                    await _context.SaveChangesAsync();
+                    response.IsSuccess = true;
+                    response.Message = "Categoría eliminada exitosamente.";
                 }
                 else
                 {
-                    _response.IsSuccess = false;
-                    _response.Message = $"No se encontró la categoría con ID {id}.";
+                    response.IsSuccess = false;
+                    response.Message = $"No se encontró la categoría con ID {id}.";
                 }
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                response.IsSuccess = false;
+                response.Message = ex.Message;
             }
-            return _response;
+            return response;
         }
     }
 }

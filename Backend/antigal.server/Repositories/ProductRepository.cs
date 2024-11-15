@@ -1,185 +1,99 @@
-﻿// Services/ProductService.cs
+﻿// Repositories/ProductRepository.cs
 using antigal.server.Data;
 using antigal.server.Models;
 using antigal.server.Models.Dto;
-using Azure;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using NPOI.XSSF.UserModel;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Threading.Tasks;
 
-namespace antigal.server.Services
+namespace antigal.server.Repositories
 {
-    public class ProductService : IProductService
+    public class ProductRepository : IProductRepository
     {
         private readonly AppDbContext _context;
-        private ResponseDto _response;
 
-        public ProductService(AppDbContext context)
+        public ProductRepository(AppDbContext context)
         {
             _context = context;
-            _response = new ResponseDto();
         }
 
-        public ResponseDto GetProducts()
+        public async Task<IEnumerable<Producto>> GetAllProductsAsync()
         {
-            try
-            {
-                IEnumerable<Producto> productos = _context.Productos.ToList();
-                _response.Data = productos;
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-            }
-
-            return _response;
+            return await _context.Productos.ToListAsync();
         }
 
-        public ResponseDto GetProductById(int id)
+        public async Task<Producto?> GetProductByIdAsync(int id)
         {
-            try
-            {
-                var producto = _context.Productos.FirstOrDefault(p => p.idProducto == id);
-                _response.Data = producto;
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-            }
-
-            return _response;
+            return await _context.Productos.FirstOrDefaultAsync(p => p.idProducto == id);
         }
 
-        public ResponseDto GetProductByTitle(string nombre)
+        public async Task<IEnumerable<Producto>> GetProductsByTitleAsync(string nombre)
         {
-            try
-            {
-                var normalizedNombre = nombre.ToLower();
-                // Obtener productos del contexto de datos
-                var productos = _context.Productos
+            var normalizedNombre = nombre.ToLower();
+            return await _context.Productos
                 .Where(p => p.nombre.ToLower().Contains(normalizedNombre))
-                .Select(p => new
+                .ToListAsync();
+        }
+
+        public async Task<Producto> AddProductAsync(Producto producto)
+        {
+            await _context.Productos.AddAsync(producto);
+            await _context.SaveChangesAsync();
+            return producto;
+        }
+
+        public async Task<bool> UpdateProductAsync(Producto producto)
+        {
+            _context.Productos.Update(producto);
+            var result = await _context.SaveChangesAsync();
+            return result > 0;
+        }
+
+        public async Task<bool> DeleteProductAsync(int id)
+        {
+            var producto = await _context.Productos.FirstOrDefaultAsync(p => p.idProducto == id);
+            if (producto == null)
+                return false;
+
+            _context.Productos.Remove(producto);
+            var result = await _context.SaveChangesAsync();
+            return result > 0;
+        }
+
+        public async Task<IEnumerable<Producto>> GetProductsByCategoryIdAsync(int categoriaId)
+        {
+            var productosCategorias = await _context.ProductoCategoria
+                .Include(pc => pc.Producto)
+                .Include(pc => pc.Categoria)
+                .Where(pc => pc.idCategoria == categoriaId)
+                .ToListAsync();
+
+            var productos = productosCategorias
+                .Select(pc => pc.Producto)
+                .Where(p => p != null)
+                .Cast<Producto>();
+
+            return productos;
+        }
+
+        public async Task<IEnumerable<Producto>> ImportProductsFromExcelAsync(Stream fileStream)
+        {
+            var productosImportados = new List<Producto>();
+
+            try
+            {
+                using (var workbook = new NPOI.XSSF.UserModel.XSSFWorkbook(fileStream))
                 {
-                    p.idProducto,
-                    p.nombre,
-                    p.marca
-                })
-                .ToList(); // Ejecutar la consulta
+                    var sheet = workbook.GetSheetAt(0); // Suponiendo que la primera hoja contiene los productos
 
-                // Asignar los productos encontrados a la respuesta
-                _response.Data = productos;
-                _response.IsSuccess = true; // Indicar éxito
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-            }
-
-            return _response;
-        }
-
-        public ResponseDto AddProduct(Producto producto)
-        {
-            try
-            {
-                _context.Productos.Add(producto);
-                _context.SaveChanges();
-                _response.Data = producto;
-            }
-            catch (DbUpdateException ex) // Capturar errores de la base de datos
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.InnerException?.Message ?? ex.Message; // Capturar la excepción interna si existe
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-            }
-
-            return _response;
-        }
-        public ResponseDto DeleteProduct(int id)
-        {
-            try
-            {
-                // Buscar el producto por su ID
-                var producto = _context.Productos.FirstOrDefault(p => p.idProducto == id);
-
-                // Verificar si el producto fue encontrado
-                if (producto == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.Message = $"No se encontró el producto con ID {id}.";
-                    return _response; // Retornar respuesta si el producto no se encuentra
-                }
-
-                // Eliminar el producto
-                _context.Productos.Remove(producto); // Usar _context.Productos.Remove
-                _context.SaveChanges();
-
-                // Indicar éxito
-                _response.IsSuccess = true;
-                _response.Message = "Producto eliminado exitosamente.";
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message; // Manejo de errores
-            }
-
-            return _response; // Retornar la respuesta
-        }
-
-        public ResponseDto PutProduct(Producto producto)
-        {
-            try
-            {
-                _context.Productos.Update(producto);
-                _context.SaveChanges();
-
-                _response.Data = producto;
-            }
-            catch (DbUpdateException ex) // Capturar errores de la base de datos
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.InnerException?.Message ?? ex.Message; // Capturar la excepción interna si existe
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-            }
-
-            return _response;
-        }
-        public ResponseDto ImportProductsFromExcel(IFormFile file)
-        {
-            var response = new ResponseDto();
-
-            try
-            {
-                using (var stream = new MemoryStream())
-                {
-                    file.CopyTo(stream);
-                    stream.Position = 0;
-
-                    // Usamos NPOI para leer el archivo Excel
-                    XSSFWorkbook workbook = new XSSFWorkbook(stream);
-                    var sheet = workbook.GetSheetAt(0); // Suponemos que el primer sheet contiene los productos
-
-                    for (int i = 1; i <= sheet.LastRowNum; i++) // Saltamos la primera fila de encabezado
+                    for (int i = 1; i <= sheet.LastRowNum; i++) // Saltar la fila de encabezado
                     {
                         var row = sheet.GetRow(i);
                         if (row == null) continue;
 
-                        // Validaciones de los datos
                         var nombre = row.GetCell(0)?.ToString();
                         var marca = row.GetCell(1)?.ToString();
                         var descripcion = row.GetCell(2)?.ToString();
@@ -192,22 +106,19 @@ namespace antigal.server.Services
                         if (string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(marca) ||
                             !int.TryParse(codigoBarrasCell, out int codigoBarras) ||
                             !int.TryParse(disponibleCell, out int disponible) ||
-                            !float.TryParse(precioCell, out float precio) ||
+                            !decimal.TryParse(precioCell, out decimal precio) ||
                             !int.TryParse(stockCell, out int stock))
                         {
-                            response.IsSuccess = false;
-                            response.Message = $"Error en la fila {i + 1}: datos inválidos.";
-                            return response;
+                            // Manejar errores de formato según sea necesario
+                            continue;
                         }
 
-                        // Validamos si destacado es nulo o no
                         int? destacado = null;
                         if (int.TryParse(destacadoCell, out int destacadoVal))
                         {
                             destacado = destacadoVal;
                         }
 
-                        // Creamos un nuevo producto basado en los datos del Excel
                         Producto producto = new Producto
                         {
                             nombre = nombre,
@@ -220,69 +131,19 @@ namespace antigal.server.Services
                             stock = stock
                         };
 
-                        // Agregamos el producto a la base de datos
-                        _context.Productos.Add(producto);
+                        await _context.Productos.AddAsync(producto);
+                        productosImportados.Add(producto);
                     }
 
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
-
-                response.IsSuccess = true;
-                response.Message = "Productos importados exitosamente.";
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                response.IsSuccess = false;
-                response.Message = $"Error al procesar el archivo: {ex.Message}";
+                throw;
             }
 
-            return response;
+            return productosImportados;
         }
-        public ResponseDto GetProductsByCategoryId(int categoriaId)
-        {
-            try
-            {
-                // Obtener productos de la categoría especificada
-                var productos = _context.ProductoCategoria
-                    .Include(pc => pc.Producto)  // Cargar Producto
-                    .Include(pc => pc.Categoria) // Cargar Categoria
-                    .Where(pc => pc.idCategoria == categoriaId)  // Filtrar por id de la categoría
-                    .ToList()  // Ejecutar la consulta
-                    .Select(pc => new
-                    {
-                        IdProducto = pc.Producto != null ? pc.Producto.idProducto : 0,  // Manejo de nullS
-                        Nombre = pc.Producto != null ? pc.Producto.nombre : "N/A",  // Manejo de null
-                        Marca = pc.Producto != null ? pc.Producto.marca : "N/A",  // Manejo de null
-                        Descripcion = pc.Producto != null ? pc.Producto.descripcion : "N/A",  // Manejo de null
-                        Precio = pc.Producto != null ? pc.Producto.precio : 0.0f,  // Manejo de null
-                        Stock = pc.Producto != null ? pc.Producto.stock : 0,  // Manejo de null
-                        Disponible = pc.Producto != null ? pc.Producto.disponible : 0,  // Manejo de null
-                        //Imagenes = pc.Producto != null ? pc.Producto.imagenes.Select(i => i.url).ToList() : new List<string>(),  // Manejo de null
-                        Categoria = pc.Categoria != null ? pc.Categoria.nombre : "N/A"  // Manejo de null
-                    })
-                    .ToList(); // Ejecutar la consulta para materializar los resultados
-
-                if (productos == null || !productos.Any())
-                {
-                    _response.IsSuccess = false;
-                    _response.Message = $"No se encontraron productos para la categoría con ID {categoriaId}.";
-                    return _response;
-                }
-
-                _response.Data = productos;
-                _response.IsSuccess = true;
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-            }
-
-            return _response;
-        }
-
-
-
-
     }
 }

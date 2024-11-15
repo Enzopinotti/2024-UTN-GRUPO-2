@@ -1,15 +1,17 @@
-﻿using antigal.server.Models;
+﻿// Repositories/ICategoriaRepository.cs
+using antigal.server.Models;
 using antigal.server.Models.Dto;
+using System.Threading.Tasks;
 
 namespace antigal.server.Repositories
 {
     public interface ICategoriaRepository
     {
-        ResponseDto GetCategories(); // Devolviendo ResponseDto
-        ResponseDto GetCategoryById(int id); // Devolviendo ResponseDto
-        ResponseDto GetCategoriesByTitle(string nombre); // Devolviendo ResponseDto
-        ResponseDto AddCategory(Categoria categoria); // Devolviendo ResponseDto
-        ResponseDto UpdateCategory(Categoria categoria); // Devolviendo ResponseDto
-        ResponseDto DeleteCategory(int id); // Devolviendo ResponseDto
+        Task<ResponseDto> GetCategoriesAsync();
+        Task<ResponseDto> GetCategoryByIdAsync(int id);
+        Task<ResponseDto> GetCategoriesByTitleAsync(string nombre);
+        Task<ResponseDto> AddCategoryAsync(Categoria categoria);
+        Task<ResponseDto> UpdateCategoryAsync(Categoria categoria);
+        Task<ResponseDto> DeleteCategoryAsync(int id);
     }
 }
