@@ -7,7 +7,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAJ/julikfW0ifpwmJ9ggR9gAAAAACAAAAAAAQZgAAAAEAACAAAAD5oGairdFCksRvikXsZzOmD5wRFoR0tggKbmnYfQzkyAAAAAAOgAAAAAIAACAAAAAeOkDjS77YXdn5SGt5vosiJS4eUxzPUK0MSiiYdX92eSAAAAArS4771cM6iw6tPoDwqI5d8hAa+ROtY0QxSV04lTNqrUAAAABTfS92Fm3NHe7lq5YktAoZx2uv4/Gv9bVjPsymQKxZxI2KR0NddEJjzw/9bNBghwsxx95lEYbI+dm694R9RTdb</EncryptedPassword>
     <_PublishTargetUrl>ftp://155.254.244.40/www.antigal.somee.com</_PublishTargetUrl>
-    <History>True|2024-11-15T05:58:32.1245852Z||;True|2024-11-14T21:55:05.9981654-03:00||;</History>
+    <History>True|2024-11-15T15:24:14.6303722Z||;True|2024-11-15T02:58:32.1245852-03:00||;True|2024-11-14T21:55:05.9981654-03:00||;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
@@ -15,22 +15,22 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/29/2022 12:04:06</publishTime>
     </File>
     <File Include="antigal.server.deps.json">
-      <publishTime>11/15/2024 02:41:29</publishTime>
+      <publishTime>11/15/2024 12:07:04</publishTime>
     </File>
     <File Include="antigal.server.dll">
-      <publishTime>11/15/2024 02:41:23</publishTime>
+      <publishTime>11/15/2024 12:06:58</publishTime>
     </File>
     <File Include="antigal.server.exe">
-      <publishTime>11/15/2024 02:41:23</publishTime>
+      <publishTime>11/15/2024 12:06:58</publishTime>
     </File>
     <File Include="antigal.server.pdb">
-      <publishTime>11/15/2024 02:41:23</publishTime>
+      <publishTime>11/15/2024 12:06:58</publishTime>
     </File>
     <File Include="antigal.server.runtimeconfig.json">
-      <publishTime>11/15/2024 02:41:23</publishTime>
+      <publishTime>11/15/2024 12:06:59</publishTime>
     </File>
     <File Include="appsettings.json">
-      <publishTime>11/15/2024 02:19:24</publishTime>
+      <publishTime>11/15/2024 11:53:36</publishTime>
     </File>
     <File Include="ar/Humanizer.resources.dll">
       <publishTime>01/29/2022 12:04:06</publishTime>
@@ -120,10 +120,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/29/2022 12:04:10</publishTime>
     </File>
     <File Include="EmailService.dll">
-      <publishTime>11/15/2024 02:41:22</publishTime>
+      <publishTime>11/15/2024 12:06:56</publishTime>
     </File>
     <File Include="EmailService.pdb">
-      <publishTime>11/15/2024 02:41:22</publishTime>
+      <publishTime>11/15/2024 12:06:56</publishTime>
     </File>
     <File Include="Enums.NET.dll">
       <publishTime>11/18/2022 19:40:50</publishTime>
@@ -780,7 +780,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/29/2022 12:04:12</publishTime>
     </File>
     <File Include="web.config">
-      <publishTime>11/15/2024 02:41:29</publishTime>
+      <publishTime>11/15/2024 12:07:04</publishTime>
     </File>
     <File Include="zh-CN/Humanizer.resources.dll">
       <publishTime>01/29/2022 12:04:12</publishTime>
