@@ -31,7 +31,7 @@ import Contact from "./pages/Contact";
 import NotFound from './components/NotFound'
 import AdminUserListContainer from "./components/admin/users/AdminUserListContainer";
 import MessageListContainer from "./components/admin/messages/MessageListContainer";
-
+import UserAddresses from "./components/users/addresses/UserAddresses";
 function App() {
   return (
     
@@ -54,9 +54,9 @@ function App() {
                 <Route index element={<Profile />} />
                 <Route path="orders" element={<Orders />} />
                 <Route path="favorites" element={<Favorites />} />
-
+                <Route path="addresses" element={<UserAddresses />}/>
                 {/* 
-              <Route path="/addresses" element={<UserAddresses />
+            
               <Route path="/security" element={<UserSecurity />} /> */}
               </Route>
 
