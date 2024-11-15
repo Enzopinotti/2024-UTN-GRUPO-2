@@ -18,6 +18,8 @@ $theme-light: (
   shadow-color: rgba(47, 56, 20, 0.1),
   delete-color: rgb(222, 42, 42),
   delete-color-hover: darken(rgb(222, 42, 42), 10%),
+  read-message-bg: #e8f4f8,
+  read-message-hover-bg: #f1f3f4, 
   font:'Roboto',
 );
 
@@ -35,6 +37,8 @@ $theme-dark: (
   shadow-color: rgba(0, 0, 0, 0.7),
   delete-color: rgb(222, 42, 42),
   delete-color-hover: darken(rgb(222, 42, 42), 10%),
+  read-message-bg: #333333, 
+  read-message-hover-bg: #444444,
   font:'Roboto',
 );
 
