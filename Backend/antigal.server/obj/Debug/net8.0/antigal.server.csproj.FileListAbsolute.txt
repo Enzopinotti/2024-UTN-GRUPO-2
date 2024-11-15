@@ -1144,3 +1144,7 @@ D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.genruntimeconfig.cache
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\ref\antigal.server.dll
 C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\AutoMapper.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\MercadoPago.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\NETCore.MailKit.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\EmailService.dll
+D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\EmailService.pdb

@@ -113,6 +113,7 @@ namespace antigal.server
             builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
             builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
             builder.Services.AddScoped<ICartRepository, CartRepository>();
+            builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
             // Agrega otros repositorios según sea necesario
 
             // Registrar UnitOfWork
@@ -130,7 +131,6 @@ namespace antigal.server
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
-            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<ISaleService, SaleService>();
             builder.Services.AddScoped<ServiceToken>();

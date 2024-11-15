@@ -1,4 +1,4 @@
-﻿/*using antigal.server.Models;
+﻿using antigal.server.Models;
 using antigal.server.Models.Dto;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,4 +16,4 @@ namespace antigal.server.Services
         Task<bool> UpdateOrderStatusAsync(int orderId, string newStatus); // Actualizar estado de la orden
     }
 }
-*/
+

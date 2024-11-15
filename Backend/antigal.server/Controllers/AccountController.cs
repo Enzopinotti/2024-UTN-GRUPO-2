@@ -15,7 +15,7 @@ namespace antigal.server.Controllers
 {
     [Route("api/accounts")]
     [ApiController]
-    public class AccountControler : ControllerBase
+    public class AccountController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
@@ -24,7 +24,7 @@ namespace antigal.server.Controllers
         private readonly JwtHandler _jwtHandler;
         private readonly IEmailSender _emailSender;
 
-        public AccountControler(
+        public AccountController(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IConfiguration configuration,

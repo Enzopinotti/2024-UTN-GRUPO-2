@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace antigal.server.Controllers
 {
+    [Authorize(Roles = "Anonymous")]
     [Route("api/[controller]")]
     [ApiController]
     public class LikesController : ControllerBase
@@ -19,7 +20,7 @@ namespace antigal.server.Controllers
             _likeService = likeService;
             _userManager = userManager;
         }
-
+        
         [HttpPost("add")]
         public async Task<IActionResult> AddLike(int productoId)
         {
@@ -43,7 +44,7 @@ namespace antigal.server.Controllers
             var result = await _likeService.RemoveLike(userId, productoId);
             return result ? Ok() : NotFound("Eliminado de favoritos!");
         }
-
+        
         [HttpGet("all")]
         public async Task<IActionResult> GetUserLikes()
         {

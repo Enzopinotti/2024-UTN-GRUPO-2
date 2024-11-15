@@ -8,19 +8,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Storage;
 using antigal.server.Models.Dto.VentaDtos;
+using antigal.server.Controllers;
+using Microsoft.AspNetCore.Identity;
 
 namespace antigal.server.Services
 {
     public class OrderService : IOrderService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IAuthService _authService;
+        private readonly UserManager<User> _userManager;
         private readonly IProductService _productService;
 
-        public OrderService(IUnitOfWork unitOfWork, IAuthService authService, IProductService productService)
+        public OrderService(IUnitOfWork unitOfWork, UserManager<User> userManager, IProductService productService)
         {
             _unitOfWork = unitOfWork;
-            _authService = authService;
+            _userManager = userManager;
             _productService = productService;
         }
 
@@ -55,7 +57,7 @@ namespace antigal.server.Services
             {
                 try
                 {
-                    var user = await _authService.GetUserByIdAsync(orderDto.idUsuario);
+                    var user = await _userManager.FindByIdAsync(orderDto.idUsuario);
                     if (user == null)
                     {
                         throw new KeyNotFoundException($"No se encontró el usuario con ID: {orderDto.idUsuario}.");
