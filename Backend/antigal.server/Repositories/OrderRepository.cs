@@ -39,18 +39,19 @@ namespace antigal.server.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Orden> GetOrderByIdAsync(int idOrden) // Mantener Orden (no nulleable)
+        public async Task<Orden> GetOrderByIdAsync(int idOrden)
         {
             var orden = await _context.Ordenes
-                .Include(o => o.Items) // Incluye los ítems de la orden
-                .FirstOrDefaultAsync(o => o.idOrden == idOrden); // Busca la orden por ID
+                .Include(o => o.Items)
+                .ThenInclude(od => od.Producto) // Incluye el producto de cada ítem
+                .FirstOrDefaultAsync(o => o.idOrden == idOrden);
 
-            if (orden == null) // Si la orden no se encuentra
+            if (orden == null)
             {
                 throw new KeyNotFoundException($"No se encontró la orden con ID: {idOrden}.");
             }
 
-            return orden; // Retorna la orden si se encuentra
+            return orden;
         }
 
 
@@ -68,6 +69,13 @@ namespace antigal.server.Repositories
             order.estado = newStatus;
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<Orden?> GetPendingOrderByUserIdAsync(string userId)
+        {
+            return await _context.Ordenes
+                .Include(o => o.Items) // Incluye ítems de la orden si es necesario
+                .FirstOrDefaultAsync(o => o.idUsuario == userId && o.estado == "Pendiente");
         }
     }
 }

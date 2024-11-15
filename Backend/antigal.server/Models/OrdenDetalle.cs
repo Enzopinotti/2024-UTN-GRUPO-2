@@ -18,7 +18,7 @@ namespace antigal.server.Models
 
         public decimal precio { get; set; }  // Precio del producto al momento de la compra
 
-        public required Orden Orden { get; set; }  // Relación con la orden
-        public required Producto Producto { get; set; }  // Relación con el producto
+        public Orden ?Orden { get; set; }  // Relación con la orden
+        public Producto ?Producto { get; set; }  // Relación con el producto
     }
 }

@@ -1,9 +1,11 @@
-﻿using antigal.server.Data;
+﻿// Repositories/CartRepository.cs
+using antigal.server.Data;
 using antigal.server.Models;
 using antigal.server.Models.Dto;
 using antigal.server.Models.Dto.CarritoDtos;
 using antigal.server.Mapping;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace antigal.server.Repositories
@@ -11,14 +13,12 @@ namespace antigal.server.Repositories
     public class CartRepository : ICartRepository
     {
         private readonly AppDbContext _context;
-        private readonly CarritoMapper _carritoMapper; // Instancia del mapeador
-
+        private readonly CarritoMapper _carritoMapper;
 
         public CartRepository(AppDbContext context, CarritoMapper carritoMapper)
         {
             _context = context;
             _carritoMapper = carritoMapper;
-
         }
 
         public async Task<ResponseDto> GetCartByUserIdAsync(string userId)
@@ -30,13 +30,11 @@ namespace antigal.server.Repositories
 
             if (cart != null)
             {
-                // Mapea el Carrito a CarritoDto
                 var carritoDto = _carritoMapper.MapCarritoToCarritoDto(cart);
                 return new ResponseDto { IsSuccess = true, Data = carritoDto };
             }
             return new ResponseDto { IsSuccess = false, Message = "Carrito no encontrado." };
         }
-
 
         public async Task<ResponseDto> CreateCartAsync(string userId)
         {
@@ -107,6 +105,46 @@ namespace antigal.server.Repositories
             cart.Items.Clear();
             await _context.SaveChangesAsync();
             return new ResponseDto { IsSuccess = true, Message = "Carrito vaciado correctamente." };
+        }
+
+        public async Task<ResponseDto> ConfirmCartAsOrderAsync(string userId)
+        {
+            var response = new ResponseDto();
+
+            var cart = await _context.Carritos
+                .Include(c => c.Items)
+                .ThenInclude(i => i.Producto)
+                .FirstOrDefaultAsync(c => c.idUsuario == userId);
+
+            if (cart == null || !cart.Items.Any())
+            {
+                response.IsSuccess = false;
+                response.Message = "El carrito está vacío o no existe.";
+                return response;
+            }
+
+            var order = new Orden
+            {
+                idUsuario = userId,
+                fechaOrden = DateTime.Now,
+                Items = cart.Items
+                    .Where(item => item.Producto != null)
+                    .Select(item => new OrdenDetalle
+                    {
+                        idProducto = item.idProducto,
+                        cantidad = item.cantidad,
+                        precio = item.Producto?.precio ?? 0m,
+                    }).ToList()
+            };
+
+            _context.Ordenes.Add(order);
+            _context.CarritoItems.RemoveRange(cart.Items);
+            await _context.SaveChangesAsync();
+
+            response.IsSuccess = true;
+            response.Data = order;
+            response.Message = "Carrito confirmado como orden exitosamente.";
+            return response;
         }
     }
 }

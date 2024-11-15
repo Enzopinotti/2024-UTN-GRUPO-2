@@ -1,5 +1,8 @@
-﻿using antigal.server.Models.Dto.VentaDtos;
+﻿// Services/ISaleService.cs
+using antigal.server.Models.Dto.VentaDtos;
 using antigal.server.Models.Dto;
+using antigal.server.Models;
+using System.Threading.Tasks;
 
 namespace antigal.server.Services
 {
@@ -7,10 +10,6 @@ namespace antigal.server.Services
     {
         Task<SaleResponseDto> CreateSaleAsync(string userId, int idOrden, decimal total, string metodoPago);
         Task<SaleDto?> GetSaleByIdAsync(int idVenta);
+        Task<bool> UpdateSaleStatusAsync(int idVenta, VentaEstado nuevoEstado);
     }
 }
-
-
-// 6/11 2am 
-// agregar mas funciones, como por ejemplo, traer todas las ventas (funcion para el admin), ordenar por preciototal, fecha, etc, de venta (funcion admin)
-// verificar que anda todo lo de venta, las conexiones entre orden y venta, orden y carrito.

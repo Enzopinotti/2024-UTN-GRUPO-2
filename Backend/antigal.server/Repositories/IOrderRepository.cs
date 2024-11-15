@@ -12,5 +12,7 @@ namespace antigal.server.Repositories
         Task<Orden> GetOrderByIdAsync(int orderId);
         Task AddOrderAsync(Orden orden); // Agregar una nueva orden
         Task<bool> UpdateOrderStatusAsync(int orderId, string newStatus); // Actualizar estado de una orden
+        Task<Orden?> GetPendingOrderByUserIdAsync(string userId); // Obtener una orden "Pending" de un usuario
+
     }
 }

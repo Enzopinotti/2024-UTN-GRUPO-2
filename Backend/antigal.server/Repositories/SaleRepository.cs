@@ -42,6 +42,13 @@ namespace antigal.server.Repositories
             }
         }
 
+        public async Task<bool> UpdateSaleAsync(Sale sale)
+        {
+            _context.Sales.Update(sale);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
     }
 
 }

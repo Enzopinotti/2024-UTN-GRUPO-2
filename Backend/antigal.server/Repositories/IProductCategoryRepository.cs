@@ -1,4 +1,5 @@
-﻿using antigal.server.Models.Dto;
+﻿// Repositories/IProductCategoryRepository.cs
+using antigal.server.Models.Dto;
 using System.Threading.Tasks;
 
 namespace antigal.server.Repositories

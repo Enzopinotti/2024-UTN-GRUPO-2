@@ -1,4 +1,5 @@
-﻿using antigal.server.Data;
+﻿// Repositories/CategoriaRepository.cs
+using antigal.server.Data;
 using antigal.server.Models;
 using antigal.server.Models.Dto;
 using Microsoft.EntityFrameworkCore;

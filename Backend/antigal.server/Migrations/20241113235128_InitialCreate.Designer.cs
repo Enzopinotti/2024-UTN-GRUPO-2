@@ -12,7 +12,7 @@ using antigal.server.Data;
 namespace antigal.server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241106031001_InitialCreate")]
+    [Migration("20241113235128_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -64,13 +64,13 @@ namespace antigal.server.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("idUsuario")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("idUsuario");
+                    b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
@@ -86,26 +86,26 @@ namespace antigal.server.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("idUsuario")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
-                    b.HasIndex("idUsuario");
+                    b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.Property<string>("idUsuario")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RoleId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("idUsuario", "RoleId");
+                    b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
 
@@ -114,7 +114,7 @@ namespace antigal.server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.Property<string>("idUsuario")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
@@ -126,7 +126,7 @@ namespace antigal.server.Migrations
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("idUsuario", "LoginProvider", "Name");
+                    b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
@@ -141,9 +141,11 @@ namespace antigal.server.Migrations
 
                     b.Property<string>("idUsuario")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("idCarrito");
+
+                    b.HasIndex("idUsuario");
 
                     b.ToTable("Carritos");
                 });
@@ -237,16 +239,21 @@ namespace antigal.server.Migrations
 
             modelBuilder.Entity("antigal.server.Models.Like", b =>
                 {
-                    b.Property<string>("idUsuario")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ProductoId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("idUsuario", "ProductoId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Likes");
                 });
@@ -338,8 +345,8 @@ namespace antigal.server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("precio")
-                        .HasColumnType("real");
+                    b.Property<decimal>("precio")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("stock")
                         .HasColumnType("int");
@@ -364,7 +371,7 @@ namespace antigal.server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("idUsuario")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -424,6 +431,45 @@ namespace antigal.server.Migrations
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
+                });
+
+            modelBuilder.Entity("antigal.server.Models.Sale", b =>
+                {
+                    b.Property<int>("idVenta")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idVenta"));
+
+                    b.Property<string>("EstadoVenta")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("fechaVenta")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("idOrden")
+                        .HasColumnType("int");
+
+                    b.Property<string>("idUsuario")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("metodoPago")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("total")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("idVenta");
+
+                    b.HasIndex("idOrden")
+                        .IsUnique();
+
+                    b.HasIndex("idUsuario");
+
+                    b.ToTable("Sales");
                 });
 
             modelBuilder.Entity("antigal.server.Models.User", b =>
@@ -528,7 +574,7 @@ namespace antigal.server.Migrations
                 {
                     b.HasOne("antigal.server.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("idUsuario")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -537,7 +583,7 @@ namespace antigal.server.Migrations
                 {
                     b.HasOne("antigal.server.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("idUsuario")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -552,7 +598,7 @@ namespace antigal.server.Migrations
 
                     b.HasOne("antigal.server.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("idUsuario")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -561,8 +607,17 @@ namespace antigal.server.Migrations
                 {
                     b.HasOne("antigal.server.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("idUsuario")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("antigal.server.Models.Carrito", b =>
+                {
+                    b.HasOne("antigal.server.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("idUsuario")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -601,6 +656,16 @@ namespace antigal.server.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("antigal.server.Models.Like", b =>
+                {
+                    b.HasOne("antigal.server.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("antigal.server.Models.Orden", b =>
                 {
                     b.HasOne("antigal.server.Models.User", "User")
@@ -629,6 +694,25 @@ namespace antigal.server.Migrations
                     b.Navigation("Orden");
 
                     b.Navigation("Producto");
+                });
+
+            modelBuilder.Entity("antigal.server.Models.Sale", b =>
+                {
+                    b.HasOne("antigal.server.Models.Orden", "Orden")
+                        .WithOne("Sale")
+                        .HasForeignKey("antigal.server.Models.Sale", "idOrden")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("antigal.server.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("idUsuario")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Orden");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("antigal.server.Relationships.ProductoCategoria", b =>
@@ -663,6 +747,8 @@ namespace antigal.server.Migrations
             modelBuilder.Entity("antigal.server.Models.Orden", b =>
                 {
                     b.Navigation("Items");
+
+                    b.Navigation("Sale");
                 });
 
             modelBuilder.Entity("antigal.server.Models.Producto", b =>

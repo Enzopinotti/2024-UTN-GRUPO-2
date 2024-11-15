@@ -57,19 +57,6 @@ namespace antigal.server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Carritos",
-                columns: table => new
-                {
-                    idCarrito = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    idUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Carritos", x => x.idCarrito);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Categorias",
                 columns: table => new
                 {
@@ -85,19 +72,6 @@ namespace antigal.server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Likes",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProductoId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Likes", x => new { x.UserId, x.ProductoId });
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Productos",
                 columns: table => new
                 {
@@ -109,7 +83,7 @@ namespace antigal.server.Migrations
                     codigoBarras = table.Column<int>(type: "int", nullable: true),
                     disponible = table.Column<int>(type: "int", nullable: true),
                     destacado = table.Column<int>(type: "int", nullable: true),
-                    precio = table.Column<float>(type: "real", nullable: false),
+                    precio = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     stock = table.Column<int>(type: "int", nullable: false),
                     ImagenUrls = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -240,6 +214,45 @@ namespace antigal.server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Carritos",
+                columns: table => new
+                {
+                    idCarrito = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    idUsuario = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Carritos", x => x.idCarrito);
+                    table.ForeignKey(
+                        name: "FK_Carritos_AspNetUsers_idUsuario",
+                        column: x => x.idUsuario,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Likes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ProductoId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Likes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Likes_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Ordenes",
                 columns: table => new
                 {
@@ -257,33 +270,6 @@ namespace antigal.server.Migrations
                         column: x => x.idUsuario,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CarritoItems",
-                columns: table => new
-                {
-                    idCarritoItem = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    idProducto = table.Column<int>(type: "int", nullable: false),
-                    idCarrito = table.Column<int>(type: "int", nullable: false),
-                    cantidad = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CarritoItems", x => x.idCarritoItem);
-                    table.ForeignKey(
-                        name: "FK_CarritoItems_Carritos_idCarrito",
-                        column: x => x.idCarrito,
-                        principalTable: "Carritos",
-                        principalColumn: "idCarrito",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CarritoItems_Productos_idProducto",
-                        column: x => x.idProducto,
-                        principalTable: "Productos",
-                        principalColumn: "idProducto",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -348,6 +334,33 @@ namespace antigal.server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CarritoItems",
+                columns: table => new
+                {
+                    idCarritoItem = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    idProducto = table.Column<int>(type: "int", nullable: false),
+                    idCarrito = table.Column<int>(type: "int", nullable: false),
+                    cantidad = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CarritoItems", x => x.idCarritoItem);
+                    table.ForeignKey(
+                        name: "FK_CarritoItems_Carritos_idCarrito",
+                        column: x => x.idCarrito,
+                        principalTable: "Carritos",
+                        principalColumn: "idCarrito",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CarritoItems_Productos_idProducto",
+                        column: x => x.idProducto,
+                        principalTable: "Productos",
+                        principalColumn: "idProducto",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OrdenDetalle",
                 columns: table => new
                 {
@@ -375,6 +388,36 @@ namespace antigal.server.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Sales",
+                columns: table => new
+                {
+                    idVenta = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    idOrden = table.Column<int>(type: "int", nullable: false),
+                    fechaVenta = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    metodoPago = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EstadoVenta = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    idUsuario = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sales", x => x.idVenta);
+                    table.ForeignKey(
+                        name: "FK_Sales_AspNetUsers_idUsuario",
+                        column: x => x.idUsuario,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Sales_Ordenes_idOrden",
+                        column: x => x.idOrden,
+                        principalTable: "Ordenes",
+                        principalColumn: "idOrden",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
@@ -400,12 +443,12 @@ namespace antigal.server.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
                 table: "AspNetUserClaims",
-                column: "idUsuario");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserLogins_UserId",
                 table: "AspNetUserLogins",
-                column: "idUsuario");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_RoleId",
@@ -435,6 +478,11 @@ namespace antigal.server.Migrations
                 column: "idProducto");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Carritos_idUsuario",
+                table: "Carritos",
+                column: "idUsuario");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Imagenes_CategoriaId",
                 table: "Imagenes",
                 column: "CategoriaId");
@@ -448,6 +496,11 @@ namespace antigal.server.Migrations
                 name: "IX_Imagenes_UsuarioId",
                 table: "Imagenes",
                 column: "UsuarioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Likes_UserId",
+                table: "Likes",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrdenDetalle_idOrdenDetalle",
@@ -468,6 +521,17 @@ namespace antigal.server.Migrations
                 name: "IX_ProductoCategoria_idCategoria",
                 table: "ProductoCategoria",
                 column: "idCategoria");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sales_idOrden",
+                table: "Sales",
+                column: "idOrden",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sales_idUsuario",
+                table: "Sales",
+                column: "idUsuario");
         }
 
         /// <inheritdoc />
@@ -507,19 +571,22 @@ namespace antigal.server.Migrations
                 name: "RefreshTokens");
 
             migrationBuilder.DropTable(
+                name: "Sales");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Carritos");
 
             migrationBuilder.DropTable(
-                name: "Ordenes");
-
-            migrationBuilder.DropTable(
                 name: "Categorias");
 
             migrationBuilder.DropTable(
                 name: "Productos");
+
+            migrationBuilder.DropTable(
+                name: "Ordenes");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

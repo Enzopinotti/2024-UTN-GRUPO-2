@@ -105,6 +105,22 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.CartController",
+    "Method": "ConfirmCartAsOrderAsync",
+    "RelativePath": "api/Cart/{userId}/confirmar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.CartController",
     "Method": "AddItemToCartAsync",
     "RelativePath": "api/Cart/{userId}/items",
     "HttpMethod": "POST",
@@ -449,14 +465,14 @@
   {
     "ContainingType": "antigal.server.Controllers.OrdersController",
     "Method": "ConfirmOrder",
-    "RelativePath": "api/Orders/confirm",
+    "RelativePath": "api/Orders/confirm/{orderId}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "orderDto",
-        "Type": "antigal.server.Models.Dto.OrdenDto",
+        "Name": "orderId",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
@@ -816,6 +832,27 @@
       {
         "Name": "idVenta",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SaleController",
+    "Method": "UpdateSaleStatus",
+    "RelativePath": "api/Sale/{idVenta}/estado",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idVenta",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "nuevoEstado",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],

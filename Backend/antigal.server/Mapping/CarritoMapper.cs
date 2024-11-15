@@ -19,7 +19,7 @@ namespace antigal.server.Mapping
                 {
                     idProducto = item.idProducto,
                     cantidad = item.cantidad,
-                    // Asigna otras propiedades si es necesario
+                    precioUnitario = item.Producto?.precio ?? 0m  // Precio unitario del producto
                 }).ToList()
             };
         }

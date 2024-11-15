@@ -1,4 +1,5 @@
-﻿using antigal.server.Data;
+﻿// Repositories/ProductCategoryRepository.cs
+using antigal.server.Data;
 using antigal.server.Models;
 using antigal.server.Models.Dto;
 using antigal.server.Relationships;
@@ -18,7 +19,6 @@ namespace antigal.server.Repositories
             _context = context;
         }
 
-        // Asignar categoría a producto
         public async Task<ResponseDto> AsignarCategoriaAProductoAsync(int idProducto, int idCategoria)
         {
             var response = new ResponseDto();
@@ -46,47 +46,41 @@ namespace antigal.server.Repositories
             return response;
         }
 
-        // Desasignar categoría de producto
         public async Task<ResponseDto> DesasignarCategoriaDeProductoAsync(int idProducto, int idCategoria)
         {
             var response = new ResponseDto();
 
             try
             {
-                // Buscar el registro de relación de producto-categoría
                 var productoCategoria = await _context.ProductoCategoria
                     .FirstOrDefaultAsync(pc => pc.idProducto == idProducto && pc.idCategoria == idCategoria);
 
                 if (productoCategoria != null)
                 {
-                    // Eliminar la relación si existe
                     _context.ProductoCategoria.Remove(productoCategoria);
                     await _context.SaveChangesAsync();
-                    response.IsSuccess = true; // Indicar que la operación fue exitosa
+                    response.IsSuccess = true;
                 }
                 else
                 {
                     response.IsSuccess = false;
-                    response.Message = "La relación Producto-Categoría no existe."; // Mensaje si no se encontró la relación
+                    response.Message = "La relación Producto-Categoría no existe.";
                 }
             }
             catch (DbUpdateException ex)
             {
-                // Manejo de errores específicos de la base de datos
                 response.IsSuccess = false;
-                response.Message = $"Error al desasignar la categoría: {ex.InnerException?.Message ?? ex.Message}"; // Mensaje de error
+                response.Message = $"Error al desasignar la categoría: {ex.InnerException?.Message ?? ex.Message}";
             }
             catch (Exception ex)
             {
-                // Manejo de errores generales
                 response.IsSuccess = false;
-                response.Message = $"Error inesperado: {ex.Message}"; // Mensaje de error general
+                response.Message = $"Error inesperado: {ex.Message}";
             }
 
-            return response; // Retornar la respuesta
+            return response;
         }
 
-        // Obtener categorías de un producto
         public async Task<ResponseDto> ObtenerCategoriasDeProductoAsync(int idProducto)
         {
             var response = new ResponseDto();
@@ -116,7 +110,6 @@ namespace antigal.server.Repositories
             return response;
         }
 
-        // Obtener productos de una categoría
         public async Task<ResponseDto> ObtenerProductosDeCategoriaAsync(int idCategoria)
         {
             var response = new ResponseDto();

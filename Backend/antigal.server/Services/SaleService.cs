@@ -1,34 +1,32 @@
-﻿using antigal.server.Models.Dto;
+﻿// Services/SaleService.cs
+using antigal.server.Models.Dto.VentaDtos;
+using antigal.server.Models.Dto;
 using antigal.server.Models;
 using antigal.server.Repositories;
-using antigal.server.Models.Dto.VentaDtos;
+using System;
+using System.Threading.Tasks;
 
 namespace antigal.server.Services
 {
     public class SaleService : ISaleService
     {
-        private readonly ISaleRepository _saleRepository;  // Repositorio de ventas
-        private readonly IOrderService _orderService;  // Servicio para obtener la orden
+        private readonly IUnitOfWork _unitOfWork;
 
-        public SaleService(ISaleRepository saleRepository, IOrderService orderService)
+        public SaleService(IUnitOfWork unitOfWork)
         {
-            _saleRepository = saleRepository;
-            _orderService = orderService;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<SaleResponseDto> CreateSaleAsync(string userId, int idOrden, decimal total, string metodoPago)
         {
             try
             {
-                // Obtener la orden asociada
-                var orden = await _orderService.GetOrderByIdAsync(idOrden);
-
+                var orden = await _unitOfWork.Orders.GetOrderByIdAsync(idOrden);
                 if (orden == null)
                 {
                     throw new KeyNotFoundException($"Orden no encontrada con ID: {idOrden}");
                 }
 
-                // Crear la venta
                 var sale = new Sale
                 {
                     idOrden = idOrden,
@@ -36,12 +34,11 @@ namespace antigal.server.Services
                     fechaVenta = DateTime.Now,
                     total = total,
                     metodoPago = metodoPago,
-                    estado = "Pendiente",
+                    EstadoVenta = VentaEstado.Pendiente,
                     idUsuario = userId
                 };
 
-                var saleCreated = await _saleRepository.CreateSaleAsync(sale);
-
+                var saleCreated = await _unitOfWork.Sales.CreateSaleAsync(sale);
                 if (saleCreated == null)
                 {
                     throw new InvalidOperationException("Error al realizar la venta, la venta no fue creada");
@@ -58,14 +55,13 @@ namespace antigal.server.Services
                         fechaVenta = saleCreated.fechaVenta,
                         total = saleCreated.total,
                         metodoPago = saleCreated.metodoPago,
-                        estado = saleCreated.estado,
+                        estado = saleCreated.EstadoVenta.ToString(),
                         idUsuario = saleCreated.idUsuario
                     }
                 };
             }
             catch (Exception ex)
             {
-                // Registrar el error en logs si fuera necesario
                 throw new Exception("Ocurrió un error al intentar crear la venta", ex);
             }
         }
@@ -74,8 +70,7 @@ namespace antigal.server.Services
         {
             try
             {
-                var sale = await _saleRepository.GetSaleByIdAsync(idVenta);
-
+                var sale = await _unitOfWork.Sales.GetSaleByIdAsync(idVenta);
                 if (sale == null)
                 {
                     throw new KeyNotFoundException($"No se encontró la venta con ID: {idVenta}");
@@ -88,16 +83,31 @@ namespace antigal.server.Services
                     fechaVenta = sale.fechaVenta,
                     total = sale.total,
                     metodoPago = sale.metodoPago,
-                    estado = sale.estado,
+                    estado = sale.EstadoVenta.ToString(),
                     idUsuario = sale.idUsuario
                 };
             }
             catch (Exception ex)
             {
-                // Registrar el error en logs si fuera necesario
                 throw new Exception("Ocurrió un error al intentar obtener la venta", ex);
             }
         }
 
+        public async Task<bool> UpdateSaleStatusAsync(int idVenta, VentaEstado nuevoEstado)
+        {
+            var sale = await _unitOfWork.Sales.GetSaleByIdAsync(idVenta);
+            if (sale == null)
+            {
+                return false;
+            }
+
+            sale.EstadoVenta = nuevoEstado;
+            var result = await _unitOfWork.Sales.UpdateSaleAsync(sale);
+            if (result)
+            {
+                await _unitOfWork.SaveChangesAsync();
+            }
+            return result;
+        }
     }
 }

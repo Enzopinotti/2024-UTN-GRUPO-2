@@ -1,3 +1,4 @@
+// Program.cs
 using Microsoft.EntityFrameworkCore;
 using antigal.server.Data;
 using antigal.server.Services;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using CloudinaryDotNet;
 using antigal.server.Mapping;
 using antigal.server.JwtFeatures;
+
 namespace antigal.server
 {
     public class Program
@@ -59,7 +61,6 @@ namespace antigal.server
                 };
             });
 
-
             // Configuración de Cloudinary
             var cloudinaryConfig = builder.Configuration.GetSection("Cloudinary");
             var cloudinary = new Cloudinary(new Account(
@@ -73,7 +74,20 @@ namespace antigal.server
             // Configuración de AutoMapper
             builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-            // Registrar servicios y repositorios
+            // Registrar Repositorios
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+            builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+            builder.Services.AddScoped<ICartRepository, CartRepository>();
+            // Agrega otros repositorios según sea necesario
+
+            // Registrar UnitOfWork
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // Registrar CarritoMapper
+            builder.Services.AddScoped<CarritoMapper>();
+
+            // Registrar servicios
             builder.Services.AddScoped<LikeService>();
             builder.Services.AddScoped<IImageService, ImageService>();
             builder.Services.AddScoped<IProductService, ProductService>();
@@ -85,12 +99,6 @@ namespace antigal.server
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<ISaleService, SaleService>();
             builder.Services.AddScoped<ServiceToken>();
-            builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
-            builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
-            builder.Services.AddScoped<ICartRepository, CartRepository>();
-            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-            builder.Services.AddScoped<ISaleRepository, SaleRepository>();
-            builder.Services.AddScoped<CarritoMapper>();
 
             // Configuración de CORS
             builder.Services.AddCors(options =>

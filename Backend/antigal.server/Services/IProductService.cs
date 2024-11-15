@@ -1,5 +1,7 @@
-﻿using antigal.server.Models;
+﻿// Services/IProductService.cs
+using antigal.server.Models;
 using antigal.server.Models.Dto;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,6 +16,6 @@ namespace antigal.server.Services
         Task<ResponseDto> DeleteProductAsync(int id);
         Task<ResponseDto> PutProductAsync(Producto producto);
         Task<ResponseDto> ImportProductsFromExcelAsync(IFormFile file);
-        Task<ResponseDto> GetProductsByCategoryIdAsync(int categoriaId); // Este método falta en ProductService
+        Task<ResponseDto> GetProductsByCategoryIdAsync(int categoriaId);
     }
 }

@@ -1,15 +1,16 @@
-﻿using antigal.server.Models.Dto;
-using antigal.server.Models.Dto.CarritoDtos;
+﻿// Repositories/ICartRepository.cs
+using antigal.server.Models.Dto;
 using System.Threading.Tasks;
 
 namespace antigal.server.Repositories
 {
     public interface ICartRepository
     {
-        Task<ResponseDto> GetCartByUserIdAsync(string userId);  // Obtener el carrito por idUsuario
-        Task<ResponseDto> CreateCartAsync(string userId);  // Crear un carrito vacío para el usuario
-        Task<ResponseDto> AddItemToCartAsync(string userId, CarritoItemDto addItemDto);  // Agregar un ítem al carrito
-        Task<ResponseDto> RemoveItemFromCartAsync(string userId, int itemId);  // Eliminar un ítem del carrito
-        Task<ResponseDto> ClearCartAsync(string userId);  // Vaciar el carrito
+        Task<ResponseDto> GetCartByUserIdAsync(string userId);
+        Task<ResponseDto> CreateCartAsync(string userId);
+        Task<ResponseDto> AddItemToCartAsync(string userId, CarritoItemDto addItemDto);
+        Task<ResponseDto> RemoveItemFromCartAsync(string userId, int itemId);
+        Task<ResponseDto> ClearCartAsync(string userId);
+        Task<ResponseDto> ConfirmCartAsOrderAsync(string userId);
     }
 }

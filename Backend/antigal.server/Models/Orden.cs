@@ -5,6 +5,7 @@ namespace antigal.server.Models
 {
     public class Orden
     {
+
         [Key]
         public int idOrden { get; set; }  // Clave primaria de la orden
 
@@ -12,7 +13,7 @@ namespace antigal.server.Models
         public required string idUsuario { get; set; }  // Clave foránea hacia el usuario
 
         [ForeignKey("idUsuario")]
-        public required User User { get; set; }  // Relación con IdentityUser
+        public User ?User { get; set; }  // Relación con IdentityUser
 
         public DateTime fechaOrden { get; set; }
         public string estado { get; set; } = "Pendiente";
@@ -21,5 +22,7 @@ namespace antigal.server.Models
 
         // Relación uno a uno con Sale
         public Sale ?Sale { get; set; } // Una orden tiene una venta asociada
+
+
     }
 }
