@@ -7,14 +7,14 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({
     accessToken: null,
-    refreshToken: null, // Opcional: Si implementas Refresh Tokens
+    //refreshToken: null, // Opcional: Si implementas Refresh Tokens
     user: null,
   });
 
   // Al cargar la aplicación, verificar si hay un token almacenado
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
-    const refreshToken = localStorage.getItem('refreshToken'); // Opcional
+    //const refreshToken = localStorage.getItem('refreshToken'); // Opcional
     if (accessToken) {
       try {
         const decoded = jwtDecode(accessToken);
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
         if (decoded.exp * 1000 > Date.now()) {
           setAuth({
             accessToken,
-            refreshToken,
+            //refreshToken,
             user: decoded,
           });
         } else {

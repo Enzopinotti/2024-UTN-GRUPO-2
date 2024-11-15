@@ -56,7 +56,7 @@ const Registro = () => {
     }
 
     try {
-      const response = await fetch('https://www.antigal.somee.com/api/Auth/register', {
+      const response = await fetch('https://www.antigal.somee.com//api/accounts/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

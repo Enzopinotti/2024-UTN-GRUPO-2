@@ -322,13 +322,13 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
               <p>Destacado:</p>
               <div className="radio-options">
                 <div className="radio-option">
-                  <input
+                <input
                     type="radio"
                     id="destacadoHome"
                     name="destacado"
-                    value="Home"
+                    value={1} // Cambiado a número
                     checked={productoDestacado === 1}
-                    onChange={(e) => setProductoDestacado(e.target.value)}
+                    onChange={(e) => setProductoDestacado(Number(e.target.value))} // Convertir a número
                   />
                   <label htmlFor="destacadoHome">Home</label>
                 </div>
@@ -337,9 +337,9 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
                     type="radio"
                     id="destacadoNo"
                     name="destacado"
-                    value="No"
+                    value={0} // Cambiado a número
                     checked={productoDestacado === 0}
-                    onChange={(e) => setProductoDestacado(e.target.value)}
+                    onChange={(e) => setProductoDestacado(Number(e.target.value))} // Convertir a número
                   />
                   <label htmlFor="destacadoNo">No</label>
                 </div>

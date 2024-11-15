@@ -15,7 +15,8 @@ const AdminProductItem = ({ product, onEdit, onDelete }) => {
   } = product;
 
   const [imageError, setImageError] = useState(false);
-  const [setImageSrc] = useState('');
+  const [imageSrc, setImageSrc] = useState('');
+
 
   useEffect(() => {
     if (imagenUrls && imagenUrls.length > 0) {

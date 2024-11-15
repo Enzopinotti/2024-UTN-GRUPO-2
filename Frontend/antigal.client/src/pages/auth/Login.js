@@ -31,22 +31,24 @@ const Login = () => {
 
   // Enviar datos del formulario de inicio de sesión
   const onSubmit = async (data) => {
-    const sanitizedData = Object.fromEntries(
-      Object.entries(data).map(([key, value]) => [key, DOMPurify.sanitize(value)])
-    );
-
+    // Renombra userName a email
+    const sanitizedData = {
+      email: DOMPurify.sanitize(data.userName),
+      password: DOMPurify.sanitize(data.password),
+    };
+  
     try {
-      const response = await fetch('https://www.antigal.somee.com/api/Auth/login', {
+      const response = await fetch('https://www.antigal.somee.com/api/accounts/authenticate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(sanitizedData),
       });
-
+  
       if (response.ok) {
-        const { accessToken, refreshToken } = await response.json();
-        login(accessToken, refreshToken); // Manejo de sesión si se usan tokens de actualización
+        const { token } = await response.json();  // Asumiendo que solo devuelves el token
+        login(token);  // Solo pasa el token
         showToast('¡Inicio de sesión exitoso!');
         navigate('/');
       } else {
@@ -58,6 +60,8 @@ const Login = () => {
       showToast('Error al iniciar sesión. Inténtalo de nuevo más tarde.', 'error');
     }
   };
+  
+  
 
   // Alternar visibilidad de la contraseña
   const togglePasswordVisibility = () => {
@@ -70,17 +74,18 @@ const Login = () => {
         <img src="./icons/iconoAntigal.png" alt="Logo" />
         <h2>Inicio de Sesión</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-group">
+        <div className="form-group">
             <label htmlFor="userName">Nombre de Usuario:</label>
             <input
               type="text"
               id="userName"
-              {...register('userName')}
+              {...register('userName')} // Esto sigue siendo 'userName' para el formulario
               placeholder="Ingresa tu nombre de usuario"
               autoComplete="username"
             />
             {errors.userName && <p className="error-message">{errors.userName.message}</p>}
           </div>
+
           <div className="form-group">
             <label htmlFor="password">Contraseña:</label>
             <div className="password-input-wrapper">
