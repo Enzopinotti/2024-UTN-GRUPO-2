@@ -1,4 +1,4 @@
-﻿using antigal.server.Models.Dto;
+using antigal.server.Models.Dto;
 using antigal.server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -22,6 +22,7 @@ namespace antigal.server.Data
         public DbSet<RefreshToken> RefreshTokens { get; set; } // Para almacenar refresh tokens
         public DbSet<Like> Likes { get; set; }
         public DbSet<Sale> Sales { get; set; } // DbSet para la entidad Sale
+        public DbSet<Payment> Payments { get; set; }  // Agrega la entidad Payment
 
         //OnModelCreating se utiliza para establecer las asociaciones entre dos clases para que impacten en la base de datos desde .NET
         protected override void OnModelCreating(ModelBuilder modelBuilder)

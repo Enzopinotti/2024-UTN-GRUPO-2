@@ -2,11 +2,12 @@
 
 namespace antigal.server.Models.Dto
 {
-    public class UseForAuthenticationDto
+    public class UserForAuthenticationDto
     {
-        [Required(ErrorMessage = "Email es requerido")]
+        [Required(ErrorMessage = "Email is required")]
         public string? Email { get; set; }
-        [Required(ErrorMessage = "Contraseña es requerido")]
+
+        [Required(ErrorMessage = "Password is required")]
         public string? Password { get; set; }
     }
 }

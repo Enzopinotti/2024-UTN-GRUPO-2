@@ -1,5 +1,90 @@
 [
   {
+    "ContainingType": "antigal.server.Controllers.AccountControler",
+    "Method": "Authenticate",
+    "RelativePath": "api/accounts/authenticate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userForAuthentication",
+        "Type": "antigal.server.Models.Dto.UserForAuthenticationDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AccountControler",
+    "Method": "ConfirmEmail",
+    "RelativePath": "api/accounts/confirm-email",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AccountControler",
+    "Method": "ForgotPassword",
+    "RelativePath": "api/accounts/forgotpassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "forgotPassword",
+        "Type": "antigal.server.Models.Dto.ForgotPasswordDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AccountControler",
+    "Method": "RegisterAsync",
+    "RelativePath": "api/accounts/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userForRegistration",
+        "Type": "antigal.server.Models.Dto.UserForRegistrationDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AccountControler",
+    "Method": "ResetPassword",
+    "RelativePath": "api/accounts/resetpassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "resetPassword",
+        "Type": "antigal.server.Models.Dto.ResetPasswordDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "antigal.server.Controllers.AdminController",
     "Method": "CreateRoleAsync",
     "RelativePath": "api/Admin/CreateRole",
@@ -334,17 +419,11 @@
   {
     "ContainingType": "antigal.server.Controllers.EmailController",
     "Method": "SendTestEmail",
-    "RelativePath": "api/Email/send-test-email",
-    "HttpMethod": "POST",
+    "RelativePath": "api/Email",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "emailRequest",
-        "Type": "antigal.server.Models.Dto.TestEmailDto",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -457,15 +536,38 @@
     "Method": "GetAllOrders",
     "RelativePath": "api/Orders/all",
     "HttpMethod": "GET",
+    "ContainingType": "antigal.server.Controllers.PaymentController",
+    "Method": "CreatePayment",
+    "RelativePath": "api/Payment/create-payment",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "amount",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      },
+      {
+        "Name": "title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "quantity",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
     "ContainingType": "antigal.server.Controllers.OrdersController",
     "Method": "ConfirmOrder",
     "RelativePath": "api/Orders/confirm/{orderId}",
+    "ContainingType": "antigal.server.Controllers.PaymentController",
+    "Method": "ReceiveNotification",
+    "RelativePath": "api/Payment/notification",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -474,6 +576,14 @@
         "Name": "orderId",
         "Type": "System.Int32",
         "IsRequired": true
+        "Name": "paymentId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "status",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

@@ -13,6 +13,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using CloudinaryDotNet;
 using antigal.server.Mapping;
 using antigal.server.JwtFeatures;
+using System.Security.Cryptography.X509Certificates;
+using EmailService;
+using MercadoPago.Config;
+
 
 namespace antigal.server
 {
@@ -26,6 +30,19 @@ namespace antigal.server
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+
+            // Cargar las credenciales de Mercado Pago desde appsettings.json
+            var mercadoPagoAccessToken = builder.Configuration["MercadoPago:AccessToken"];
+            if (string.IsNullOrEmpty(mercadoPagoAccessToken))
+            {
+                throw new InvalidOperationException("El AccessToken de Mercado Pago no está configurado en appsettings.json.");
+            }
+
+            // Inicializar Mercado Pago SDK
+            MercadoPagoConfig.AccessToken = mercadoPagoAccessToken;
+
+
+
             // Configurar Identity
             builder.Services.AddIdentity<User, Role>(options =>
             {
@@ -33,6 +50,15 @@ namespace antigal.server
             })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
+
+            builder.Services.Configure<DataProtectionTokenProviderOptions>(opt =>
+            opt.TokenLifespan = TimeSpan.FromHours(2));
+
+
+
+
+
+
 
             // Configuración de JWT
             var jwtSettings = builder.Configuration.GetSection("JWTSettings");
@@ -61,6 +87,8 @@ namespace antigal.server
                 };
             });
 
+            builder.Services.Configure<DataProtectionTokenProviderOptions>(opt =>
+           opt.TokenLifespan = TimeSpan.FromHours(2));
             // Configuración de Cloudinary
             var cloudinaryConfig = builder.Configuration.GetSection("Cloudinary");
             var cloudinary = new Cloudinary(new Account(
@@ -69,9 +97,15 @@ namespace antigal.server
                 cloudinaryConfig["ApiSecret"]
             ));
             builder.Services.AddSingleton(cloudinary);
-            builder.Services.AddSingleton<JwtHandler>();
 
-            // Configuración de AutoMapper
+            // Configuración de EmailConfiguration
+            var emailConfig = builder.Configuration.GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>()!;
+            builder.Services.AddSingleton(emailConfig);
+
+            // Registrar servicios y otros componentes
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddSingleton<JwtHandler>();
             builder.Services.AddAutoMapper(typeof(MappingProfile));
 
             // Registrar Repositorios
@@ -95,10 +129,16 @@ namespace antigal.server
             builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<ISaleService, SaleService>();
             builder.Services.AddScoped<ServiceToken>();
+            builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+            builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+            builder.Services.AddScoped<ICartRepository, CartRepository>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
             // Configuración de CORS
             builder.Services.AddCors(options =>
@@ -138,7 +178,8 @@ namespace antigal.server
             });
 
             builder.Services.AddEndpointsApiExplorer();
-
+            builder.Services.AddLogging();
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
             // Controladores y JSON
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>

@@ -849,14 +849,6 @@ D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debu
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\MimeKit.dll
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\SendGrid.dll
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\StarkbankEcdsa.dll
-D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.csproj.AssemblyReference.cache
-D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.GeneratedMSBuildEditorConfig.editorconfig
-D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.AssemblyInfoInputs.cache
-D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.AssemblyInfo.cs
-D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.csproj.CoreCompileInputs.cache
-D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.MvcApplicationPartsAssemblyInfo.cs
-D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.MvcApplicationPartsAssemblyInfo.cache
-D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.sourcelink.json
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\appsettings.json
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\antigal.server.exe
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\antigal.server.deps.json
@@ -937,6 +929,7 @@ D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\MimeKit.dll
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Mono.TextTemplating.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\NETCore.MailKit.dll
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Newtonsoft.Json.dll
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\NPOI.Core.dll
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\NPOI.OOXML.dll
@@ -1126,6 +1119,16 @@ D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Security.Cryptography.ProtectedData.dll
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\EmailService.dll
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\EmailService.pdb
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.csproj.AssemblyReference.cache
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.GeneratedMSBuildEditorConfig.editorconfig
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.AssemblyInfoInputs.cache
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.AssemblyInfo.cs
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.csproj.CoreCompileInputs.cache
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.MvcApplicationPartsAssemblyInfo.cs
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.MvcApplicationPartsAssemblyInfo.cache
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\antigal.server.sourcelink.json
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\staticwebassets.build.json
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\staticwebassets.development.json
 D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\obj\Debug\net8.0\staticwebassets\msbuild.antigal.server.Microsoft.AspNetCore.StaticWebAssets.props

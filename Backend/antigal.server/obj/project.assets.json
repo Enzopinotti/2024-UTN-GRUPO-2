@@ -807,6 +807,23 @@
           }
         }
       },
+      "mercadopago-sdk/2.4.1": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.1",
+          "System.Configuration.ConfigurationManager": "6.0.0"
+        },
+        "compile": {
+          "lib/net6.0/MercadoPago.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/MercadoPago.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authentication/2.2.0": {
         "type": "package",
         "dependencies": {
@@ -2615,6 +2632,19 @@
           "lib/netcoreapp3.1/Mono.TextTemplating.dll": {}
         }
       },
+      "NETCore.MailKit/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "MailKit": "3.2.0",
+          "Microsoft.Extensions.DependencyInjection": "6.0.0"
+        },
+        "compile": {
+          "lib/netstandard2.1/NETCore.MailKit.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/NETCore.MailKit.dll": {}
+        }
+      },
       "Newtonsoft.Json/13.0.3": {
         "type": "package",
         "compile": {
@@ -4412,6 +4442,21 @@
             "rid": "win"
           }
         }
+      },
+      "EmailService/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.10",
+          "MimeKit": "4.8.0",
+          "NETCore.MailKit": "2.1.0"
+        },
+        "compile": {
+          "bin/placeholder/EmailService.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/EmailService.dll": {}
+        }
       }
     }
   },
@@ -5471,6 +5516,23 @@
         "lib/netstandard2.0/MathNet.Numerics.xml",
         "mathnet.numerics.signed.5.0.0.nupkg.sha512",
         "mathnet.numerics.signed.nuspec"
+      ]
+    },
+    "mercadopago-sdk/2.4.1": {
+      "sha512": "ewCzveC9kqjUuFAZbtAZL/9PS+4wGjfzH6/zEyXqr4WR16M9CmJn0KFulSY0mtAl3yq7E6wfllZjij6apA6yYQ==",
+      "type": "package",
+      "path": "mercadopago-sdk/2.4.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net6.0/MercadoPago.dll",
+        "lib/net6.0/MercadoPago.pdb",
+        "lib/net6.0/MercadoPago.xml",
+        "lib/netstandard2.1/MercadoPago.dll",
+        "lib/netstandard2.1/MercadoPago.pdb",
+        "lib/netstandard2.1/MercadoPago.xml",
+        "mercadopago-sdk.2.4.1.nupkg.sha512",
+        "mercadopago-sdk.nuspec"
       ]
     },
     "Microsoft.AspNetCore.Authentication/2.2.0": {
@@ -8750,6 +8812,18 @@
         "mono.texttemplating.2.3.1.nupkg.sha512",
         "mono.texttemplating.nuspec",
         "readme.md"
+      ]
+    },
+    "NETCore.MailKit/2.1.0": {
+      "sha512": "+1C0sg4YJQczp/2RVrVbKLIntg7Mou7Ie5M01UBiAsxmIarjfBRlCgKK4sEbPyGask52VRKV29/Zi+41B6LPXA==",
+      "type": "package",
+      "path": "netcore.mailkit/2.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.1/NETCore.MailKit.dll",
+        "netcore.mailkit.2.1.0.nupkg.sha512",
+        "netcore.mailkit.nuspec"
       ]
     },
     "Newtonsoft.Json/13.0.3": {
@@ -12544,12 +12618,18 @@
         "system.windows.extensions.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "EmailService/1.0.0": {
+      "type": "project",
+      "path": "../EmailService/EmailService.csproj",
+      "msbuildProject": "../EmailService/EmailService.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
       "AutoMapper >= 13.0.1",
       "CloudinaryDotNet >= 1.26.2",
+      "EmailService >= 1.0.0",
       "FluentEmail.Core >= 3.0.2",
       "FluentEmail.SendGrid >= 3.0.2",
       "FluentValidation.DependencyInjectionExtensions >= 11.10.0",
@@ -12562,12 +12642,16 @@
       "Microsoft.EntityFrameworkCore >= 8.0.10",
       "Microsoft.EntityFrameworkCore.SqlServer >= 8.0.10",
       "Microsoft.EntityFrameworkCore.Tools >= 8.0.10",
+      "Microsoft.Extensions.Logging >= 8.0.1",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 8.0.6",
+      "MimeKit >= 4.8.0",
+      "NETCore.MailKit >= 2.1.0",
       "NPOI >= 2.7.1",
       "SendGrid >= 9.29.3",
       "SharpGrip.FluentValidation.AutoValidation.Mvc >= 1.4.0",
       "Swashbuckle.AspNetCore >= 6.9.0",
-      "dotenv.net >= 3.2.1"
+      "dotenv.net >= 3.2.1",
+      "mercadopago-sdk >= 2.4.1"
     ]
   },
   "packageFolders": {
@@ -12597,7 +12681,11 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj": {
+              "projectPath": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -12673,9 +12761,21 @@
             "target": "Package",
             "version": "[8.0.10, )"
           },
+          "Microsoft.Extensions.Logging": {
+            "target": "Package",
+            "version": "[8.0.1, )"
+          },
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "target": "Package",
             "version": "[8.0.6, )"
+          },
+          "MimeKit": {
+            "target": "Package",
+            "version": "[4.8.0, )"
+          },
+          "NETCore.MailKit": {
+            "target": "Package",
+            "version": "[2.1.0, )"
           },
           "NPOI": {
             "target": "Package",
@@ -12696,6 +12796,10 @@
           "dotenv.net": {
             "target": "Package",
             "version": "[3.2.1, )"
+          },
+          "mercadopago-sdk": {
+            "target": "Package",
+            "version": "[2.4.1, )"
           }
         },
         "imports": [

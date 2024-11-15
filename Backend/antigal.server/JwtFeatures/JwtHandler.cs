@@ -12,7 +12,7 @@ namespace antigal.server.JwtFeatures
         public JwtHandler(IConfiguration configuration)
         {
             _configuration = configuration;
-            _jwtSettings = _configuration.GetSection("JwtSettings");
+            _jwtSettings = _configuration.GetSection("JWTSettings");
         }
         public string CreateToken(User user, IList<string> roles)
         {

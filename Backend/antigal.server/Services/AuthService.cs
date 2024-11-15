@@ -1,11 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿/*using System.Threading.Tasks;
 using antigal.server.Models.Dto;
 using antigal.server.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using antigal.server.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.UI.Services;
+using EmailService;
 
 namespace antigal.server.Services
 {
@@ -170,3 +170,4 @@ namespace antigal.server.Services
 
     }
 }
+*/
