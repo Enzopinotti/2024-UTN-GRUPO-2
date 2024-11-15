@@ -24,3 +24,16 @@ D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\refint\EmailService.dll
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\EmailService.pdb
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\ref\EmailService.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\bin\Debug\net8.0\EmailService.deps.json
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\bin\Debug\net8.0\EmailService.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\bin\Debug\net8.0\EmailService.pdb
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\EmailService.csproj.AssemblyReference.cache
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\EmailService.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\EmailService.AssemblyInfoInputs.cache
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\EmailService.AssemblyInfo.cs
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\EmailService.csproj.CoreCompileInputs.cache
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\EmailService.sourcelink.json
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\EmailService.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\refint\EmailService.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\EmailService.pdb
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\EmailService\obj\Debug\net8.0\ref\EmailService.dll

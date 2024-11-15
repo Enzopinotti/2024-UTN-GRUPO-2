@@ -44,7 +44,7 @@ namespace antigal.server.Controllers
 
         [AllowAnonymous]
         [HttpGet("getProducts")]
-        public async Task<ResponseDto> GetProduct(string orden = null, string precio = null)
+        public async Task<ResponseDto> GetProduct(string? orden = null, string? precio = null)
         {
             return await _productService.GetProducts(orden, precio);
         }
