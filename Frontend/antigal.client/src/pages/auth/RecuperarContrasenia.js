@@ -26,7 +26,7 @@ const RecuperarContrasenia = () => {
     const sanitizedEmail = sanitizeInput(data.email);
 
     try {
-      const response = await fetch('https://tu-backend.com/api/auth/recuperar', {
+      const response = await fetch('https://www.antigal.somee.com/api/auth/recuperar', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

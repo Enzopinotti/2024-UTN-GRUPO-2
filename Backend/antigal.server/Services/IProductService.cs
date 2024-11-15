@@ -1,4 +1,4 @@
-﻿
+
 //
 using antigal.server.Models;
 using antigal.server.Models.Dto;
@@ -8,7 +8,8 @@ namespace antigal.server.Services
 {
     public interface IProductService
     {
-        ResponseDto GetProducts();
+        ResponseDto GetProducts(string orden = null, string precio = null);
+        Task<ResponseDto> GetProductsHomeAsync();
         ResponseDto GetProductById(int id);
         ResponseDto GetProductByTitle(string nombre);
         ResponseDto AddProduct(Producto producto);

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProductList from './ProductList';
+import ProductFilter from './ProductFilter';
 import CategoryList from '../../categories/CategoryList';
 import Breadcrumb from '../../breadcrumb/Breadcrumb';
 import CartPreview from '../../carts/CartPreview'; // Importamos el CartPreview
@@ -17,16 +18,26 @@ const ProductListContainer = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [loading, setLoading] = useState(true); // Estado de carga
   const [error, setError] = useState(false);    // Estado de error
+  const [filter, setFilter] = useState('');
 
   const location = useLocation();  // Para Breadcrumb dinámico
 
   useEffect(() => {
     const fetchProductsAndCategories = async () => {
-      const useBackend = false; // Cambia este flag a true para conectar con el backend
-      const fetchURL = useBackend
-        ? 'https://localhost:7255/api/Product/getProducts'
+      const useBackend = true; // Cambia este flag a true para conectar con el backend
+      let fetchURL = useBackend
+        ? 'https://www.antigal.somee.com/api/Product/getProducts'
         : 'https://fakestoreapi.com/products';
   
+      // Modificar la URL según el filtro seleccionado
+      if (filter) {
+        if (filter === 'antiguos' || filter === 'recientes') {
+          fetchURL += `?orden=${filter}`;
+        } else if (filter === 'precioAscendente' || filter === 'precioDescendente') {
+          fetchURL += `?precio=${filter === 'precioAscendente' ? 'ascendente' : 'descendente'}`;
+        }
+      }
+
       try {
         // Primera llamada: Obtener productos
         const response = await fetch(fetchURL);
@@ -34,62 +45,39 @@ const ProductListContainer = () => {
           throw new Error('Error al obtener productos');
         }
         const data = await response.json();
-  
-        // Adaptar los datos según la API utilizada
-        let adaptedData;
-        if (useBackend) {
-          if (data.data && Array.isArray(data.data)) {
-            // Adaptar los datos de los productos
-            adaptedData = data.data.map(item => ({
-              id: item.idProducto,           
-              name: item.nombre,            
-              brand: item.marca,             
-              description: item.descripcion, 
-              barcode: item.codigoBarras,   
-              available: item.disponible,    
-              featured: item.destacado,      
-              price: item.precio,            
-              stock: item.stock,             
-              images: item.imagenUrls[0],   
-              categories: [],                
-            }));
-          } else {
-            throw new Error('Formato de datos incorrecto');
-          }
-        } else {
-          if (data && Array.isArray(data)) {
-            // Adaptar los datos de los productos de fakestore
-            adaptedData = data.map(item => ({
-              id: item.id,                   
-              name: item.title,             
-              brand: 'Marca',               
-              description: item.description,  
-              barcode: '123',                
-              available: true,              
-              featured: false,              
-              price: item.price,             
-              stock: 10,                     
-              images: item.image,            
-              categories: [item.category],   
-            }));
-          } else {
-            throw new Error('Formato de datos incorrecto');
-          }
-        }
-  
-        const productsWithCategories = await Promise.all(
-          adaptedData.map(async (product) => {
-            if (useBackend) {
-              const fetchURLCategory = `https://localhost:7255/api/ProductCategory/categorias/${product.id}`;
+        console.log("la data es:  ", data);
+
+        if (data.data && data.data.$values && Array.isArray(data.data.$values)) {
+          // Adaptar los datos de los productos
+          const adaptedData = data.data.$values.map(item => ({
+            id: item.idProducto,           // Mapear idProducto a id
+            name: item.nombre,             // Mapear nombre a name
+            brand: item.marca,             // Mapear marca a brand
+            description: item.descripcion, // Mapear descripcion a description
+            barcode: item.codigoBarras,    // Mapear codigoBarras a barcode
+            available: item.disponible,    // Mapear disponible a available
+            featured: item.destacado,      // Mapear destacado a featured
+            price: item.precio,            // Mapear precio a price
+            stock: item.stock,             // Mapear stock a stock
+            images: item.imagenUrls.$values[0] || 'icons/por-defecto.png',         // Mapear imagenes a images
+            categories: [],                // Inicializar categorías vacías
+          }));
+
+          // Segunda llamada: Obtener categorías para cada producto
+          const productsWithCategories = await Promise.all(
+            adaptedData.map(async (product) => {
+              const fetchURLCategory = `https://www.antigal.somee.com/api/ProductCategory/categorias/${product.id}`;
               try {
                 const responseCategory = await fetch(fetchURLCategory);
                 if (!responseCategory.ok) {
                   throw new Error(`Error al obtener categorías para el producto ${product.id}`);
                 }
                 const dataCategory = await responseCategory.json();
-  
-                if (dataCategory.data && Array.isArray(dataCategory.data)) {
-                  const formattedCategories = dataCategory.data.map(cat => formatCamelCase(cat.nombre));
+
+                // Acceso a la estructura de la respuesta
+                if (dataCategory.data && dataCategory.data.$values && Array.isArray(dataCategory.data.$values)) {
+                  // Asumimos que cada categoría tiene un campo 'nombre'
+                  const formattedCategories = dataCategory.data.$values.map(cat => formatCamelCase(cat.nombre));
                   return { ...product, categories: formattedCategories };
                 } else {
                   return { ...product, categories: [] };
@@ -98,42 +86,44 @@ const ProductListContainer = () => {
                 console.error(`Error al obtener categorías para el producto ${product.id}: `, errorCategory);
                 return { ...product, categories: [] };
               }
-            } else {
-              return product; 
-            }
-          })
-        );
-  
-        // Actualizar el estado de productos
-        setProducts(productsWithCategories);
-        setFilteredProducts(productsWithCategories); // Inicialmente todos los productos
-  
-        // Generar un objeto para contar productos por categoría
-        const categoryCount = {};
-        productsWithCategories.forEach(product => {
-          product.categories.forEach(category => {
-            categoryCount[category] = (categoryCount[category] || 0) + 1;
+            })
+          );
+          console.log("los productos con  categorias son: ", productsWithCategories);
+
+          // Actualizar el estado de productos
+          setProducts(productsWithCategories);
+          setFilteredProducts(productsWithCategories); // Inicialmente todos los productos
+
+          // Generar un objeto para contar productos por categoría
+          const categoryCount = {};
+
+          productsWithCategories.forEach(product => {
+            product.categories.forEach(category => {
+              categoryCount[category] = (categoryCount[category] || 0) + 1;
+            });
           });
-        });
-  
-        // Formatear las categorías como {name, count} para el componente CategoryList
-        const formattedCategories = Object.entries(categoryCount).map(([name, count]) => ({
-          name,
-          count,
-        }));
-  
-        setCategories(formattedCategories); // Actualizar el estado con las categorías formateadas
-        setLoading(false);
-        setError(false);
+
+          // Formatear las categorías como {name, count} para el componente CategoryList
+          const formattedCategories = Object.entries(categoryCount).map(([name, count]) => ({
+            name,
+            count,
+          }));
+          console.log("formato",formattedCategories);
+          setCategories(formattedCategories);  // Actualizar el estado con las categorías formateadas
+          setLoading(false); 
+          setError(false); 
+        } else {
+          throw new Error('Formato de datos incorrecto');
+        }
       } catch (err) {
         console.error('Error al obtener productos:', err);
-        setLoading(false); // Ya no está cargando
-        setError(true);    // Ha ocurrido un error
+        setLoading(false);  // Ya no está cargando
+        setError(true);     // Ha ocurrido un error
       }
     };
-  
+
     fetchProductsAndCategories();
-  }, []);
+  }, [filter]);
 
   // Alternar el estado del dropdown de categorías en mobile
   const toggleDropdown = () => {
@@ -141,15 +131,22 @@ const ProductListContainer = () => {
   };
 
   // Función para manejar el filtrado de categorías
-  const handleCategoryClick = (categoryName) => {
-    if (categoryName === selectedCategory) {
-      setFilteredProducts(products); // Mostrar todos los productos si se deselecciona la categoría
-      setSelectedCategory(null);
-    } else {
-      const filtered = products.filter(product => product.category === categoryName);
-      setFilteredProducts(filtered);
-      setSelectedCategory(categoryName); // Establecer la categoría seleccionada
-    }
+const handleCategoryClick = (categoryName) => {
+  if (categoryName === selectedCategory) {
+    setFilteredProducts(products); // Mostrar todos los productos si se deselecciona la categoría
+    setSelectedCategory(null);
+  } else {
+    // Filtrar productos si la categoría seleccionada está en el arreglo de categorías del producto
+    const filtered = products.filter(product => 
+      product.categories && product.categories.includes(categoryName)
+    );
+    setFilteredProducts(filtered);
+    setSelectedCategory(categoryName); // Establecer la categoría seleccionada
+  }
+};
+
+  const handleFilterChange = (selectedFilter) => {
+    setFilter(selectedFilter);
   };
 
   return (
@@ -198,6 +195,7 @@ const ProductListContainer = () => {
           ) : (
             <>
               <Banner />
+              <ProductFilter onFilterChange={handleFilterChange} />
               <ProductList products={filteredProducts} />
             </>
           )}

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using antigal.server.Data;
 using antigal.server.Services;
 using antigal.server.Repositories;
@@ -63,6 +63,7 @@ namespace antigal.server
 
             builder.Services.AddScoped<IImageService, ImageService>();
 
+            builder.Services.AddScoped<LikeService>();
             //*********** SERVICES ***********//
 
             // Inyección del servicio IProductService y su implementación ProductService

@@ -22,7 +22,7 @@ const CartPreview = () => {
             console.log(item),
             <li key={item.id} className="cart-item">
               <div className="cart-item-details">
-                <img src={item.imageUrl} alt={item.name} className="cart-item-image" />
+                <img src={item.images} alt={item.name} className="cart-item-image" />
                 <div className="cart-item-info">
                   <span className="cart-item-name">{item.name}</span>
                   <span className="cart-item-price">

@@ -57,7 +57,7 @@ const ResetearContrasenia = () => {
     };
 
     try {
-      const response = await fetch('https://tu-backend.com/api/auth/resetear', {
+      const response = await fetch('https://www.antigal.somee.com/api/auth/resetear', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

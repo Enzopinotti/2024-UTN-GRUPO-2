@@ -2209,12 +2209,12 @@ footer .footer-bottom img {
 }
 .productDetail .detail-container .detail-img {
   padding: 10px;
-  width: 60%;
-  height: 450px;
+  width: 40%;
+  height: auto;
 }
 .productDetail .detail-container .detail-img img {
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: cover;
 }
 .productDetail .detail-container .detail-side {
@@ -2561,16 +2561,20 @@ footer .footer-bottom img {
 }
 .cart-page .cart-products .cart-item .delete-button {
   background: none;
+  justify-content: center;
   border: none;
   cursor: pointer;
   padding: 5px;
-  transition: transform 0.2s;
+  transition: transform 0.3s;
 }
 .cart-page .cart-products .cart-item .delete-button:hover {
-  transform: scale(1.2);
+  transform: scale(1.1);
 }
 .cart-page .cart-products .cart-item .delete-button img {
-  filter: invert(35%) sepia(20%) saturate(500%) hue-rotate(320deg) brightness(90%) contrast(85%);
+  width: 2rem; /* Ajusta el tamaño del ícono */
+  height: 2rem; /* Ajusta el tamaño del ícono */
+  margin-left: 1.5rem; /* Espacio entre el ícono y el texto */
+  filter: brightness(0) saturate(500%) invert(35%) sepia(200%) saturate(500%) hue-rotate(-50deg) brightness(100%) contrast(100%);
 }
 .cart-page .cart-products .cart-item .quantity-controls {
   display: flex;
@@ -2717,7 +2721,7 @@ footer .footer-bottom img {
   height: 200px;
   object-fit: contain;
   margin-bottom: 20px;
-  animation: bounce 2s infinite;
+  animation: bounce 7s ease-in-out infinite;
   /* Media Query para Móviles */
 }
 @media (max-width: 480px) {
@@ -2751,10 +2755,10 @@ footer .footer-bottom img {
     transform: translateY(0);
   }
   40% {
-    transform: translateY(-20px);
+    transform: translateY(-15px);
   }
   60% {
-    transform: translateY(-10px);
+    transform: translateY(-7px);
   }
 }
 
@@ -3986,11 +3990,13 @@ footer .footer-bottom img {
   height: 200px;
   background-color: var(--primary-white-color);
   position: relative;
+  overflow-y: hidden;
 }
 .admin-page .content .product-list .product-item .product-img img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  aspect-ratio: 4/3;
 }
 .admin-page .content .product-list .product-item .product-img .no-image {
   display: flex;

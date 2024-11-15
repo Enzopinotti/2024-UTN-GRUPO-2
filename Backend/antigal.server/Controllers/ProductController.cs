@@ -1,4 +1,4 @@
-﻿// Controllers/ProductController.cs
+// Controllers/ProductController.cs
 using antigal.server.Models;
 using antigal.server.Models.Dto;
 using antigal.server.Services;
@@ -18,10 +18,16 @@ namespace antigal.server.Controllers
         }
 
         [HttpGet("getProducts")]
-        public ResponseDto GetProduct()
+        public ResponseDto GetProduct(string orden = null, string precio = null)
         {
             Console.WriteLine("funciona");
-            return _productService.GetProducts();
+            return _productService.GetProducts(orden, precio);
+        }
+
+        [HttpGet("home")]
+        public Task<ResponseDto> GetHome()
+        {
+            return _productService.GetProductsHomeAsync();
         }
 
         [HttpGet("getProductById/{id}")]

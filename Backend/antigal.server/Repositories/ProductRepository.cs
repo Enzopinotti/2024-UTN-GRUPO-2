@@ -1,4 +1,4 @@
-﻿// Services/ProductService.cs
+// Services/ProductService.cs
 using antigal.server.Data;
 using antigal.server.Models;
 using antigal.server.Models.Dto;
@@ -23,12 +23,35 @@ namespace antigal.server.Services
             _response = new ResponseDto();
         }
 
-        public ResponseDto GetProducts()
+        public ResponseDto GetProducts(string orden = null, string precio = null)
         {
             try
             {
-                IEnumerable<Producto> productos = _context.Productos.ToList();
-                _response.Data = productos;
+                // Obtener la lista de productos
+                IEnumerable<Producto> productos = _context.Productos.AsQueryable();
+
+                // Aplicar ordenamiento por fecha
+                if (orden == "antiguos")
+                {
+                    productos = productos.OrderBy(p => p.FechaCreacion);
+                }
+                else if (orden == "recientes")
+                {
+                    productos = productos.OrderByDescending(p => p.FechaCreacion);
+                }
+
+                // Aplicar ordenamiento por precio
+                if (precio == "ascendente")
+                {
+                    productos = productos.OrderBy(p => p.precio);
+                }
+                else if (precio == "descendente")
+                {
+                    productos = productos.OrderByDescending(p => p.precio);
+                }
+
+                // Convertir a lista y asignar a la respuesta
+                _response.Data = productos.ToList();
             }
             catch (Exception ex)
             {
@@ -39,6 +62,29 @@ namespace antigal.server.Services
             return _response;
         }
 
+        public async Task<ResponseDto> GetProductsHomeAsync()
+        {
+            var productosDestacados = await _context.Productos
+                .Where(p => p.destacado == 1)
+                .ToListAsync();
+
+            if (!productosDestacados.Any())
+            {
+                return new ResponseDto
+                {
+                    Data = null,
+                    IsSuccess = false,
+                    Message = "No se encontraron productos destacados."
+                };
+            }
+
+            return new ResponseDto
+            {
+                Data = productosDestacados,
+                IsSuccess = true,
+                Message = "Productos destacados obtenidos correctamente."
+            };
+        }
         public ResponseDto GetProductById(int id)
         {
             try
@@ -88,6 +134,7 @@ namespace antigal.server.Services
         {
             try
             {
+                producto.FechaCreacion = DateTime.Now;
                 _context.Productos.Add(producto);
                 _context.SaveChanges();
                 _response.Data = producto;

@@ -6,7 +6,7 @@ const AdminProductItem = ({ product, onEdit, onDelete }) => {
     idProducto,
     nombre,
     precio,
-    imagenes, // Cambiado de 'imagen' a 'imagenes'
+    imagenUrls, // Cambiado de 'imagen' a 'imagenes'
     descripcion,
     marca,
     stock,
@@ -18,13 +18,13 @@ const AdminProductItem = ({ product, onEdit, onDelete }) => {
   const [imageSrc, setImageSrc] = useState('');
 
   useEffect(() => {
-    if (imagenes && imagenes.length > 0) {
+    if (imagenUrls && imagenUrls.length > 0) {
       // Si la imagen es una URL (cadena), úsala directamente
       // Si es un objeto File, crea una URL para previsualización
-      if (typeof imagenes[0] === 'string') {
-        setImageSrc(imagenes[0]);
+      if (typeof imagenUrls === 'string') {
+        setImageSrc(imagenUrls);
       } else {
-        const objectUrl = URL.createObjectURL(imagenes[0]);
+        const objectUrl = URL.createObjectURL(imagenUrls);
         setImageSrc(objectUrl);
 
         // Limpia la URL creada para evitar fugas de memoria
@@ -33,7 +33,7 @@ const AdminProductItem = ({ product, onEdit, onDelete }) => {
     } else {
       setImageSrc('');
     }
-  }, [imagenes]);
+  }, [imagenUrls]);
 
   const handleImageError = () => {
     setImageError(true);
@@ -42,8 +42,8 @@ const AdminProductItem = ({ product, onEdit, onDelete }) => {
   return (
     <div className="product-item">
       <div className="product-img">
-        {imageSrc && !imageError ? (
-          <img src={imageSrc} alt={nombre} onError={handleImageError} />
+        {imagenUrls && !imageError ? (
+          <img src={imagenUrls.$values[0]} alt={nombre} onError={handleImageError} />
         ) : (
           <div className="no-image">Sin Imagen</div>
         )}
