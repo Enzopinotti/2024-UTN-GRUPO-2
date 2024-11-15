@@ -41,13 +41,14 @@ namespace antigal.server.Controllers
         {
             return _productService.ImportProductsFromExcelAsync(file);
         }
+
         [AllowAnonymous]
         [HttpGet("getProducts")]
-        public Task<ResponseDto> GetProductsAsync()
+        public async Task<ResponseDto> GetProduct(string orden = null, string precio = null)
         {
-            Console.WriteLine("funciona");
-            return _productService.GetProductsAsync();
+            return await _productService.GetProducts(orden, precio);
         }
+
         [AllowAnonymous]
         [HttpGet("getProductById/{id}")]
         public Task<ResponseDto> GetProductByIdAsync(int id)

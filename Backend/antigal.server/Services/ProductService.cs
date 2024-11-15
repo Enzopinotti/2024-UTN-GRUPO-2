@@ -11,28 +11,35 @@ namespace antigal.server.Services
     public class ProductService : IProductService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IProductRepository _productRepository;
+        private readonly ResponseDto _response;
 
-        public ProductService(IUnitOfWork unitOfWork)
+        public ProductService(IUnitOfWork unitOfWork, IProductRepository productRepository, ResponseDto response)
         {
             _unitOfWork = unitOfWork;
+            _productRepository = productRepository;
+            _response = new ResponseDto();
         }
 
-        public async Task<ResponseDto> GetProductsAsync()
+        public async Task<ResponseDto> GetProducts(string orden = null, string precio = null)
         {
-            var response = new ResponseDto();
             try
             {
-                var productos = await _unitOfWork.Products.GetAllProductsAsync();
-                response.Data = productos;
-                response.IsSuccess = true;
+                // Obtener productos del repositorio
+                var productos = await _productRepository.GetProductsAsync(orden, precio);
+
+                // Asignar datos a la respuesta
+                _response.Data = productos.ToList();
+                _response.IsSuccess = true;
+                _response.Message = "Productos obtenidos correctamente.";
             }
             catch (Exception ex)
             {
-                response.IsSuccess = false;
-                response.Message = ex.Message;
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
             }
 
-            return response;
+            return _response;
         }
 
         public async Task<ResponseDto> GetProductByIdAsync(int id)
@@ -235,5 +242,26 @@ namespace antigal.server.Services
             return response;
         }
 
+        public async Task<ResponseDto> GetProductsHomeAsync()
+        {
+            var productosDestacados = await _productRepository.GetFeaturedProductsAsync();
+
+            if (!productosDestacados.Any())
+            {
+                return new ResponseDto
+                {
+                    Data = null,
+                    IsSuccess = false,
+                    Message = "No se encontraron productos destacados."
+                };
+            }
+
+            return new ResponseDto
+            {
+                Data = productosDestacados,
+                IsSuccess = true,
+                Message = "Productos destacados obtenidos correctamente."
+            };
+        }
     }
 }

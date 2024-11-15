@@ -3,6 +3,7 @@ using antigal.server.Data;
 using antigal.server.Models;
 using antigal.server.Models.Dto;
 using Microsoft.EntityFrameworkCore;
+using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,9 +21,31 @@ namespace antigal.server.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Producto>> GetAllProductsAsync()
+        public async Task<IEnumerable<Producto>> GetProductsAsync(string orden, string precio)
         {
-            return await _context.Productos.ToListAsync();
+            var productos = _context.Productos.AsQueryable();
+
+            // Aplicar ordenamiento por fecha
+            if (orden == "antiguos")
+            {
+                productos = productos.OrderBy(p => p.FechaCreacion);
+            }
+            else if (orden == "recientes")
+            {
+                productos = productos.OrderByDescending(p => p.FechaCreacion);
+            }
+
+            // Aplicar ordenamiento por precio
+            if (precio == "ascendente")
+            {
+                productos = productos.OrderBy(p => p.precio);
+            }
+            else if (precio == "descendente")
+            {
+                productos = productos.OrderByDescending(p => p.precio);
+            }
+
+            return await productos.ToListAsync();
         }
 
         public async Task<Producto?> GetProductByIdAsync(int id)
@@ -146,28 +169,11 @@ namespace antigal.server.Repositories
             return productosImportados;
         }
 
-        public async Task<ResponseDto> GetProductsHomeAsync()
+        public async Task<List<Producto>> GetFeaturedProductsAsync()
         {
-            var productosDestacados = await _context.Productos
+            return await _context.Productos
                 .Where(p => p.destacado == 1)
                 .ToListAsync();
-
-            if (!productosDestacados.Any())
-            {
-                return new ResponseDto
-                {
-                    Data = null,
-                    IsSuccess = false,
-                    Message = "No se encontraron productos destacados."
-                };
-            }
-
-            return new ResponseDto
-            {
-                Data = productosDestacados,
-                IsSuccess = true,
-                Message = "Productos destacados obtenidos correctamente."
-            };
         }
     }
 }
