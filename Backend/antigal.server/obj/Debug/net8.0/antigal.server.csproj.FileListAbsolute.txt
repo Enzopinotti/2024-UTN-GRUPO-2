@@ -1149,3 +1149,8 @@ D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debu
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\EmailService.dll
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\EmailService.pdb
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Bcl.TimeProvider.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\MercadoPago.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\Microsoft.Bcl.TimeProvider.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\NETCore.MailKit.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\EmailService.dll
+C:\Users\beker\OneDrive\Escritorio\DESARROLLO\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\EmailService.pdb

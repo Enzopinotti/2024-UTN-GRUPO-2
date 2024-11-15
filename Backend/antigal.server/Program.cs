@@ -15,6 +15,7 @@ using antigal.server.JwtFeatures;
 using EmailService;
 using MercadoPago.Config;
 using System.IdentityModel.Tokens.Jwt;
+using antigal.server.Models.Dto;
 
 namespace antigal.server
 {
@@ -190,6 +191,7 @@ namespace antigal.server
                 });
             });
 
+            builder.Services.AddTransient<ResponseDto>();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddLogging();
             builder.Services.AddTransient<IEmailSender, EmailSender>();

@@ -63,7 +63,7 @@ namespace antigal.server.Repositories
 
         public async Task<Producto> AddProductAsync(Producto producto)
         {
-                producto.FechaCreacion = DateTime.Now;
+            producto.FechaCreacion = DateTime.Now;
             await _context.Productos.AddAsync(producto);
             await _context.SaveChangesAsync();
             return producto;

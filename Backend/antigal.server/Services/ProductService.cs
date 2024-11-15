@@ -18,11 +18,12 @@ namespace antigal.server.Services
         {
             _unitOfWork = unitOfWork;
             _productRepository = productRepository;
-            _response = new ResponseDto();
+            _response = response;
         }
 
         public async Task<ResponseDto> GetProducts(string orden = null, string precio = null)
         {
+            var response = new ResponseDto();
             try
             {
                 // Obtener productos del repositorio
