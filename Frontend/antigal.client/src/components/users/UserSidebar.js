@@ -70,15 +70,7 @@ const UserSidebar = ({user}) => {
                 Mis Direcciones
               </NavLink>
             </li>
-            <li>
-              <NavLink
-                to="account-security"
-                className={({ isActive }) => (isActive ? "active" : undefined)}
-                onClick={showDevelopmentAlert}
-              >
-                Seguridad
-              </NavLink>
-            </li>
+          
           </ul>
         </div>
       </div>

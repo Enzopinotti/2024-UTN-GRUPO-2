@@ -55,9 +55,7 @@ function App() {
                 <Route path="orders" element={<Orders />} />
                 <Route path="favorites" element={<Favorites />} />
                 <Route path="addresses" element={<UserAddresses />}/>
-                {/* 
-            
-              <Route path="/security" element={<UserSecurity />} /> */}
+                
               </Route>
 
               {/* Ruta protegida para el admin */}
