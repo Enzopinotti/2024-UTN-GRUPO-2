@@ -25,6 +25,12 @@ const AdminNav = () => {
         >
           Usuarios
         </NavLink>
+        <NavLink
+          to="/admin/messages"
+          className={({ isActive }) => (isActive ? 'nav-button active' : 'nav-button')}
+        >
+          Mensajes
+        </NavLink>
       </nav>
     </div>
   );

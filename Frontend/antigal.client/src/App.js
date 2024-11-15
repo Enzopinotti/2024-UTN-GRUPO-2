@@ -30,6 +30,7 @@ import RecuperarContrasenia from "./pages/auth/RecuperarContrasenia";
 import Contact from "./pages/Contact";
 import NotFound from './components/NotFound'
 import AdminUserListContainer from "./components/admin/users/AdminUserListContainer";
+import MessageListContainer from "./components/admin/messages/MessageListContainer";
 
 function App() {
   return (
@@ -70,6 +71,10 @@ function App() {
                 <Route
                   path="users"
                   element={<AdminUserListContainer />}
+                />
+                <Route
+                  path="messages"
+                  element={<MessageListContainer />}
                 />
               </Route>
 

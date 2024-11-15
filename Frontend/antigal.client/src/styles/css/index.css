@@ -4471,6 +4471,98 @@ main .admin-dashboard .admin-page .content .product-list .product-item .product-
   }
 }
 
+.message-list-container {
+  margin-top: 15px;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-height: 600px;
+  overflow-y: scroll;
+}
+.message-list-container .message {
+  width: 100%;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+.message-list-container .message:hover {
+  background-color: #f1f3f4;
+}
+.message-list-container .message.read {
+  background-color: #e8f4f8;
+}
+.message-list-container .message .message-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%;
+}
+.message-list-container .message .name {
+  max-width: 300px;
+  width: auto;
+  font-weight: bold;
+  color: #333;
+  font-size: 1rem;
+}
+.message-list-container .message .text {
+  width: auto;
+  font-size: 0.85rem;
+  color: #777;
+  margin-top: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.message-list-container .message .date {
+  width: 120px;
+  font-size: 0.8rem;
+  color: #999;
+  white-space: nowrap;
+  text-align: right;
+}
+.message-list-container .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.message-list-container .modal {
+  background-color: #fff;
+  padding: 20px;
+  width: 400px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.message-list-container .modal-buttons {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.message-list-container .modal button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.message-list-container .modal button:first-of-type {
+  background-color: #4caf50;
+  color: #fff;
+}
+.message-list-container .modal button:last-of-type {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
 .user-layout {
   width: 100%;
   height: fit-content;
