@@ -4475,9 +4475,10 @@ main .admin-dashboard .admin-page .content .product-list .product-item .product-
   margin-top: 15px;
   border-radius: 8px;
   padding: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   max-height: 600px;
   overflow-y: scroll;
+  background-color: var(--background-color);
+  box-shadow: 0 4px 8px var(--shadow-color);
 }
 .message-list-container .message {
   width: 100%;
@@ -4485,15 +4486,15 @@ main .admin-dashboard .admin-page .content .product-list .product-item .product-
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--read-message-hover-bg);
   transition: background-color 0.3s;
   cursor: pointer;
 }
 .message-list-container .message:hover {
-  background-color: #f1f3f4;
+  background-color: var(--read-message-hover-bg);
 }
 .message-list-container .message.read {
-  background-color: #e8f4f8;
+  background-color: var(--read-message-bg);
 }
 .message-list-container .message .message-info {
   display: flex;
@@ -4503,15 +4504,13 @@ main .admin-dashboard .admin-page .content .product-list .product-item .product-
 }
 .message-list-container .message .name {
   max-width: 300px;
-  width: auto;
   font-weight: bold;
-  color: #333;
+  color: var(--text-color);
   font-size: 1rem;
 }
 .message-list-container .message .text {
-  width: auto;
   font-size: 0.85rem;
-  color: #777;
+  color: var(--text-color);
   margin-top: 5px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -4520,7 +4519,7 @@ main .admin-dashboard .admin-page .content .product-list .product-item .product-
 .message-list-container .message .date {
   width: 120px;
   font-size: 0.8rem;
-  color: #999;
+  color: var(--primary-black-color);
   white-space: nowrap;
   text-align: right;
 }
@@ -4537,7 +4536,7 @@ main .admin-dashboard .admin-page .content .product-list .product-item .product-
   z-index: 999;
 }
 .message-list-container .modal {
-  background-color: #fff;
+  background-color: var(--primary-black-color);
   padding: 20px;
   width: 400px;
   border-radius: 8px;
@@ -5272,6 +5271,8 @@ main .admin-dashboard .admin-page .content .product-list .product-item .product-
   --shadow-color: rgba(47, 56, 20, 0.1);
   --delete-color: rgb(222, 42, 42);
   --delete-color-hover: rgb(184.4268292683, 28.5731707317, 28.5731707317);
+  --read-message-bg: #e8f4f8;
+  --read-message-hover-bg: #f1f3f4;
   --font: Roboto;
 }
 
@@ -5289,6 +5290,8 @@ body.dark-mode {
   --shadow-color: rgba(0, 0, 0, 0.7);
   --delete-color: rgb(222, 42, 42);
   --delete-color-hover: rgb(184.4268292683, 28.5731707317, 28.5731707317);
+  --read-message-bg: #333333;
+  --read-message-hover-bg: #444444;
   --font: Roboto;
 }
 
