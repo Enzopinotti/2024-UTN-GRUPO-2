@@ -13,9 +13,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using CloudinaryDotNet;
 using antigal.server.Mapping;
 using antigal.server.JwtFeatures;
-using System.Security.Cryptography.X509Certificates;
 using EmailService;
 using MercadoPago.Config;
+using System.IdentityModel.Tokens.Jwt;
 
 
 namespace antigal.server
@@ -52,13 +52,7 @@ namespace antigal.server
             .AddDefaultTokenProviders();
 
             builder.Services.Configure<DataProtectionTokenProviderOptions>(opt =>
-            opt.TokenLifespan = TimeSpan.FromHours(2));
-
-
-
-
-
-
+                opt.TokenLifespan = TimeSpan.FromHours(2));
 
             // Configuración de JWT
             var jwtSettings = builder.Configuration.GetSection("JWTSettings");
@@ -83,12 +77,34 @@ namespace antigal.server
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = jwtSettings["validIssuer"],
                     ValidAudience = jwtSettings["validAudience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey)),
+                    NameClaimType = JwtRegisteredClaimNames.Sub, // Mapea 'sub' al NameIdentifier
+                    RoleClaimType = "role"
+                };
+
+                // Personalizar mensajes de error
+                options.Events = new JwtBearerEvents
+                {
+                    OnChallenge = context =>
+                    {
+                        context.HandleResponse();
+                        context.Response.StatusCode = 401;
+                        context.Response.ContentType = "application/json";
+                        var result = System.Text.Json.JsonSerializer.Serialize(new { message = "Acceso no autorizado. Por favor, inicie sesión." });
+                        return context.Response.WriteAsync(result);
+                    },
+                    OnForbidden = context =>
+                    {
+                        context.Response.StatusCode = 403;
+                        context.Response.ContentType = "application/json";
+                        var result = System.Text.Json.JsonSerializer.Serialize(new { message = "No tienes permiso para acceder a este recurso." });
+                        return context.Response.WriteAsync(result);
+                    }
                 };
             });
 
-            builder.Services.Configure<DataProtectionTokenProviderOptions>(opt =>
-           opt.TokenLifespan = TimeSpan.FromHours(2));
+            builder.Services.AddAuthorization();
+
             // Configuración de Cloudinary
             var cloudinaryConfig = builder.Configuration.GetSection("Cloudinary");
             var cloudinary = new Cloudinary(new Account(
@@ -114,6 +130,7 @@ namespace antigal.server
             builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
             builder.Services.AddScoped<ICartRepository, CartRepository>();
             builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             // Agrega otros repositorios según sea necesario
 
             // Registrar UnitOfWork
@@ -122,8 +139,8 @@ namespace antigal.server
             // Registrar CarritoMapper
             builder.Services.AddScoped<CarritoMapper>();
 
-            // Registrar servicios
-            builder.Services.AddScoped<LikeService>();
+            // Registrar servicios con interfaces
+            builder.Services.AddScoped<ILikeService, LikeService>();
             builder.Services.AddScoped<IImageService, ImageService>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -134,11 +151,7 @@ namespace antigal.server
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<ISaleService, SaleService>();
             builder.Services.AddScoped<ServiceToken>();
-            builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
-            builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
-            builder.Services.AddScoped<ICartRepository, CartRepository>();
-            builder.Services.AddScoped<IOrderService, OrderService>();
-            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            // Eliminar duplicaciones y registros innecesarios
 
             // Configuración de CORS
             builder.Services.AddCors(options =>
@@ -154,7 +167,7 @@ namespace antigal.server
             {
                 c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
                 {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'",
+                    Description = "JWT Authorization header usando el esquema Bearer. Ejemplo: 'Bearer {token}'",
                     Name = "Authorization",
                     In = Microsoft.OpenApi.Models.ParameterLocation.Header,
                     Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
@@ -180,6 +193,7 @@ namespace antigal.server
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddLogging();
             builder.Services.AddTransient<IEmailSender, EmailSender>();
+
             // Controladores y JSON
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>

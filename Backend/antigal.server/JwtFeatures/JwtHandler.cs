@@ -42,6 +42,8 @@ namespace antigal.server.JwtFeatures
 
             if (!string.IsNullOrWhiteSpace(user.UserName))
             {
+                // Agrega el claim 'sub' con el user.Id
+                claims.Add(new Claim(JwtRegisteredClaimNames.Sub, user.Id));
                 claims.Add(new Claim(ClaimTypes.Name, user.UserName));
             }
             else
