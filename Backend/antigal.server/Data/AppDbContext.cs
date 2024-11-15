@@ -15,6 +15,7 @@ namespace antigal.server.Data
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet <Imagen> Imagenes { get; set; }
         public DbSet <ProductoCategoria> ProductoCategoria { get; set; }
+        public DbSet <Envio> Envios { get; set; }
         public DbSet<Carrito> Carritos { get; set; }
         public DbSet<CarritoItem> CarritoItems { get; set; }
         public DbSet<Orden> Ordenes { get; set; }

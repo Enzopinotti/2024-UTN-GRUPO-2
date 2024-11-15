@@ -12705,19 +12705,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Pato\\.nuget\\packages\\": {}
+    "C:\\Users\\Usuario\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
+      "projectUniqueName": "C:\\Facultad\\Desarrollo de Software\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
       "projectName": "antigal.server",
-      "projectPath": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
-      "packagesPath": "C:\\Users\\Pato\\.nuget\\packages\\",
-      "outputPath": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\obj\\",
+      "projectPath": "C:\\Facultad\\Desarrollo de Software\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
+      "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
+      "outputPath": "C:\\Facultad\\Desarrollo de Software\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Pato\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -12725,7 +12725,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -12742,11 +12741,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -12875,7 +12869,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

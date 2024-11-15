@@ -154,6 +154,8 @@ namespace antigal.server
             // Eliminar duplicaciones y registros innecesarios
 
             // Configuración de CORS
+            builder.Services.AddScoped<IEnvioRepository, EnvioRepository>();
+            builder.Services.AddScoped<EnvioService>();
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowLocalhost", policy =>

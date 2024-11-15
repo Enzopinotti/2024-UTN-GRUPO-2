@@ -196,6 +196,30 @@ namespace antigal.server.Migrations
                     b.ToTable("Categorias");
                 });
 
+            modelBuilder.Entity("antigal.server.Models.Envio", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Destinatario")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Direccion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FechaEnvio")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Envios");
+                });
+
             modelBuilder.Entity("antigal.server.Models.Imagen", b =>
                 {
                     b.Property<int>("Id")

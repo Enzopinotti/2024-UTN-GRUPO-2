@@ -2,7 +2,7 @@
   "version": 2,
   "dgSpecHash": "ReEb6m7EML8=",
   "success": true,
-  "projectFilePath": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
+  "projectFilePath": "C:\\Facultad\\Desarrollo de Software\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Pato\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\Pato\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
