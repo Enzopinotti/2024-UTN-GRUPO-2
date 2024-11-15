@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+using EmailService;
 using Microsoft.AspNetCore.Mvc;
-using SendGrid.Helpers.Mail;
-using antigal.server.Services;
-using antigal.server.Models.Dto;
 
 namespace antigal.server.Controllers
 {
@@ -12,29 +9,38 @@ namespace antigal.server.Controllers
     {
         private readonly IEmailSender _emailSender;
 
+        // Inyección de dependencias del servicio de envío de correo
         public EmailController(IEmailSender emailSender)
         {
             _emailSender = emailSender;
         }
 
-        [HttpPost("send-test-email")]
-        public async Task<IActionResult> SendTestEmail([FromBody] TestEmailDto emailRequest)
+        // Acción HTTP GET para enviar un email
+        [HttpGet]
+        public IActionResult SendTestEmail()
         {
-            if (string.IsNullOrWhiteSpace(emailRequest.Email))
-            {
-                return BadRequest("El campo 'Email' no puede estar vacío.");
-            }
-
             try
             {
-                await _emailSender.SendEmailAsync(emailRequest.Email, emailRequest.Subject, emailRequest.Message);
-                return Ok("Test email sent successfully.");
+                // Crear un mensaje de correo (ajusta los parámetros de acuerdo a tus necesidades)
+                var message = new Message(
+                    new string[] { "sdfsdfffasdffsddfsdf@gmail.com" }, // Dirección de destinatario
+                    "Test email",                          // Asunto
+                    "This is content from our email." // Cuerpo del mensaje
+                );
+
+                // Enviar el correo
+                _emailSender.SendEmail(message);
+
+                // Retornar respuesta de éxito (200 OK)
+                return Ok("Email sent successfully.");
             }
             catch (Exception ex)
             {
-                // Puedes registrar el error aquí si es necesario
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                // En caso de error, retornar un mensaje de error con status 500
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error sending email: {ex.Message}");
             }
         }
+
     }
 }
+

@@ -1,12 +1,33 @@
 [
   {
-    "ContainingType": "antigal.server.Controllers.AuthController",
+    "ContainingType": "antigal.server.Controllers.AccountController",
+    "Method": "Authenticate",
+    "RelativePath": "api/accounts/authenticate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userForAuthentication",
+        "Type": "antigal.server.Models.Dto.UserForAuthenticationDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AccountController",
     "Method": "ConfirmEmail",
-    "RelativePath": "api/Auth/confirmemail",
+    "RelativePath": "api/accounts/confirm-email",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
       {
         "Name": "token",
         "Type": "System.String",
@@ -16,57 +37,57 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "antigal.server.Controllers.AuthController",
-    "Method": "LoginAsync",
-    "RelativePath": "api/Auth/login",
+    "ContainingType": "antigal.server.Controllers.AccountController",
+    "Method": "ForgotPassword",
+    "RelativePath": "api/accounts/forgotpassword",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "loginDto",
-        "Type": "antigal.server.Models.Dto.LoginDto",
+        "Name": "forgotPassword",
+        "Type": "antigal.server.Models.Dto.ForgotPasswordDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "antigal.server.Controllers.AuthController",
-    "Method": "RefreshTokenAsync",
-    "RelativePath": "api/Auth/refresh-token",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "refreshTokenDto",
-        "Type": "antigal.server.Models.Dto.RefreshTokenDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.AuthController",
+    "ContainingType": "antigal.server.Controllers.AccountController",
     "Method": "RegisterAsync",
-    "RelativePath": "api/Auth/register",
+    "RelativePath": "api/accounts/register",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "registerDto",
-        "Type": "antigal.server.Models.Dto.RegisterDto",
+        "Name": "userForRegistration",
+        "Type": "antigal.server.Models.Dto.UserForRegistrationDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "antigal.server.Controllers.AuthAdminController",
+    "ContainingType": "antigal.server.Controllers.AccountController",
+    "Method": "ResetPassword",
+    "RelativePath": "api/accounts/resetpassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "resetPassword",
+        "Type": "antigal.server.Models.Dto.ResetPasswordDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AdminController",
     "Method": "CreateRoleAsync",
-    "RelativePath": "api/AuthAdmin/create-role",
+    "RelativePath": "api/Admin/CreateRole",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -80,40 +101,18 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "antigal.server.Controllers.AuthAdminController",
-    "Method": "LoginAsync",
-    "RelativePath": "api/AuthAdmin/login-admin",
-    "HttpMethod": "POST",
+    "ContainingType": "antigal.server.Controllers.AdminController",
+    "Method": "GetUsers",
+    "RelativePath": "api/Admin/Users",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "loginDto",
-        "Type": "antigal.server.Models.Dto.LoginDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.AuthAdminController",
-    "Method": "RegisterAsync",
-    "RelativePath": "api/AuthAdmin/register-admin",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "registerDto",
-        "Type": "antigal.server.Models.Dto.RegisterDto",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
     "ContainingType": "antigal.server.Controllers.CartController",
-    "Method": "GetCartByUserId",
+    "Method": "GetCartByUserIdAsync",
     "RelativePath": "api/Cart/{userId}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -127,7 +126,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "antigal.server.Models.Dto.ResponseDto",
+        "Type": "antigal.server.Models.Dto.CarritoDto",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -139,7 +138,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.CartController",
-    "Method": "CreateCart",
+    "Method": "CreateCartAsync",
     "RelativePath": "api/Cart/{userId}",
     "HttpMethod": "POST",
     "IsController": true,
@@ -153,7 +152,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "antigal.server.Models.Dto.ResponseDto",
+        "Type": "antigal.server.Models.Dto.CarritoDto",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -165,7 +164,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.CartController",
-    "Method": "ClearCart",
+    "Method": "ClearCartAsync",
     "RelativePath": "api/Cart/{userId}/clear",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -179,7 +178,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "antigal.server.Models.Dto.ResponseDto",
+        "Type": "antigal.server.Models.Dto.CarritoDtos.VaciarCarritoDto",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -191,7 +190,23 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.CartController",
-    "Method": "AddItemToCart",
+    "Method": "ConfirmCartAsOrderAsync",
+    "RelativePath": "api/Cart/{userId}/confirmar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.CartController",
+    "Method": "AddItemToCartAsync",
     "RelativePath": "api/Cart/{userId}/items",
     "HttpMethod": "POST",
     "IsController": true,
@@ -204,13 +219,13 @@
       },
       {
         "Name": "addItemDto",
-        "Type": "antigal.server.Models.Dto.AddItemToCartDto",
+        "Type": "antigal.server.Models.Dto.CarritoItemDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "antigal.server.Models.Dto.ResponseDto",
+        "Type": "antigal.server.Models.Dto.CarritoItemDto",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -222,7 +237,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.CartController",
-    "Method": "RemoveItemFromCart",
+    "Method": "RemoveItemFromCartAsync",
     "RelativePath": "api/Cart/{userId}/items/{itemId}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -241,7 +256,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "antigal.server.Models.Dto.ResponseDto",
+        "Type": "antigal.server.Models.Dto.CarritoDtos.EliminarCarritoItemDto",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -402,22 +417,32 @@
     ]
   },
   {
-    "ContainingType": "antigal.server.Controllers.ContactoController",
-    "Method": "PostContacto",
-    "RelativePath": "api/Contacto",
+    "ContainingType": "antigal.server.Controllers.EmailController",
+    "Method": "SendTestEmail",
+    "RelativePath": "api/Email",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.EnvioController",
+    "Method": "AddEnvio",
+    "RelativePath": "api/Envio/addEnvio",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "contacto",
-        "Type": "antigal.server.Models.Contacto",
+        "Name": "envio",
+        "Type": "antigal.server.Models.Envio",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "antigal.server.Models.Contacto",
+        "Type": "antigal.server.Models.Dto.ResponseDto",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -428,16 +453,22 @@
     ]
   },
   {
-    "ContainingType": "antigal.server.Controllers.ContactoController",
-    "Method": "GetContactos",
-    "RelativePath": "api/Contacto",
-    "HttpMethod": "GET",
+    "ContainingType": "antigal.server.Controllers.EnvioController",
+    "Method": "DeleteEnvio",
+    "RelativePath": "api/Envio/deleteEnvio/{id}",
+    "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[antigal.server.Models.Contacto, antigal.server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "antigal.server.Models.Dto.ResponseDto",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -448,9 +479,9 @@
     ]
   },
   {
-    "ContainingType": "antigal.server.Controllers.ContactoController",
-    "Method": "GetContacto",
-    "RelativePath": "api/Contacto/{id}",
+    "ContainingType": "antigal.server.Controllers.EnvioController",
+    "Method": "GetEnvioById",
+    "RelativePath": "api/Envio/getEnvioById/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -463,7 +494,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "antigal.server.Models.Contacto",
+        "Type": "antigal.server.Models.Dto.ResponseDto",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -474,20 +505,55 @@
     ]
   },
   {
-    "ContainingType": "antigal.server.Controllers.EmailController",
-    "Method": "SendTestEmail",
-    "RelativePath": "api/Email/send-test-email",
-    "HttpMethod": "POST",
+    "ContainingType": "antigal.server.Controllers.EnvioController",
+    "Method": "GetEnvios",
+    "RelativePath": "api/Envio/getEnvios",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "antigal.server.Models.Dto.ResponseDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.EnvioController",
+    "Method": "UpdateEnvio",
+    "RelativePath": "api/Envio/updateEnvio/{id}",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "emailRequest",
-        "Type": "antigal.server.Models.Dto.TestEmailDto",
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "envio",
+        "Type": "antigal.server.Models.Envio",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "antigal.server.Models.Dto.ResponseDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "antigal.server.Controllers.ImageController",
@@ -607,15 +673,62 @@
   {
     "ContainingType": "antigal.server.Controllers.OrdersController",
     "Method": "ConfirmOrder",
-    "RelativePath": "api/Orders/confirm",
+    "RelativePath": "api/Orders/confirm/{orderId}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "orderDto",
-        "Type": "antigal.server.Models.Dto.OrderDto",
+        "Name": "orderId",
+        "Type": "System.Int32",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.PaymentController",
+    "Method": "CreatePayment",
+    "RelativePath": "api/Payment/create-payment",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "amount",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      },
+      {
+        "Name": "title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "quantity",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.PaymentController",
+    "Method": "ReceiveNotification",
+    "RelativePath": "api/Payment/notification",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "paymentId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "status",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -648,7 +761,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.ProductController",
-    "Method": "DeleteProduct",
+    "Method": "DeleteProductAsync",
     "RelativePath": "api/Product/deleteProduct/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -674,7 +787,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.ProductController",
-    "Method": "GetProductById",
+    "Method": "GetProductByIdAsync",
     "RelativePath": "api/Product/getProductById/{id}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -700,7 +813,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.ProductController",
-    "Method": "GetProductByTitle",
+    "Method": "GetProductByTitleAsync",
     "RelativePath": "api/Product/getProductByTitle/{nombre}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -726,39 +839,8 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.ProductController",
-    "Method": "GetProduct",
+    "Method": "GetProductsAsync",
     "RelativePath": "api/Product/getProducts",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "orden",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "precio",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "antigal.server.Models.Dto.ResponseDto",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "antigal.server.Controllers.ProductController",
-    "Method": "GetHome",
-    "RelativePath": "api/Product/home",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -777,7 +859,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.ProductController",
-    "Method": "PutProduct",
+    "Method": "PutProductAsync",
     "RelativePath": "api/Product/updateProduct",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -803,7 +885,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.ProductController",
-    "Method": "UploadProductsFromExcel",
+    "Method": "ImportProductsFromExcelAsync",
     "RelativePath": "api/Product/uploadProductsFromExcel",
     "HttpMethod": "POST",
     "IsController": true,
@@ -829,7 +911,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.ProductCategoryController",
-    "Method": "AsignarCategoriaAProducto",
+    "Method": "AsignarCategoriaAProductoAsync",
     "RelativePath": "api/ProductCategory/asignar",
     "HttpMethod": "POST",
     "IsController": true,
@@ -860,7 +942,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.ProductCategoryController",
-    "Method": "ObtenerCategoriasDeProducto",
+    "Method": "ObtenerCategoriasDeProductoAsync",
     "RelativePath": "api/ProductCategory/categorias/{idProducto}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -886,7 +968,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.ProductCategoryController",
-    "Method": "DesasignarCategoriaDeProducto",
+    "Method": "DesasignarCategoriaDeProductoAsync",
     "RelativePath": "api/ProductCategory/desasignar",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -917,7 +999,7 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.ProductCategoryController",
-    "Method": "ObtenerProductosDeCategoria",
+    "Method": "ObtenerProductosDeCategoriaAsync",
     "RelativePath": "api/ProductCategory/productos/{idCategoria}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -940,5 +1022,58 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "SaleController",
+    "Method": "GetSaleById",
+    "RelativePath": "api/Sale/{idVenta}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idVenta",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SaleController",
+    "Method": "UpdateSaleStatus",
+    "RelativePath": "api/Sale/{idVenta}/estado",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idVenta",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "nuevoEstado",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SaleController",
+    "Method": "RealizarVenta",
+    "RelativePath": "api/Sale/realizar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "antigal.server.Models.Dto.VentaDtos.SaleRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

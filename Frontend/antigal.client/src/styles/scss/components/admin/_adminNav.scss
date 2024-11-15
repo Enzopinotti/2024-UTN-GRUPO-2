@@ -1,17 +1,18 @@
-@use "../../abstract/variables" as variables;
-@use '../../abstract/mixins' as mixins;
+@import '../../abstract/variables';
+
 
 // src/components/admin/AdminNav.scss
 
 
 main{
     .admin-dashboard{
-        background-color: mixins.theme(primary-white-color);
+        background-color: $primary-white-color;
         min-height: 100vh;
+        font-family: $font;
         .admin-page{
           .admin-nav {
-              background-color: mixins.theme(primary-black-color);
-              color: mixins.theme(primary-white-color);
+              background-color: $primary-black-color;
+              color: $primary-white-color;
               padding: 20px;
               display: flex;
               flex-direction: column;
@@ -19,6 +20,7 @@ main{
 
               h2 {
                 margin-bottom: 20px;
+                font-family: $font;
                 font-size: 1.3rem;
               }
             
@@ -30,20 +32,21 @@ main{
                   padding: 10px 20px;
                   border-radius: 8px;
                   text-decoration: none;
-                  color: mixins.theme(primary-white-color);
+                  color: $primary-white-color;
+                  font-family: $font;
                   background-color: transparent;
-                  border: 2px solid mixins.theme(primary-white-color);
+                  border: 2px solid $primary-white-color;
                   transition: background-color 0.3s, transform 0.3s;
             
                   &:hover {
-                    background-color: mixins.theme(primary-black-color-hover);
+                    background-color: lighten($primary-black-color, 10%);
                     transform: translateY(-2px);
                   }
             
                   &.active {
-                    background-color: mixins.theme(primary-color);
-                    border-color: mixins.theme(primary-color);
-                    color: mixins.theme(primary-white-color);
+                    background-color: $primary-color;
+                    border-color: $primary-color;
+                    color: $primary-white-color;
                   }
                 }
               }
@@ -57,13 +60,13 @@ main{
               button{
                 border: 0;
                 padding: 10px 20px;
-                background-color: mixins.theme(primary-color);
+                background-color: $primary-color;
                 border-radius: 0.5rem;
                 -webkit-border-radius: 0.5rem;
                 -moz-border-radius: 0.5rem;
                 -ms-border-radius: 0.5rem;
                 -o-border-radius: 0.5rem;
-                color: mixins.theme(primary-white-color);
+                color: $primary-white-color;
               }
             }
             .product-list{

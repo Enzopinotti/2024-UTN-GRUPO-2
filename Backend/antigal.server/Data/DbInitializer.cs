@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
-using antigal.server.Models; 
-using antigal.server.Models.Dto;
+using antigal.server.Models;
 using System.Linq;
+
 public class DbInitializer
 {
     public static async Task Initialize(IServiceProvider serviceProvider)
@@ -13,8 +13,8 @@ public class DbInitializer
         var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
 
         // Crear los roles si no existen
-        string[] roleNames = { "Admin", "User  " };
-        string[] roleDescriptions = { "Administradores del sistema", "Usuarios regulares" };
+        string[] roleNames = { "Admin", "User", "Visitor" };
+        string[] roleDescriptions = { "Administradores del sistema", "Usuarios regulares", "Visitantes" };
 
         for (int i = 0; i < roleNames.Length; i++)
         {
@@ -24,7 +24,8 @@ public class DbInitializer
                 var role = new Role
                 {
                     Name = roleNames[i],
-                    Description = roleDescriptions[i] // Asignar descripción
+                    NormalizedName = roleNames[i].ToUpper(),
+                    Description = roleDescriptions[i]
                 };
 
                 var result = await roleManager.CreateAsync(role);
@@ -46,21 +47,17 @@ public class DbInitializer
         var existingAdmin = await userManager.FindByEmailAsync(adminEmail);
         if (existingAdmin == null)
         {
-            var adminUser = new User // Asegúrate de que User sea tu clase de usuario
+            var adminUser = new User
             {
                 UserName = "admin",
                 Email = adminEmail,
-                FullName = "Administrador del Sistema",
+                EmailConfirmed = true // Confirmar el email directamente
             };
 
             var result = await userManager.CreateAsync(adminUser, adminPassword);
             if (result.Succeeded)
             {
-                // Confirmar el correo electrónico
-                adminUser.EmailConfirmed = true; // Marcar el correo como confirmado
-                await userManager.UpdateAsync(adminUser); // Actualizar el usuario en la base de datos
-
-                await userManager.AddToRoleAsync(adminUser, "Admin"); // Asignar rol de administrador
+                await userManager.AddToRoleAsync(adminUser, "Admin");
                 Console.WriteLine($"Usuario administrador '{adminUser.UserName}' creado con éxito.");
             }
             else

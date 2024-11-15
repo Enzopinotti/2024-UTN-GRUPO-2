@@ -1,10 +1,11 @@
-﻿using antigal.server.Data;
+// Services/LikeService.cs
+using antigal.server.Data;
 using antigal.server.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace antigal.server.Services
 {
-    public class LikeService
+    public class LikeService : ILikeService
     {
         private readonly AppDbContext _context;
 
@@ -19,8 +20,9 @@ namespace antigal.server.Services
                 .FirstOrDefaultAsync(l => l.UserId == userId && l.ProductoId == productoId);
 
             if (existingLike != null)
+            {
                 return false; // Ya existe un like
-
+            }
             var like = new Like { UserId = userId, ProductoId = productoId };
             _context.Likes.Add(like);
             await _context.SaveChangesAsync();
@@ -42,13 +44,11 @@ namespace antigal.server.Services
 
         public async Task<List<Producto>> GetUserLikes(string userId)
         {
-            // Obtén todos los ProductoId que el usuario ha marcado con "like"
             var likedProductIds = await _context.Likes
                 .Where(l => l.UserId == userId)
                 .Select(l => l.ProductoId)
                 .ToListAsync();
 
-            // Consulta los productos correspondientes a esos ProductoId
             var likedProducts = await _context.Productos
                 .Where(p => likedProductIds.Contains(p.idProducto))
                 .ToListAsync();

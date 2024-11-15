@@ -13,8 +13,8 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
   const [codigoBarras, setCodigoBarras] = useState('');
   const [marca, setMarca] = useState('');
   const [stock, setStock] = useState('');
-  const [disponible, setDisponible] = useState(1);
-  const [productoDestacado, setProductoDestacado] = useState(0); 
+  const [disponible, setDisponible] = useState(true);
+  const [productoDestacado, setProductoDestacado] = useState('No'); 
 
   // Estado para las categorías
   const [categorias, setCategorias] = useState([]);
@@ -43,8 +43,8 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
       setCodigoBarras(product.codigoBarras || '');
       setMarca(product.marca || '');
       setStock(product.stock !== undefined ? product.stock.toString() : '');
-      setDisponible(product.disponible !== undefined ? product.disponible : 1);
-      setProductoDestacado(product.destacado || 0);
+      setDisponible(product.disponible !== undefined ? product.disponible : true);
+      setProductoDestacado(product.destacado || 'No');
       setImagenes(product.imagenes || []);
       
       // Guardar datos iniciales para detectar cambios
@@ -56,8 +56,8 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
         codigoBarras: product.codigoBarras || '',
         marca: product.marca || '',
         stock: product.stock !== undefined ? product.stock.toString() : '',
-        disponible: product.disponible !== undefined ? product.disponible : 1,
-        destacado: product.destacado || 0,
+        disponible: product.disponible !== undefined ? product.disponible : true,
+        destacado: product.destacado || 'No',
       });
     } else {
       setNombre('');
@@ -67,8 +67,8 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
       setCodigoBarras('');
       setMarca('');
       setStock('');
-      setDisponible(1);
-      setProductoDestacado(0);
+      setDisponible(true);
+      setProductoDestacado('No');
       setImagenes([]);
       setInitialData({});
     }
@@ -140,7 +140,7 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
   };
 
   // Manejador de envío del formulario
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -183,8 +183,13 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
       formData.append('imagenes', imagen);
     });
 
-    // Llamar a la función onSave pasada desde el padre
-    await onSave(formData);
+    onSave(formData);
+    onClose();
+
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   // Manejador para seleccionar imágenes
@@ -327,7 +332,7 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
                     id="destacadoHome"
                     name="destacado"
                     value="Home"
-                    checked={productoDestacado === 1}
+                    checked={productoDestacado === 'Home'}
                     onChange={(e) => setProductoDestacado(e.target.value)}
                   />
                   <label htmlFor="destacadoHome">Home</label>
@@ -338,7 +343,7 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
                     id="destacadoNo"
                     name="destacado"
                     value="No"
-                    checked={productoDestacado === 0}
+                    checked={productoDestacado === 'No'}
                     onChange={(e) => setProductoDestacado(e.target.value)}
                   />
                   <label htmlFor="destacadoNo">No</label>
@@ -390,7 +395,7 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
           {imagenes.length > 0 && (
             <div className="image-previews">
               {imagenes.map((imagen, index) => {
-                const isFile = imagen instanceof File;
+                const isFile = typeof imagen !== 'string';
                 const src = isFile ? URL.createObjectURL(imagen) : imagen;
                 const key = isFile ? `${imagen.name}-${index}` : `existing-${index}`;
                 
@@ -434,3 +439,4 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
 };
 
 export default ProductForm;
+

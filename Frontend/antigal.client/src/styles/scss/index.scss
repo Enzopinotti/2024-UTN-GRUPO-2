@@ -1,53 +1,28 @@
-// src/styles/scss/index.scss
 
-@use './abstract/mixins' as mixins;
-@use './abstract/variables' as variables;
+
+@use './abstract/mixins';
 @use './base/resets';
+
+
 @use './layout/media-queries';
 
 @use './components/header';
 @use './components/footer';
 @use './components/home';
-@use './components/products/products';
+@use './components/products//products';
 @use './components/productDetail';
-@use './components/sobreNosotros';
-@use './components/cart';
-@use './components/tiendaFisica';
-@use './components/contact';
-@use './components/login';
-@use './components/registro';
-@use './components/resetearContrasenia';
 
 @use './components/admin/categoryListContainer';
 @use './components/admin/categoryForm';
 @use './components/admin/productListContainer';
 @use './components/admin/adminNav';
 @use './components/admin/productForm';
+@import './abstract/variables';
 
-@use './components/users/user';
-@use './components/users/orders';
-@use './components/users/favorites';
-
-@use './components/privacyPolicy';
-
-@import "slick-carousel/slick/slick.css";
-@import "slick-carousel/slick/slick-theme.css";
-
-
-/* Aplicar el tema claro por defecto dentro de :root */
-:root {
-  @include mixins.apply-theme(light);
-  
+*{
+  font-family: $font;
 }
 
-/* Aplicar el tema oscuro cuando el cuerpo tenga la clase `.dark-mode` */
-body.dark-mode {
-  @include mixins.apply-theme(dark);
-}
-body{
-  font-family: mixins.theme(font);
-  background-color: mixins.theme(background-color);
-}
 
 @keyframes likeAnimation {
     0% {
@@ -107,4 +82,5 @@ body{
     -o-transform: scale(1);
 }
 }
+
 

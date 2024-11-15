@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using antigal.server.Data;
 using antigal.server.Services;
 using antigal.server.Repositories;
@@ -9,117 +9,206 @@ using antigal.server.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using MathNet.Numerics.Interpolation;
 using CloudinaryDotNet;
-using Microsoft.Extensions.DependencyInjection;
+using antigal.server.Mapping;
+using antigal.server.JwtFeatures;
+using EmailService;
+using MercadoPago.Config;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace antigal.server
 {
     public class Program
     {
-        public static async Task Main(string[] args) // Cambiar a Task
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Agregar el contexto de la base de datos al contenedor de servicios
+            // Agregar el contexto de la base de datos
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+
+            // Cargar las credenciales de Mercado Pago desde appsettings.json
+            var mercadoPagoAccessToken = builder.Configuration["MercadoPago:AccessToken"];
+            if (string.IsNullOrEmpty(mercadoPagoAccessToken))
+            {
+                throw new InvalidOperationException("El AccessToken de Mercado Pago no está configurado en appsettings.json.");
+            }
+
+            // Inicializar Mercado Pago SDK
+            MercadoPagoConfig.AccessToken = mercadoPagoAccessToken;
+
+
+
             // Configurar Identity
-            builder.Services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<AppDbContext>()
-                .AddDefaultTokenProviders();
+            builder.Services.AddIdentity<User, Role>(options =>
+            {
+                options.SignIn.RequireConfirmedEmail = false;
+            })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+
+            builder.Services.Configure<DataProtectionTokenProviderOptions>(opt =>
+                opt.TokenLifespan = TimeSpan.FromHours(2));
 
             // Configuración de JWT
-            builder.Services.AddAuthentication(options =>
+            var jwtSettings = builder.Configuration.GetSection("JWTSettings");
+            builder.Services.AddAuthentication(opt =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(options =>
             {
+                var securityKey = jwtSettings["securityKey"];
+                if (string.IsNullOrWhiteSpace(securityKey))
+                {
+                    throw new InvalidOperationException("La clave de seguridad JWT no está configurada.");
+                }
+
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                    ValidAudience = builder.Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                    ValidIssuer = jwtSettings["validIssuer"],
+                    ValidAudience = jwtSettings["validAudience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey)),
+                    NameClaimType = JwtRegisteredClaimNames.Sub, // Mapea 'sub' al NameIdentifier
+                    RoleClaimType = "role"
+                };
+
+                // Personalizar mensajes de error
+                options.Events = new JwtBearerEvents
+                {
+                    OnChallenge = context =>
+                    {
+                        context.HandleResponse();
+                        context.Response.StatusCode = 401;
+                        context.Response.ContentType = "application/json";
+                        var result = System.Text.Json.JsonSerializer.Serialize(new { message = "Acceso no autorizado. Por favor, inicie sesión." });
+                        return context.Response.WriteAsync(result);
+                    },
+                    OnForbidden = context =>
+                    {
+                        context.Response.StatusCode = 403;
+                        context.Response.ContentType = "application/json";
+                        var result = System.Text.Json.JsonSerializer.Serialize(new { message = "No tienes permiso para acceder a este recurso." });
+                        return context.Response.WriteAsync(result);
+                    }
                 };
             });
 
-            //Cloudinary para imagenes
-            var cloudinaryConfig = builder.Configuration.GetSection("Cloudinary");
+            builder.Services.AddAuthorization();
 
+            // Configuración de Cloudinary
+            var cloudinaryConfig = builder.Configuration.GetSection("Cloudinary");
             var cloudinary = new Cloudinary(new Account(
                 cloudinaryConfig["CloudName"],
                 cloudinaryConfig["ApiKey"],
                 cloudinaryConfig["ApiSecret"]
-                ));
-
+            ));
             builder.Services.AddSingleton(cloudinary);
 
-            builder.Services.AddScoped<IImageService, ImageService>();
+            // Configuración de EmailConfiguration
+            var emailConfig = builder.Configuration.GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>()!;
+            builder.Services.AddSingleton(emailConfig);
 
-            builder.Services.AddScoped<LikeService>();
-            //*********** SERVICES ***********//
+            // Registrar servicios y otros componentes
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddSingleton<JwtHandler>();
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-            // Inyección del servicio IProductService y su implementación ProductService
-            builder.Services.AddScoped<IProductService, ProductService>();
-            // Inyección del servicio ICategoryService y su implementación CategoryService
-            builder.Services.AddScoped<ICategoryService, CategoryService>();
-            // Inyección del servicio IProductCategoryService y su implementación ProductCategoryService
-            builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
-            // Inyección del servicio ICartService y su implementación CartService
-            builder.Services.AddScoped<ICartService, CartService>();
-
-            builder.Services.AddScoped<IEmailSender, EmailSender>();
-            builder.Services.AddScoped<IAuthService, AuthService>();
-            builder.Services.AddScoped<ServiceToken>();
-
-            //*********** REPOSITORIES ***********//
-
-            // Inyección del repositorio IProductCategoryRepository y su implementación ProductCategoryRepository
-            builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
-            // Inyección del repositorio ICategoriaRepository y su implementación CategoriaRepository
+            // Registrar Repositorios
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
-            // Inyección del repositorio ICartRepository y su implementación CartRepository
+            builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
             builder.Services.AddScoped<ICartRepository, CartRepository>();
-            // Inyección del servicio IOrderService y su implementación OrderService
-            builder.Services.AddScoped<IOrderService, OrderService>();
-            // Inyección del repositorio IOrderRepository y su implementación OrderRepository
+            builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IEnvioRepository, EnvioRepository>(); // Registrar IEnvioRepository
+            // Agrega otros repositorios según sea necesario
 
-            // Agregar servicios de CORS (sirve para restringir metodos, origen de solicitudes, etc) SEGURIDAD
+            // Registrar UnitOfWork
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // Registrar CarritoMapper
+            builder.Services.AddScoped<CarritoMapper>();
+
+            // Registrar servicios con interfaces
+            builder.Services.AddScoped<ILikeService, LikeService>();
+            builder.Services.AddScoped<IImageService, ImageService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
+            builder.Services.AddScoped<ICartService, CartService>();
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<ISaleService, SaleService>();
+            builder.Services.AddScoped<IEnvioService, EnvioService>(); // Registrar IEnvioService
+            builder.Services.AddScoped<ServiceToken>();
+            // Eliminar duplicaciones y registros innecesarios
+
+            // Configuración de CORS
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowLocalhost",
-                    builder => builder.WithOrigins("http://localhost:3000") // Permitir acceso desde el frontend
-                                      .AllowAnyMethod() // Permitir todos los métodos HTTP (GET, POST, etc.)
-                                      .AllowAnyHeader()); // Permitir todas las cabeceras
+                options.AddPolicy("AllowLocalhost", policy =>
+                    policy.WithOrigins("http://localhost:3000")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
             });
 
-            // Controllers
+            // Configuración de Swagger con soporte JWT
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header usando el esquema Bearer. Ejemplo: 'Bearer {token}'",
+                    Name = "Authorization",
+                    In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                    Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+                {
+                    {
+                        new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                        {
+                            Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                            {
+                                Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
+            });
+
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddLogging();
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+            // Controladores y JSON
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-                options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
-            });
+                {
+                    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+                    options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+                });
 
             // Validaciones
             builder.Services.AddValidatorsFromAssemblyContaining<Program>();
             builder.Services.AddFluentValidationAutoValidation();
 
-            // Agregar otros servicios como Swagger si es necesario
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
             var app = builder.Build();
 
-            // Inicializar la base de datos
+            // Inicialización de la base de datos
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
@@ -133,26 +222,24 @@ namespace antigal.server
                 }
             }
 
-            // Usar la política de CORS
+            // Middleware de CORS y autenticación
             app.UseCors("AllowLocalhost");
+            app.UseHttpsRedirection();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
-            // Configurar el middleware de la aplicación
+            // Configuración de Swagger
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
+            // Mapear controladores
             app.MapControllers();
-            
+
+            // Ejecutar la aplicación
             app.Run();
         }
-        
     }
-
 }

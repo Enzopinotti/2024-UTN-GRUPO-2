@@ -1,4 +1,4 @@
-﻿using antigal.server.Data;
+using antigal.server.Data;
 using antigal.server.Models;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
@@ -205,7 +205,7 @@ namespace antigal.server.Services
                 return publicId;
             }
 
-            return null;
+            throw new InvalidOperationException("No se pudo extraer el Public ID de la URL proporcionada.");
         }
 
     }

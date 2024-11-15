@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavBar from '../common/NavBar';
 import Logo from '../common/Logo';
 import CartWidget from '../common/CartWidget';
@@ -7,21 +7,15 @@ import MenuHamburger from '../common/MenuHamburger';
 import CloseIcon from '../common/CloseIcon';
 import SocialMedia from '../common/SocialMedia';
 import UserIcon from '../common/UserIconDos';
-import Swal from 'sweetalert2'; 
+import Swal from 'sweetalert2'; // Importamos SweetAlert2
 import SearchBar from '../common/SearchBar';
 import SearchBarMobile from '../common/SearchBarMobile';
-import { ThemeContext } from '../../contexts/ThemeContext';
-import ThemeSlider from '../common/ThemeSlider';
-
-
-
 const Header = () => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 800);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
-  
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  // Función para mostrar mensaje de "Funcionalidad en Desarrollo"
   const showDevelopmentAlert = () => {
     Swal.fire({
       title: 'Funcionalidad en Desarrollo',
@@ -74,7 +68,7 @@ const Header = () => {
     <header className='header'>
       {isMobile ? (
         <div className='header-mobile'>
-          
+          {/* Alerta de "Funcionalidad en Desarrollo" al hacer clic en el carrito */}
           <CartWidget onClick={showDevelopmentAlert} />
           
           <Logo toggleMenu={toggleMenu} isMenuOpen={isMenuOpen} />
@@ -85,8 +79,7 @@ const Header = () => {
                 <Logo toggleMenu={toggleMenu} isMenuOpen={isMenuOpen} />
                 <CloseIcon onClick={toggleMenu} />
               </article>
-              <UserIcon />
-              <ThemeSlider />                
+              <UserIcon />                  
               <NavBar vertical={true} onLinkClick={toggleMenu} /> 
              <SearchBarMobile/>
               <SocialMedia />
@@ -98,14 +91,14 @@ const Header = () => {
           <Logo />
           <NavBar />
           <div className='widgets'>
+            {/* Alerta de "Funcionalidad en Desarrollo" al hacer clic en la lupa */}
             <LupaWidget onClick={toggleSearchBar} />
             <CartWidget onClick={showDevelopmentAlert} />
             <UserIcon />
-            <ThemeSlider /> 
           </div>
         </div>
       )}
-     {isSearchBarVisible && <SearchBar isVisible={isSearchBarVisible} onClose={toggleSearchBar } />}</header>
+     {isSearchBarVisible && <SearchBar isVisible={isSearchBarVisible} onClose={toggleSearchBar } />}      </header>
   );
 };
 

@@ -1,3 +1,4 @@
+// src/components/admin/categories/CategoryListContainer.js
 import React, { useState, useEffect } from 'react';
 import AdminNav from '../AdminNav';
 import CategoryList from './CategoryList';
@@ -11,19 +12,19 @@ const CategoryListContainer = () => {
   const [editingCategory, setEditingCategory] = useState(null);
 
   // Variable para controlar el uso del backend
-  const useBackend = true; // Cambia a 'true' para usar el backend
+  const useBackend = false; // Cambia a 'true' para usar el backend
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         if (useBackend) {
           // Obtener categorías desde el backend
-          const response = await fetch('https://www.antigal.somee.com/api/Category/getCategories');
+          const response = await fetch('http://localhost:5000/categorias');
           if (!response.ok) {
-            throw new Error('Error al obtener categorías del backend'); 
+            throw new Error('Error al obtener categorías del backend');
           }
           const data = await response.json();
-          setCategories(data.data.$values);
+          setCategories(data);
         } else {
           // Cargar categorías desde localStorage
           const storedCategories = getCategories();

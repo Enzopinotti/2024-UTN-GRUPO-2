@@ -1,28 +1,27 @@
-﻿using antigal.server.Data;
-using antigal.server.Models;
+// Services/ProductCategoryService.cs
 using antigal.server.Models.Dto;
 using antigal.server.Repositories;
+using antigal.server.Data;
+using antigal.server.Models;
+using System.Threading.Tasks;
 
 namespace antigal.server.Services
 {
     public class ProductCategoryService : IProductCategoryService
     {
-        private readonly IProductCategoryRepository _repository;
-        private readonly AppDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ProductCategoryService(IProductCategoryRepository repository, AppDbContext context)
+        public ProductCategoryService(IUnitOfWork unitOfWork)
         {
-            _repository = repository;
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
-        // Método privado para verificar la existencia de producto y categoría
-        private ResponseDto VerificarExistencia(int idProducto, int idCategoria)
+        private async Task<ResponseDto> VerificarExistenciaAsync(int idProducto, int idCategoria)
         {
-            var response = new ResponseDto(); // Nueva instancia de ResponseDto
+            var response = new ResponseDto();
 
-            var producto = _context.Productos.Find(idProducto);
-            var categoria = _context.Categorias.Find(idCategoria);
+            var producto = await _unitOfWork.Products.GetProductByIdAsync(idProducto);
+            var categoria = await _unitOfWork.Categories.GetCategoryByIdAsync(idCategoria);
 
             if (producto == null || categoria == null)
             {
@@ -31,52 +30,46 @@ namespace antigal.server.Services
             }
             else
             {
-                response.IsSuccess = true; // Si se encuentran, se establece éxito
+                response.IsSuccess = true;
             }
 
             return response;
         }
 
-        // Asigna una categoría a un producto
-        public ResponseDto AsignarCategoriaAProducto(int idProducto, int idCategoria)
+        public async Task<ResponseDto> AsignarCategoriaAProductoAsync(int idProducto, int idCategoria)
         {
-            var verificationResponse = VerificarExistencia(idProducto, idCategoria);
+            var verificationResponse = await VerificarExistenciaAsync(idProducto, idCategoria);
 
             if (!verificationResponse.IsSuccess)
             {
-                return verificationResponse; // Retornar la respuesta si hubo un error
+                return verificationResponse;
             }
 
-            // Llamar al repositorio para asignar la categoría
-            var resultResponse = _repository.AsignarCategoriaAProducto(idProducto, idCategoria);
+            var resultResponse = await _unitOfWork.ProductCategories.AsignarCategoriaAProductoAsync(idProducto, idCategoria);
             return resultResponse;
         }
 
-        // Desasigna una categoría de un producto
-        public ResponseDto DesasignarCategoriaDeProducto(int idProducto, int idCategoria)
+        public async Task<ResponseDto> DesasignarCategoriaDeProductoAsync(int idProducto, int idCategoria)
         {
-            var verificationResponse = VerificarExistencia(idProducto, idCategoria);
+            var verificationResponse = await VerificarExistenciaAsync(idProducto, idCategoria);
 
             if (!verificationResponse.IsSuccess)
             {
-                return verificationResponse; // Retornar la respuesta si hubo un error
+                return verificationResponse;
             }
 
-            // Llamar al repositorio para desasignar la categoría
-            var resultResponse = _repository.DesasignarCategoriaDeProducto(idProducto, idCategoria);
+            var resultResponse = await _unitOfWork.ProductCategories.DesasignarCategoriaDeProductoAsync(idProducto, idCategoria);
             return resultResponse;
         }
 
-        // Obtiene las categorías de un producto
-        public ResponseDto ObtenerCategoriasDeProducto(int idProducto)
+        public async Task<ResponseDto> ObtenerCategoriasDeProductoAsync(int idProducto)
         {
-            return _repository.ObtenerCategoriasDeProducto(idProducto);
+            return await _unitOfWork.ProductCategories.ObtenerCategoriasDeProductoAsync(idProducto);
         }
 
-        // Obtiene los productos de una categoría
-        public ResponseDto ObtenerProductosDeCategoria(int idCategoria)
+        public async Task<ResponseDto> ObtenerProductosDeCategoriaAsync(int idCategoria)
         {
-            return _repository.ObtenerProductosDeCategoria(idCategoria);
+            return await _unitOfWork.ProductCategories.ObtenerProductosDeCategoriaAsync(idCategoria);
         }
     }
 }

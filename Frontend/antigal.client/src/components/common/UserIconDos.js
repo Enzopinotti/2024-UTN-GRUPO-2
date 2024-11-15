@@ -1,58 +1,58 @@
 // src/components/common/UserIconDos.js
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../contexts/AuthContext';
+import Swal from 'sweetalert2';
 
 const UserIconDos = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { auth, logout } = useContext(AuthContext);
+  const isAuthenticated = true; // Suponiendo que esta variable controla si el usuario está autenticado como admin
   const navigate = useNavigate();
   const menuRef = useRef(null);
 
   const toggleMenu = () => {
-    setIsMenuOpen(prevState => !prevState);
+    setIsMenuOpen(!isMenuOpen);
   };
 
-  // Manejar clics fuera del menú
+  // Función para manejar clics fuera del menú
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setIsMenuOpen(false);
+    }
+  };
+
+  // useEffect para agregar y limpiar el event listener
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setIsMenuOpen(false);
-      }
-    };
     if (isMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
     }
+    // Limpieza al desmontar el componente
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isMenuOpen]);
 
-  // Funciones de navegación
-  const goToProfile = () => {
-    navigate('/profile');
-    setIsMenuOpen(false);
-  };
-
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-    setIsMenuOpen(false);
+  // Navegar al Dashboard de Admin
+  const goToAdminDashboard = () => {
+    navigate('/admin/products');
+    setIsMenuOpen(false); // Cerrar el menú después de navegar
   };
 
   return (
     <article className='sessionContainer' ref={menuRef}>
       {isMenuOpen && (
         <ul className='user-menu'>
-          {auth.accessToken ? (
+          {isAuthenticated ? (
             <>
-              <li onClick={goToProfile}>Perfil</li>
-              <li onClick={handleLogout}>Cerrar Sesión</li>
+              <li onClick={goToAdminDashboard}>Administrar</li>
+              <li>Perfil</li>
+              <li>Cerrar Sesión</li>
             </>
           ) : (
             <>
-              <li onClick={() => navigate('/register')}>Registrarse</li>
-              <li onClick={() => navigate('/login')}>Iniciar Sesión</li>
+              <li onClick={() => Swal.fire('Funcionalidad en Desarrollo', 'Esta funcionalidad estará disponible pronto.', 'info')}>Registrarse</li>
+              <li onClick={() => Swal.fire('Funcionalidad en Desarrollo', 'Esta funcionalidad estará disponible pronto.', 'info')}>Iniciar Sesión</li>
             </>
           )}
         </ul>
@@ -60,7 +60,7 @@ const UserIconDos = () => {
       <div className="user-icon-container">
         <img
           src="/icons/userIcon.svg"
-          alt="user icon"
+          alt="user icon de Antigal"
           onClick={toggleMenu}
           className="user-icon"
         />

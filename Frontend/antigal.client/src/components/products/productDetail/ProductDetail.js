@@ -14,7 +14,7 @@ const ProductDetail = ({product}) => {
       <div className="detail-sideBar">
       </div>
       <div className="detail-container">
-        <ProductImage images={product.images} name={product.name} />
+        <ProductImage imageUrl={product.imageUrl} name={product.name} />
         <div className="detail-side">
           <ProductInfo product={product} />
           <ProductStockControl product={product} />
