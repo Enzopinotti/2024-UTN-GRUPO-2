@@ -1386,7 +1386,7 @@ footer .footer-bottom img {
   width: 100%;
   gap: 20px;
 }
-.home_container .segundaSection .carousel .offerCard {
+.home_container .segundaSection .carousel a .offerCard {
   flex-grow: 1;
   max-width: calc(100% - 10px);
   border-radius: 8px;
@@ -1396,14 +1396,16 @@ footer .footer-bottom img {
   flex-direction: column;
   justify-content: space-between;
   height: auto;
+  text-decoration: none;
+  color: var(--primary-black-color);
 }
-.home_container .segundaSection .carousel .offerCard img {
+.home_container .segundaSection .carousel a .offerCard img {
   width: 100%;
   aspect-ratio: 4/3;
   object-fit: cover;
   border-radius: 4px;
 }
-.home_container .segundaSection .carousel .offerCard .offerName {
+.home_container .segundaSection .carousel a .offerCard .offerName {
   font-size: 1.1rem;
   font-weight: bold;
   margin: 10px 0;
@@ -1412,36 +1414,36 @@ footer .footer-bottom img {
   text-overflow: ellipsis;
   color: var(--primary-black-color);
 }
-.home_container .segundaSection .carousel .offerCard .offerDescription {
+.home_container .segundaSection .carousel a .offerCard .offerDescription {
   color: var(--primary-black-color);
 }
-.home_container .segundaSection .carousel .offerCard .offerBrand {
+.home_container .segundaSection .carousel a .offerCard .offerBrand {
   font-size: 0.9rem;
   color: var(--primary-black-color-hover);
   margin-bottom: 10px;
 }
-.home_container .segundaSection .carousel .offerCard .offerPrice {
+.home_container .segundaSection .carousel a .offerCard .offerPrice {
   margin-bottom: 10px;
 }
-.home_container .segundaSection .carousel .offerCard .offerPrice .precioAnterior {
+.home_container .segundaSection .carousel a .offerCard .offerPrice .precioAnterior {
   text-decoration: line-through;
   color: var(--primary-black-color-hover);
   margin-right: 10px;
 }
-.home_container .segundaSection .carousel .offerCard .offerPrice .precioOferta {
+.home_container .segundaSection .carousel a .offerCard .offerPrice .precioOferta {
   font-weight: bold;
   color: var(--secondary-color);
 }
-.home_container .segundaSection .carousel .offerCard .offerRating {
+.home_container .segundaSection .carousel a .offerCard .offerRating {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
 }
-.home_container .segundaSection .carousel .offerCard .offerRating span {
+.home_container .segundaSection .carousel a .offerCard .offerRating span {
   margin-left: 5px;
   color: #777;
 }
-.home_container .segundaSection .carousel .offerCard .comprarButton {
+.home_container .segundaSection .carousel a .offerCard .comprarButton {
   background-color: var(--primary-color);
   color: var(--primary-black-color);
   padding: 10px;
@@ -1450,14 +1452,14 @@ footer .footer-bottom img {
   cursor: pointer;
   transition: background-color 0.3s;
 }
-.home_container .segundaSection .carousel .offerCard .comprarButton:hover {
+.home_container .segundaSection .carousel a .offerCard .comprarButton:hover {
   background-color: var(--shadow-color);
 }
-.home_container .segundaSection .carousel .offerCard .likeSection {
+.home_container .segundaSection .carousel a .offerCard .likeSection {
   margin-top: auto;
   text-align: center;
 }
-.home_container .segundaSection .carousel .offerCard .likeSection .likeButton {
+.home_container .segundaSection .carousel a .offerCard .likeSection .likeButton {
   background-color: transparent;
   border: none;
   color: #3498db;
@@ -1467,7 +1469,7 @@ footer .footer-bottom img {
   justify-content: center;
   align-items: center;
 }
-.home_container .segundaSection .carousel .offerCard .likeSection .likeButton:hover {
+.home_container .segundaSection .carousel a .offerCard .likeSection .likeButton:hover {
   color: rgb(33.1380753138, 125.1882845188, 186.8619246862);
 }
 .home_container .segundaSection .pagination {
