@@ -1,5 +1,4 @@
-﻿// Repositories/UnitOfWork.cs
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Threading.Tasks;
 using antigal.server.Data;
@@ -18,13 +17,15 @@ namespace antigal.server.Repositories
         private ICategoriaRepository? _categoriaRepository;
         private IProductCategoryRepository? _productCategoryRepository;
         private ICartRepository? _cartRepository;
+        private readonly IEnvioRepository _envioRepository; // Cambiado a no nullable y readonly
         // Agrega otros repositorios según sea necesario
 
-        // Modificar el constructor para aceptar CarritoMapper
-        public UnitOfWork(AppDbContext context, CarritoMapper carritoMapper)
+        // Modificar el constructor para aceptar CarritoMapper y IEnvioRepository
+        public UnitOfWork(AppDbContext context, CarritoMapper carritoMapper, IEnvioRepository envioRepository)
         {
             _context = context;
             _carritoMapper = carritoMapper;
+            _envioRepository = envioRepository;
         }
 
         public IOrderRepository Orders => _orderRepository ??= new OrderRepository(_context);
@@ -33,7 +34,7 @@ namespace antigal.server.Repositories
         public ICategoriaRepository Categories => _categoriaRepository ??= new CategoriaRepository(_context);
         public IProductCategoryRepository ProductCategories => _productCategoryRepository ??= new ProductCategoryRepository(_context);
         public ICartRepository Carts => _cartRepository ??= new CartRepository(_context, _carritoMapper);
-        // Inicializa otros repositorios según sea necesario
+        public IEnvioRepository Envio => _envioRepository; // Implementación de la propiedad Envio
 
         public async Task<IDbContextTransaction> BeginTransactionAsync()
         {

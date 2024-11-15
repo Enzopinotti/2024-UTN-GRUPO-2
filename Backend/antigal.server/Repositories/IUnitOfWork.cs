@@ -13,7 +13,7 @@ namespace antigal.server.Repositories
         ICategoriaRepository Categories { get; }
         IProductCategoryRepository ProductCategories { get; }
         ICartRepository Carts { get; }
-        // Agrega otros repositorios según sea necesario
+        IEnvioRepository Envio { get; }
 
         Task<IDbContextTransaction> BeginTransactionAsync();
         Task<int> SaveChangesAsync();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using antigal.server.Models;
@@ -22,7 +23,12 @@ namespace antigal.server.Repositories
 
         public async Task<Envio> GetByIdAsync(int id)
         {
-            return await _context.Envios.FindAsync(id);
+            var envio = await _context.Envios.FindAsync(id);
+            if (envio == null)
+            {
+                throw new KeyNotFoundException($"No se encontró el envío con ID {id}.");
+            }
+            return envio;
         }
 
         public async Task<Envio> AddAsync(Envio envio)
@@ -34,15 +40,28 @@ namespace antigal.server.Repositories
 
         public async Task<Envio> UpdateAsync(Envio envio)
         {
-            _context.Entry(envio).State = EntityState.Modified;
+            var existingEnvio = await _context.Envios.FindAsync(envio.Id);
+            if (existingEnvio == null)
+            {
+                throw new KeyNotFoundException($"No se encontró el envío con ID {envio.Id}.");
+            }
+
+            existingEnvio.Destinatario = envio.Destinatario;
+            existingEnvio.Direccion = envio.Direccion;
+            existingEnvio.FechaEnvio = envio.FechaEnvio;
+
+            _context.Envios.Update(existingEnvio);
             await _context.SaveChangesAsync();
-            return envio;
+            return existingEnvio;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
             var envio = await _context.Envios.FindAsync(id);
-            if (envio == null) return false;
+            if (envio == null)
+            {
+                return false;
+            }
 
             _context.Envios.Remove(envio);
             await _context.SaveChangesAsync();

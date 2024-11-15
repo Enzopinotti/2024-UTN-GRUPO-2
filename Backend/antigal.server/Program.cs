@@ -1,4 +1,3 @@
-// Program.cs
 using Microsoft.EntityFrameworkCore;
 using antigal.server.Data;
 using antigal.server.Services;
@@ -16,7 +15,6 @@ using antigal.server.JwtFeatures;
 using EmailService;
 using MercadoPago.Config;
 using System.IdentityModel.Tokens.Jwt;
-
 
 namespace antigal.server
 {
@@ -131,6 +129,7 @@ namespace antigal.server
             builder.Services.AddScoped<ICartRepository, CartRepository>();
             builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IEnvioRepository, EnvioRepository>(); // Registrar IEnvioRepository
             // Agrega otros repositorios según sea necesario
 
             // Registrar UnitOfWork
@@ -150,12 +149,11 @@ namespace antigal.server
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<ISaleService, SaleService>();
+            builder.Services.AddScoped<IEnvioService, EnvioService>(); // Registrar IEnvioService
             builder.Services.AddScoped<ServiceToken>();
             // Eliminar duplicaciones y registros innecesarios
 
             // Configuración de CORS
-            builder.Services.AddScoped<IEnvioRepository, EnvioRepository>();
-            builder.Services.AddScoped<EnvioService>();
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowLocalhost", policy =>
