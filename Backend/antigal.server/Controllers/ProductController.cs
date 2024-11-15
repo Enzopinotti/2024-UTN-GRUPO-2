@@ -60,5 +60,15 @@ namespace antigal.server.Controllers
         {
             return _productService.GetProductByTitleAsync(nombre);
         }
+
+        [AllowAnonymous]
+        [HttpGet("home")]
+        public Task<ResponseDto> GetHome()
+        {
+            return _productService.GetProductsHomeAsync();
+        }
+
+
+
     }
 }

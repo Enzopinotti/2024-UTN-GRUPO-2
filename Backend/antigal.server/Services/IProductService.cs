@@ -17,5 +17,6 @@ namespace antigal.server.Services
         Task<ResponseDto> PutProductAsync(Producto producto);
         Task<ResponseDto> ImportProductsFromExcelAsync(IFormFile file);
         Task<ResponseDto> GetProductsByCategoryIdAsync(int categoriaId);
+        Task<ResponseDto> GetProductsHomeAsync();
     }
 }

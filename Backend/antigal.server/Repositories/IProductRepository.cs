@@ -17,5 +17,6 @@ namespace antigal.server.Repositories
         Task<bool> DeleteProductAsync(int id);
         Task<IEnumerable<Producto>> GetProductsByCategoryIdAsync(int categoriaId);
         Task<IEnumerable<Producto>> ImportProductsFromExcelAsync(Stream fileStream);
+        Task<ResponseDto> GetProductsHomeAsync();
     }
 }

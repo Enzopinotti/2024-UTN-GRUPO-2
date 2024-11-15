@@ -145,5 +145,29 @@ namespace antigal.server.Repositories
 
             return productosImportados;
         }
+
+        public async Task<ResponseDto> GetProductsHomeAsync()
+        {
+            var productosDestacados = await _context.Productos
+                .Where(p => p.destacado == 1)
+                .ToListAsync();
+
+            if (!productosDestacados.Any())
+            {
+                return new ResponseDto
+                {
+                    Data = null,
+                    IsSuccess = false,
+                    Message = "No se encontraron productos destacados."
+                };
+            }
+
+            return new ResponseDto
+            {
+                Data = productosDestacados,
+                IsSuccess = true,
+                Message = "Productos destacados obtenidos correctamente."
+            };
+        }
     }
 }
