@@ -18,7 +18,7 @@ const CategoryListContainer = () => {
       try {
         if (useBackend) {
           // Obtener categorías desde el backend
-          const response = await fetch('https://localhost:7255/api/Category/getCategories');
+          const response = await fetch('https://www.antigal.somee.com/api/Category/getCategories');
           if (!response.ok) {
             throw new Error('Error al obtener categorías del backend'); 
           }

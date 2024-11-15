@@ -26,7 +26,7 @@ const ProductListContainer = () => {
     const fetchProductsAndCategories = async () => {
       const useBackend = true; // Cambia este flag a true para conectar con el backend
       let fetchURL = useBackend
-        ? 'https://localhost:7255/api/Product/getProducts'
+        ? 'https://www.antigal.somee.com/api/Product/getProducts'
         : 'https://fakestoreapi.com/products';
   
       // Modificar la URL según el filtro seleccionado
@@ -66,7 +66,7 @@ const ProductListContainer = () => {
           // Segunda llamada: Obtener categorías para cada producto
           const productsWithCategories = await Promise.all(
             adaptedData.map(async (product) => {
-              const fetchURLCategory = `https://localhost:7255/api/ProductCategory/categorias/${product.id}`;
+              const fetchURLCategory = `https://www.antigal.somee.com/api/ProductCategory/categorias/${product.id}`;
               try {
                 const responseCategory = await fetch(fetchURLCategory);
                 if (!responseCategory.ok) {

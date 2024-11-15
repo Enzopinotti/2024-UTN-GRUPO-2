@@ -24,7 +24,7 @@ const SegundaSection = () => {
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const response = await fetch('https://localhost:7255/api/Product/home');
+        const response = await fetch('https://www.antigal.somee.com/api/Product/home');
         if (!response.ok) {
           throw new Error('Error al obtener productos');
         }

@@ -13,7 +13,7 @@ const ProductDetailContainer = () =>{
 
     useEffect(()=>{
         const useBackend=true;
-        const fetchURL= useBackend ? `https://localhost:7255/api/Product/getProductById/${id}`: `https://fakestoreapi.com/products/${id}`;
+        const fetchURL= useBackend ? `https://www.antigal.somee.com/api/Product/getProductById/${id}`: `https://fakestoreapi.com/products/${id}`;
         console.log(fetchURL);
 
         fetch(fetchURL)
