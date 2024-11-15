@@ -12,8 +12,8 @@ using antigal.server.Data;
 namespace antigal.server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241115050617_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20241115051743_ActualizacionModelo")]
+    partial class ActualizacionModelo
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
