@@ -60,9 +60,7 @@ namespace antigal.server.Controllers
             var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
             // Configurar URL de confirmación
-            var clientUri = !string.IsNullOrWhiteSpace(userForRegistration.ClientUri)
-                ? userForRegistration.ClientUri
-                : "http://localhost:7255/authentication/confirm-email";
+            var clientUri = "https://www.antigal.somee.com/api/authentication/confirm-email";
 
             var callback = $"{clientUri}?userId={user.Id}&token={encodedToken}";
 

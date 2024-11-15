@@ -1,5 +1,6 @@
 ﻿using antigal.server.Data;
 using antigal.server.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using NPOI.SS.Formula.Functions;
 
 namespace antigal.server.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class ContactoController : ControllerBase
@@ -19,6 +21,7 @@ namespace antigal.server.Controllers
         }
 
         // POST: api/Contacto
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<Contacto>> PostContacto(Contacto contacto)
         {
