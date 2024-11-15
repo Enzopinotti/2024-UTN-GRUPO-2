@@ -15,7 +15,7 @@ const UserLayout = () => {
     dni: "41167000", 
   };
 
-  const [ user,  setUser ] = useState(fakeUser);
+  const [ user ] = useState(fakeUser);
 
   
   

@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 
 const ProfilePictureModal = ({ isOpen, onClose, onUploadComplete  }) => {
   const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState(null);
+  const [ setPreview] = useState(null);
   
 
   const handleFileChange = (e) => {

@@ -37,6 +37,7 @@ const SobreNosotros = () => {
         <div className="instagram-feed">
           {/* Aquí se insertará el widget de Instagram */}
           <iframe 
+          title="Mapa de ubicación"
             src="//lightwidget.com/widgets/39722489d2fb5cffafd1ed21f6bc1f9d.html" 
             scrolling="no" 
             allowtransparency="true" 

@@ -18,7 +18,6 @@ import Logout from "./pages/auth/Logout";
 import Registro from "./pages/auth/Registro";
 import Login from "./pages/auth/Login";
 import Profile from "./pages/profile/Profile";
-import ProtectedRoute from "./components/common/ProtectedRoute";
 import Orders from "./pages/profile/Orders";
 import Favorites from "./pages/profile/Favorites";
 import { FavoriteProvider } from "./contexts/FavoriteContext";
