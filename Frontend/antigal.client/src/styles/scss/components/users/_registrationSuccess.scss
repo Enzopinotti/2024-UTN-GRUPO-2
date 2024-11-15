@@ -1,0 +1,46 @@
+.registration-success-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    min-height: 100vh;
+    background-color: #f0f2f5; // Ajusta según tu tema
+  
+    .registration-success-container {
+      background-color: #fff;
+      padding: 2rem 3rem;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 500px;
+      width: 100%;
+  
+      h2 {
+        margin-bottom: 1rem;
+        color: #333;
+        font-size: 1.8rem;
+      }
+  
+      p {
+        margin-bottom: 1.5rem;
+        color: #555;
+        font-size: 1rem;
+        line-height: 1.5;
+      }
+  
+      .cta-button {
+        display: inline-block;
+        padding: 0.6rem 1.2rem;
+        background-color: #74873D; // Color primario
+        color: #fff;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+        font-weight: bold;
+  
+        &:hover {
+          background-color: darken(#74873D, 10%);
+        }
+      }
+    }
+  }

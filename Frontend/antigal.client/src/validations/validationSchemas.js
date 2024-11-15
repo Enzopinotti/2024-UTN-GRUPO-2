@@ -1,12 +1,16 @@
- // src/validations/validationSchemas.js
+// src/validations/validationSchemas.js
 import * as Yup from 'yup';
 
 export const registrationSchema = Yup.object().shape({
-  userName: Yup.string()
+  firstName: Yup.string()
     .required('El nombre de usuario es obligatorio')
     .min(4, 'Debe tener al menos 4 caracteres')
     .max(20, 'No puede exceder 20 caracteres')
     .matches(/^[a-zA-Z0-9]+$/, 'Solo puede contener letras y números'),
+  lastName: Yup.string() // Cambiado de fullName a lastName
+    .required('El apellido es obligatorio')
+    .min(2, 'Debe tener al menos 2 caracteres')
+    .max(50, 'No puede exceder 50 caracteres'),
   email: Yup.string()
     .required('El correo electrónico es obligatorio')
     .email('Debe ser un correo electrónico válido'),
@@ -20,17 +24,13 @@ export const registrationSchema = Yup.object().shape({
   confirmPassword: Yup.string()
     .required('La confirmación de contraseña es obligatoria')
     .oneOf([Yup.ref('password'), null], 'Las contraseñas no coinciden'),
-  fullName: Yup.string()
-    .required('El nombre completo es obligatorio')
-    .min(2, 'Debe tener al menos 2 caracteres')
-    .max(50, 'No puede exceder 50 caracteres'),
 });
 
+
 export const loginSchema = Yup.object().shape({
-    userName: Yup.string()
-      .required('El nombre de usuario es obligatorio')
-      .min(4, 'Debe tener al menos 4 caracteres')
-      .max(20, 'No puede exceder 20 caracteres'),
+    email: Yup.string()
+      .required('El correo electrónico es obligatorio')
+      .email('Debe ser un correo electrónico válido'),
     password: Yup.string()
       .required('La contraseña es obligatoria')
       .min(8, 'Debe tener al menos 8 caracteres'),

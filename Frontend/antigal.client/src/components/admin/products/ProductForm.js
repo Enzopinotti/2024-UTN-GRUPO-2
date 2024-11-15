@@ -148,7 +148,6 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
     }
 
     let formData = new FormData();
-
     if (product) {
       const modifiedFields = getModifiedFields();
 

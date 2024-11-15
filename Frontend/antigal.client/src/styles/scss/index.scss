@@ -32,6 +32,8 @@
 @use './components/users/orders';
 @use './components/users/favorites';
 @use './components/users/addresses';
+@use './components/users/confirmEmail';
+@use './components/users/registrationSuccess';
 
 @use './components/privacyPolicy';
 

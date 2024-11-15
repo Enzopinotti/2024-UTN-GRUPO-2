@@ -33,10 +33,10 @@ const Login = () => {
   const onSubmit = async (data) => {
     // Renombra userName a email
     const sanitizedData = {
-      email: DOMPurify.sanitize(data.userName),
+      email: DOMPurify.sanitize(data.email),
       password: DOMPurify.sanitize(data.password),
     };
-  
+    console.log('estoy mandando: ', sanitizedData);
     try {
       const response = await fetch('https://www.antigal.somee.com/api/accounts/authenticate', {
         method: 'POST',
@@ -45,7 +45,7 @@ const Login = () => {
         },
         body: JSON.stringify(sanitizedData),
       });
-  
+      console.log('response: ', response);
       if (response.ok) {
         const { token } = await response.json();  // Asumiendo que solo devuelves el token
         login(token);  // Solo pasa el token
@@ -75,15 +75,15 @@ const Login = () => {
         <h2>Inicio de Sesión</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
         <div className="form-group">
-            <label htmlFor="userName">Nombre de Usuario:</label>
+            <label htmlFor="email">Correo Electrónico:</label>
             <input
-              type="text"
-              id="userName"
-              {...register('userName')} // Esto sigue siendo 'userName' para el formulario
-              placeholder="Ingresa tu nombre de usuario"
-              autoComplete="username"
+              type="email"
+              id="email"
+              {...register('email')}
+              placeholder="Ingresa tu correo electrónico"
+              autoComplete="email"
             />
-            {errors.userName && <p className="error-message">{errors.userName.message}</p>}
+            {errors.email && <p className="error-message">{errors.email.message}</p>}
           </div>
 
           <div className="form-group">

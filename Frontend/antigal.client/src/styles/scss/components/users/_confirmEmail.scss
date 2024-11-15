@@ -1,0 +1,39 @@
+.confirm-email-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5; // Ajusta según tu tema
+  
+    .confirm-email-container {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+  
+      h2 {
+        margin-bottom: 1rem;
+        color: #333;
+      }
+  
+      p {
+        margin-bottom: 1.5rem;
+        color: #555;
+      }
+  
+      a {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background-color: #74873D; // Color primario
+        color: #fff;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: background-color 0.3s;
+  
+        &:hover {
+          background-color: darken(#74873D, 10%);
+        }
+      }
+    }
+  }

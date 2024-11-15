@@ -32,6 +32,8 @@ import NotFound from './components/NotFound'
 import AdminUserListContainer from "./components/admin/users/AdminUserListContainer";
 import MessageListContainer from "./components/admin/messages/MessageListContainer";
 import UserAddresses from "./components/users/addresses/UserAddresses";
+import ConfirmEmail from "./components/common/ConfirmEmail";
+import RegistrationSuccess from "./components/common/RegistrationSuccess";
 function App() {
   return (
     
@@ -86,6 +88,8 @@ function App() {
               <Route path="/tienda-fisica" element={<TiendaFisica />} />
               <Route path="/contacto" element={<Contact />} />
               <Route path="/politica-de-privacidad" element={< PrivacyPolicy/>} />
+              <Route path="/authentication/confirm-email" element={<ConfirmEmail />} />
+              <Route path="/registration-success" element={<RegistrationSuccess />} />
               <Route path="*" element={<NotFound />} /> 
             </Routes>
           </Main>
