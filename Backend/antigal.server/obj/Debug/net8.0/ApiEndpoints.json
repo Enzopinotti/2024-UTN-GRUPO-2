@@ -54,6 +54,22 @@
   },
   {
     "ContainingType": "antigal.server.Controllers.AccountController",
+    "Method": "RefreshToken",
+    "RelativePath": "api/accounts/refresh-token",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tokenDto",
+        "Type": "antigal.server.Models.Dto.TokenDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "antigal.server.Controllers.AccountController",
     "Method": "RegisterAsync",
     "RelativePath": "api/accounts/register",
     "HttpMethod": "POST",

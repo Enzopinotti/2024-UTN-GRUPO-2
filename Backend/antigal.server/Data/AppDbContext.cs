@@ -19,7 +19,6 @@ namespace antigal.server.Data
         public DbSet<CarritoItem> CarritoItems { get; set; }
         public DbSet<Orden> Ordenes { get; set; }
         public DbSet<OrdenDetalle> OrdenDetalle { get; set; }
-        public DbSet<RefreshToken> RefreshTokens { get; set; } // Para almacenar refresh tokens
         public DbSet<Like> Likes { get; set; }
         public DbSet<Sale> Sales { get; set; } // DbSet para la entidad Sale
         public DbSet<Payment> Payments { get; set; }  // Agrega la entidad Payment
@@ -149,6 +148,11 @@ namespace antigal.server.Data
             modelBuilder.Entity<Producto>()
                 .Property(p => p.precio)
                 .HasColumnType("decimal(18,2)"); // Cambia (18,2) según tus necesidades (18 dígitos en total, 2 decimales)
+
+            modelBuilder.Entity<Payment>()
+            .Property(p => p.Amount)
+            .HasColumnType("decimal(18,2)"); // Ajusta la precisión y escala según tus necesidades
+
 
 
         }

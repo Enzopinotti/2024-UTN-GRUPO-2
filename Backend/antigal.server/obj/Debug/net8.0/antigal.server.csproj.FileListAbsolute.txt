@@ -1148,3 +1148,4 @@ D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debu
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\NETCore.MailKit.dll
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\EmailService.dll
 D:\Repositorios GitHub\FACULTAD\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\EmailService.pdb
+D:\repositorio\facultad\2024-UTN-GRUPO-2\Backend\antigal.server\bin\Debug\net8.0\MercadoPago.dll
