@@ -34,6 +34,7 @@ import MessageListContainer from "./components/admin/messages/MessageListContain
 import UserAddresses from "./components/users/addresses/UserAddresses";
 import ConfirmEmail from "./components/common/ConfirmEmail";
 import RegistrationSuccess from "./components/common/RegistrationSuccess";
+import CheckoutPage from "./pages/CheckoutPage";
 function App() {
   return (
     
@@ -90,6 +91,7 @@ function App() {
               <Route path="/politica-de-privacidad" element={< PrivacyPolicy/>} />
               <Route path="/authentication/confirm-email" element={<ConfirmEmail />} />
               <Route path="/registration-success" element={<RegistrationSuccess />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="*" element={<NotFound />} /> 
             </Routes>
           </Main>

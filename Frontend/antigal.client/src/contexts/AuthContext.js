@@ -1,6 +1,6 @@
 // src/contexts/AuthContext.js
-import React, { createContext, useState, useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
+import { jwtDecode } from 'jwt-decode'; // Importación corregida
 
 export const AuthContext = createContext();
 
@@ -11,7 +11,34 @@ export const AuthProvider = ({ children }) => {
     user: null,
   });
 
-  // Al cargar la aplicación, verificar si hay un token almacenado
+  // Definir la función 'logout' primero
+  const logout = useCallback(() => {
+    setAuth({
+      accessToken: null,
+      //refreshToken: null,
+      user: null,
+    });
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    console.log('Usuario ha cerrado sesión.');
+  }, []);
+
+  // Definir la función 'login' a continuación
+  const login = useCallback((accessToken, refreshToken = null) => {
+    const decoded = jwtDecode(accessToken);
+    setAuth({
+      accessToken,
+      refreshToken,
+      user: decoded,
+    });
+    localStorage.setItem('accessToken', accessToken);
+    if (refreshToken) {
+      localStorage.setItem('refreshToken', refreshToken);
+    }
+    console.log('Usuario ha iniciado sesión:', decoded);
+  }, []);
+
+  // Ahora, utilizar 'logout' en el useEffect
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
     //const refreshToken = localStorage.getItem('refreshToken'); // Opcional
@@ -25,8 +52,10 @@ export const AuthProvider = ({ children }) => {
             //refreshToken,
             user: decoded,
           });
+          console.log('Token válido encontrado:', decoded);
         } else {
           // Token expirado
+          console.log('Token expirado.');
           logout();
         }
       } catch (error) {
@@ -34,30 +63,7 @@ export const AuthProvider = ({ children }) => {
         logout();
       }
     }
-  }, []);
-
-  const login = (accessToken, refreshToken = null) => {
-    const decoded = jwtDecode(accessToken);
-    setAuth({
-      accessToken,
-      refreshToken,
-      user: decoded,
-    });
-    localStorage.setItem('accessToken', accessToken);
-    if (refreshToken) {
-      localStorage.setItem('refreshToken', refreshToken);
-    }
-  };
-
-  const logout = () => {
-    setAuth({
-      accessToken: null,
-      refreshToken: null,
-      user: null,
-    });
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-  };
+  }, [logout]); // 'logout' ya está definido y memoizado
 
   return (
     <AuthContext.Provider value={{ auth, login, logout }}>

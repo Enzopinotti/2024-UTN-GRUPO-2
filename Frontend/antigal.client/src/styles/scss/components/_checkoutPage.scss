@@ -1,0 +1,110 @@
+
+@use "../abstract/variables" as variables;
+@use '../abstract/mixins' as mixins;
+
+.checkout-page {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  
+    .checkout-title {
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 30px;
+      color: mixins.theme(primary-color);
+    }
+  
+    .checkout-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+  
+      @media (min-width: 768px) {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+  
+    .checkout-section {
+      flex: 1;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 20px;
+      background-color: #fafafa;
+  
+      h2 {
+        font-size: 1.5em;
+        margin-bottom: 20px;
+        color: mixins.theme(primary-color);
+      }
+  
+      .checkout-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+  
+        label {
+          font-size: 1em;
+          margin-bottom: 10px;
+  
+          input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+  
+            &:focus {
+              outline: none;
+              border-color: mixins.theme(primary-color);
+              box-shadow: 0 0 5px mixins.theme(primary-color);
+            }
+          }
+        }
+      }
+    }
+  
+    .order-summary {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+  
+      .summary-item {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1em;
+  
+        &.total {
+          font-weight: bold;
+          font-size: 1.3em;
+          color: mixins.theme(secondary-color);
+        }
+      }
+  
+      hr {
+        border: none;
+        border-top: 1px solid #e0e0e0;
+        margin: 10px 0;
+      }
+    }
+  
+    .checkout-footer {
+      text-align: center;
+  
+      .place-order-button {
+        padding: 15px 30px;
+        background-color: mixins.theme(primary-color);
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1.2em;
+        transition: background-color 0.3s ease;
+  
+        &:hover {
+          background-color: mixins.theme(shadow-color);
+        }
+      }
+    }
+  }
+  

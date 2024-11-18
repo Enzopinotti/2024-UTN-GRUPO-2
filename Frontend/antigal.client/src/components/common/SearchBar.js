@@ -37,7 +37,7 @@ const SearchBar = ({ isVisible, onClose, isMobile }) => {
 
     try {
       const response = await fetch(
-        `https://localhost:7255/api/Product/getProductByTitle/${encodeURIComponent(searchTerm)}`,
+        `https://www.antigal.somee.com/api/Product/getProductByTitle/${encodeURIComponent(searchTerm)}`,
         {
           method: "GET",
           headers: {
