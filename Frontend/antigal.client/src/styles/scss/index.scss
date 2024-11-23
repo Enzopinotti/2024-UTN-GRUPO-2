@@ -11,16 +11,52 @@
 @use './components/home';
 @use './components/products//products';
 @use './components/productDetail';
+<<<<<<< HEAD
+=======
+@use './components/sobreNosotros';
+@use './components/cart';
+@use './components/tiendaFisica';
+@use './components/contact';
+@use './components/login';
+@use './components/registro';
+@use './components/resetearContrasenia';
+@use './components/notFound';
+@use './components/checkoutPage';
+>>>>>>> FrontEnd
 
 @use './components/admin/categoryListContainer';
 @use './components/admin/categoryForm';
 @use './components/admin/productListContainer';
 @use './components/admin/adminNav';
+@use './components/admin/adminUsers';
 @use './components/admin/productForm';
+<<<<<<< HEAD
 @import './abstract/variables';
 
 *{
   font-family: $font;
+=======
+@use './components/admin/messages';
+
+
+@use './components/users/user';
+@use './components/users/orders';
+@use './components/users/favorites';
+@use './components/users/addresses';
+@use './components/users/confirmEmail';
+@use './components/users/registrationSuccess';
+
+@use './components/privacyPolicy';
+
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+
+
+/* Aplicar el tema claro por defecto dentro de :root */
+:root {
+  @include mixins.apply-theme(light);
+  
+>>>>>>> FrontEnd
 }
 
 

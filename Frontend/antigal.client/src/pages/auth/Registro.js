@@ -50,23 +50,35 @@ const Registro = () => {
   };
 
   const onSubmit = async (data) => {
-    const sanitizedData = {};
-    for (const key in data) {
-      sanitizedData[key] = sanitizeInput(data[key]);
+    console.log('data, antes de sanitizar: ', data);
+    
+    const clientUri = `${window.location.origin}/authentication/confirm-email`;
+    
+    const sanitizedData = {
+      ...data,
+      clientUri, // Añadido
+    };
+  
+    // Sanitizar los datos
+    const sanitizedDataSanitized = {};
+    for (const key in sanitizedData) {
+      sanitizedDataSanitized[key] = sanitizeInput(sanitizedData[key]);
     }
-
+  
+    console.log('estoy mandando: ', sanitizedDataSanitized);
+    
     try {
-      const response = await fetch('https://www.antigal.somee.com/api/Auth/register', {
+      const response = await fetch('https://www.antigal.somee.com/api/accounts/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(sanitizedData),
+        body: JSON.stringify(sanitizedDataSanitized),
       });
-
+  
       if (response.ok) {
-        toast.success('¡Usuario registrado con éxito! Ahora puedes iniciar sesión.');
-        setTimeout(() => navigate('/login'), 3000);
+        toast.success('¡Usuario registrado con éxito! Revisa tu correo electrónico para confirmar tu cuenta.');
+        navigate('/registration-success'); // Redirigir a la página de éxito
       } else {
         const errorData = await response.json();
         toast.error(errorData.message || 'Error al registrarse.');
@@ -76,7 +88,7 @@ const Registro = () => {
       toast.error('Error al registrarse. Inténtalo de nuevo más tarde.');
     }
   };
-
+  
   // Alterna la visibilidad de la contraseña
   const togglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState);
@@ -89,15 +101,26 @@ const Registro = () => {
         <h2>Registro</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-group">
-            <label htmlFor="userName">Nombre de Usuario:</label>
+            <label htmlFor="firstName">Nombre:</label>
             <input
               type="text"
-              id="userName"
-              {...register('userName')}
+              id="firstName"
+              {...register('firstName')}
               placeholder="Ingresa tu nombre de usuario"
               autoComplete="username"
             />
-            {errors.userName && <p className="error-message">{errors.userName.message}</p>}
+            {errors.firstName && <p className="error-message">{errors.firstName.message}</p>}
+          </div>
+          <div className="form-group">
+            <label htmlFor="lastName">Apellido:</label>
+            <input
+              type="text"
+              id="lastName"
+              {...register('lastName')}
+              placeholder="Ingresa tu nombre completo"
+              autoComplete="lastname"
+            />
+            {errors.lastName && <p className="error-message">{errors.lastName.message}</p>}
           </div>
           <div className="form-group">
             <label htmlFor="email">Correo Electrónico:</label>
@@ -169,17 +192,7 @@ const Registro = () => {
               <p className="error-message">{errors.confirmPassword.message}</p>
             )}
           </div>
-          <div className="form-group">
-            <label htmlFor="fullName">Nombre Completo:</label>
-            <input
-              type="text"
-              id="fullName"
-              {...register('fullName')}
-              placeholder="Ingresa tu nombre completo"
-              autoComplete="name"
-            />
-            {errors.fullName && <p className="error-message">{errors.fullName.message}</p>}
-          </div>
+          
           <button type="submit" className="cta-button primary">
             Registrarse
           </button>

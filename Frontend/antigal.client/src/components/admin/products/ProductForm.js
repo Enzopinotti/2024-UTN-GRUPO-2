@@ -1,9 +1,13 @@
 // src/components/admin/products/ProductForm.js
+
 import React, { useState, useEffect, useRef } from 'react';
 import Swal from 'sweetalert2';
-import initialCategories from '../../../data/initialCategories'; 
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { productSchema } from '../../../validations/validationSchemas';
 
 const ProductForm = ({ show, onClose, onSave, product }) => {
+<<<<<<< HEAD
   // Estados para los campos del formulario
   const [nombre, setNombre] = useState('');
   const [precio, setPrecio] = useState('');
@@ -22,20 +26,31 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
   // Estado para detectar cambios (solo para edición)
   const [initialData, setInitialData] = useState({});
 
+=======
+>>>>>>> FrontEnd
   // Ref para el input de imágenes
   const fileInputRef = useRef(null);
 
-  useEffect(() => {
-    const storedCategories = localStorage.getItem('categories');
-    if (storedCategories) {
-      setCategorias(JSON.parse(storedCategories));
-    } else {
-      setCategorias(initialCategories);
-    }
-  }, []);
+  // Inicializar react-hook-form
+  const { register, handleSubmit, control, reset, formState: { errors, isSubmitting } } = useForm({
+    resolver: yupResolver(productSchema),
+    defaultValues: {
+      nombre: '',
+      precio: '',
+      categoria: '',
+      descripcion: '',
+      codigoBarras: '',
+      marca: '',
+      stock: '',
+      disponible: 1,
+      destacado: 0,
+      imagenes: [],
+    },
+  });
 
   useEffect(() => {
     if (product) {
+<<<<<<< HEAD
       setNombre(product.nombre || '');
       setPrecio(product.precio !== undefined ? product.precio.toString() : '');
       setCategoria(product.categoria || '');
@@ -49,12 +64,16 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
       
       // Guardar datos iniciales para detectar cambios
       setInitialData({
+=======
+      reset({
+>>>>>>> FrontEnd
         nombre: product.nombre || '',
-        precio: product.precio !== undefined ? product.precio.toString() : '',
+        precio: product.precio !== undefined ? product.precio : '',
         categoria: product.categoria || '',
         descripcion: product.descripcion || '',
         codigoBarras: product.codigoBarras || '',
         marca: product.marca || '',
+<<<<<<< HEAD
         stock: product.stock !== undefined ? product.stock.toString() : '',
         disponible: product.disponible !== undefined ? product.disponible : true,
         destacado: product.destacado || 'No',
@@ -71,109 +90,95 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
       setProductoDestacado('No');
       setImagenes([]);
       setInitialData({});
-    }
-  }, [product]);
-
-  // Validaciones del formulario
-  const validateForm = () => {
-    if (
-      nombre.trim() === '' ||
-      precio.trim() === '' ||
-      stock.trim() === '' ||
-      descripcion.trim() === ''
-    ) {
-      Swal.fire('Error', 'Los campos Nombre, Precio, Stock y Descripción son obligatorios.', 'error');
-      return false;
-    }
-
-    if (isNaN(precio) || parseFloat(precio) <= 0) {
-      Swal.fire('Error', 'El precio debe ser un número positivo.', 'error');
-      return false;
-    }
-
-    if (isNaN(stock) || parseInt(stock) < 0) {
-      Swal.fire('Error', 'El stock debe ser un número entero no negativo.', 'error');
-      return false;
-    }
-
-    if (codigoBarras && !/^\d+$/.test(codigoBarras)) {
-      Swal.fire('Error', 'El código de barras debe contener solo números.', 'error');
-      return false;
-    }
-
-    if (imagenes.length > 6) {
-      Swal.fire('Error', 'No puedes subir más de 6 imágenes por producto.', 'error');
-      return false;
-    }
-
-    return true;
-  };
-
-  // Función para detectar campos modificados (solo para edición)
-  const getModifiedFields = () => {
-    const modified = {};
-
-    if (product) {
-      if (nombre !== initialData.nombre) modified.nombre = nombre;
-      if (precio !== initialData.precio) modified.precio = parseFloat(precio);
-      if (categoria !== initialData.categoria) modified.categoria = categoria;
-      if (descripcion !== initialData.descripcion) modified.descripcion = descripcion;
-      if (codigoBarras !== initialData.codigoBarras) modified.codigoBarras = codigoBarras;
-      if (marca !== initialData.marca) modified.marca = marca;
-      if (stock !== initialData.stock) modified.stock = parseInt(stock);
-      if (disponible !== initialData.disponible) modified.disponible = disponible;
-      if (productoDestacado !== initialData.destacado) modified.destacado = productoDestacado;
+=======
+        stock: product.stock !== undefined ? product.stock : '',
+        disponible: product.disponible !== undefined ? product.disponible : 1,
+        destacado: product.destacado || 0,
+        imagenes: [], // Las imágenes existentes no se manejan aquí
+      });
     } else {
-      // Para creación, todos los campos relevantes deben ser enviados
-      modified.nombre = nombre;
-      modified.precio = parseFloat(precio);
-      modified.categoria = categoria;
-      modified.descripcion = descripcion;
-      modified.codigoBarras = codigoBarras;
-      modified.marca = marca;
-      modified.stock = parseInt(stock);
-      modified.disponible = disponible;
-      modified.destacado = productoDestacado;
+      reset({
+        nombre: '',
+        precio: '',
+        categoria: '',
+        descripcion: '',
+        codigoBarras: '',
+        marca: '',
+        stock: '',
+        disponible: 1,
+        destacado: 0,
+        imagenes: [],
+      });
+>>>>>>> FrontEnd
     }
+  }, [product, reset]);
 
-    return modified;
-  };
+  // Validaciones del formulario se manejan a través de react-hook-form y Yup
 
   // Manejador de envío del formulario
+<<<<<<< HEAD
   const handleSubmit = (e) => {
     e.preventDefault();
+=======
+  const onSubmit = async (data) => {
+    try {
+      // Mostrar en consola los datos recibidos
+      console.log('Datos del formulario de producto recibidos:', data);
+>>>>>>> FrontEnd
 
-    if (!validateForm()) {
-      return;
-    }
+      // Crear un FormData para enviar archivos y datos
+      const formData = new FormData();
 
-    let formData = new FormData();
+      if (product) {
+        // Para edición, enviar idProducto y campos modificados
+        const modifiedFields = {};
 
-    if (product) {
-      const modifiedFields = getModifiedFields();
+        // Comparar campos y agregar solo los modificados
+        if (product.nombre !== data.nombre) modifiedFields.nombre = data.nombre;
+        if (product.precio !== Number(data.precio)) modifiedFields.precio = Number(data.precio);
+        if (product.categoria !== data.categoria) modifiedFields.categoria = data.categoria;
+        if (product.descripcion !== data.descripcion) modifiedFields.descripcion = data.descripcion;
+        if (product.codigoBarras !== data.codigoBarras) modifiedFields.codigoBarras = data.codigoBarras;
+        if (product.marca !== data.marca) modifiedFields.marca = data.marca;
+        if (product.stock !== Number(data.stock)) modifiedFields.stock = Number(data.stock);
+        if (product.disponible !== Number(data.disponible)) modifiedFields.disponible = Number(data.disponible);
+        if (product.destacado !== Number(data.destacado)) modifiedFields.destacado = Number(data.destacado);
 
-      if (Object.keys(modifiedFields).length === 0 && imagenes.length === 0) {
-        Swal.fire('Información', 'No hay cambios para guardar.', 'info');
-        return;
+        if (Object.keys(modifiedFields).length > 0 || data.imagenes.length > 0) {
+          formData.append('idProducto', product.idProducto); // Asegúrate de enviar el ID del producto
+          formData.append('fields', JSON.stringify(modifiedFields));
+        } else {
+          Swal.fire('Información', 'No hay cambios para guardar.', 'info');
+          return;
+        }
+      } else {
+        // Para creación, enviar todos los campos relevantes
+        const newProduct = {
+          nombre: data.nombre,
+          precio: Number(data.precio),
+          categoria: data.categoria,
+          descripcion: data.descripcion,
+          codigoBarras: data.codigoBarras,
+          marca: data.marca,
+          stock: Number(data.stock),
+          disponible: Number(data.disponible),
+          destacado: Number(data.destacado),
+        };
+
+        formData.append('producto', JSON.stringify(newProduct));
       }
 
-      formData.append('idProducto', product.idProducto); // Asegúrate de enviar el ID del producto
-      formData.append('fields', JSON.stringify(modifiedFields));
+      // Añadir cada imagen al FormData
+      if (data.imagenes && data.imagenes.length > 0) {
+        Array.from(data.imagenes).forEach((imagen) => {
+          formData.append('imagenes', imagen);
+        });
+      }
 
-    } else {
-      // Crear un objeto de producto
-      const newProduct = {
-        nombre,
-        precio: parseFloat(precio),
-        categoria,
-        descripcion,
-        codigoBarras,
-        marca,
-        stock: parseInt(stock),
-        disponible,
-        destacado: productoDestacado, 
-      };
+      // Mostrar en consola el FormData
+      console.log('FormData a enviar:', formData);
 
+<<<<<<< HEAD
       // Crear FormData para enviar archivos y datos
       formData.append('producto', JSON.stringify(newProduct));
     }
@@ -204,17 +209,21 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
     // Reset file input
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
+=======
+      // Llamar a la función onSave pasada desde el padre
+      await onSave(formData);
+    } catch (error) {
+      console.error('Error al procesar el formulario de producto:', error);
+      Swal.fire('Error', 'No se pudo procesar el formulario de producto.', 'error');
+>>>>>>> FrontEnd
     }
   };
 
   // Manejador para eliminar una imagen seleccionada
-  const handleRemoveImage = (index) => {
-    setImagenes((prevImagenes) => prevImagenes.filter((_, i) => i !== index));
-
-    // Reset file input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
+  const handleRemoveImage = (index, imageList, setValue) => {
+    const updatedImages = Array.from(imageList);
+    updatedImages.splice(index, 1);
+    setValue('imagenes', updatedImages);
   };
 
   // Manejadores para cerrar el modal al hacer clic fuera o en la "X"
@@ -242,7 +251,7 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
             &times;
           </button>
         </div>
-        <form className="product-form" onSubmit={handleSubmit}>
+        <form className="product-form" onSubmit={handleSubmit(onSubmit)}>
           {/* Primera fila: Nombre y Descripción */}
           <div className="form-row">
             <div className="form-group">
@@ -252,11 +261,11 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
               <input
                 type="text"
                 id="nombre"
-                name="nombre"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                required
+                {...register('nombre')}
+                placeholder="Ingresa el nombre del producto"
+                autoComplete="off"
               />
+              {errors.nombre && <p className="error-message">{errors.nombre.message}</p>}
             </div>
 
             <div className="form-group">
@@ -265,11 +274,11 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
               </label>
               <textarea
                 id="descripcion"
-                name="descripcion"
-                value={descripcion}
-                onChange={(e) => setDescripcion(e.target.value)}
-                required
+                {...register('descripcion')}
+                placeholder="Ingresa la descripción del producto"
+                autoComplete="off"
               />
+              {errors.descripcion && <p className="error-message">{errors.descripcion.message}</p>}
             </div>
           </div>
 
@@ -280,13 +289,14 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
                 Precio<span className="required">*</span>:
               </label>
               <input
-                type="text"
+                type="number"
                 id="precio"
-                name="precio"
-                value={precio}
-                onChange={(e) => setPrecio(e.target.value)}
-                required
+                {...register('precio')}
+                placeholder="Ingresa el precio del producto"
+                step="0.01"
+                min="0"
               />
+              {errors.precio && <p className="error-message">{errors.precio.message}</p>}
             </div>
 
             <div className="form-group">
@@ -296,59 +306,80 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
               <input
                 type="number"
                 id="stock"
-                name="stock"
-                value={stock}
-                onChange={(e) => setStock(e.target.value)}
-                required
+                {...register('stock')}
+                placeholder="Ingresa el stock del producto"
+                step="1"
+                min="0"
               />
+              {errors.stock && <p className="error-message">{errors.stock.message}</p>}
             </div>
           </div>
 
           {/* Tercera fila: Categoría y Destacado */}
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="categoria">Categoría:</label>
+              <label htmlFor="categoria">Categoría<span className="required">*</span>:</label>
               <select
                 id="categoria"
-                name="categoria"
-                value={categoria}
-                onChange={(e) => setCategoria(e.target.value)}
+                {...register('categoria')}
+                defaultValue=""
               >
-                <option value="">Seleccione una categoría</option>
-                {categorias.map((cat) => (
-                  <option key={cat.idCategoria} value={cat.nombre}>
-                    {cat.nombre}
-                  </option>
-                ))}
+                <option value="" disabled>
+                  Seleccione una categoría
+                </option>
+                {/* Asegúrate de que las categorías se pasen correctamente */}
+                {/* Puedes mapear desde props o desde el estado */}
+                {/* Aquí asumimos que tienes una lista de categorías en algún lugar */}
+                {/* Ejemplo estático: */}
+                <option value="Electrónica">Electrónica</option>
+                <option value="Ropa">Ropa</option>
+                <option value="Hogar">Hogar</option>
+                <option value="Juguetes">Juguetes</option>
+                {/* ... otras categorías */}
               </select>
+              {errors.categoria && <p className="error-message">{errors.categoria.message}</p>}
             </div>
 
-            <div className="form-group radio-group">
-              <p>Destacado:</p>
+            <div className="form-group">
+              <label>Destacado<span className="required">*</span>:</label>
               <div className="radio-options">
                 <div className="radio-option">
                   <input
                     type="radio"
+<<<<<<< HEAD
                     id="destacadoHome"
                     name="destacado"
                     value="Home"
                     checked={productoDestacado === 'Home'}
                     onChange={(e) => setProductoDestacado(e.target.value)}
+=======
+                    id="destacadoSi"
+                    value={1}
+                    {...register('destacado')}
+                    defaultChecked={!product || product.destacado === 1}
+>>>>>>> FrontEnd
                   />
-                  <label htmlFor="destacadoHome">Home</label>
+                  <label htmlFor="destacadoSi">Sí</label>
                 </div>
                 <div className="radio-option">
                   <input
                     type="radio"
                     id="destacadoNo"
+<<<<<<< HEAD
                     name="destacado"
                     value="No"
                     checked={productoDestacado === 'No'}
                     onChange={(e) => setProductoDestacado(e.target.value)}
+=======
+                    value={0}
+                    {...register('destacado')}
+                    defaultChecked={product && product.destacado === 0}
+>>>>>>> FrontEnd
                   />
                   <label htmlFor="destacadoNo">No</label>
                 </div>
               </div>
+              {errors.destacado && <p className="error-message">{errors.destacado.message}</p>}
             </div>
           </div>
 
@@ -359,21 +390,23 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
               <input
                 type="text"
                 id="marca"
-                name="marca"
-                value={marca}
-                onChange={(e) => setMarca(e.target.value)}
+                {...register('marca')}
+                placeholder="Ingresa la marca del producto"
+                autoComplete="off"
               />
+              {errors.marca && <p className="error-message">{errors.marca.message}</p>}
             </div>
 
             <div className="form-group">
-              <label htmlFor="codigoBarra">Código de Barra:</label>
+              <label htmlFor="codigoBarras">Código de Barra:</label>
               <input
-                type="number"
-                id="codigoBarra"
-                name="codigoBarra"
-                value={codigoBarras}
-                onChange={(e) => setCodigoBarras(e.target.value)}
+                type="text"
+                id="codigoBarras"
+                {...register('codigoBarras')}
+                placeholder="Ingresa el código de barra del producto"
+                autoComplete="off"
               />
+              {errors.codigoBarras && <p className="error-message">{errors.codigoBarras.message}</p>}
             </div>
           </div>
 
@@ -383,15 +416,16 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
             <input
               type="file"
               id="imagenes"
-              name="imagenes"
+              {...register('imagenes')}
               accept="image/*"
               multiple
-              onChange={handleImageChange}
               ref={fileInputRef}
             />
+            {errors.imagenes && <p className="error-message">{errors.imagenes.message}</p>}
           </div>
 
           {/* Mostrar vistas previas de las imágenes seleccionadas */}
+<<<<<<< HEAD
           {imagenes.length > 0 && (
             <div className="image-previews">
               {imagenes.map((imagen, index) => {
@@ -422,14 +456,47 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
               })}
             </div>
           )}
+=======
+          <Controller
+            control={control}
+            name="imagenes"
+            render={({ field: { onChange, value } }) => (
+              <div className="image-previews">
+                {value && value.length > 0 && (
+                  Array.from(value).map((imagen, index) => {
+                    const src = URL.createObjectURL(imagen);
+                    return (
+                      <div key={index} className="image-preview">
+                        <img
+                          src={src}
+                          alt={`Imagen ${index + 1}`}
+                          onLoad={() => {
+                            URL.revokeObjectURL(src); // Liberar el objeto URL después de cargar la imagen
+                          }}
+                        />
+                        <button
+                          type="button"
+                          className="remove-image-button"
+                          onClick={() => handleRemoveImage(index, value, onChange)}
+                        >
+                          &times;
+                        </button>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            )}
+          />
+>>>>>>> FrontEnd
 
           {/* Sección de Botones de Acción */}
           <div className="form-actions">
-            <button type="button" className="cancel-button" onClick={onClose}>
+            <button type="button" className="cancel-button" onClick={onClose} disabled={isSubmitting}>
               Cancelar
             </button>
-            <button type="submit" className="submit-button">
-              {product ? 'Actualizar' : 'Crear'}
+            <button type="submit" className="submit-button" disabled={isSubmitting}>
+              {isSubmitting ? 'Procesando...' : (product ? 'Actualizar' : 'Crear')}
             </button>
           </div>
         </form>
@@ -439,4 +506,7 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
 };
 
 export default ProductForm;
+<<<<<<< HEAD
 
+=======
+>>>>>>> FrontEnd

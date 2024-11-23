@@ -21,7 +21,7 @@ const UserOrderListContainer = ({ orders }) => {
     <div className="order-list">
       {orders.length > 0 ? (
         sortedOrders.map((order) => (
-          <div className="order">
+          <div className="order" key={order.id}>
             <div className="order-header">
               <div className="ordet-date">
                 <h4>Fecha del pedido</h4>

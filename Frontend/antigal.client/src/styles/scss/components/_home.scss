@@ -76,6 +76,7 @@
         width: 100%;
         gap: 20px;
     
+        a{
         .offerCard {
             flex-grow: 1;
             max-width: calc(100% / 1 - 10px); 
@@ -87,6 +88,7 @@
             flex-direction: column;
             justify-content: space-between;
             height: auto;
+<<<<<<< HEAD
 
             img {
                 width: 100%;
@@ -116,23 +118,34 @@
                     text-decoration: line-through;
                     color: #999;
                     margin-right: 10px;
+=======
+                text-decoration: none;
+                color: mixins.theme(primary-black-color);
+                img {
+                    width: 100%;
+                    aspect-ratio: 4 / 3;
+                    object-fit: cover;
+                    border-radius: 4px;
+>>>>>>> FrontEnd
                 }
-        
-                .precioOferta {
+                .offerName {
+                    font-size: 1.1rem;
                     font-weight: bold;
+<<<<<<< HEAD
                     color: $secondary-color;
+=======
+                    margin: 10px 0;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    color: mixins.theme(primary-black-color);
+>>>>>>> FrontEnd
                 }
-            }
-    
-            .offerRating {
-                display: flex;
-                align-items: center;
-                margin-bottom: 10px;
-        
-                span {
-                    margin-left: 5px;
-                    color: #777;
+                .offerDescription{
+                    color: mixins.theme(primary-black-color);
+                    
                 }
+<<<<<<< HEAD
             }
     
             .comprarButton {
@@ -146,30 +159,77 @@
         
                 &:hover {
                     background-color: darken($primary-color, 10%);
+=======
+                .offerBrand {
+                    font-size: 0.9rem;
+                    color: mixins.theme(primary-black-color-hover);
+                    margin-bottom: 10px;
+>>>>>>> FrontEnd
                 }
-            }
-    
-            .likeSection {
-                margin-top: auto;
-                text-align: center;
-        
-                .likeButton {
-                    background-color: transparent;
-                    border: none;
-                    color: #3498db;
-                    cursor: pointer;
-                    font-size: 1rem;
+                
+                .offerPrice {
+                    margin-bottom: 10px;
+                    
+                    .precioAnterior {
+                        text-decoration: line-through;
+                        color: mixins.theme(primary-black-color-hover);
+                        margin-right: 10px;
+                    }
+                    
+                    .precioOferta {
+                        font-weight: bold;
+                        color: mixins.theme(secondary-color);
+                    }
+                }
+                
+                .offerRating {
                     display: flex;
-                    justify-content: center;
                     align-items: center;
-        
+                    margin-bottom: 10px;
+                    
+                    span {
+                        margin-left: 5px;
+                        color: #777;
+                    }
+                }
+                
+                .comprarButton {
+                    background-color: mixins.theme(primary-color);
+                    color: mixins.theme(primary-black-color);
+                    padding: 10px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                    
                     &:hover {
-                        color: darken(#3498db, 10%);
+                        background-color: mixins.theme(shadow-color);
+                    }
+                }
+                
+                .likeSection {
+                    margin-top: auto;
+                    text-align: center;
+                    
+                    .likeButton {
+                        background-color: transparent;
+                        border: none;
+                        color: #3498db;
+                        cursor: pointer;
+                        font-size: 1rem;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        
+                        &:hover {
+                            color: darken(#3498db, 10%);
+                        }
                     }
                 }
             }
         }
     }
+<<<<<<< HEAD
     
     .pagination {
         display: flex;
@@ -177,6 +237,15 @@
         justify-content: center;
         margin-top: 20px;
         background-color: $primary-white-color;
+=======
+        
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            background-color: mixins.theme(primary-white-color);
+>>>>>>> FrontEnd
         padding: 0.5rem;
         border-radius: 1rem;
     

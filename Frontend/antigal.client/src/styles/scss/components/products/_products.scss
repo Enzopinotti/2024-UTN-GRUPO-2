@@ -276,7 +276,10 @@
       }
     }
   }
-  
+  .product-filter{
+    padding-left: 3.5rem;
+    margin-bottom: 1rem;
+  }
   @media (min-width: 768px) { // Tres productos por fila en tabletas grandes
     .product-item {
       width: calc(50% - 20px); // Se ajusta para tres productos por fila

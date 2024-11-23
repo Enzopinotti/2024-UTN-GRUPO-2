@@ -16,6 +16,47 @@ const SearchBar = ({isVisible, onClose,isMobile  }) => {
    };
 
 
+<<<<<<< HEAD
+=======
+    try {
+      const response = await fetch(
+        `https://www.antigal.somee.com/api/Product/getProductByTitle/${encodeURIComponent(searchTerm)}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.isSuccess) {
+        const productos = data.data.$values; // Verifica esta estructura
+        console.log(data);
+        setSearchResults(productos);
+        if (productos.length === 0) {
+          toast.info("No se encontraron productos con ese término.");
+        }
+      } else {
+        setError(data.message || "Error al buscar productos.");
+        toast.error(data.message || "Error al buscar productos.");
+      }
+    } catch (err) {
+      console.error("Error al buscar productos:", err);
+      setError("Error al buscar productos. Inténtalo de nuevo más tarde.");
+      toast.error("Error al buscar productos. Inténtalo de nuevo más tarde.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Función para manejar cambios en el input
+>>>>>>> FrontEnd
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);

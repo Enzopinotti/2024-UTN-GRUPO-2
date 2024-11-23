@@ -7,13 +7,30 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+<<<<<<< HEAD
+=======
+    "css-minimizer-webpack-plugin": "^7.0.0",
+    "date-fns": "^4.1.0",
+    "dompurify": "^3.1.7",
+    "json-server": "^1.0.0-beta.3",
+    "jwt-decode": "^4.0.0",
+>>>>>>> FrontEnd
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.1",
     "react-scripts": "^5.0.1",
     "react-swipeable": "^7.0.1",
+<<<<<<< HEAD
     "sweetalert2": "^11.14.1",
     "web-vitals": "^2.1.4"
+=======
+    "react-toastify": "^10.0.5",
+    "sass": "^1.80.6",
+    "slick-carousel": "^1.8.1",
+    "sweetalert2": "^11.7.12",
+    "web-vitals": "^2.1.4",
+    "yup": "^1.4.0"
+>>>>>>> FrontEnd
   },
   "scripts": {
     "start": "react-scripts start",
@@ -42,6 +59,17 @@
     ]
   },
   "devDependencies": {
+<<<<<<< HEAD
     "concurrently": "^8.2.2"
+=======
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@eslint/object-schema": "^2.1.4",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.57.1",
+    "eslint-config-react-app": "^7.0.1",
+    "html-webpack-plugin": "^5.6.3",
+    "rimraf": "^6.0.1",
+    "webpack-dev-server": "^5.1.0"
+>>>>>>> FrontEnd
   }
 }

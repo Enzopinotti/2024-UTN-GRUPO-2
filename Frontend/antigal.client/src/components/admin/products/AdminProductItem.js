@@ -17,6 +17,7 @@ const AdminProductItem = ({ product, onEdit, onDelete }) => {
   const [imageError, setImageError] = useState(false);
   const [imageSrc, setImageSrc] = useState('');
 
+
   useEffect(() => {
     if (imagenes && imagenes.length > 0) {
       // Si la imagen es una URL (cadena), úsala directamente
