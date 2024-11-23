@@ -1,4 +1,4 @@
-﻿using antigal.server.Relationships;
+using antigal.server.Relationships;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -12,21 +12,21 @@ namespace antigal.server.Models
         public required string marca { get; set; }
         public string? descripcion { get; set; }
         public int?  codigoBarras { get; set; }
-        public int disponible { get; set; }
+        public int? disponible { get; set; }
         public int? destacado { get; set; }
-        public  float precio { get; set; }
+        public decimal precio { get; set; }
         public  int stock { get; set; }
-       
+        public DateTime FechaCreacion { get; set; }
+
         //RELACION UNO A MUCHOS CON IMAGEN
-       
-        public List <Imagen> imagenes { get; set; } = new List<Imagen> ();
+        public List<string> ImagenUrls { get; set; } = new List<string>(); // Almacena solo las URLs
 
         //RELACION MUCHOS A MUCHOS CON CATEGORIA   
         [JsonIgnore]
         public List<ProductoCategoria> CategoriaProductos { get; set; } = new List<ProductoCategoria>();
 
 
-        public Producto(int idProducto, string nombre, string marca, string? descripcion, int? codigoBarras, int disponible, int? destacado, float precio, int stock)
+        public Producto(int idProducto, string nombre, string marca, string? descripcion, int? codigoBarras, int disponible, int? destacado, decimal precio, int stock)
         {
             this.idProducto = idProducto;
             this.nombre = nombre;

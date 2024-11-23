@@ -1,46 +1,48 @@
-﻿using antigal.server.Models;
+// Services/CategoryService.cs
+using antigal.server.Models;
 using antigal.server.Models.Dto;
 using antigal.server.Repositories;
+using System.Threading.Tasks;
 
 namespace antigal.server.Services
 {
     public class CategoryService : ICategoryService
     {
-        private readonly ICategoriaRepository _categoriaRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CategoryService(ICategoriaRepository categoriaRepository)
+        public CategoryService(IUnitOfWork unitOfWork)
         {
-            _categoriaRepository = categoriaRepository;
+            _unitOfWork = unitOfWork;
         }
 
-        public ResponseDto GetCategories()
+        public async Task<ResponseDto> GetCategoriesAsync()
         {
-            return _categoriaRepository.GetCategories();
+            return await _unitOfWork.Categories.GetCategoriesAsync();
         }
 
-        public ResponseDto GetCategoryById(int id)
+        public async Task<ResponseDto> GetCategoryByIdAsync(int id)
         {
-            return _categoriaRepository.GetCategoryById(id);
+            return await _unitOfWork.Categories.GetCategoryByIdAsync(id);
         }
 
-        public ResponseDto GetCategoryByTitle(string nombre)
+        public async Task<ResponseDto> GetCategoryByTitleAsync(string nombre)
         {
-            return _categoriaRepository.GetCategoriesByTitle(nombre);
+            return await _unitOfWork.Categories.GetCategoriesByTitleAsync(nombre);
         }
 
-        public ResponseDto AddCategory(Categoria categoria)
+        public async Task<ResponseDto> AddCategoryAsync(Categoria categoria)
         {
-            return _categoriaRepository.AddCategory(categoria);
+            return await _unitOfWork.Categories.AddCategoryAsync(categoria);
         }
 
-        public ResponseDto UpdateCategory(Categoria categoria)
+        public async Task<ResponseDto> UpdateCategoryAsync(Categoria categoria)
         {
-            return _categoriaRepository.UpdateCategory(categoria);
+            return await _unitOfWork.Categories.UpdateCategoryAsync(categoria);
         }
 
-        public ResponseDto DeleteCategory(int id)
+        public async Task<ResponseDto> DeleteCategoryAsync(int id)
         {
-            return _categoriaRepository.DeleteCategory(id);
+            return await _unitOfWork.Categories.DeleteCategoryAsync(id);
         }
     }
 }

@@ -1,20 +1,200 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj": {}
+    "C:\\Users\\beker\\OneDrive\\Escritorio\\DESARROLLO\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj": {}
   },
   "projects": {
-    "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj": {
+    "C:\\Users\\beker\\OneDrive\\Escritorio\\DESARROLLO\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
+        "projectUniqueName": "C:\\Users\\beker\\OneDrive\\Escritorio\\DESARROLLO\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
         "projectName": "antigal.server",
-        "projectPath": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
-        "packagesPath": "C:\\Users\\Pato\\.nuget\\packages\\",
-        "outputPath": "D:\\Repositorios GitHub\\FACULTAD\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\obj\\",
+        "projectPath": "C:\\Users\\beker\\OneDrive\\Escritorio\\DESARROLLO\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\antigal.server.csproj",
+        "packagesPath": "C:\\Users\\beker\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\beker\\OneDrive\\Escritorio\\DESARROLLO\\2024-UTN-GRUPO-2\\Backend\\antigal.server\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Pato\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\beker\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\beker\\OneDrive\\Escritorio\\DESARROLLO\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj": {
+                "projectPath": "C:\\Users\\beker\\OneDrive\\Escritorio\\DESARROLLO\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "CloudinaryDotNet": {
+              "target": "Package",
+              "version": "[1.26.2, )"
+            },
+            "FluentEmail.Core": {
+              "target": "Package",
+              "version": "[3.0.2, )"
+            },
+            "FluentEmail.SendGrid": {
+              "target": "Package",
+              "version": "[3.0.2, )"
+            },
+            "FluentValidation.DependencyInjectionExtensions": {
+              "target": "Package",
+              "version": "[11.10.0, )"
+            },
+            "MailKit": {
+              "target": "Package",
+              "version": "[4.8.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.10, )"
+            },
+            "Microsoft.AspNetCore.Authentication.OpenIdConnect": {
+              "target": "Package",
+              "version": "[8.0.10, )"
+            },
+            "Microsoft.AspNetCore.Identity": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.10, )"
+            },
+            "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[8.0.10, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.10, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.10, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.10, )"
+            },
+            "Microsoft.Extensions.Logging": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[8.0.6, )"
+            },
+            "MimeKit": {
+              "target": "Package",
+              "version": "[4.8.0, )"
+            },
+            "NETCore.MailKit": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "NPOI": {
+              "target": "Package",
+              "version": "[2.7.1, )"
+            },
+            "SendGrid": {
+              "target": "Package",
+              "version": "[9.29.3, )"
+            },
+            "SharpGrip.FluentValidation.AutoValidation.Mvc": {
+              "target": "Package",
+              "version": "[1.4.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.9.0, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.2.0, )"
+            },
+            "dotenv.net": {
+              "target": "Package",
+              "version": "[3.2.1, )"
+            },
+            "mercadopago-sdk": {
+              "target": "Package",
+              "version": "[2.4.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\beker\\OneDrive\\Escritorio\\DESARROLLO\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\beker\\OneDrive\\Escritorio\\DESARROLLO\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj",
+        "projectName": "EmailService",
+        "projectPath": "C:\\Users\\beker\\OneDrive\\Escritorio\\DESARROLLO\\2024-UTN-GRUPO-2\\Backend\\EmailService\\EmailService.csproj",
+        "packagesPath": "C:\\Users\\beker\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\beker\\OneDrive\\Escritorio\\DESARROLLO\\2024-UTN-GRUPO-2\\Backend\\EmailService\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\beker\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -46,43 +226,21 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "FluentValidation.DependencyInjectionExtensions": {
+            "Microsoft.AspNetCore.Identity": {
               "target": "Package",
-              "version": "[11.10.0, )"
+              "version": "[2.2.0, )"
             },
-            "Microsoft.AspNetCore.OpenApi": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.8, )"
+              "version": "[8.0.10, )"
             },
-            "Microsoft.EntityFrameworkCore": {
+            "MimeKit": {
               "target": "Package",
-              "version": "[8.0.8, )"
+              "version": "[4.8.0, )"
             },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
+            "NETCore.MailKit": {
               "target": "Package",
-              "version": "[8.0.8, )"
-            },
-            "Microsoft.EntityFrameworkCore.Tools": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[8.0.8, )"
-            },
-            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
-              "target": "Package",
-              "version": "[8.0.5, )"
-            },
-            "NPOI": {
-              "target": "Package",
-              "version": "[2.7.1, )"
-            },
-            "SharpGrip.FluentValidation.AutoValidation.Mvc": {
-              "target": "Package",
-              "version": "[1.4.0, )"
-            },
-            "Swashbuckle.AspNetCore": {
-              "target": "Package",
-              "version": "[6.7.0, )"
+              "version": "[2.1.0, )"
             }
           },
           "imports": [
@@ -97,14 +255,11 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
