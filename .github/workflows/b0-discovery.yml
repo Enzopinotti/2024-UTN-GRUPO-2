@@ -180,7 +180,8 @@ jobs:
           code=$?
           set -e
           echo "frontend_test_exit=$code" | tee b0-frontend-test-status.txt
-          grep -E "No tests found|Tests:|Test Suites:" b0-frontend-tests.txt || true
+          grep -E "No tests found|Tests:|Test Suites:|FAIL |Cannot find|SyntaxError|TypeError|ReferenceError|● " b0-frontend-tests.txt | head -n 120 || true
+          find "$frontend/src" -type f \( -name "*.test.*" -o -name "*.spec.*" -o -name "setupTests.*" \) -print | sort | sed "s#^$frontend/##" | tee b0-frontend-test-files.txt
 
       - name: Restore backend solution
         shell: bash
@@ -201,6 +202,7 @@ jobs:
           code=$?
           set -e
           echo "backend_build_exit=$code" | tee b0-backend-build-status.txt
+          grep -E "error (CS|MSB|NETSDK|NU)|: error " b0-backend-build.txt | head -n 160 || true
 
       - name: Probe backend tests
         shell: bash
@@ -285,6 +287,7 @@ jobs:
             cat b0-frontend-build-status.txt 2>/dev/null || true
             cat b0-frontend-audit-summary.txt 2>/dev/null || true
             cat b0-frontend-test-status.txt 2>/dev/null || true
+            cat b0-frontend-test-files.txt 2>/dev/null || true
             cat b0-backend-restore-status.txt 2>/dev/null || true
             cat b0-backend-build-status.txt 2>/dev/null || true
             cat b0-backend-test-status.txt 2>/dev/null || true
