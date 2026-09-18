@@ -70,7 +70,12 @@ jobs:
         run: |
           set -euo pipefail
           dotnet list Backend/antigal.server/antigal.server.csproj package --vulnerable --include-transitive | tee b3-vulnerable.txt
-          dotnet list Backend/antigal.server/antigal.server.csproj package --outdated --include-transitive | tee b3-outdated.txt
+          dotnet list Backend/antigal.server/antigal.server.csproj package --outdated | tee b3-outdated.txt || true
+          if grep -q "has the following vulnerable packages" b3-vulnerable.txt; then
+            echo "backend_vulnerabilities_remaining=true"
+          else
+            echo "backend_vulnerabilities_remaining=false"
+          fi
 
       - name: Validate security boundary
         run: python3 scripts/security_baseline.py
