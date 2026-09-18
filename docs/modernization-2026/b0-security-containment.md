@@ -24,7 +24,7 @@ B0-S:
 
 - clears secret/account-specific values from maintained `appsettings.json`;
 - documents environment-variable names only;
-- removes tracked `bin/` and `obj/` output;
+- removes tracked `bin/` and `obj/` output and Visual Studio `*.csproj.user` state;
 - expands `.gitignore` for generated/local state;
 - adds a deterministic guard against reintroducing those classes of files or
   non-empty sensitive appsettings slots.
@@ -34,7 +34,7 @@ B0-S:
 The baseline contained **123 tracked files** under backend
 `bin/` or `obj/` directories.
 
-Those files are generated build output, not source authority.
+Those files are generated build output, not source authority. One additional tracked `*.csproj.user` file is local IDE state and is also removed.
 
 ## External rotation boundary
 

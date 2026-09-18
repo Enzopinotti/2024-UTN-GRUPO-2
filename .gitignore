@@ -13,9 +13,10 @@ node_modules/
 build/
 dist/
 
-# .NET generated build output
+# .NET generated / local project output
 **/bin/
 **/obj/
+*.csproj.user
 
 # OS noise
 .DS_Store

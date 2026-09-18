@@ -51,6 +51,10 @@ for path in tracked:
         not Path(path).name.startswith(".env"),
         f"tracked environment file: {path}",
     )
+    expect(
+        not path.endswith(".csproj.user"),
+        f"tracked Visual Studio user project state: {path}",
+    )
 
 if failures:
     print("Current-tree security baseline failed:", file=sys.stderr)
