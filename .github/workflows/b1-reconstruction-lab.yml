@@ -1,0 +1,72 @@
+name: B1 reconstruction lab
+
+on:
+  push:
+    branches:
+      - modernize/b1-integration-reconstruction-lab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reconstruct:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: "false"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+
+    steps:
+      - name: Checkout exact lab SHA
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+
+      - name: Setup Node 20 compatibility runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup .NET 8 compatibility runtime
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Validate restored frontend manifests
+        run: |
+          node -e "JSON.parse(require('fs').readFileSync('Frontend/antigal.client/package.json','utf8'))"
+          node -e "JSON.parse(require('fs').readFileSync('Frontend/antigal.client/package-lock.json','utf8'))"
+          node - <<'NODE'
+          const fs = require('fs');
+          const pkg = JSON.parse(fs.readFileSync('Frontend/antigal.client/package.json','utf8'));
+          const lock = JSON.parse(fs.readFileSync('Frontend/antigal.client/package-lock.json','utf8'));
+          const root = lock.packages[''];
+          if (JSON.stringify(pkg.dependencies || {}) !== JSON.stringify(root.dependencies || {})) process.exit(1);
+          if (JSON.stringify(pkg.devDependencies || {}) !== JSON.stringify(root.devDependencies || {})) process.exit(1);
+          console.log('frontend_manifest_lock_match=true');
+          NODE
+
+      - name: Install frontend
+        working-directory: Frontend/antigal.client
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: Frontend/antigal.client
+        run: npm run build
+
+      - name: Restore backend
+        run: dotnet restore Backend/antigal.server.sln
+
+      - name: Build backend
+        run: dotnet build Backend/antigal.server.sln -c Release --no-restore
+
+      - name: Validate current-tree security boundary
+        run: python3 scripts/security_baseline.py
+
+      - name: Verify source tree
+        run: |
+          git diff --exit-code
+          test -f Frontend/antigal.client/src/pages/Home.js
+          test -f Frontend/antigal.client/src/contexts/CartContext.js
+          test -f Backend/antigal.server/Models/Dto/ResponseDto.cs
+          test -f Backend/antigal.server/Relationships/ProductoCategoria.cs

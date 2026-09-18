@@ -7,27 +7,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { productSchema } from '../../../validations/validationSchemas';
 
 const ProductForm = ({ show, onClose, onSave, product }) => {
-<<<<<<< HEAD
-  // Estados para los campos del formulario
-  const [nombre, setNombre] = useState('');
-  const [precio, setPrecio] = useState('');
-  const [categoria, setCategoria] = useState('');
-  const [imagenes, setImagenes] = useState([]); 
-  const [descripcion, setDescripcion] = useState('');
-  const [codigoBarras, setCodigoBarras] = useState('');
-  const [marca, setMarca] = useState('');
-  const [stock, setStock] = useState('');
-  const [disponible, setDisponible] = useState(true);
-  const [productoDestacado, setProductoDestacado] = useState('No'); 
-
-  // Estado para las categorías
-  const [categorias, setCategorias] = useState([]);
-
-  // Estado para detectar cambios (solo para edición)
-  const [initialData, setInitialData] = useState({});
-
-=======
->>>>>>> FrontEnd
   // Ref para el input de imágenes
   const fileInputRef = useRef(null);
 
@@ -50,47 +29,13 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
 
   useEffect(() => {
     if (product) {
-<<<<<<< HEAD
-      setNombre(product.nombre || '');
-      setPrecio(product.precio !== undefined ? product.precio.toString() : '');
-      setCategoria(product.categoria || '');
-      setDescripcion(product.descripcion || '');
-      setCodigoBarras(product.codigoBarras || '');
-      setMarca(product.marca || '');
-      setStock(product.stock !== undefined ? product.stock.toString() : '');
-      setDisponible(product.disponible !== undefined ? product.disponible : true);
-      setProductoDestacado(product.destacado || 'No');
-      setImagenes(product.imagenes || []);
-      
-      // Guardar datos iniciales para detectar cambios
-      setInitialData({
-=======
       reset({
->>>>>>> FrontEnd
         nombre: product.nombre || '',
         precio: product.precio !== undefined ? product.precio : '',
         categoria: product.categoria || '',
         descripcion: product.descripcion || '',
         codigoBarras: product.codigoBarras || '',
         marca: product.marca || '',
-<<<<<<< HEAD
-        stock: product.stock !== undefined ? product.stock.toString() : '',
-        disponible: product.disponible !== undefined ? product.disponible : true,
-        destacado: product.destacado || 'No',
-      });
-    } else {
-      setNombre('');
-      setPrecio('');
-      setCategoria('');
-      setDescripcion('');
-      setCodigoBarras('');
-      setMarca('');
-      setStock('');
-      setDisponible(true);
-      setProductoDestacado('No');
-      setImagenes([]);
-      setInitialData({});
-=======
         stock: product.stock !== undefined ? product.stock : '',
         disponible: product.disponible !== undefined ? product.disponible : 1,
         destacado: product.destacado || 0,
@@ -109,22 +54,16 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
         destacado: 0,
         imagenes: [],
       });
->>>>>>> FrontEnd
     }
   }, [product, reset]);
 
   // Validaciones del formulario se manejan a través de react-hook-form y Yup
 
   // Manejador de envío del formulario
-<<<<<<< HEAD
-  const handleSubmit = (e) => {
-    e.preventDefault();
-=======
   const onSubmit = async (data) => {
     try {
       // Mostrar en consola los datos recibidos
       console.log('Datos del formulario de producto recibidos:', data);
->>>>>>> FrontEnd
 
       // Crear un FormData para enviar archivos y datos
       const formData = new FormData();
@@ -178,44 +117,11 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
       // Mostrar en consola el FormData
       console.log('FormData a enviar:', formData);
 
-<<<<<<< HEAD
-      // Crear FormData para enviar archivos y datos
-      formData.append('producto', JSON.stringify(newProduct));
-    }
-
-    // Añadir cada imagen al FormData
-    imagenes.forEach((imagen) => {
-      formData.append('imagenes', imagen);
-    });
-
-    onSave(formData);
-    onClose();
-
-    // Reset file input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
-
-  // Manejador para seleccionar imágenes
-  const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    if (files.length + imagenes.length > 6) {
-      Swal.fire('Error', 'No puedes subir más de 6 imágenes por producto.', 'error');
-      return;
-    }
-    setImagenes([...imagenes, ...files]);
-
-    // Reset file input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-=======
       // Llamar a la función onSave pasada desde el padre
       await onSave(formData);
     } catch (error) {
       console.error('Error al procesar el formulario de producto:', error);
       Swal.fire('Error', 'No se pudo procesar el formulario de producto.', 'error');
->>>>>>> FrontEnd
     }
   };
 
@@ -346,18 +252,10 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
                 <div className="radio-option">
                   <input
                     type="radio"
-<<<<<<< HEAD
-                    id="destacadoHome"
-                    name="destacado"
-                    value="Home"
-                    checked={productoDestacado === 'Home'}
-                    onChange={(e) => setProductoDestacado(e.target.value)}
-=======
                     id="destacadoSi"
                     value={1}
                     {...register('destacado')}
                     defaultChecked={!product || product.destacado === 1}
->>>>>>> FrontEnd
                   />
                   <label htmlFor="destacadoSi">Sí</label>
                 </div>
@@ -365,16 +263,9 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
                   <input
                     type="radio"
                     id="destacadoNo"
-<<<<<<< HEAD
-                    name="destacado"
-                    value="No"
-                    checked={productoDestacado === 'No'}
-                    onChange={(e) => setProductoDestacado(e.target.value)}
-=======
                     value={0}
                     {...register('destacado')}
                     defaultChecked={product && product.destacado === 0}
->>>>>>> FrontEnd
                   />
                   <label htmlFor="destacadoNo">No</label>
                 </div>
@@ -425,38 +316,6 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
           </div>
 
           {/* Mostrar vistas previas de las imágenes seleccionadas */}
-<<<<<<< HEAD
-          {imagenes.length > 0 && (
-            <div className="image-previews">
-              {imagenes.map((imagen, index) => {
-                const isFile = typeof imagen !== 'string';
-                const src = isFile ? URL.createObjectURL(imagen) : imagen;
-                const key = isFile ? `${imagen.name}-${index}` : `existing-${index}`;
-                
-                return (
-                  <div key={key} className="image-preview">
-                    <img
-                      src={src}
-                      alt={`Imagen ${index + 1}`}
-                      onLoad={() => {
-                        if (isFile) {
-                          URL.revokeObjectURL(src); // Liberar el objeto URL después de cargar la imagen
-                        }
-                      }}
-                    />
-                    <button
-                      type="button"
-                      className="remove-image-button"
-                      onClick={() => handleRemoveImage(index)}
-                    >
-                      &times;
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-=======
           <Controller
             control={control}
             name="imagenes"
@@ -488,7 +347,6 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
               </div>
             )}
           />
->>>>>>> FrontEnd
 
           {/* Sección de Botones de Acción */}
           <div className="form-actions">
@@ -506,7 +364,3 @@ const ProductForm = ({ show, onClose, onSave, product }) => {
 };
 
 export default ProductForm;
-<<<<<<< HEAD
-
-=======
->>>>>>> FrontEnd

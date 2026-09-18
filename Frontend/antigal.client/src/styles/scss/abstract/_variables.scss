@@ -1,7 +1,7 @@
+// src/abstract/variables.scss
+
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-<<<<<<< HEAD
-=======
 $font: 'Roboto', sans-serif;
 
 // Colores para el tema claro
@@ -49,13 +49,12 @@ $themes: (
 
 /*@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
->>>>>>> FrontEnd
 $font:'Roboto', sans-serif;
 
-$primary-color: #74873D; // Verde principal
-$secondary-color: #ED8B00; // Naranja secundario
+theme(primary-color): #74873D; // Verde principal
+theme(secondary-color): #ED8B00; // Naranja secundario
 
-$primary-black-color: #222222;
-$primary-white-color: #FFFFFF;
+theme(primary-black-color): #222222;
+mixins.theme(primary-white-color): #FFFFFF;
 
-$shadow-green-color: #2F3814; // Sombra basada en un verde oscuro
+mixins.theme(shadow-color): #2F3814; // Sombra basada en un verde oscuro*/
