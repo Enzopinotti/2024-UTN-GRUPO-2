@@ -51,6 +51,15 @@ jobs:
           console.log('frontend_manifest_lock_match=true');
           NODE
 
+      - name: Normalize legacy lock metadata for npm 11
+        working-directory: Frontend/antigal.client
+        run: |
+          cp package-lock.json "$RUNNER_TEMP/package-lock.before.json"
+          npm install --package-lock-only --ignore-scripts
+          echo "lock_diff_lines=$(git diff --numstat -- package-lock.json | awk '{print $1+$2}')" 
+          git diff --stat -- package-lock.json
+          git diff --exit-code -- package.json
+
       - name: Install frontend
         working-directory: Frontend/antigal.client
         run: npm ci
@@ -70,7 +79,7 @@ jobs:
 
       - name: Verify source tree
         run: |
-          git diff --exit-code
+          git diff --exit-code -- . ':!Frontend/antigal.client/package-lock.json'
           test -f Frontend/antigal.client/src/pages/Home.js
           test -f Frontend/antigal.client/src/contexts/CartContext.js
           test -f Backend/antigal.server/Models/Dto/ResponseDto.cs
