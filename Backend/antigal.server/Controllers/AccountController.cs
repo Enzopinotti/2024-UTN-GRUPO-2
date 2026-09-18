@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using antigal.server.JwtFeatures;
 using antigal.server.Services;
+using antigal.server.Mapping;
 using EmailService;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
