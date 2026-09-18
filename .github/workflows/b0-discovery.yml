@@ -120,16 +120,52 @@ jobs:
               raise SystemExit("historical package/lock devDependency mismatch")
           PY
 
-      - name: Install and build historical FrontEnd authority
+      - name: Install and probe historical FrontEnd build
         shell: bash
         run: |
           set -euo pipefail
           frontend="$RUNNER_TEMP/frontend-authority/Frontend/antigal.client"
+
           (
             cd "$frontend"
             npm ci
+          ) 2>&1 | tee b0-frontend-install.txt
+
+          set +e
+          (
+            cd "$frontend"
             CI=true npm run build
-          ) 2>&1 | tee b0-frontend-build.txt
+          ) > b0-frontend-build-strict.txt 2>&1
+          strict_code=$?
+
+          (
+            cd "$frontend"
+            CI=false npm run build
+          ) > b0-frontend-build-compatible.txt 2>&1
+          compatible_code=$?
+
+          (
+            cd "$frontend"
+            npm audit --json
+          ) > b0-frontend-audit.json 2>/dev/null
+          audit_code=$?
+          set -e
+
+          {
+            echo "frontend_strict_build_exit=$strict_code"
+            echo "frontend_compatible_build_exit=$compatible_code"
+            echo "frontend_audit_exit=$audit_code"
+          } | tee b0-frontend-build-status.txt
+
+          python3 - <<'PY' | tee b0-frontend-audit-summary.txt
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path("b0-frontend-audit.json").read_text())
+          vulnerabilities = data.get("metadata", {}).get("vulnerabilities", {})
+          for key in ("info", "low", "moderate", "high", "critical", "total"):
+              print(f"npm_audit_{key}={vulnerabilities.get(key, 0)}")
+          PY
 
       - name: Probe historical frontend tests
         shell: bash
@@ -150,13 +186,21 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          dotnet restore Backend/antigal.server.sln 2>&1 | tee b0-backend-restore.txt
+          set +e
+          dotnet restore Backend/antigal.server.sln > b0-backend-restore.txt 2>&1
+          code=$?
+          set -e
+          echo "backend_restore_exit=$code" | tee b0-backend-restore-status.txt
 
       - name: Build backend solution
         shell: bash
         run: |
           set -euo pipefail
-          dotnet build Backend/antigal.server.sln -c Release --no-restore 2>&1 | tee b0-backend-build.txt
+          set +e
+          dotnet build Backend/antigal.server.sln -c Release --no-restore > b0-backend-build.txt 2>&1
+          code=$?
+          set -e
+          echo "backend_build_exit=$code" | tee b0-backend-build-status.txt
 
       - name: Probe backend tests
         shell: bash
@@ -238,7 +282,11 @@ jobs:
             echo
             cat b0-current-frontend-authority.txt 2>/dev/null || true
             cat b0-frontend-authority.txt 2>/dev/null || true
+            cat b0-frontend-build-status.txt 2>/dev/null || true
+            cat b0-frontend-audit-summary.txt 2>/dev/null || true
             cat b0-frontend-test-status.txt 2>/dev/null || true
+            cat b0-backend-restore-status.txt 2>/dev/null || true
+            cat b0-backend-build-status.txt 2>/dev/null || true
             cat b0-backend-test-status.txt 2>/dev/null || true
             cat b0-source-inventory.txt 2>/dev/null || true
             cat b0-nuget-vulnerable-status.txt 2>/dev/null || true
