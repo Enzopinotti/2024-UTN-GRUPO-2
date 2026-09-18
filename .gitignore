@@ -1,3 +1,21 @@
+# Local environment files
 .env
+.env.*
+!.env.example
+
+# IDE / editor state
 .vs/
+.vscode/
+.idea/
+
+# Frontend generated dependencies/build output
 node_modules/
+build/
+dist/
+
+# .NET generated build output
+**/bin/
+**/obj/
+
+# OS noise
+.DS_Store

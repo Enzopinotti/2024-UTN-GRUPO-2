@@ -1,0 +1,29 @@
+name: Current-tree security baseline
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+      - modernize/2026-authorship-security-baseline
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  security-baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+
+      - name: Validate current-tree security boundary
+        run: python3 scripts/security_baseline.py
+
+      - name: Verify tracked tree remains clean
+        run: git diff --exit-code
