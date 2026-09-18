@@ -93,6 +93,12 @@ jobs:
         working-directory: Frontend/antigal.client
         run: npm ci
 
+      - name: Test frontend behavior
+        working-directory: Frontend/antigal.client
+        env:
+          CI: "true"
+        run: npm test -- --watchAll=false
+
       - name: Build frontend
         working-directory: Frontend/antigal.client
         run: npm run build
@@ -102,6 +108,9 @@ jobs:
 
       - name: Build backend
         run: dotnet build Backend/antigal.server.sln -c Release --no-restore
+
+      - name: Test backend behavior
+        run: dotnet test Backend/antigal.server.Tests/antigal.server.Tests.csproj -c Release --no-build
 
       - name: Validate current-tree security boundary
         run: python3 scripts/security_baseline.py
