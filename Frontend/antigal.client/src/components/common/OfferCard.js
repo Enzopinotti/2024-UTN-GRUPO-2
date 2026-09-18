@@ -7,13 +7,15 @@ const OfferCard = ({ producto, isDesktop, reverse }) => {
     idProducto, // Asegúrate de que el id del producto esté presente
     nombre,
     marca,
-    precioAnterior,
+    precio,
     precioOferta,
-    imagen,
-    estrellas,
-    totalReviews,
-    descripcion
+    imagenUrls,
+    descripcion,
+    estrellas = 0, // Valor por defecto si no se proporciona
+    totalReviews = 0 // Valor por defecto si no se proporciona
   } = producto;
+
+  const imagen = imagenUrls?.$values[0] || '';
 
   // Estado para manejar los likes
   const [likes, setLikes] = useState(0);
@@ -24,15 +26,9 @@ const OfferCard = ({ producto, isDesktop, reverse }) => {
   };
 
   return (
-<<<<<<< HEAD
-    <div className={`offerCard ${isDesktop ? (reverse ? 'row-reverse' : 'row') : ''}`}>
-      {/* Imagen del producto */}
-      <img src={imagen} alt={`Imagen de ${nombre}`} className="offerImage" />
-=======
     <Link to={`/products/${idProducto}`} className="offerCardLink">
       <div className={`offerCard ${isDesktop ? (reverse ? 'row-reverse' : 'row') : ''}`}>
         <img src={imagen} alt={`Imagen de ${nombre}`} className="offerImage" />
->>>>>>> FrontEnd
 
         {/* Detalles del producto */}
         <div className="offerDetails">
@@ -40,19 +36,11 @@ const OfferCard = ({ producto, isDesktop, reverse }) => {
           <p className="offerBrand">{marca}</p>
           <p className="offerDescription">{descripcion}</p>
 
-<<<<<<< HEAD
-        {/* Precios */}
-        <p className="offerPrice">
-          <span className="precioAnterior">${precioAnterior}</span>
-          <span className="precioOferta">${precioOferta}</span>
-        </p>
-=======
           {/* Precios */}
           <p className="offerPrice">
             <span className="precio">${precio}</span>
             <span className="precioOferta">${precioOferta}</span>
           </p>
->>>>>>> FrontEnd
 
           {/* Rating */}
           <div className="offerRating">
@@ -84,17 +72,14 @@ OfferCard.propTypes = {
     idProducto: PropTypes.number.isRequired, // ID necesario para el enlace
     nombre: PropTypes.string.isRequired,
     marca: PropTypes.string.isRequired,
-<<<<<<< HEAD
-    precioAnterior: PropTypes.number.isRequired,
-    precioOferta: PropTypes.number.isRequired,
-    imagen: PropTypes.string.isRequired,
-    estrellas: PropTypes.number.isRequired,
-    totalReviews: PropTypes.number.isRequired,
-=======
     precio: PropTypes.number.isRequired,
     precioOferta: PropTypes.number.isRequired, // Agregado para evitar problemas de validación
->>>>>>> FrontEnd
     descripcion: PropTypes.string.isRequired,
+    imagenUrls: PropTypes.shape({
+      $values: PropTypes.arrayOf(PropTypes.string).isRequired
+    }).isRequired,
+    estrellas: PropTypes.number, // Este campo puede ser opcional
+    totalReviews: PropTypes.number // Este campo puede ser opcional
   }).isRequired,
   isDesktop: PropTypes.bool.isRequired,
   reverse: PropTypes.bool.isRequired,

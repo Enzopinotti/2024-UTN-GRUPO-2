@@ -56,6 +56,11 @@ const Footer = () => {
               <a href="#">FAQ</a>
             </li>
             <li>
+              <NavLink to="/politica-de-privacidad" className="active">
+                Políticas de Privacidad
+              </NavLink>
+            </li>
+            <li>
               <NavLink to="/contact" className="active">
                 Contacto
               </NavLink>

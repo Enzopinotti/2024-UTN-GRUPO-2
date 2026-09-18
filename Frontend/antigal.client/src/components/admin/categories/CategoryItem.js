@@ -2,18 +2,18 @@
 import React, { useState, useEffect } from 'react';
 
 const CategoryItem = ({ category, onEdit, onDelete }) => {
-  const { idCategoria, nombre, descripcion, imagen } = category;
+  const { idCategoria, nombre, descripcion, imagenUrl } = category;
 
   const [imageError, setImageError] = useState(false);
   const [imageSrc, setImageSrc] = useState('');
 
   useEffect(() => {
-    if (imagen) {
-      setImageSrc(imagen);
+    if (imagenUrl) {
+      setImageSrc(imagenUrl);
     } else {
       setImageSrc('');
     }
-  }, [imagen]);
+  }, [imagenUrl]);
 
   const handleImageError = () => {
     setImageError(true);

@@ -1,18 +1,15 @@
+// src/styles/scss/index.scss
 
-
-@use './abstract/mixins';
+@use './abstract/mixins' as mixins;
+@use './abstract/variables' as variables;
 @use './base/resets';
-
-
 @use './layout/media-queries';
 
 @use './components/header';
 @use './components/footer';
 @use './components/home';
-@use './components/products//products';
+@use './components/products/products';
 @use './components/productDetail';
-<<<<<<< HEAD
-=======
 @use './components/sobreNosotros';
 @use './components/cart';
 @use './components/tiendaFisica';
@@ -22,7 +19,6 @@
 @use './components/resetearContrasenia';
 @use './components/notFound';
 @use './components/checkoutPage';
->>>>>>> FrontEnd
 
 @use './components/admin/categoryListContainer';
 @use './components/admin/categoryForm';
@@ -30,12 +26,6 @@
 @use './components/admin/adminNav';
 @use './components/admin/adminUsers';
 @use './components/admin/productForm';
-<<<<<<< HEAD
-@import './abstract/variables';
-
-*{
-  font-family: $font;
-=======
 @use './components/admin/messages';
 
 
@@ -56,9 +46,16 @@
 :root {
   @include mixins.apply-theme(light);
   
->>>>>>> FrontEnd
 }
 
+/* Aplicar el tema oscuro cuando el cuerpo tenga la clase `.dark-mode` */
+body.dark-mode {
+  @include mixins.apply-theme(dark);
+}
+body{
+  font-family: mixins.theme(font);
+  background-color: mixins.theme(background-color);
+}
 
 @keyframes likeAnimation {
     0% {
@@ -118,5 +115,4 @@
     -o-transform: scale(1);
 }
 }
-
 

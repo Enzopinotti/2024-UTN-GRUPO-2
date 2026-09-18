@@ -1,4 +1,10 @@
-@import '../../abstract/variables';
+
+@use "../../abstract/variables" as variables;
+@use '../../abstract/mixins' as mixins;
+
+
+
+
 .page-detail-container{
   min-height: 80vh;
   display: flex;
@@ -15,6 +21,47 @@
   }
   .cart-preview-container{
     display: none;
+  }
+  .mobile-filters{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    .filter-button{
+      background-color: transparent;
+      border: 0;
+      cursor: pointer;
+      img{
+        width: 2rem;
+
+      }
+    }
+    .breadcrumb{
+      p{
+        a{
+          color: mixins.theme(primary-black-color);
+          text-decoration: none;
+
+        }
+        span{
+          color: mixins.theme(primary-black-color);
+          text-decoration: none;
+          img{
+            width: 0.7rem;
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+            position: relative;
+            top: 0.3rem;
+          }
+        }
+        .active{
+          color: mixins.theme(secondary-color);
+          font-weight: 900;
+        }
+      }
+    }
   }
   .categories-dropdown {
     padding: 10px 2rem;
@@ -51,7 +98,7 @@
          
           border-radius: 4px;
           span{
-            color: $secondary-color !important;
+            color: mixins.theme(secondary-color) !important;
           }
         }
 
@@ -196,7 +243,7 @@
           }
       
           .precioOferta {
-            color: black;
+            color: mixins.theme(primary-black-color);
             font-weight: bold;
       
             &.onSale {
@@ -210,10 +257,10 @@
           font-size: 0.8rem !important;
           user-select: none;
           .cartButton{
-            background-color: $primary-color;
+            background-color: mixins.theme(primary-color);
             display: flex;
             padding: 0.5rem 1rem;
-            color: $primary-white-color;
+            color: mixins.theme(primary-white-color);
             border-radius: 0.45rem;
             -webkit-border-radius: 0.45rem;
             -moz-border-radius: 0.45rem;
@@ -221,15 +268,15 @@
             -o-border-radius: 0.45rem;
             img{
               width: 23px;
-              color: $primary-white-color !important;
+              color: mixins.theme(primary-white-color) !important;
               padding-left: 0.5rem;
             }
           }
           .cartDeleteButton{
             display: flex;
             padding: 0.5rem 1rem;
-            color: $secondary-color;
-            border: 2px solid $secondary-color;
+            color: mixins.theme(secondary-color);
+            border: 2px solid mixins.theme(secondary-color);
             border-radius: 0.45rem;
             -webkit-border-radius: 0.45rem;
             -moz-border-radius: 0.45rem;
@@ -237,7 +284,7 @@
             -o-border-radius: 0.45rem;
             img{
               width: 23px;
-              color: $primary-white-color !important;
+              color: mixins.theme(primary-white-color) !important;
               padding-left: 0.5rem;
             }
           }
@@ -250,11 +297,12 @@
   
   // Media Queries para ajustar la disposición de los productos según el tamaño de pantalla
   @media (min-width: 480px) { // Dos productos por fila en tabletas pequeñas
+    .products-page {
     .product-list {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
-    }
+    }}
   
     
   }
@@ -265,7 +313,6 @@
         padding-right: 3.3rem;
       }
       .product-list-container{
-       
         .product-list{
           padding-left: 2.6rem;
           padding-right: 2.6rem;
@@ -281,9 +328,10 @@
     margin-bottom: 1rem;
   }
   @media (min-width: 768px) { // Tres productos por fila en tabletas grandes
+    .products-page {
     .product-item {
       width: calc(50% - 20px); // Se ajusta para tres productos por fila
-    }
+    }}
   }
   
   @media (min-width: 1080px) { // Cuatro productos por fila en pantallas grandes
@@ -293,13 +341,36 @@
     }
     .asideYProductos{
       display: flex;
+      color: mixins.theme(primary-black-color);
       .categories-aside {
         display: block;
-        width: 20%; // Ajustamos el ancho del aside
+        width: 20%; 
         padding-left: 1.5rem;
         .breadcrumb{
           margin-bottom: 2rem;
           user-select: none;
+          p{
+            a{
+              color: mixins.theme(primary-black-color);
+              text-decoration: none;
+    
+            }
+            span{
+              color: mixins.theme(primary-black-color);
+              text-decoration: none;
+              img{
+                width: 0.7rem;
+                margin-left: 0.5rem;
+                margin-right: 0.5rem;
+                position: relative;
+                top: 0.3rem;
+              }
+            }
+            .active{
+              color: mixins.theme(secondary-color);
+              font-weight: 900;
+            }
+          }
           .imgBread{
             width: 0.54rem;
             margin-left: 0.5rem;
@@ -322,8 +393,8 @@
                 margin-top: 0.7rem;
                 cursor: pointer;
                 &.active{
-                  color: $secondary-color;
-                  text-shadow: $secondary-color 1px 1px 2px;
+                  color: mixins.theme(secondary-color);
+                  text-shadow: mixins.theme(secondary-color) 1px 1px 2px;
                 }
               }
               
@@ -403,22 +474,21 @@
         height: auto;
         position: sticky;
         .cart-preview {
-          font-family: $font;
           padding: 20px;
-          background-color: $primary-white-color;
+          background-color: theme(primary-white-color);
           border-radius: 8px;
           max-width: 400px;
-          box-shadow: 0 4px 12px rgba($shadow-green-color, 0.2);
+          box-shadow: 0 4px 12px rgba(mixins.theme(shadow-color), 0.2);
         
           h2.cart-title {
             font-size: 1.5em;
             margin-bottom: 20px;
             font-weight: 700;
-            color: $primary-black-color;
+            color: theme(primary-black-color);
           }
         
           .empty-cart-message {
-            color: $primary-black-color;
+            color: theme(primary-black-color);
             font-weight: 400;
           }
         
@@ -432,7 +502,7 @@
               flex-direction: column;
               margin-bottom: 15px;
               padding-bottom: 10px;
-              border-bottom: 1px solid $primary-black-color;
+              border-bottom: 1px solid theme(primary-black-color);
         
               /* Detalles del producto */
               .cart-item-details {
@@ -454,13 +524,13 @@
                   .cart-item-name {
                     font-size: 1em;
                     font-weight: 500;
-                    color: $primary-black-color;
+                    color: theme(primary-black-color);
                   }
         
                   .cart-item-price {
                     font-size: 0.9em;
                     font-weight: bold;
-                    color: $primary-color;
+                    color: theme(primary-color);
                   }
                 }
               }
@@ -477,8 +547,8 @@
                   align-items: center;
         
                   .quantity-button {
-                    background-color: $primary-color;
-                    color: $primary-white-color;
+                    background-color: theme(primary-color);
+                    color: theme(primary-white-color);
                     border: none;
                     padding: 5px 10px;
                     cursor: pointer;
@@ -495,14 +565,14 @@
                   .quantity-value {
                     font-size: 1em;
                     font-weight: 500;
-                    color: $primary-black-color;
+                    color: theme(primary-black-color);
                   }
                 }
         
                 .remove-button {
                   background-color: transparent;
-                  color: $secondary-color;
-                  border: solid $secondary-color;
+                  color: theme(secondary-color);
+                  border: solid theme(secondary-color);
                   padding: 5px 10px;
                   cursor: pointer;
                   font-size: 0.9em;
@@ -514,7 +584,8 @@
                   -ms-border-radius: 10px;
                   -o-border-radius: 10px;
                   &:hover {
-                    color: darken($secondary-color, 10%);
+                    color: theme(secondary-color);
+                   
                   }
                 }
               }
@@ -530,13 +601,13 @@
               font-size: 1em;
               font-weight: 500;
               margin-bottom: 5px;
-              color: $primary-black-color;
+              color: theme(primary-black-color);
             }
         
             .cart-total {
               font-size: 1.3em;
               font-weight: bold;
-              color: $primary-color;
+              color: theme(primary-color);
             }
           }
         }
