@@ -1,0 +1,150 @@
+name: Quality
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+      - modernize/2026-authorship-security-baseline
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: "false"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Setup Node 24.20.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24.20.0"
+          cache: npm
+          cache-dependency-path: Frontend/antigal.client/package-lock.json
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Verify frontend runtime contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(node --version)" = "v24.20.0"
+          test "$(npm --version)" = "11.19.0"
+          test "$(cat .nvmrc)" = "24.20.0"
+          echo "node=$(node --version)"
+          echo "npm=$(npm --version)"
+          dotnet --version
+
+      - name: Verify integrated source authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          base = Path("Frontend/antigal.client")
+          package = json.loads((base / "package.json").read_text(encoding="utf-8-sig"))
+          lock = json.loads((base / "package-lock.json").read_text(encoding="utf-8-sig"))
+          root = lock["packages"][""]
+
+          assert package.get("dependencies", {}) == root.get("dependencies", {})
+          assert package.get("devDependencies", {}) == root.get("devDependencies", {})
+
+          required = [
+              base / "src/pages/Home.js",
+              base / "src/contexts/CartContext.js",
+              Path("Backend/antigal.server/Models/Dto/ResponseDto.cs"),
+              Path("Backend/antigal.server/Relationships/ProductoCategoria.cs"),
+              Path("Backend/antigal.server/Services/IImageService.cs"),
+          ]
+          missing = [str(path) for path in required if not path.is_file()]
+          if missing:
+              raise SystemExit(f"missing reconstructed source authority: {missing}")
+
+          print("integrated-source-authority=present")
+          print("frontend-manifest-lock-root=matched")
+          PY
+
+      - name: Reject unresolved merge markers in source authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git grep -n -E '^(<<<<<<<|=======|>>>>>>>)' --             Frontend/antigal.client             Backend/antigal.server; then
+            echo "Unresolved merge markers found in maintained source." >&2
+            exit 1
+          fi
+
+      - name: Install frontend exactly
+        working-directory: Frontend/antigal.client
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: Frontend/antigal.client
+        run: npm run build
+
+      - name: Restore backend
+        run: dotnet restore Backend/antigal.server.sln
+
+      - name: Build backend
+        run: dotnet build Backend/antigal.server.sln -c Release --no-restore
+
+      - name: Validate current-tree security boundary
+        run: python3 scripts/security_baseline.py
+
+      - name: Capture known dependency advisory baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          (
+            cd Frontend/antigal.client
+            npm audit --json > "$GITHUB_WORKSPACE/frontend-audit.json" || true
+          )
+          dotnet list Backend/antigal.server/antigal.server.csproj             package --vulnerable --include-transitive > backend-vulnerable.txt
+
+          python3 - <<'PY' | tee quality-summary.txt
+          import json
+          from pathlib import Path
+
+          audit = json.loads(Path("frontend-audit.json").read_text())
+          vulns = audit.get("metadata", {}).get("vulnerabilities", {})
+          print("frontend_audit_total=" + str(vulns.get("total", 0)))
+          print("frontend_audit_high=" + str(vulns.get("high", 0)))
+          print("frontend_audit_critical=" + str(vulns.get("critical", 0)))
+
+          backend = Path("backend-vulnerable.txt").read_text()
+          print("backend_vulnerability_report_present=" + str("vulnerable packages" in backend).lower())
+          print("B1 quality contract passed.")
+          PY
+
+      - name: Verify repository remains clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
+
+      - name: Upload quality evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: quality-${{ github.sha }}
+          retention-days: 30
+          if-no-files-found: error
+          path: |
+            quality-summary.txt
+            frontend-audit.json
+            backend-vulnerable.txt
