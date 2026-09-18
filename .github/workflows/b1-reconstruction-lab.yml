@@ -1,5 +1,7 @@
 name: B1 reconstruction lab
 
+# Exact-head validation after npm 11 lock normalization.
+
 on:
   push:
     branches:
