@@ -65,18 +65,6 @@ jobs:
       - name: Test .NET 10 behavior
         run: dotnet test Backend/antigal.server.Tests/antigal.server.Tests.csproj -c Release --no-build
 
-      - name: Audit backend dependencies
-        shell: bash
-        run: |
-          set -euo pipefail
-          dotnet list Backend/antigal.server/antigal.server.csproj package --vulnerable --include-transitive | tee b3-vulnerable.txt
-          dotnet list Backend/antigal.server/antigal.server.csproj package --outdated | tee b3-outdated.txt || true
-          if grep -q "has the following vulnerable packages" b3-vulnerable.txt; then
-            echo "backend_vulnerabilities_remaining=true"
-          else
-            echo "backend_vulnerabilities_remaining=false"
-          fi
-
       - name: Validate security boundary
         run: python3 scripts/security_baseline.py
 
@@ -84,3 +72,23 @@ jobs:
         run: |
           git diff --exit-code
           test -z "$(git status --porcelain)"
+
+      - name: Audit full .NET solution
+        shell: bash
+        run: |
+          set -euo pipefail
+          report="$RUNNER_TEMP/b3-solution-vulnerable.txt"
+          dotnet list Backend/antigal.server.sln package --vulnerable --include-transitive | tee "$report"
+
+          if grep -q "has the following vulnerable packages" "$report"; then
+            echo "solution_vulnerabilities_remaining=true"
+            exit 1
+          fi
+
+          echo "solution_vulnerabilities_remaining=false"
+
+      - name: Capture direct outdated packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet list Backend/antigal.server/antigal.server.csproj package --outdated || true
