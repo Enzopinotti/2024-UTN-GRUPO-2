@@ -42,6 +42,7 @@ jobs:
           grep -q 'Microsoft.EntityFrameworkCore" Version="8.0.31"' Backend/antigal.server/antigal.server.csproj
           grep -q 'NPOI" Version="2.7.6"' Backend/antigal.server/antigal.server.csproj
           grep -q 'SixLabors.ImageSharp" Version="2.1.13"' Backend/antigal.server/antigal.server.csproj
+          grep -q 'System.Security.Cryptography.Xml" Version="8.0.4"' Backend/antigal.server/antigal.server.csproj
           for pkg in dotenv.net FluentEmail.Core FluentEmail.SendGrid Microsoft.AspNetCore.Authentication.OpenIdConnect Microsoft.AspNetCore.Identity Microsoft.AspNetCore.OpenApi Microsoft.Extensions.Logging Microsoft.VisualStudio.Web.CodeGeneration.Design SendGrid AutoMapper; do
             if grep -q "Include=\"$pkg\"" Backend/antigal.server/antigal.server.csproj; then
               echo "unused/removed package reintroduced: $pkg" >&2
