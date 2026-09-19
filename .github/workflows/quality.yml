@@ -66,20 +66,44 @@ jobs:
           assert package.get("devDependencies", {}) == root.get("devDependencies", {})
 
           frontend_tooling = {
-              "@rollup/plugin-terser",
-              "@svgr/webpack",
               "@testing-library/jest-dom",
               "@testing-library/react",
               "@testing-library/user-event",
-              "css-minimizer-webpack-plugin",
+              "@vitejs/plugin-react",
+              "concurrently",
+              "jsdom",
               "json-server",
-              "react-scripts",
               "sass",
+              "vite",
+              "vitest",
+          }
+          removed_cra_tooling = {
+              "@babel/plugin-proposal-private-property-in-object",
+              "@eslint/object-schema",
+              "@rollup/plugin-terser",
+              "@svgr/webpack",
+              "css-minimizer-webpack-plugin",
+              "eslint-config-react-app",
+              "html-webpack-plugin",
+              "react-scripts",
+              "webpack-dev-server",
           }
           dependencies = set(package.get("dependencies", {}))
           dev_dependencies = set(package.get("devDependencies", {}))
           assert not frontend_tooling & dependencies
           assert frontend_tooling <= dev_dependencies
+          assert not removed_cra_tooling & dependencies
+          assert not removed_cra_tooling & dev_dependencies
+
+          scripts = package.get("scripts", {})
+          assert scripts.get("start") == "vite"
+          assert scripts.get("build") == "vite build"
+          assert scripts.get("test") == "vitest run"
+          assert "eject" not in scripts
+
+          assert (base / "vite.config.mjs").is_file()
+          assert (base / "index.html").is_file()
+          assert not (base / "public/index.html").exists()
 
           required = [
               base / "src/pages/Home.js",
@@ -94,6 +118,8 @@ jobs:
 
           print("integrated-source-authority=present")
           print("frontend-manifest-lock-root=matched")
+          print("frontend-vite-vitest-authority=present")
+          print("frontend-cra-authority=absent")
 
           server_project = Path("Backend/antigal.server/antigal.server.csproj").read_text(encoding="utf-8-sig")
           email_project = Path("Backend/EmailService/EmailService.csproj").read_text(encoding="utf-8-sig")
@@ -161,7 +187,7 @@ jobs:
         working-directory: Frontend/antigal.client
         env:
           CI: "true"
-        run: npm test -- --watchAll=false
+        run: npm test
 
       - name: Build frontend
         working-directory: Frontend/antigal.client
@@ -230,7 +256,7 @@ jobs:
           if not solution_clean:
               raise SystemExit("NuGet solution vulnerability audit is no longer clean")
 
-          print("B4a dependency-security contract passed.")
+          print("B5a toolchain and B4a dependency-security contracts passed.")
           PY
 
       - name: Upload quality evidence
