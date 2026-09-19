@@ -55,6 +55,10 @@ for path in tracked:
         not path.endswith(".csproj.user"),
         f"tracked Visual Studio user project state: {path}",
     )
+    expect(
+        not path.endswith(".pubxml.user"),
+        f"tracked Visual Studio publish user state: {path}",
+    )
 
 if failures:
     print("Current-tree security baseline failed:", file=sys.stderr)

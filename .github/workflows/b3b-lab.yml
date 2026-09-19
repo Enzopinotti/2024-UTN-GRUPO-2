@@ -38,7 +38,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ! git grep -n -E 'AutoMapper|IMapper|MappingProfile|AddAutoMapper' -- Backend/antigal.server Backend/antigal.server.Tests
+          if git grep -n -E 'AutoMapper|IMapper|MappingProfile|AddAutoMapper' -- Backend/antigal.server Backend/antigal.server.Tests; then
+            echo "AutoMapper reference remains in maintained backend source." >&2
+            exit 1
+          fi
           test ! -f Backend/antigal.server/Mapping/MappingProfile.cs
           test -f Backend/antigal.server/Mapping/UserRegistrationMapper.cs
 

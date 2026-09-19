@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using CloudinaryDotNet;
+using antigal.server.Mapping;
 using antigal.server.JwtFeatures;
 using EmailService;
 using MercadoPago.Config;
