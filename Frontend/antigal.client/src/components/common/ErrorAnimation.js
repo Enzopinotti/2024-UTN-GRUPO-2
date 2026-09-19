@@ -1,6 +1,4 @@
 // src/components/common/ErrorAnimation.js
-import React from 'react';
-
 const ErrorAnimation = () => {
   return (
     <div className="error-animation">

@@ -1,5 +1,4 @@
 // src/components/admin/categories/CategoryList.js
-import React from 'react';
 import CategoryItem from './CategoryItem';
 
 const CategoryList = ({ categories, onEdit, onDelete }) => {

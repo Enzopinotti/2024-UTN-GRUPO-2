@@ -1,5 +1,4 @@
 // src/components/Home/IconoSeccion.js
-import React from 'react';
 import PropTypes from 'prop-types';
 
 // Función para limpiar el título y generar una clase CSS válida

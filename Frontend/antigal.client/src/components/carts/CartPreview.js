@@ -1,5 +1,5 @@
 // src/components/cart/CartPreview.js
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { CartContext } from '../../contexts/CartContext'; // Importamos el contexto
 
 const CartPreview = () => {

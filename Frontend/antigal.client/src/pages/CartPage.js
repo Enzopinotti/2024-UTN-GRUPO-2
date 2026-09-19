@@ -1,5 +1,5 @@
 // src/pages/CartPage.js
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { CartContext } from '../contexts/CartContext';
 import CartItem from '../components/carts/CartItem';
 import OrderSummary from '../components/carts/OrderSummary';

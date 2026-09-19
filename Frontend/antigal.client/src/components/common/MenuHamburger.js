@@ -1,6 +1,4 @@
 // src/components/common/MenuHamburger.js
-import React from 'react';
-
 const MenuHamburger = ({ onClick }) => {
   return (
     <div onClick={onClick}> 

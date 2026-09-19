@@ -1,18 +1,7 @@
-import React,{useState} from "react";
+import {useState} from "react";
 import { NavLink } from "react-router-dom";
-import Swal from "sweetalert2";
 const UserSidebar = ({user}) => {
-  const showDevelopmentAlert = (event) => {
-    event.preventDefault();
-    Swal.fire({
-      title: "Funcionalidad en Desarrollo",
-      text: "Esta funcionalidad estará disponible pronto.",
-      icon: "info",
-      confirmButtonText: "Cerrar",
-    });
-  };
-  
-  const [isOpen, setIsOpen] = useState(false);
+const [isOpen, setIsOpen] = useState(false);
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };

@@ -1,5 +1,5 @@
 // src/components/common/SearchBarMobile.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import LupaWidget from "./LupaWidget";
 import { toast } from "react-toastify"; // Importar react-toastify para notificaciones
 
@@ -8,7 +8,7 @@ const SearchBarMobile = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]); // Estado para resultados
   const [loading, setLoading] = useState(false); // Estado para carga
-  const [error, setError] = useState(""); // Estado para errores
+  const [, setError] = useState(""); // Estado para errores
 
   const items = [
     "Alfajor Vegano",

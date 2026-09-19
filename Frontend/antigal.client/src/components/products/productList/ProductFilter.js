@@ -1,5 +1,5 @@
 // ProductFilter.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const ProductFilter = ({ onFilterChange }) => {
   const [selectedFilter, setSelectedFilter] = useState('recientes'); // Predeterminado en "recientes"

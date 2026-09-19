@@ -1,5 +1,5 @@
 // src/components/admin/products/AdminProductItem.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const AdminProductItem = ({ product, onEdit, onDelete }) => {
   const {
@@ -15,7 +15,7 @@ const AdminProductItem = ({ product, onEdit, onDelete }) => {
   } = product;
 
   const [imageError, setImageError] = useState(false);
-  const [imageSrc, setImageSrc] = useState('');
+  const [, setImageSrc] = useState('');
 
 
   useEffect(() => {

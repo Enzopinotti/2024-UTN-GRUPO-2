@@ -1,4 +1,3 @@
-import React from "react";
 import ErrorAnimation from "./common/ErrorAnimation";
 import { Link } from "react-router-dom";
 

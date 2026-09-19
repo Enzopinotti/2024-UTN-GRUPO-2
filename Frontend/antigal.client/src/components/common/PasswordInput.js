@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const PasswordInput = ({ register, errors }) => {
   const [showPassword, setShowPassword] = useState(false);

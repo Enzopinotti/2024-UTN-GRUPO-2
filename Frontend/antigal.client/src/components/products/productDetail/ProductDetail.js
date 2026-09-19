@@ -1,4 +1,3 @@
-import React from "react";
 import ProductInfo from './ProductInfo';
 import ProductStockControl from "./ProductStockControl";
 import ProductMoreInfo from "./ProductMoreInfo";

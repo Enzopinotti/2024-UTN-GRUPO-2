@@ -1,5 +1,4 @@
 // src/components/admin/AdminNav.js
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 const AdminNav = () => {

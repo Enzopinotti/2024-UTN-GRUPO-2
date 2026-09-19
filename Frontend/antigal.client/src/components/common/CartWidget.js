@@ -1,5 +1,5 @@
 // src/components/common/CartWidget.js
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { CartContext } from '../../contexts/CartContext';  // Importar el contexto del carrito
 import { useNavigate } from 'react-router-dom'; // Importar el hook useNavigate
 

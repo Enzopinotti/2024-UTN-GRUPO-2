@@ -1,5 +1,5 @@
 // src/pages/Profile.js
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import UserDetail from "../../components/users/UserDetail";
 import Swal from "sweetalert2";
 import ProfilePictureModal from "../../components/users/ProfilePictureModal";
