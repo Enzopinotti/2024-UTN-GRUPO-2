@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - modernize/2026-authorship-security-baseline
+      - modernize/b6-eslint-lab
   workflow_dispatch:
 
 permissions:
@@ -66,11 +67,15 @@ jobs:
           assert package.get("devDependencies", {}) == root.get("devDependencies", {})
 
           frontend_tooling = {
+              "@eslint/js",
               "@testing-library/jest-dom",
               "@testing-library/react",
               "@testing-library/user-event",
               "@vitejs/plugin-react",
               "concurrently",
+              "eslint",
+              "eslint-plugin-react-hooks",
+              "globals",
               "jsdom",
               "json-server",
               "sass",
@@ -99,11 +104,13 @@ jobs:
           assert scripts.get("start") == "vite"
           assert scripts.get("build") == "vite build"
           assert scripts.get("test") == "vitest run"
+          assert scripts.get("lint") == "eslint src"
           assert "eject" not in scripts
           assert package.get("dependencies", {}).get("prop-types") == "15.8.1"
           assert package.get("dependencies", {}).get("react-router-dom") == "7.18.4"
 
           assert (base / "vite.config.mjs").is_file()
+          assert (base / "eslint.config.mjs").is_file()
           assert (base / "index.html").is_file()
           assert not (base / "public/index.html").exists()
 
@@ -122,6 +129,7 @@ jobs:
           print("frontend-manifest-lock-root=matched")
           print("frontend-vite-vitest-authority=present")
           print("frontend-cra-authority=absent")
+          print("frontend-eslint-authority=present")
 
           server_project = Path("Backend/antigal.server/antigal.server.csproj").read_text(encoding="utf-8-sig")
           email_project = Path("Backend/EmailService/EmailService.csproj").read_text(encoding="utf-8-sig")
@@ -187,6 +195,10 @@ jobs:
 
       - name: Validate direct production dependency authority
         run: node scripts/frontend_dependency_authority.mjs
+
+      - name: Lint frontend
+        working-directory: Frontend/antigal.client
+        run: npm run lint -- --max-warnings 115
 
       - name: Test frontend behavior
         working-directory: Frontend/antigal.client
@@ -265,7 +277,7 @@ jobs:
           if not solution_clean:
               raise SystemExit("NuGet solution vulnerability audit is no longer clean")
 
-          print("B5b Router 7 and zero-advisory dependency-security contracts passed.")
+          print("B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
           PY
 
       - name: Upload quality evidence
