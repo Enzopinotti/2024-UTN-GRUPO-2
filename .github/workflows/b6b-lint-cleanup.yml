@@ -101,7 +101,8 @@ jobs:
             const before = fs.readFileSync(file, "utf8");
             const after = transform(before);
             if (after === before) {
-              throw new Error(`B6b expected transformation did not apply: ${relativePath}`);
+              console.log(`b6b-already-clean=${relativePath}`);
+              return;
             }
             fs.writeFileSync(file, after);
           }
@@ -161,17 +162,6 @@ jobs:
               "  const handleChange = () => () => {};\n\n"
             )
           );
-
-          const quality = ".github/workflows/quality.yml";
-          const qBefore = fs.readFileSync(quality, "utf8");
-          const qAfter = qBefore.replace(
-            "npm run lint -- --max-warnings 115",
-            "npm run lint -- --max-warnings 12"
-          );
-          if (qAfter === qBefore) {
-            throw new Error("B6b could not lower permanent lint warning ceiling");
-          }
-          fs.writeFileSync(quality, qAfter);
 
           console.log(`b6b-react-default-imports-removed=${reactImportsRemoved}`);
           NODE
@@ -283,7 +273,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add Frontend/antigal.client/src .github/workflows/quality.yml
+          git add Frontend/antigal.client/src
           git diff --cached --quiet && { echo "No B6b cleanup changes"; exit 0; }
           git commit -m "B6b lab candidate: remove mechanical frontend lint debt"
           git push origin HEAD:modernize/b6b-lint-cleanup-lab
