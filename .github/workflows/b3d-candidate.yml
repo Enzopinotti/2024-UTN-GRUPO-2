@@ -1,0 +1,155 @@
+name: B3d frontend security candidate lab
+
+on:
+  push:
+    branches:
+      - modernize/b3d-frontend-security-lab
+    paths:
+      - Frontend/antigal.client/package.json
+      - .github/workflows/b3d-candidate.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: "false"
+
+    steps:
+      - name: Checkout exact lab commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node 24.20.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24.20.0"
+
+      - name: Regenerate lockfile for candidate
+        working-directory: Frontend/antigal.client
+        run: npm install --package-lock-only --ignore-scripts
+
+      - name: Validate candidate manifest boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          base = Path("Frontend/antigal.client")
+          package = json.loads((base / "package.json").read_text())
+          lock = json.loads((base / "package-lock.json").read_text())
+          root = lock["packages"][""]
+
+          assert package["dependencies"] == root["dependencies"]
+          assert package["devDependencies"] == root["devDependencies"]
+
+          expected = {
+              "dompurify": "^3.4.15",
+              "react-router-dom": "^6.30.6",
+              "sweetalert2": "^11.26.25",
+          }
+          for name, version in expected.items():
+              assert package["dependencies"].get(name) == version
+
+          forbidden = {
+              "@rollup/plugin-terser",
+              "css-minimizer-webpack-plugin",
+              "webpack-dev-server",
+          }
+          all_direct = set(package["dependencies"]) | set(package["devDependencies"])
+          assert not (forbidden & all_direct), forbidden & all_direct
+
+          print("b3d-direct-security-boundary=valid")
+          PY
+
+      - name: Materialize candidate lock on lab branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- Frontend/antigal.client/package-lock.json; then
+            echo "candidate-lock-already-materialized=true"
+          else
+            git config user.name "Enzo Pinotti"
+            git config user.email "enzopinottii@gmail.com"
+            git add Frontend/antigal.client/package-lock.json
+            git commit -m "B3d lab: materialize patched frontend lockfile"
+            git push origin HEAD:modernize/b3d-frontend-security-lab
+          fi
+
+      - name: Install candidate exactly
+        working-directory: Frontend/antigal.client
+        run: npm ci
+
+      - name: Test frontend behavior
+        working-directory: Frontend/antigal.client
+        env:
+          CI: "true"
+        run: npm test -- --watchAll=false
+
+      - name: Build frontend
+        working-directory: Frontend/antigal.client
+        run: npm run build
+
+      - name: Audit candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd Frontend/antigal.client
+          npm audit --json > "$GITHUB_WORKSPACE/b3d-candidate-audit.json" || true
+          cd "$GITHUB_WORKSPACE"
+
+          python3 - <<'PY' | tee b3d-candidate-summary.txt
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path("b3d-candidate-audit.json").read_text())
+          metadata = data.get("metadata", {}).get("vulnerabilities", {})
+          vulns = data.get("vulnerabilities", {})
+
+          for key in ("info", "low", "moderate", "high", "critical", "total"):
+              print(f"npm_audit_{key}={metadata.get(key, 0)}")
+
+          print("direct_vulnerabilities:")
+          direct = {}
+          for name, item in sorted(vulns.items()):
+              if item.get("isDirect"):
+                  direct[name] = item.get("severity")
+                  print(f"- {name}: {item.get('severity')}")
+          print("direct_vulnerability_count=" + str(len(direct)))
+
+          forbidden_direct = {
+              "dompurify",
+              "react-router-dom",
+              "sweetalert2",
+              "@rollup/plugin-terser",
+              "css-minimizer-webpack-plugin",
+              "webpack-dev-server",
+          }
+          remaining = forbidden_direct & set(direct)
+          if remaining:
+              raise SystemExit(f"targeted direct vulnerabilities remain: {sorted(remaining)}")
+          PY
+
+      - name: Verify tracked source changes are expected
+        shell: bash
+        run: |
+          set -euo pipefail
+          changed="$(git status --porcelain --untracked-files=no)"
+          test -z "$changed"
+
+      - name: Upload B3d candidate evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b3d-candidate-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            b3d-candidate-audit.json
+            b3d-candidate-summary.txt
