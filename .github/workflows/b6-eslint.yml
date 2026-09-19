@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: b6-eslint-lab
@@ -15,6 +15,7 @@ concurrency:
 
 jobs:
   characterize:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -38,20 +39,23 @@ jobs:
         with:
           dotnet-version: "8.0.x"
 
-      - name: Install maintained frontend exactly
-        working-directory: Frontend/antigal.client
-        run: npm ci
-
-      - name: Install transient ESLint probe toolchain
+      - name: Synthesize ESLint lockfile candidate
         working-directory: Frontend/antigal.client
         shell: bash
         run: |
           set -euo pipefail
-          npm install --no-save --package-lock=false \
-            eslint@latest \
-            @eslint/js@latest \
-            globals@latest \
-            eslint-plugin-react-hooks@latest
+          npm install --package-lock-only
+          npm audit fix --package-lock-only || true
+
+      - name: Install exact B6a candidate
+        working-directory: Frontend/antigal.client
+        run: npm ci
+
+      - name: Print maintained ESLint toolchain
+        working-directory: Frontend/antigal.client
+        shell: bash
+        run: |
+          set -euo pipefail
           npm ls eslint @eslint/js globals eslint-plugin-react-hooks | tee "$GITHUB_WORKSPACE/b6-eslint-toolchain.txt"
 
       - name: Characterize frontend static-analysis debt
@@ -116,6 +120,15 @@ jobs:
           if (fatals !== 0) {
             throw new Error(`ESLint configuration has ${fatals} fatal parser/configuration errors`);
           }
+          if (errors !== 0) {
+            throw new Error(`ESLint candidate still has ${errors} blocking errors`);
+          }
+          if (warnings > 115) {
+            throw new Error(`ESLint warning baseline regressed above 115: ${warnings}`);
+          }
+
+          console.log("b6a_eslint_error_boundary=clean");
+          console.log("b6a_eslint_warning_boundary=accepted");
           NODE
 
       - name: Test frontend behavior
@@ -163,6 +176,17 @@ jobs:
               raise SystemExit("NuGet solution vulnerability audit regressed")
           print("nuget_solution_vulnerability_report_clean=true")
           PY
+
+      - name: Commit validated ESLint package authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Frontend/antigal.client/package.json Frontend/antigal.client/package-lock.json
+          git diff --cached --quiet && { echo "No package authority changes"; exit 0; }
+          git commit -m "B6a lab candidate: ESLint package authority"
+          git push origin HEAD:modernize/b6-eslint-lab
 
       - name: Upload B6a evidence
         if: always()
