@@ -78,6 +78,19 @@ jobs:
 
           print("integrated-source-authority=present")
           print("frontend-manifest-lock-root=matched")
+
+          server_project = Path("Backend/antigal.server/antigal.server.csproj").read_text(encoding="utf-8-sig")
+          email_project = Path("Backend/EmailService/EmailService.csproj").read_text(encoding="utf-8-sig")
+
+          assert 'Include="NETCore.MailKit"' not in server_project
+          assert 'Include="NETCore.MailKit"' not in email_project
+          assert 'Include="MailKit" Version="4.18.0"' in email_project
+          assert 'Include="MimeKit" Version="4.18.0"' in email_project
+          assert 'Include="MailKit"' not in server_project
+          assert 'Include="MimeKit"' not in server_project
+          assert 'Include="Microsoft.AspNetCore.Identity"' not in email_project
+          assert 'Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"' not in email_project
+          print("mail-dependency-boundary=clean")
           PY
 
       - name: Reject unresolved merge markers in source authority
@@ -131,6 +144,7 @@ jobs:
             npm audit --json > "$GITHUB_WORKSPACE/frontend-audit.json" || true
           )
           dotnet list Backend/antigal.server/antigal.server.csproj             package --vulnerable --include-transitive > backend-vulnerable.txt
+          dotnet list Backend/EmailService/EmailService.csproj             package --vulnerable --include-transitive > emailservice-vulnerable.txt
 
           python3 - <<'PY' | tee quality-summary.txt
           import json
@@ -143,8 +157,22 @@ jobs:
           print("frontend_audit_critical=" + str(vulns.get("critical", 0)))
 
           backend = Path("backend-vulnerable.txt").read_text()
+          email = Path("emailservice-vulnerable.txt").read_text()
           print("backend_vulnerability_report_present=" + str("vulnerable packages" in backend).lower())
-          print("B1 quality contract passed.")
+          email_clean = "has no vulnerable packages" in email
+          print("emailservice_vulnerability_report_clean=" + str(email_clean).lower())
+          if not email_clean:
+              raise SystemExit("EmailService dependency audit is no longer clean")
+
+          forbidden_mail_advisories = (
+              "GHSA-9j88-vvj5-vhgr",
+              "GHSA-g7hc-96xr-gvvx",
+          )
+          for advisory in forbidden_mail_advisories:
+              if advisory in backend or advisory in email:
+                  raise SystemExit(f"patched mail advisory reintroduced: {advisory}")
+
+          print("B3a mail dependency contract passed.")
           PY
 
       - name: Upload quality evidence
@@ -157,3 +185,4 @@ jobs:
             quality-summary.txt
             frontend-audit.json
             backend-vulnerable.txt
+            emailservice-vulnerable.txt
