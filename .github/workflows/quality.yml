@@ -101,6 +101,7 @@ jobs:
           assert scripts.get("test") == "vitest run"
           assert "eject" not in scripts
           assert package.get("dependencies", {}).get("prop-types") == "15.8.1"
+          assert package.get("dependencies", {}).get("react-router-dom") == "7.18.4"
 
           assert (base / "vite.config.mjs").is_file()
           assert (base / "index.html").is_file()
@@ -246,11 +247,15 @@ jobs:
           print("frontend_production_audit_high=" + str(production_high))
           print("frontend_production_audit_critical=" + str(production_critical))
 
-          if production_high != 0 or production_critical != 0:
-              raise SystemExit("frontend production dependency graph regained high/critical advisories")
-          if production_total > 2:
+          full_total = vulns.get("total", 0)
+          if full_total != 0:
               raise SystemExit(
-                  "frontend production advisory count regressed above validated B4a boundary: "
+                  "frontend dependency graph is no longer clean: "
+                  + str(full_total)
+              )
+          if production_total != 0:
+              raise SystemExit(
+                  "frontend production dependency graph is no longer clean: "
                   + str(production_total)
               )
 
@@ -260,7 +265,7 @@ jobs:
           if not solution_clean:
               raise SystemExit("NuGet solution vulnerability audit is no longer clean")
 
-          print("B5a toolchain and B4a dependency-security contracts passed.")
+          print("B5b Router 7 and zero-advisory dependency-security contracts passed.")
           PY
 
       - name: Upload quality evidence
