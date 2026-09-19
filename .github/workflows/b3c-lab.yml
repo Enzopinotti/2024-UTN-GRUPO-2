@@ -73,6 +73,16 @@ jobs:
       - name: Test backend behavior
         run: dotnet test Backend/antigal.server.Tests/antigal.server.Tests.csproj -c Release --no-build
 
+      - name: Validate current-tree security boundary
+        run: python3 scripts/security_baseline.py
+
+      - name: Verify source tree remains clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
+
       - name: Audit complete solution
         shell: bash
         run: |
@@ -89,32 +99,6 @@ jobs:
         shell: bash
         run: |
           dotnet list Backend/antigal.server/antigal.server.csproj package --outdated > b3c-outdated.txt 2>&1 || true
-
-      - name: Validate current-tree security boundary
-        run: python3 scripts/security_baseline.py
-
-      - name: Verify source tree remains clean
-        shell: bash
-        run: |
-          set -euo pipefail
-          git diff --exit-code
-          unexpected="$(
-            git status --porcelain |
-              grep -v -E '^\?\? b3c-(summary|solution-vulnerable|outdated)\.txt
-      - name: Upload B3c evidence
-        if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: b3c-net8-${{ github.sha }}
-          retention-days: 14
-          if-no-files-found: warn
-          path: |
-            b3c-summary.txt
-            b3c-solution-vulnerable.txt
-            b3c-outdated.txt
- || true
-          )"
-          test -z "$unexpected"
 
       - name: Upload B3c evidence
         if: always()
