@@ -1,0 +1,119 @@
+name: B4 candidate verification
+
+on:
+  push:
+    branches:
+      - modernize/b4-frontend-security-lab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: "false"
+
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Setup Node 24.20.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24.20.0"
+          cache: npm
+          cache-dependency-path: Frontend/antigal.client/package-lock.json
+
+      - name: Install candidate
+        working-directory: Frontend/antigal.client
+        run: npm ci
+
+      - name: Test candidate
+        working-directory: Frontend/antigal.client
+        env:
+          CI: "true"
+        run: npm test -- --watchAll=false
+
+      - name: Build candidate
+        working-directory: Frontend/antigal.client
+        run: npm run build
+
+      - name: Audit full and production dependency graphs
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd Frontend/antigal.client
+          npm audit --json > "$GITHUB_WORKSPACE/b4-verify-all.json" || true
+          npm audit --omit=dev --json > "$GITHUB_WORKSPACE/b4-verify-production.json" || true
+          cd "$GITHUB_WORKSPACE"
+
+          python3 - <<'PY' | tee b4-verify-summary.txt
+          import json
+          from pathlib import Path
+
+          def summarize(label, path):
+              data = json.loads(Path(path).read_text())
+              counts = data.get("metadata", {}).get("vulnerabilities", {})
+              for severity in ("low", "moderate", "high", "critical", "total"):
+                  print(f"{label}_{severity}={counts.get(severity, 0)}")
+              for name, info in sorted(data.get("vulnerabilities", {}).items()):
+                  if label == "production":
+                      print(
+                          "production_pkg="
+                          + name
+                          + "|severity=" + info.get("severity", "unknown")
+                          + "|direct=" + str(bool(info.get("isDirect"))).lower()
+                          + "|fix=" + str(info.get("fixAvailable")).lower()
+                      )
+              return counts
+
+          full = summarize("all", "b4-verify-all.json")
+          prod = summarize("production", "b4-verify-production.json")
+
+          if prod.get("critical", 0) != 0 or prod.get("high", 0) != 0:
+              raise SystemExit("production graph regained high/critical advisories")
+          if prod.get("total", 0) > 2:
+              raise SystemExit("production graph is worse than validated candidate")
+          print("b4_candidate_security_boundary=accepted")
+          PY
+
+      - name: Verify manifest classification
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          pkg = json.loads(Path("Frontend/antigal.client/package.json").read_text())
+          tooling = {
+              "@rollup/plugin-terser",
+              "@svgr/webpack",
+              "@testing-library/jest-dom",
+              "@testing-library/react",
+              "@testing-library/user-event",
+              "css-minimizer-webpack-plugin",
+              "json-server",
+              "react-scripts",
+              "sass",
+          }
+          deps = set(pkg.get("dependencies", {}))
+          dev = set(pkg.get("devDependencies", {}))
+          assert not tooling & deps
+          assert tooling <= dev
+          print("tooling-classification=dev-only")
+          PY
+
+      - name: Upload verification evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b4-verify-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            b4-verify-summary.txt
+            b4-verify-all.json
+            b4-verify-production.json
