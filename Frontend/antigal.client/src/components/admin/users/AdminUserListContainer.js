@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import AdminNav from "../AdminNav";
 import Swal from "sweetalert2";
 import fakeUsers from "../../../data/fakeUsers";

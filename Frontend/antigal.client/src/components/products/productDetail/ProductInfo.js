@@ -1,5 +1,3 @@
-import React from "react";
-
 const ProductInfo = ({ product }) => {
   return (
     <div className="detail-section">

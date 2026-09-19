@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import NavBar from '../common/NavBar';
 import Logo from '../common/Logo';
 import CartWidget from '../common/CartWidget';

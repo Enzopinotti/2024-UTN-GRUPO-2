@@ -1,6 +1,4 @@
 // src/pages/SobreNosotros.js
-import React from 'react';
-
 const SobreNosotros = () => {
   return (
     <div className="sobre-nosotros">

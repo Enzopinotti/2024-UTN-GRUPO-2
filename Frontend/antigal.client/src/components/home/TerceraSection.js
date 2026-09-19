@@ -1,5 +1,4 @@
 // src/components/Home/TerceraSection.js
-import React from 'react';
 import IconoSeccion from './IconoSection';
 
 const TerceraSection = ({ backgroundImage }) => {

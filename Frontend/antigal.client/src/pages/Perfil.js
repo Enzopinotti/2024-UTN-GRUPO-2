@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import UserDetail from "../components/users/UserDetail";
 import Swal from "sweetalert2";
 import ProfilePictureModal from "../components/users/ProfilePictureModal";

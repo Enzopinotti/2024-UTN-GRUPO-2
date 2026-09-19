@@ -1,6 +1,5 @@
 // src/context/CartContext.js
-import React, { createContext, useState, useEffect } from 'react';
-
+import { createContext, useState, useEffect } from 'react';
 // Crear el contexto del carrito
 export const CartContext = createContext();
 

@@ -1,6 +1,5 @@
 // src/components/admin/categories/CategoryItem.js
-import React, { useState, useEffect } from 'react';
-
+import { useState, useEffect } from 'react';
 const CategoryItem = ({ category, onEdit, onDelete }) => {
   const { idCategoria, nombre, descripcion, imagenUrl } = category;
 

@@ -1,5 +1,3 @@
-import React from 'react'
-
 const LupaWidget = ({ onClick }) => {
   return (
     <div onClick={onClick} >

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PrimeraSection from '../components/home/PrimeraSection';
 import TerceraSection from '../components/home/TerceraSection';
 import SegundaSection from '../components/home/SegundaSection';

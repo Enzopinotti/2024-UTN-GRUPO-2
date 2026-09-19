@@ -1,5 +1,3 @@
-import React from 'react';
-
 const CloseIcon = ({ onClick }) => {
   return (
     <div className='close-icon' onClick={onClick}>

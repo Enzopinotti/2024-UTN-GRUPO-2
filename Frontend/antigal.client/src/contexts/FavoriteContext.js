@@ -1,6 +1,5 @@
 // FavoriteContext.js
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 //crea contexto Favoritos
 const FavoriteContext =createContext();
 

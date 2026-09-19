@@ -1,6 +1,4 @@
 // src/components/common/SearchResults.jsx
-import React from "react";
-
 const SearchResults = ({ loading, searchResults, searchTerm, items, onItemClick }) => {
   if (loading) {
     return <h4>Cargando...</h4>;

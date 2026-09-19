@@ -1,5 +1,5 @@
 // src/components/common/SearchBarMobile.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import LupaWidget from "./LupaWidget";
 import { toast } from "react-toastify"; // Importar react-toastify para notificaciones
 
