@@ -131,7 +131,7 @@ const SearchBar = ({ isVisible, onClose, isMobile }) => {
         }`}
       >
         <div className="top-section">
-          <h2>¿Qué se antoja hoy? ( ͡👁️ ͜ʖ ͡👁️)</h2>
+          <h2>¿Qué se antoja hoy? ( ͡👁️ ͜ʖ ͡👁️)</h2>
           <button className="close-searchbar" onClick={onClose}>
             <i className="fa-solid fa-x"></i>
           </button>
