@@ -1,5 +1,5 @@
 // src/components/common/UserIcon.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const UserIcon = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

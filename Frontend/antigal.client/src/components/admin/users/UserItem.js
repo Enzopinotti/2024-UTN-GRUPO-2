@@ -1,5 +1,3 @@
-import React from "react";
-
 const UserItem = ({ user, handleToggleRole, handleDeleteUser }) => {
   return (
     <tr key={user.id}>

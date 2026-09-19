@@ -1,5 +1,4 @@
 // src/components/cart/EmptyCart.js
-import React from 'react';
 import { Player } from '@lottiefiles/react-lottie-player'; 
 
 const EmptyCart = () => {

@@ -1,5 +1,5 @@
 // src/components/admin/products/ProductListContainer.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import AdminNav from '../AdminNav';
 import ProductList from './ProductList';
 import ProductForm from './ProductForm';

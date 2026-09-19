@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import fakeOrders from "../../data/fakeOrder";
 import Swal from "sweetalert2";

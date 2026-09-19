@@ -1,5 +1,5 @@
 // src/components/common/SearchBar.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LupaWidget from "./LupaWidget";
 import { toast } from "react-toastify";
@@ -11,7 +11,7 @@ const SearchBar = ({ isVisible, onClose, isMobile }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [, setError] = useState("");
 
   const navigate = useNavigate();
 

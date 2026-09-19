@@ -1,6 +1,4 @@
 // src/components/common/LoadingSVG.js
-import React from 'react';
-
 const LoadingSVG = () => {
   return (
     <div className="loading-svg">

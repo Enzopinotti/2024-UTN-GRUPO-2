@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import NavBar from '../common/NavBar';
 import Logo from '../common/Logo';
 import CartWidget from '../common/CartWidget';
@@ -10,7 +10,6 @@ import UserIcon from '../common/UserIconDos';
 import Swal from 'sweetalert2'; 
 import SearchBar from '../common/SearchBar';
 import SearchBarMobile from '../common/SearchBarMobile';
-import { ThemeContext } from '../../contexts/ThemeContext';
 import ThemeSlider from '../common/ThemeSlider';
 
 
@@ -21,7 +20,6 @@ const Header = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
   
-  const { theme, toggleTheme } = useContext(ThemeContext);
   const showDevelopmentAlert = () => {
     Swal.fire({
       title: 'Funcionalidad en Desarrollo',

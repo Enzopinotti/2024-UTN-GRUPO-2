@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react';
 import AdminNav from '../AdminNav'
 import MessageList from './MessageList'
 import Swal from 'sweetalert2';

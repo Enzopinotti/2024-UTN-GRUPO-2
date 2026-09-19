@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import OfferCard from '../common/OfferCard';
 import { getVisibleItems } from '../../utils/screenUtils';
 import { useSwipeable } from 'react-swipeable';
-import { Link } from "react-router-dom";
 
 const SegundaSection = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);

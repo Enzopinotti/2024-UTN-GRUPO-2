@@ -1,5 +1,4 @@
 // src/components/admin/products/ProductList.js
-import React from 'react';
 import AdminProductItem from './AdminProductItem';
 
 const AdminProductList = ({ products, onEdit, onDelete }) => {

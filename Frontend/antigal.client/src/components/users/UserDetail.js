@@ -1,5 +1,3 @@
-import React from "react";
-
 const UserDetail = ({ label, value, isEditing, onChange }) => {
   return (
     <div className="user-detail">

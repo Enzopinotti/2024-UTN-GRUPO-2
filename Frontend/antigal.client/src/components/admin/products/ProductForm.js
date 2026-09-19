@@ -1,6 +1,6 @@
 // src/components/admin/products/ProductForm.js
 
-import React, { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import Swal from 'sweetalert2';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';

@@ -1,6 +1,4 @@
 // src/components/cart/OrderSummary.js
-import React from 'react';
-
 const OrderSummary = ({ subtotal, shipping, taxes, total }) => {
   return (
     <div className="order-summary">
