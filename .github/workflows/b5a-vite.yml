@@ -53,6 +53,7 @@ jobs:
           pkg.scripts.start = "vite";
           pkg.scripts.build = "vite build";
           pkg.scripts.test = "vitest run";
+          pkg.scripts.sass = "sass --no-charset --watch src/styles/scss:src/styles/css";
           pkg.scripts.dev = 'concurrently "npm run sass" "vite"';
           delete pkg.scripts.eject;
           delete pkg.eslintConfig;
