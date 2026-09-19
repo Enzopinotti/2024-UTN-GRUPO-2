@@ -124,17 +124,30 @@ jobs:
                   print(f"- {name}: {item.get('severity')}")
           print("direct_vulnerability_count=" + str(len(direct)))
 
-          forbidden_direct = {
+          eliminated_direct = {
               "dompurify",
-              "react-router-dom",
               "sweetalert2",
               "@rollup/plugin-terser",
               "css-minimizer-webpack-plugin",
               "webpack-dev-server",
           }
-          remaining = forbidden_direct & set(direct)
-          if remaining:
-              raise SystemExit(f"targeted direct vulnerabilities remain: {sorted(remaining)}")
+          remaining_eliminated = eliminated_direct & set(direct)
+          if remaining_eliminated:
+              raise SystemExit(
+                  f"targeted direct vulnerabilities remain: {sorted(remaining_eliminated)}"
+              )
+
+          allowed_direct = {"react-router-dom", "react-scripts"}
+          unexpected_direct = set(direct) - allowed_direct
+          if unexpected_direct:
+              raise SystemExit(
+                  f"unexpected direct vulnerabilities: {sorted(unexpected_direct)}"
+              )
+
+          if metadata.get("total", 999) > 66:
+              raise SystemExit("frontend audit regression above B3d measured ceiling")
+
+          print("b3d_safe_reduction_passed=true")
           PY
 
       - name: Verify tracked source changes are expected
