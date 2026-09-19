@@ -93,12 +93,28 @@ jobs:
       - name: Validate current-tree security boundary
         run: python3 scripts/security_baseline.py
 
-      - name: Verify clean tree
+      - name: Verify source tree remains clean
         shell: bash
         run: |
           set -euo pipefail
           git diff --exit-code
-          test -z "$(git status --porcelain)"
+          unexpected="$(
+            git status --porcelain |
+              grep -v -E '^\?\? b3c-(summary|solution-vulnerable|outdated)\.txt
+      - name: Upload B3c evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b3c-net8-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            b3c-summary.txt
+            b3c-solution-vulnerable.txt
+            b3c-outdated.txt
+ || true
+          )"
+          test -z "$unexpected"
 
       - name: Upload B3c evidence
         if: always()
