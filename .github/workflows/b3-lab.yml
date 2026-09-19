@@ -1,0 +1,94 @@
+name: B3 dependency security lab
+
+on:
+  push:
+    branches:
+      - modernize/b3-dependency-security-lab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: "false"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+
+    steps:
+      - name: Checkout exact lab commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Setup Node 24.20.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24.20.0"
+          cache: npm
+          cache-dependency-path: Frontend/antigal.client/package-lock.json
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install frontend exactly
+        working-directory: Frontend/antigal.client
+        run: npm ci
+
+      - name: Test frontend behavior
+        working-directory: Frontend/antigal.client
+        env:
+          CI: "true"
+        run: npm test -- --watchAll=false
+
+      - name: Build frontend
+        working-directory: Frontend/antigal.client
+        run: npm run build
+
+      - name: Restore backend
+        run: dotnet restore Backend/antigal.server.sln
+
+      - name: Build backend
+        run: dotnet build Backend/antigal.server.sln -c Release --no-restore
+
+      - name: Test backend behavior
+        run: dotnet test Backend/antigal.server.Tests/antigal.server.Tests.csproj -c Release --no-build
+
+      - name: Capture backend vulnerability state
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet list Backend/antigal.server/antigal.server.csproj package --vulnerable --include-transitive | tee b3-server-vulnerable.txt
+          dotnet list Backend/EmailService/EmailService.csproj package --vulnerable --include-transitive | tee b3-email-vulnerable.txt
+          {
+            echo "server_direct_mailkit_4_18=$(grep -c 'MailKit.*4.18.0' b3-server-vulnerable.txt || true)"
+            echo "server_direct_mimekit_4_18=$(grep -c 'MimeKit.*4.18.0' b3-server-vulnerable.txt || true)"
+            echo "email_direct_mimekit_4_18=$(grep -c 'MimeKit.*4.18.0' b3-email-vulnerable.txt || true)"
+            echo "mailkit_advisory_remaining=$(grep -c 'GHSA-9j88-vvj5-vhgr' b3-server-vulnerable.txt b3-email-vulnerable.txt || true)"
+            echo "mimekit_advisory_remaining=$(grep -c 'GHSA-g7hc-96xr-gvvx' b3-server-vulnerable.txt b3-email-vulnerable.txt || true)"
+            echo "automapper_advisory_remaining=$(grep -c 'GHSA-rvv3-g6hj-g44x' b3-server-vulnerable.txt || true)"
+          } | tee b3-summary.txt
+
+      - name: Validate current-tree security boundary
+        run: python3 scripts/security_baseline.py
+
+      - name: Verify clean tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
+
+      - name: Upload B3 lab evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b3-lab-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            b3-summary.txt
+            b3-server-vulnerable.txt
+            b3-email-vulnerable.txt
