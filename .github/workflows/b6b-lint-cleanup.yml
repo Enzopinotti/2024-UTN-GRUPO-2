@@ -181,7 +181,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          npm run lint -- --format json > "$GITHUB_WORKSPACE/b6b-lint.json" || true
+          npx eslint src --format json > "$GITHUB_WORKSPACE/b6b-lint.json" || true
 
           node - <<'NODE' | tee "$GITHUB_WORKSPACE/b6b-summary.txt"
           const fs = require("fs");
