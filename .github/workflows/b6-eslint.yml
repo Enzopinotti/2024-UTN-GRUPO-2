@@ -1,0 +1,167 @@
+name: B6a ESLint characterization lab
+
+on:
+  push:
+    branches:
+      - modernize/b6-eslint-lab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: b6-eslint-lab
+  cancel-in-progress: true
+
+jobs:
+  characterize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: "false"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+
+    steps:
+      - name: Checkout exact lab commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Setup Node 24.20.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24.20.0"
+          cache: npm
+          cache-dependency-path: Frontend/antigal.client/package-lock.json
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install maintained frontend exactly
+        working-directory: Frontend/antigal.client
+        run: npm ci
+
+      - name: Install transient ESLint probe toolchain
+        working-directory: Frontend/antigal.client
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --no-save --package-lock=false \
+            eslint@latest \
+            @eslint/js@latest \
+            globals@latest \
+            eslint-plugin-react-hooks@latest
+          npm ls eslint @eslint/js globals eslint-plugin-react-hooks | tee "$GITHUB_WORKSPACE/b6-eslint-toolchain.txt"
+
+      - name: Characterize frontend static-analysis debt
+        working-directory: Frontend/antigal.client
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx eslint src --format json > "$GITHUB_WORKSPACE/b6-eslint-report.json" || true
+          cd "$GITHUB_WORKSPACE"
+
+          node - <<'NODE' | tee b6-eslint-summary.txt
+          const fs = require("fs");
+
+          const report = JSON.parse(fs.readFileSync("b6-eslint-report.json", "utf8"));
+          let files = 0;
+          let errors = 0;
+          let warnings = 0;
+          let fatals = 0;
+          const rules = new Map();
+
+          for (const item of report) {
+            if (!item.messages?.length) continue;
+            files += 1;
+            errors += item.errorCount || 0;
+            warnings += item.warningCount || 0;
+            fatals += item.fatalErrorCount || 0;
+
+            for (const message of item.messages || []) {
+              const key = message.ruleId || "<parser>";
+              const current = rules.get(key) || { count: 0, errors: 0, warnings: 0 };
+              current.count += 1;
+              if (message.severity === 2) current.errors += 1;
+              if (message.severity === 1) current.warnings += 1;
+              rules.set(key, current);
+            }
+          }
+
+          const top = [...rules.entries()]
+            .sort((a, b) => b[1].count - a[1].count)
+            .slice(0, 20);
+
+          console.log(`lint_files_with_findings=${files}`);
+          console.log(`lint_errors=${errors}`);
+          console.log(`lint_warnings=${warnings}`);
+          console.log(`lint_fatal_errors=${fatals}`);
+          for (const [rule, counts] of top) {
+            console.log(`rule=${rule} total=${counts.count} errors=${counts.errors} warnings=${counts.warnings}`);
+          }
+
+          if (fatals !== 0) {
+            throw new Error(`ESLint configuration has ${fatals} fatal parser/configuration errors`);
+          }
+          NODE
+
+      - name: Test frontend behavior
+        working-directory: Frontend/antigal.client
+        run: npm test
+
+      - name: Build frontend
+        working-directory: Frontend/antigal.client
+        run: npm run build
+
+      - name: Restore backend
+        run: dotnet restore Backend/antigal.server.sln
+
+      - name: Build backend
+        run: dotnet build Backend/antigal.server.sln -c Release --no-restore
+
+      - name: Test backend behavior
+        run: dotnet test Backend/antigal.server.Tests/antigal.server.Tests.csproj -c Release --no-build
+
+      - name: Validate current-tree security boundary
+        run: python3 scripts/security_baseline.py
+
+      - name: Reconfirm zero-advisory package graph
+        shell: bash
+        run: |
+          set -euo pipefail
+          (
+            cd Frontend/antigal.client
+            npm audit --json > "$GITHUB_WORKSPACE/b6-frontend-audit.json" || true
+          )
+          dotnet list Backend/antigal.server.sln package --vulnerable --include-transitive > b6-solution-vulnerable.txt
+
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          audit = json.loads(Path("b6-frontend-audit.json").read_text())
+          total = audit.get("metadata", {}).get("vulnerabilities", {}).get("total", 0)
+          print(f"frontend_audit_total={total}")
+          if total != 0:
+              raise SystemExit("frontend dependency graph regressed")
+
+          solution = Path("b6-solution-vulnerable.txt").read_text()
+          if "has the following vulnerable packages" in solution:
+              raise SystemExit("NuGet solution vulnerability audit regressed")
+          print("nuget_solution_vulnerability_report_clean=true")
+          PY
+
+      - name: Upload B6a evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b6a-eslint-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            b6-eslint-toolchain.txt
+            b6-eslint-report.json
+            b6-eslint-summary.txt
+            b6-frontend-audit.json
+            b6-solution-vulnerable.txt
