@@ -1,0 +1,97 @@
+name: B3d frontend dependency audit lab
+
+on:
+  push:
+    branches:
+      - modernize/b3d-frontend-security-lab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: "false"
+
+    steps:
+      - name: Checkout exact lab commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Setup Node 24.20.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24.20.0"
+          cache: npm
+          cache-dependency-path: Frontend/antigal.client/package-lock.json
+
+      - name: Install exactly
+        working-directory: Frontend/antigal.client
+        run: npm ci
+
+      - name: Test maintained frontend behavior
+        working-directory: Frontend/antigal.client
+        env:
+          CI: "true"
+        run: npm test -- --watchAll=false
+
+      - name: Build maintained frontend
+        working-directory: Frontend/antigal.client
+        run: npm run build
+
+      - name: Capture npm audit graph
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd Frontend/antigal.client
+          npm audit --json > "$GITHUB_WORKSPACE/b3d-audit.json" || true
+          cd "$GITHUB_WORKSPACE"
+
+          python3 - <<'PY' | tee b3d-audit-summary.txt
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path("b3d-audit.json").read_text())
+          metadata = data.get("metadata", {}).get("vulnerabilities", {})
+          vulns = data.get("vulnerabilities", {})
+
+          for key in ("info", "low", "moderate", "high", "critical", "total"):
+              print(f"npm_audit_{key}={metadata.get(key, 0)}")
+
+          print("direct_vulnerabilities:")
+          for name, item in sorted(vulns.items()):
+              if item.get("isDirect"):
+                  fix = item.get("fixAvailable")
+                  if isinstance(fix, dict):
+                      fix_desc = f"{fix.get('name')}@{fix.get('version')} force={bool(fix.get('isSemVerMajor'))}"
+                  else:
+                      fix_desc = str(fix).lower()
+                  print(f"- {name}: severity={item.get('severity')} range={item.get('range')} fix={fix_desc}")
+
+          print("all_vulnerable_packages:")
+          for name, item in sorted(vulns.items()):
+              print(
+                  f"- {name}: severity={item.get('severity')} "
+                  f"direct={str(bool(item.get('isDirect'))).lower()} "
+                  f"effects={','.join(item.get('effects') or [])}"
+              )
+          PY
+
+      - name: Verify source tree remains clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code
+          test -z "$(git status --porcelain --untracked-files=no)"
+
+      - name: Upload B3d evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b3d-audit-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            b3d-audit.json
+            b3d-audit-summary.txt
