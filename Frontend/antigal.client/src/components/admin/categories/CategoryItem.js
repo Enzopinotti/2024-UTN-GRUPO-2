@@ -1,19 +1,10 @@
 // src/components/admin/categories/CategoryItem.js
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const CategoryItem = ({ category, onEdit, onDelete }) => {
   const { idCategoria, nombre, descripcion, imagenUrl } = category;
 
   const [imageError, setImageError] = useState(false);
-  const [imageSrc, setImageSrc] = useState('');
-
-  useEffect(() => {
-    if (imagenUrl) {
-      setImageSrc(imagenUrl);
-    } else {
-      setImageSrc('');
-    }
-  }, [imagenUrl]);
 
   const handleImageError = () => {
     setImageError(true);
@@ -22,8 +13,8 @@ const CategoryItem = ({ category, onEdit, onDelete }) => {
   return (
     <div className="category-item">
       <div className="category-img">
-        {imageSrc && !imageError ? (
-          <img src={imageSrc} alt={nombre} onError={handleImageError} />
+        {imagenUrl && !imageError ? (
+          <img src={imagenUrl} alt={nombre} onError={handleImageError} />
         ) : (
           <div className="no-image">Sin Imagen</div>
         )}
