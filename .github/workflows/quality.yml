@@ -100,6 +100,7 @@ jobs:
           assert scripts.get("build") == "vite build"
           assert scripts.get("test") == "vitest run"
           assert "eject" not in scripts
+          assert package.get("dependencies", {}).get("prop-types") == "15.8.1"
 
           assert (base / "vite.config.mjs").is_file()
           assert (base / "index.html").is_file()
@@ -182,6 +183,9 @@ jobs:
       - name: Install frontend exactly
         working-directory: Frontend/antigal.client
         run: npm ci
+
+      - name: Validate direct production dependency authority
+        run: node scripts/frontend_dependency_authority.mjs
 
       - name: Test frontend behavior
         working-directory: Frontend/antigal.client
