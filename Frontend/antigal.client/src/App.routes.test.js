@@ -1,126 +1,127 @@
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
+import { vi } from "vitest";
 import App from "./App";
 
-jest.mock("./components/layout/Header", () => () =>
-  require("react").createElement("header", { "data-testid": "app-header" })
-);
-jest.mock("./components/layout/Main", () => ({ children }) =>
-  require("react").createElement("main", { "data-testid": "app-main" }, children)
-);
-jest.mock("./components/layout/Footer", () => () =>
-  require("react").createElement("footer", { "data-testid": "app-footer" })
-);
+vi.mock("./components/layout/Header", () => ({
+  default: () => <header data-testid="app-header" />,
+}));
+vi.mock("./components/layout/Main", () => ({
+  default: ({ children }) => <main data-testid="app-main">{children}</main>,
+}));
+vi.mock("./components/layout/Footer", () => ({
+  default: () => <footer data-testid="app-footer" />,
+}));
 
-jest.mock("./contexts/CartContext", () => ({
-  CartProvider: ({ children }) =>
-    require("react").createElement(require("react").Fragment, null, children),
+vi.mock("./contexts/CartContext", () => ({
+  CartProvider: ({ children }) => children,
 }));
-jest.mock("./contexts/FavoriteContext", () => ({
-  FavoriteProvider: ({ children }) =>
-    require("react").createElement(require("react").Fragment, null, children),
+vi.mock("./contexts/FavoriteContext", () => ({
+  FavoriteProvider: ({ children }) => children,
 }));
-jest.mock("react-toastify", () => ({
+vi.mock("react-toastify", () => ({
   ToastContainer: () => null,
 }));
 
-jest.mock("./pages/Home", () => () =>
-  require("react").createElement("div", { "data-testid": "route-home" })
-);
-jest.mock("./components/products/productList/ProductListContainer", () => () =>
-  require("react").createElement("div", { "data-testid": "route-products" })
-);
-jest.mock("./components/products/productDetail/ProductDetailContainer", () => () =>
-  require("react").createElement("div", { "data-testid": "route-product-detail" })
-);
-jest.mock("./pages/CartPage", () => () =>
-  require("react").createElement("div", { "data-testid": "route-cart" })
-);
+vi.mock("./pages/Home", () => ({
+  default: () => <div data-testid="route-home" />,
+}));
+vi.mock("./components/products/productList/ProductListContainer", () => ({
+  default: () => <div data-testid="route-products" />,
+}));
+vi.mock("./components/products/productDetail/ProductDetailContainer", () => ({
+  default: () => <div data-testid="route-product-detail" />,
+}));
+vi.mock("./pages/CartPage", () => ({
+  default: () => <div data-testid="route-cart" />,
+}));
 
-jest.mock("./components/users/UserLayout", () => () => {
-  const ReactRuntime = require("react");
-  const { Outlet } = require("react-router-dom");
-  return ReactRuntime.createElement(
-    "section",
-    { "data-testid": "route-profile-layout" },
-    ReactRuntime.createElement(Outlet)
-  );
+vi.mock("./components/users/UserLayout", async () => {
+  const { Outlet } = await vi.importActual("react-router-dom");
+  return {
+    default: () => (
+      <section data-testid="route-profile-layout">
+        <Outlet />
+      </section>
+    ),
+  };
 });
-jest.mock("./pages/profile/Profile", () => () =>
-  require("react").createElement("div", { "data-testid": "route-profile" })
-);
-jest.mock("./pages/profile/Orders", () => () =>
-  require("react").createElement("div", { "data-testid": "route-profile-orders" })
-);
-jest.mock("./pages/profile/Favorites", () => () =>
-  require("react").createElement("div", { "data-testid": "route-profile-favorites" })
-);
-jest.mock("./components/users/addresses/UserAddresses", () => () =>
-  require("react").createElement("div", { "data-testid": "route-profile-addresses" })
-);
+vi.mock("./pages/profile/Profile", () => ({
+  default: () => <div data-testid="route-profile" />,
+}));
+vi.mock("./pages/profile/Orders", () => ({
+  default: () => <div data-testid="route-profile-orders" />,
+}));
+vi.mock("./pages/profile/Favorites", () => ({
+  default: () => <div data-testid="route-profile-favorites" />,
+}));
+vi.mock("./components/users/addresses/UserAddresses", () => ({
+  default: () => <div data-testid="route-profile-addresses" />,
+}));
 
-jest.mock("./components/admin/dashboard/AdminDashboard", () => () => {
-  const ReactRuntime = require("react");
-  const { Outlet } = require("react-router-dom");
-  return ReactRuntime.createElement(
-    "section",
-    { "data-testid": "route-admin-layout" },
-    ReactRuntime.createElement(Outlet)
-  );
+vi.mock("./components/admin/dashboard/AdminDashboard", async () => {
+  const { Outlet } = await vi.importActual("react-router-dom");
+  return {
+    default: () => (
+      <section data-testid="route-admin-layout">
+        <Outlet />
+      </section>
+    ),
+  };
 });
-jest.mock("./components/admin/categories/CategoryListContainer", () => () =>
-  require("react").createElement("div", { "data-testid": "route-admin-categories" })
-);
-jest.mock("./components/admin/products/ProductListContainer", () => () =>
-  require("react").createElement("div", { "data-testid": "route-admin-products" })
-);
-jest.mock("./components/admin/users/AdminUserListContainer", () => () =>
-  require("react").createElement("div", { "data-testid": "route-admin-users" })
-);
-jest.mock("./components/admin/messages/MessageListContainer", () => () =>
-  require("react").createElement("div", { "data-testid": "route-admin-messages" })
-);
+vi.mock("./components/admin/categories/CategoryListContainer", () => ({
+  default: () => <div data-testid="route-admin-categories" />,
+}));
+vi.mock("./components/admin/products/ProductListContainer", () => ({
+  default: () => <div data-testid="route-admin-products" />,
+}));
+vi.mock("./components/admin/users/AdminUserListContainer", () => ({
+  default: () => <div data-testid="route-admin-users" />,
+}));
+vi.mock("./components/admin/messages/MessageListContainer", () => ({
+  default: () => <div data-testid="route-admin-messages" />,
+}));
 
-jest.mock("./pages/auth/Login", () => () =>
-  require("react").createElement("div", { "data-testid": "route-login" })
-);
-jest.mock("./pages/auth/ResetearContrasenia", () => () =>
-  require("react").createElement("div", { "data-testid": "route-reset-password" })
-);
-jest.mock("./pages/auth/RecuperarContrasenia", () => () =>
-  require("react").createElement("div", { "data-testid": "route-forgot-password" })
-);
-jest.mock("./pages/auth/Registro", () => () =>
-  require("react").createElement("div", { "data-testid": "route-register" })
-);
-jest.mock("./pages/auth/Logout", () => () =>
-  require("react").createElement("div", { "data-testid": "route-logout" })
-);
+vi.mock("./pages/auth/Login", () => ({
+  default: () => <div data-testid="route-login" />,
+}));
+vi.mock("./pages/auth/ResetearContrasenia", () => ({
+  default: () => <div data-testid="route-reset-password" />,
+}));
+vi.mock("./pages/auth/RecuperarContrasenia", () => ({
+  default: () => <div data-testid="route-forgot-password" />,
+}));
+vi.mock("./pages/auth/Registro", () => ({
+  default: () => <div data-testid="route-register" />,
+}));
+vi.mock("./pages/auth/Logout", () => ({
+  default: () => <div data-testid="route-logout" />,
+}));
 
-jest.mock("./pages/SobreNosotros", () => () =>
-  require("react").createElement("div", { "data-testid": "route-about" })
-);
-jest.mock("./pages/TiendaFisica", () => () =>
-  require("react").createElement("div", { "data-testid": "route-store" })
-);
-jest.mock("./pages/Contact", () => () =>
-  require("react").createElement("div", { "data-testid": "route-contact" })
-);
-jest.mock("./pages/PrivacyPolicy", () => () =>
-  require("react").createElement("div", { "data-testid": "route-privacy" })
-);
-jest.mock("./components/common/ConfirmEmail", () => () =>
-  require("react").createElement("div", { "data-testid": "route-confirm-email" })
-);
-jest.mock("./components/common/RegistrationSuccess", () => () =>
-  require("react").createElement("div", { "data-testid": "route-registration-success" })
-);
-jest.mock("./pages/CheckoutPage", () => () =>
-  require("react").createElement("div", { "data-testid": "route-checkout" })
-);
-jest.mock("./components/NotFound", () => () =>
-  require("react").createElement("div", { "data-testid": "route-not-found" })
-);
+vi.mock("./pages/SobreNosotros", () => ({
+  default: () => <div data-testid="route-about" />,
+}));
+vi.mock("./pages/TiendaFisica", () => ({
+  default: () => <div data-testid="route-store" />,
+}));
+vi.mock("./pages/Contact", () => ({
+  default: () => <div data-testid="route-contact" />,
+}));
+vi.mock("./pages/PrivacyPolicy", () => ({
+  default: () => <div data-testid="route-privacy" />,
+}));
+vi.mock("./components/common/ConfirmEmail", () => ({
+  default: () => <div data-testid="route-confirm-email" />,
+}));
+vi.mock("./components/common/RegistrationSuccess", () => ({
+  default: () => <div data-testid="route-registration-success" />,
+}));
+vi.mock("./pages/CheckoutPage", () => ({
+  default: () => <div data-testid="route-checkout" />,
+}));
+vi.mock("./components/NotFound", () => ({
+  default: () => <div data-testid="route-not-found" />,
+}));
 
 function renderAt(path) {
   window.history.pushState({}, "", path);
