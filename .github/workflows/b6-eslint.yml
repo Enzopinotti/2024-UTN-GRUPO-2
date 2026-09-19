@@ -101,6 +101,18 @@ jobs:
             console.log(`rule=${rule} total=${counts.count} errors=${counts.errors} warnings=${counts.warnings}`);
           }
 
+          console.log("lint_error_details_begin");
+          for (const item of report) {
+            for (const message of item.messages || []) {
+              if (message.severity !== 2) continue;
+              const relative = item.filePath.replace(process.cwd() + "/", "");
+              console.log(
+                `${relative}:${message.line}:${message.column} ${message.ruleId || "<parser>"} ${message.message}`
+              );
+            }
+          }
+          console.log("lint_error_details_end");
+
           if (fatals !== 0) {
             throw new Error(`ESLint configuration has ${fatals} fatal parser/configuration errors`);
           }
