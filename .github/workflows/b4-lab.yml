@@ -1,0 +1,127 @@
+name: B4 frontend security lab
+
+on:
+  push:
+    branches:
+      - modernize/b4-frontend-security-lab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  characterize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: "false"
+
+    steps:
+      - name: Checkout exact lab commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Setup Node 24.20.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24.20.0"
+          cache: npm
+          cache-dependency-path: Frontend/antigal.client/package-lock.json
+
+      - name: Install exactly
+        working-directory: Frontend/antigal.client
+        run: npm ci
+
+      - name: Test maintained behavior
+        working-directory: Frontend/antigal.client
+        env:
+          CI: "true"
+        run: npm test -- --watchAll=false
+
+      - name: Build maintained frontend
+        working-directory: Frontend/antigal.client
+        run: npm run build
+
+      - name: Capture full and production-only audits
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd Frontend/antigal.client
+          npm audit --json > "$GITHUB_WORKSPACE/b4-audit-all.json" || true
+          npm audit --omit=dev --json > "$GITHUB_WORKSPACE/b4-audit-production.json" || true
+
+      - name: Summarize advisory provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' | tee b4-summary.txt
+          import json
+          from pathlib import Path
+
+          def load(name):
+              return json.loads(Path(name).read_text())
+
+          all_audit = load("b4-audit-all.json")
+          prod_audit = load("b4-audit-production.json")
+
+          for label, data in (("all", all_audit), ("production", prod_audit)):
+              counts = data.get("metadata", {}).get("vulnerabilities", {})
+              print(f"{label}_total={counts.get('total', 0)}")
+              print(f"{label}_low={counts.get('low', 0)}")
+              print(f"{label}_moderate={counts.get('moderate', 0)}")
+              print(f"{label}_high={counts.get('high', 0)}")
+              print(f"{label}_critical={counts.get('critical', 0)}")
+
+          vulns = all_audit.get("vulnerabilities", {})
+          rows = []
+          for name, info in vulns.items():
+              via = info.get("via", [])
+              advisory_count = sum(1 for item in via if isinstance(item, dict))
+              transitive_via = [item for item in via if isinstance(item, str)]
+              fix = info.get("fixAvailable")
+              if isinstance(fix, dict):
+                  fix_text = f"{fix.get('name')}@{fix.get('version')} force={str(fix.get('isSemVerMajor')).lower()}"
+              else:
+                  fix_text = str(fix).lower()
+              rows.append((
+                  info.get("severity", "unknown"),
+                  bool(info.get("isDirect")),
+                  name,
+                  advisory_count,
+                  ",".join(transitive_via[:6]),
+                  fix_text,
+              ))
+
+          severity_rank = {"critical": 0, "high": 1, "moderate": 2, "low": 3, "info": 4, "unknown": 5}
+          rows.sort(key=lambda row: (severity_rank.get(row[0], 9), not row[1], row[2]))
+
+          print("vulnerable_package_rows=" + str(len(rows)))
+          for severity, direct, name, advisory_count, via, fix in rows:
+              print(
+                  "pkg="
+                  + name
+                  + "|severity=" + severity
+                  + "|direct=" + str(direct).lower()
+                  + "|advisories=" + str(advisory_count)
+                  + "|via=" + via
+                  + "|fix=" + fix
+              )
+
+          package = json.loads(Path("Frontend/antigal.client/package.json").read_text())
+          deps = set(package.get("dependencies", {}))
+          dev = set(package.get("devDependencies", {}))
+          overlap = sorted(deps & dev)
+          print("manifest_dependency_count=" + str(len(deps)))
+          print("manifest_dev_dependency_count=" + str(len(dev)))
+          print("manifest_overlap=" + ",".join(overlap))
+          PY
+
+      - name: Upload B4 characterization
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b4-characterization-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            b4-summary.txt
+            b4-audit-all.json
+            b4-audit-production.json
