@@ -1,0 +1,112 @@
+name: B3c .NET 8 dependency security lab
+
+on:
+  push:
+    branches:
+      - modernize/b3c-net8-security-lab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: "false"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+
+    steps:
+      - name: Checkout exact lab commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Setup Node 24.20.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24.20.0"
+          cache: npm
+          cache-dependency-path: Frontend/antigal.client/package-lock.json
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Assert net8 package boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q '<TargetFramework>net8.0</TargetFramework>' Backend/antigal.server/antigal.server.csproj
+          grep -q 'Microsoft.EntityFrameworkCore" Version="8.0.31"' Backend/antigal.server/antigal.server.csproj
+          grep -q 'NPOI" Version="2.7.6"' Backend/antigal.server/antigal.server.csproj
+          grep -q 'SixLabors.ImageSharp" Version="2.1.13"' Backend/antigal.server/antigal.server.csproj
+          for pkg in dotenv.net FluentEmail.Core FluentEmail.SendGrid Microsoft.AspNetCore.Authentication.OpenIdConnect Microsoft.AspNetCore.Identity Microsoft.AspNetCore.OpenApi Microsoft.Extensions.Logging Microsoft.VisualStudio.Web.CodeGeneration.Design SendGrid AutoMapper; do
+            if grep -q "Include=\"$pkg\"" Backend/antigal.server/antigal.server.csproj; then
+              echo "unused/removed package reintroduced: $pkg" >&2
+              exit 1
+            fi
+          done
+
+      - name: Install frontend exactly
+        working-directory: Frontend/antigal.client
+        run: npm ci
+
+      - name: Test frontend behavior
+        working-directory: Frontend/antigal.client
+        env:
+          CI: "true"
+        run: npm test -- --watchAll=false
+
+      - name: Build frontend
+        working-directory: Frontend/antigal.client
+        run: npm run build
+
+      - name: Restore backend
+        run: dotnet restore Backend/antigal.server.sln
+
+      - name: Build backend
+        run: dotnet build Backend/antigal.server.sln -c Release --no-restore
+
+      - name: Test backend behavior
+        run: dotnet test Backend/antigal.server.Tests/antigal.server.Tests.csproj -c Release --no-build
+
+      - name: Audit complete solution
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet list Backend/antigal.server.sln package --vulnerable --include-transitive | tee b3c-solution-vulnerable.txt
+          if grep -q "has the following vulnerable packages" b3c-solution-vulnerable.txt; then
+            echo "solution_vulnerabilities_remaining=true" | tee b3c-summary.txt
+            exit 1
+          fi
+          echo "solution_vulnerabilities_remaining=false" | tee b3c-summary.txt
+
+      - name: Capture outdated direct packages
+        if: always()
+        shell: bash
+        run: |
+          dotnet list Backend/antigal.server/antigal.server.csproj package --outdated > b3c-outdated.txt 2>&1 || true
+
+      - name: Validate current-tree security boundary
+        run: python3 scripts/security_baseline.py
+
+      - name: Verify clean tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
+
+      - name: Upload B3c evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b3c-net8-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            b3c-summary.txt
+            b3c-solution-vulnerable.txt
+            b3c-outdated.txt
