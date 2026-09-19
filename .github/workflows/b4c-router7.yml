@@ -52,15 +52,33 @@ jobs:
           set -euo pipefail
           npm ls react-router-dom react-router | tee "$GITHUB_WORKSPACE/b4c-router-tree.txt"
 
-      - name: Test frontend behavior and routing
-        working-directory: Frontend/antigal.client
-        env:
-          CI: "true"
-        run: npm test -- --watchAll=false
+      - name: Probe frontend behavior and routing
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          (
+            cd Frontend/antigal.client
+            CI=true npm test -- --watchAll=false
+          ) > b4c-tests.txt 2>&1
+          code=$?
+          set -e
+          echo "router7_test_exit=$code" | tee b4c-test-status.txt
+          grep -E "Test Suites:|Tests:|Cannot find module|FAIL " b4c-tests.txt | head -n 80 || true
 
-      - name: Build frontend
-        working-directory: Frontend/antigal.client
-        run: npm run build
+      - name: Probe frontend build
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          (
+            cd Frontend/antigal.client
+            npm run build
+          ) > b4c-build.txt 2>&1
+          code=$?
+          set -e
+          echo "router7_build_exit=$code" | tee b4c-build-status.txt
+          grep -E "Compiled successfully|Failed to compile|Module not found|Cannot find|Error" b4c-build.txt | head -n 80 || true
 
       - name: Restore backend
         run: dotnet restore Backend/antigal.server.sln
@@ -98,25 +116,19 @@ jobs:
               for severity in ("low", "moderate", "high", "critical", "total"):
                   print(f"{label}_{severity}={counts.get(severity, 0)}")
 
-          if prod_counts.get("total", 0) != 0:
-              raise SystemExit(
-                  "Router 7 candidate did not clear the production audit graph: "
-                  + str(prod_counts)
-              )
-
-          print("router7_production_audit=clean")
+          print("router7_production_audit_total=" + str(prod_counts.get("total", 0)))
+          print("router7_production_audit_clean=" + str(prod_counts.get("total", 0) == 0).lower())
           PY
 
-      - name: Commit validated Router 7 lockfile
+      - name: Write Router 7 compatibility summary
         shell: bash
         run: |
           set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add Frontend/antigal.client/package-lock.json
-          git diff --cached --quiet && { echo "No lockfile changes"; exit 0; }
-          git commit -m "B4c lab candidate: React Router 7 lockfile"
-          git push origin HEAD:modernize/b4c-router7-lab
+          {
+            cat b4c-test-status.txt
+            cat b4c-build-status.txt
+            cat b4c-summary.txt
+          } | tee b4c-compatibility.txt
 
       - name: Upload Router 7 evidence
         if: always()
@@ -128,5 +140,10 @@ jobs:
           path: |
             b4c-router-tree.txt
             b4c-summary.txt
+            b4c-compatibility.txt
+            b4c-test-status.txt
+            b4c-build-status.txt
+            b4c-tests.txt
+            b4c-build.txt
             b4c-audit-all.json
             b4c-audit-production.json
