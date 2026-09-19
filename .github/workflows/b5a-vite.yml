@@ -109,6 +109,9 @@ jobs:
         working-directory: Frontend/antigal.client
         run: npm ci
 
+      - name: Validate direct production dependency authority
+        run: node scripts/frontend_dependency_authority.mjs
+
       - name: Verify CRA is absent from package authority
         working-directory: Frontend/antigal.client
         shell: bash
