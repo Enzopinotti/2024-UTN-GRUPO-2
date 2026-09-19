@@ -50,7 +50,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          npm run lint -- --format json > "$GITHUB_WORKSPACE/b6b-lint-before.json" || true
+          npx eslint src --format json > "$GITHUB_WORKSPACE/b6b-lint-before.json" || true
 
       - name: Remove only lint-proven unused React default imports
         shell: bash
@@ -112,7 +112,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          npm run lint -- --format json > "$GITHUB_WORKSPACE/b6b-lint-after.json" || true
+          npx eslint src --format json > "$GITHUB_WORKSPACE/b6b-lint-after.json" || true
           cd "$GITHUB_WORKSPACE"
 
           node - <<'NODE' | tee b6b-summary.txt
