@@ -1,0 +1,99 @@
+name: B3b remove AutoMapper lab
+
+on:
+  push:
+    branches:
+      - modernize/b3b-remove-automapper-lab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: "false"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+
+    steps:
+      - name: Checkout exact lab commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Setup Node 24.20.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24.20.0"
+          cache: npm
+          cache-dependency-path: Frontend/antigal.client/package-lock.json
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Assert AutoMapper removed
+        shell: bash
+        run: |
+          set -euo pipefail
+          ! git grep -n -E 'AutoMapper|IMapper|MappingProfile|AddAutoMapper' -- Backend/antigal.server Backend/antigal.server.Tests
+          test ! -f Backend/antigal.server/Mapping/MappingProfile.cs
+          test -f Backend/antigal.server/Mapping/UserRegistrationMapper.cs
+
+      - name: Install frontend exactly
+        working-directory: Frontend/antigal.client
+        run: npm ci
+
+      - name: Test frontend behavior
+        working-directory: Frontend/antigal.client
+        env:
+          CI: "true"
+        run: npm test -- --watchAll=false
+
+      - name: Build frontend
+        working-directory: Frontend/antigal.client
+        run: npm run build
+
+      - name: Restore backend
+        run: dotnet restore Backend/antigal.server.sln
+
+      - name: Build backend
+        run: dotnet build Backend/antigal.server.sln -c Release --no-restore
+
+      - name: Test backend behavior
+        run: dotnet test Backend/antigal.server.Tests/antigal.server.Tests.csproj -c Release --no-build
+
+      - name: Validate current-tree security boundary
+        run: python3 scripts/security_baseline.py
+
+      - name: Verify clean tree before evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
+
+      - name: Capture AutoMapper advisory state
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet list Backend/antigal.server/antigal.server.csproj package --vulnerable --include-transitive | tee b3b-server-vulnerable.txt
+          {
+            echo "automapper_reference_remaining=$(grep -c 'AutoMapper' Backend/antigal.server/antigal.server.csproj || true)"
+            echo "automapper_advisory_remaining=$(grep -c 'GHSA-rvv3-g6hj-g44x' b3b-server-vulnerable.txt || true)"
+          } | tee b3b-summary.txt
+
+          test "$(grep -c 'AutoMapper' Backend/antigal.server/antigal.server.csproj || true)" = "0"
+          test "$(grep -c 'GHSA-rvv3-g6hj-g44x' b3b-server-vulnerable.txt || true)" = "0"
+
+      - name: Upload B3b lab evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b3b-lab-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            b3b-summary.txt
+            b3b-server-vulnerable.txt

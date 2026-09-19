@@ -10,7 +10,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using CloudinaryDotNet;
-using antigal.server.Mapping;
 using antigal.server.JwtFeatures;
 using EmailService;
 using MercadoPago.Config;
@@ -121,7 +120,6 @@ namespace antigal.server
             // Registrar servicios y otros componentes
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddSingleton<JwtHandler>();
-            builder.Services.AddAutoMapper(typeof(MappingProfile));
 
             // Registrar Repositorios
             builder.Services.AddScoped<IProductRepository, ProductRepository>();

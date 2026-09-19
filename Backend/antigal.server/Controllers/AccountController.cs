@@ -4,9 +4,9 @@ using antigal.server.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using System.Linq;
-using AutoMapper;
 using antigal.server.JwtFeatures;
 using antigal.server.Services;
+using antigal.server.Mapping;
 using EmailService;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
@@ -18,7 +18,6 @@ namespace antigal.server.Controllers
     public class AccountController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
-        private readonly IMapper _mapper;
         private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly JwtHandler _jwtHandler;
@@ -28,14 +27,12 @@ namespace antigal.server.Controllers
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IConfiguration configuration,
-            IMapper mapper,
             JwtHandler jwtHandler,
             IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
-            _mapper = mapper;
             _jwtHandler = jwtHandler;
             _emailSender = emailSender;
         }
@@ -46,7 +43,7 @@ namespace antigal.server.Controllers
             if (userForRegistration is null)
                 return BadRequest();
 
-            var user = _mapper.Map<User>(userForRegistration);
+            var user = UserRegistrationMapper.ToUser(userForRegistration);
             var result = await _userManager.CreateAsync(user, userForRegistration.Password!);
 
             if (!result.Succeeded)
