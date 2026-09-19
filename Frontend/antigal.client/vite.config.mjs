@@ -30,13 +30,6 @@ export default defineConfig({
       include: /\.[jt]sx?$/,
     }),
   ],
-  optimizeDeps: {
-    esbuildOptions: {
-      loader: {
-        ".js": "jsx",
-      },
-    },
-  },
   server: {
     port: 3000,
     strictPort: true,
