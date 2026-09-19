@@ -1,0 +1,174 @@
+name: B4 frontend security candidate
+
+on:
+  push:
+    branches:
+      - modernize/b4-frontend-security-lab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  synthesize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: "false"
+
+    steps:
+      - name: Checkout exact lab commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: modernize/b4-frontend-security-lab
+
+      - name: Setup Node 24.20.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24.20.0"
+          cache: npm
+          cache-dependency-path: Frontend/antigal.client/package-lock.json
+
+      - name: Reclassify build and test tooling
+        shell: bash
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = 'Frontend/antigal.client/package.json';
+          const pkg = JSON.parse(fs.readFileSync(path, 'utf8'));
+
+          const tooling = [
+            '@rollup/plugin-terser',
+            '@svgr/webpack',
+            '@testing-library/jest-dom',
+            '@testing-library/react',
+            '@testing-library/user-event',
+            'css-minimizer-webpack-plugin',
+            'json-server',
+            'react-scripts',
+            'sass'
+          ];
+
+          pkg.devDependencies ||= {};
+          for (const name of tooling) {
+            if (!(name in pkg.dependencies)) {
+              throw new Error(`expected tooling dependency missing: ${name}`);
+            }
+            pkg.devDependencies[name] = pkg.dependencies[name];
+            delete pkg.dependencies[name];
+          }
+
+          pkg.dependencies = Object.fromEntries(Object.entries(pkg.dependencies).sort());
+          pkg.devDependencies = Object.fromEntries(Object.entries(pkg.devDependencies).sort());
+          fs.writeFileSync(path, JSON.stringify(pkg, null, 2) + '\n');
+          NODE
+
+      - name: Refresh compatible lockfile security fixes
+        working-directory: Frontend/antigal.client
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --package-lock-only
+          npm audit fix --package-lock-only || true
+
+      - name: Install exact candidate
+        working-directory: Frontend/antigal.client
+        run: npm ci
+
+      - name: Test candidate
+        working-directory: Frontend/antigal.client
+        env:
+          CI: "true"
+        run: npm test -- --watchAll=false
+
+      - name: Build candidate
+        working-directory: Frontend/antigal.client
+        run: npm run build
+
+      - name: Measure candidate audits
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd Frontend/antigal.client
+          npm audit --json > "$GITHUB_WORKSPACE/b4-candidate-all.json" || true
+          npm audit --omit=dev --json > "$GITHUB_WORKSPACE/b4-candidate-production.json" || true
+          cd "$GITHUB_WORKSPACE"
+
+          python3 - <<'PY' | tee b4-candidate-summary.txt
+          import json
+          from pathlib import Path
+
+          def counts(path):
+              data = json.loads(Path(path).read_text())
+              return data.get("metadata", {}).get("vulnerabilities", {}), data
+
+          all_counts, all_data = counts("b4-candidate-all.json")
+          prod_counts, prod_data = counts("b4-candidate-production.json")
+
+          for label, values in (("all", all_counts), ("production", prod_counts)):
+              for severity in ("low", "moderate", "high", "critical", "total"):
+                  print(f"{label}_{severity}={values.get(severity, 0)}")
+
+          critical_prod = prod_counts.get("critical", 0)
+          high_prod = prod_counts.get("high", 0)
+          print(f"production_high_or_critical={high_prod + critical_prod}")
+
+          for name, info in sorted(prod_data.get("vulnerabilities", {}).items()):
+              if info.get("severity") in {"critical", "high"}:
+                  print(
+                      "production_pkg="
+                      + name
+                      + "|severity="
+                      + info.get("severity", "unknown")
+                      + "|direct="
+                      + str(bool(info.get("isDirect"))).lower()
+                      + "|fix="
+                      + str(info.get("fixAvailable")).lower()
+                  )
+          PY
+
+      - name: Require security improvement
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          prod = json.loads(Path("b4-candidate-production.json").read_text())
+          counts = prod.get("metadata", {}).get("vulnerabilities", {})
+          total = counts.get("total", 0)
+          high = counts.get("high", 0)
+          critical = counts.get("critical", 0)
+
+          if total >= 70:
+              raise SystemExit(f"candidate did not reduce production audit total: {total}")
+          if critical >= 3:
+              raise SystemExit(f"candidate did not reduce production critical findings: {critical}")
+          print(f"production-audit-improved total={total} high={high} critical={critical}")
+          PY
+
+      - name: Commit validated lab candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Frontend/antigal.client/package.json Frontend/antigal.client/package-lock.json
+          git diff --cached --quiet && { echo "No candidate changes"; exit 0; }
+          git commit -m "B4 lab candidate: compatible frontend security reduction"
+          git push origin HEAD:modernize/b4-frontend-security-lab
+
+      - name: Upload candidate evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b4-candidate-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            b4-candidate-summary.txt
+            b4-candidate-all.json
+            b4-candidate-production.json
