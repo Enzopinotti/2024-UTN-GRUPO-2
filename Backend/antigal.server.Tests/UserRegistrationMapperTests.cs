@@ -31,8 +31,17 @@ public class UserRegistrationMapperTests
     [TestMethod]
     public void ToUser_NullSource_Throws()
     {
-        Assert.ThrowsException<ArgumentNullException>(
-            () => UserRegistrationMapper.ToUser(null!)
-        );
+        var thrown = false;
+
+        try
+        {
+            UserRegistrationMapper.ToUser(null!);
+        }
+        catch (ArgumentNullException)
+        {
+            thrown = true;
+        }
+
+        Assert.IsTrue(thrown, "Null registration input must throw ArgumentNullException.");
     }
 }
