@@ -77,19 +77,69 @@ jobs:
           NODE
 
           cd Frontend/antigal.client
-          npm install --save-dev --save-exact             vite@latest             @vitejs/plugin-react@latest             vitest@latest             jsdom@latest
+
+          # The old lockfile still encodes CRA/Babel peer edges. Re-resolving that
+          # mixed graph is what caused the first B5a ERESOLVE. Build a new lock
+          # from the cleaned manifest instead of forcing incompatible peers.
+          cp package-lock.json "$GITHUB_WORKSPACE/b5a-package-lock-cra.json"
+          rm package-lock.json
+
+          npm install --save-dev --save-exact \
+            vite@8.2.2 \
+            @vitejs/plugin-react@6.1.1 \
+            vitest@5.0.1 \
+            jsdom@30.0.1 \
+            @testing-library/jest-dom@7.0.1
+
+          # Apply only compatible lockfile fixes. Remaining advisories are measured
+          # explicitly later and are never hidden with --force/--legacy-peer-deps.
           npm audit fix --package-lock-only || true
 
       - name: Install exact Vite candidate
         working-directory: Frontend/antigal.client
         run: npm ci
 
+      - name: Verify CRA is absent from package authority
+        working-directory: Frontend/antigal.client
+        shell: bash
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs = require("fs");
+          const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
+          const forbidden = [
+            "react-scripts",
+            "eslint-config-react-app",
+            "webpack-dev-server",
+            "html-webpack-plugin",
+            "@svgr/webpack",
+            "css-minimizer-webpack-plugin"
+          ];
+          const remaining = forbidden.filter(
+            (name) => pkg.dependencies?.[name] || pkg.devDependencies?.[name]
+          );
+          if (remaining.length) {
+            throw new Error(`CRA package authority still contains: ${remaining.join(", ")}`);
+          }
+          NODE
+
+          if grep -Eq '"(react-scripts|eslint-config-react-app)"[[:space:]]*:' package-lock.json; then
+            echo "CRA packages remain in the regenerated lockfile" >&2
+            exit 1
+          fi
+
       - name: Print maintained toolchain
         working-directory: Frontend/antigal.client
         shell: bash
         run: |
           set -euo pipefail
-          npm ls vite @vitejs/plugin-react vitest jsdom react-router-dom | tee "$GITHUB_WORKSPACE/b5a-toolchain.txt"
+          npm ls \
+            vite \
+            @vitejs/plugin-react \
+            vitest \
+            jsdom \
+            @testing-library/jest-dom \
+            react-router-dom | tee "$GITHUB_WORKSPACE/b5a-toolchain.txt"
 
       - name: Test frontend contracts
         working-directory: Frontend/antigal.client
@@ -168,3 +218,4 @@ jobs:
             b5a-summary.txt
             b5a-audit-all.json
             b5a-audit-production.json
+            b5a-package-lock-cra.json
