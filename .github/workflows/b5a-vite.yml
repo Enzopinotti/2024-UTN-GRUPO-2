@@ -58,6 +58,11 @@ jobs:
           delete pkg.scripts.eject;
           delete pkg.eslintConfig;
 
+          // The product source imports PropTypes directly in maintained
+          // components. CRA's transitive graph previously masked this missing
+          // runtime authority; Vite/Rolldown correctly requires it explicitly.
+          pkg.dependencies["prop-types"] = "15.8.1";
+
           const removeDev = [
             "@babel/plugin-proposal-private-property-in-object",
             "@eslint/object-schema",
