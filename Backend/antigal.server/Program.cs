@@ -121,7 +121,6 @@ namespace antigal.server
             // Registrar servicios y otros componentes
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddSingleton<JwtHandler>();
-            builder.Services.AddAutoMapper(typeof(MappingProfile));
 
             // Registrar Repositorios
             builder.Services.AddScoped<IProductRepository, ProductRepository>();

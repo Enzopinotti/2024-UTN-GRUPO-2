@@ -90,7 +90,11 @@ jobs:
           assert 'Include="MimeKit"' not in server_project
           assert 'Include="Microsoft.AspNetCore.Identity"' not in email_project
           assert 'Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"' not in email_project
+          assert 'Include="AutoMapper"' not in server_project
+          assert not Path("Backend/antigal.server/Mapping/MappingProfile.cs").exists()
+          assert Path("Backend/antigal.server/Mapping/UserRegistrationMapper.cs").is_file()
           print("mail-dependency-boundary=clean")
+          print("registration-mapping-boundary=explicit")
           PY
 
       - name: Reject unresolved merge markers in source authority
@@ -172,7 +176,12 @@ jobs:
               if advisory in backend or advisory in email:
                   raise SystemExit(f"patched mail advisory reintroduced: {advisory}")
 
-          print("B3a mail dependency contract passed.")
+          automapper_advisory = "GHSA-rvv3-g6hj-g44x"
+          if automapper_advisory in backend:
+              raise SystemExit("removed AutoMapper advisory reintroduced")
+
+          print("automapper_advisory_remaining=false")
+          print("B3b backend dependency contract passed.")
           PY
 
       - name: Upload quality evidence

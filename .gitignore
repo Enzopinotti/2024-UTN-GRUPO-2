@@ -17,6 +17,7 @@ dist/
 **/bin/
 **/obj/
 *.csproj.user
+*.pubxml.user
 
 # OS noise
 .DS_Store

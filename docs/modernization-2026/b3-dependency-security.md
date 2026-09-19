@@ -101,6 +101,79 @@ blindly upgrading the package.
 That change must preserve registration mapping semantics and pass all existing
 tests plus a new mapping contract before promotion.
 
+## B3b — Remove AutoMapper from the registration path
+
+### Why removal instead of upgrade
+
+The application used AutoMapper only for one registration mapping:
+
+`UserForRegistrationDto -> User`.
+
+That mapping copied:
+
+- `FirstName`;
+- `LastName`;
+- `Email`;
+- `UserName = Email`.
+
+AutoMapper 13.0.1 is affected by `GHSA-rvv3-g6hj-g44x`. Patched modern
+AutoMapper lines also use a newer licensing model, so the smallest maintenance
+change for this academic repository is to remove the dependency rather than
+introduce a new licensing/configuration obligation.
+
+### Maintained replacement
+
+B3b:
+
+- removes the AutoMapper package;
+- removes `MappingProfile`;
+- removes AutoMapper DI registration and constructor injection;
+- adds a small explicit `UserRegistrationMapper`;
+- preserves the four historical registration mapping semantics;
+- adds two backend tests for field preservation and null input;
+- removes tracked Visual Studio `*.pubxml.user` state and permanently ignores
+  that local publish-user file class.
+
+No authentication, password, email-confirmation or role behavior is changed.
+
+### Lab evidence
+
+Validated candidate:
+
+`57b5d705137e32798f0a8f38822e80dd8e5dd5b5`
+
+Workflow:
+
+`35418469188` — success.
+
+Evidence:
+
+- frontend: 13/13 tests green;
+- frontend production build green;
+- backend: 10/10 tests green;
+- backend release build green;
+- current-tree security baseline green;
+- AutoMapper project reference count: 0;
+- AutoMapper advisory `GHSA-rvv3-g6hj-g44x`: absent.
+
+Artifact:
+
+- id: `10576423934`;
+- digest:
+  `sha256:eb7cab4110ca4252f3721c9e5485804bb50d1365988edcb0a661c45f516db594`.
+
+Permanent Quality now prevents both the dependency and advisory from returning.
+
+## Remaining backend dependency debt
+
+After B3a/B3b, the next investigation is the remaining transitive/runtime tool
+surface, including NPOI/ImageSharp and old Microsoft design-time dependencies.
+
+A separate .NET 10 lab has proven one possible clean graph, but B3 does not
+promote that runtime migration merely because it is green. The next lab must
+first determine whether the same advisory cleanup is achievable while
+preserving the current `net8.0` application target.
+
 ## Frontend boundary
 
 The frontend still reports the historical CRA dependency debt measured in B0/B2.
