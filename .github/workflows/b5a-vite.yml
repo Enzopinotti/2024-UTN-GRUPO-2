@@ -9,6 +9,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: b5a-vite-lab
+  cancel-in-progress: true
+
 jobs:
   verify:
     if: github.actor != 'github-actions[bot]'
@@ -20,10 +24,10 @@ jobs:
       DOTNET_NOLOGO: "1"
 
     steps:
-      - name: Checkout exact lab branch
+      - name: Checkout triggering B5a commit
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: modernize/b5a-vite-lab
+          ref: ${{ github.sha }}
 
       - name: Setup Node 24.20.0
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
