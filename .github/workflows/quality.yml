@@ -65,6 +65,22 @@ jobs:
           assert package.get("dependencies", {}) == root.get("dependencies", {})
           assert package.get("devDependencies", {}) == root.get("devDependencies", {})
 
+          frontend_tooling = {
+              "@rollup/plugin-terser",
+              "@svgr/webpack",
+              "@testing-library/jest-dom",
+              "@testing-library/react",
+              "@testing-library/user-event",
+              "css-minimizer-webpack-plugin",
+              "json-server",
+              "react-scripts",
+              "sass",
+          }
+          dependencies = set(package.get("dependencies", {}))
+          dev_dependencies = set(package.get("devDependencies", {}))
+          assert not frontend_tooling & dependencies
+          assert frontend_tooling <= dev_dependencies
+
           required = [
               base / "src/pages/Home.js",
               base / "src/contexts/CartContext.js",
@@ -177,6 +193,7 @@ jobs:
           (
             cd Frontend/antigal.client
             npm audit --json > "$GITHUB_WORKSPACE/frontend-audit.json" || true
+            npm audit --omit=dev --json > "$GITHUB_WORKSPACE/frontend-production-audit.json" || true
           )
           dotnet list Backend/antigal.server.sln package --vulnerable --include-transitive > solution-vulnerable.txt
 
@@ -190,13 +207,30 @@ jobs:
           print("frontend_audit_high=" + str(vulns.get("high", 0)))
           print("frontend_audit_critical=" + str(vulns.get("critical", 0)))
 
+          production_audit = json.loads(Path("frontend-production-audit.json").read_text())
+          production = production_audit.get("metadata", {}).get("vulnerabilities", {})
+          production_total = production.get("total", 0)
+          production_high = production.get("high", 0)
+          production_critical = production.get("critical", 0)
+          print("frontend_production_audit_total=" + str(production_total))
+          print("frontend_production_audit_high=" + str(production_high))
+          print("frontend_production_audit_critical=" + str(production_critical))
+
+          if production_high != 0 or production_critical != 0:
+              raise SystemExit("frontend production dependency graph regained high/critical advisories")
+          if production_total > 2:
+              raise SystemExit(
+                  "frontend production advisory count regressed above validated B4a boundary: "
+                  + str(production_total)
+              )
+
           solution = Path("solution-vulnerable.txt").read_text()
           solution_clean = "has the following vulnerable packages" not in solution
           print("nuget_solution_vulnerability_report_clean=" + str(solution_clean).lower())
           if not solution_clean:
               raise SystemExit("NuGet solution vulnerability audit is no longer clean")
 
-          print("B3c backend dependency contract passed.")
+          print("B4a dependency-security contract passed.")
           PY
 
       - name: Upload quality evidence
@@ -208,4 +242,5 @@ jobs:
           path: |
             quality-summary.txt
             frontend-audit.json
+            frontend-production-audit.json
             solution-vulnerable.txt
