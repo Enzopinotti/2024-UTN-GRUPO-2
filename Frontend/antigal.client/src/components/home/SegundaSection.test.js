@@ -25,7 +25,7 @@ afterEach(() => {
 });
 
 test("loads recommended products and leaves the carousel at its initial page", async () => {
-  global.fetch = vi.fn().mockResolvedValue({
+  globalThis.fetch = vi.fn().mockResolvedValue({
     ok: true,
     json: async () => ({
       data: {
@@ -43,13 +43,13 @@ test("loads recommended products and leaves the carousel at its initial page", a
   expect(await screen.findByText("TOP PRODUCTOS RECOMENDADOS")).toBeInTheDocument();
   expect(screen.getAllByText("Avena").length).toBeGreaterThan(0);
   expect(screen.getAllByText("Granola").length).toBeGreaterThan(0);
-  expect(global.fetch).toHaveBeenCalledWith(
+  expect(globalThis.fetch).toHaveBeenCalledWith(
     "https://www.antigal.somee.com/api/Product/home"
   );
 });
 
 test("preserves the API failure state", async () => {
-  global.fetch = vi.fn().mockResolvedValue({
+  globalThis.fetch = vi.fn().mockResolvedValue({
     ok: false,
   });
 
