@@ -1,0 +1,303 @@
+name: B6b lint cleanup lab
+
+on:
+  push:
+    branches:
+      - modernize/b6b-lint-cleanup-lab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: b6b-lint-cleanup-lab
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: "false"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+
+    steps:
+      - name: Checkout triggering B6b commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+
+      - name: Setup Node 24.20.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24.20.0"
+          cache: npm
+          cache-dependency-path: Frontend/antigal.client/package-lock.json
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install frontend exactly
+        working-directory: Frontend/antigal.client
+        run: npm ci
+
+      - name: Remove mechanical unused frontend authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs = require("fs");
+          const path = require("path");
+
+          const root = path.join("Frontend", "antigal.client", "src");
+
+          function walk(dir) {
+            return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+              const full = path.join(dir, entry.name);
+              return entry.isDirectory() ? walk(full) : [full];
+            });
+          }
+
+          let reactImportsRemoved = 0;
+
+          for (const file of walk(root).filter((file) => /\.(js|jsx)$/.test(file))) {
+            let source = fs.readFileSync(file, "utf8");
+            const original = source;
+
+            const mixedPattern = /import\s+React\s*,\s*\{([^}]+)\}\s+from\s+(['"])react\2;?/;
+            const mixed = source.match(mixedPattern);
+            if (mixed) {
+              const withoutImport = source.replace(mixedPattern, "");
+              if (!/\bReact\s*\./.test(withoutImport)) {
+                source = source.replace(
+                  mixedPattern,
+                  `import {${mixed[1]}} from ${mixed[2]}react${mixed[2]};`
+                );
+                reactImportsRemoved += 1;
+              }
+            }
+
+            const defaultPattern = /import\s+React\s+from\s+(['"])react\1;?\s*\n?/;
+            const defaultImport = source.match(defaultPattern);
+            if (defaultImport) {
+              const withoutImport = source.replace(defaultPattern, "");
+              if (!/\bReact\s*\./.test(withoutImport)) {
+                source = withoutImport;
+                reactImportsRemoved += 1;
+              }
+            }
+
+            if (source !== original) {
+              fs.writeFileSync(file, source);
+            }
+          }
+
+          function update(relativePath, transform) {
+            const file = path.join("Frontend", "antigal.client", relativePath);
+            const before = fs.readFileSync(file, "utf8");
+            const after = transform(before);
+            if (after === before) {
+              throw new Error(`B6b expected transformation did not apply: ${relativePath}`);
+            }
+            fs.writeFileSync(file, after);
+          }
+
+          update("src/components/admin/products/AdminProductItem.js", (s) =>
+            s.replace(
+              "const [imageSrc, setImageSrc] = useState('');",
+              "const [, setImageSrc] = useState('');"
+            )
+          );
+
+          update("src/components/admin/products/ProductForm.js", (s) =>
+            s.replace(
+              "import { useState, useEffect, useRef } from 'react';",
+              "import { useEffect, useRef } from 'react';"
+            )
+          );
+
+          for (const file of [
+            "src/components/common/SearchBar.js",
+            "src/components/common/SearchBarMobile.js",
+          ]) {
+            update(file, (s) =>
+              s.replace(
+                'const [error, setError] = useState("");',
+                'const [, setError] = useState("");'
+              )
+            );
+          }
+
+          update("src/components/home/SegundaSection.js", (s) =>
+            s.replace('import { Link } from "react-router-dom";\n', "")
+          );
+
+          update("src/components/layout/Header.js", (s) =>
+            s
+              .replace(
+                "import { useState, useEffect, useContext } from 'react';",
+                "import { useState, useEffect } from 'react';"
+              )
+              .replace("import { ThemeContext } from '../../contexts/ThemeContext';\n", "")
+              .replace("  const { theme, toggleTheme } = useContext(ThemeContext);\n", "")
+          );
+
+          update("src/components/users/UserSidebar.js", (s) =>
+            s
+              .replace('import Swal from "sweetalert2";\n', "")
+              .replace(
+                /  const showDevelopmentAlert = \(event\) => \{[\s\S]*?\n  \};\n\s*/m,
+                ""
+              )
+          );
+
+          update("src/pages/Perfil.js", (s) =>
+            s.replace(
+              /  const handleChange = \(key\) => \(value\) => \{\s*\}\s*/m,
+              "  const handleChange = () => () => {};\n\n"
+            )
+          );
+
+          const quality = ".github/workflows/quality.yml";
+          const qBefore = fs.readFileSync(quality, "utf8");
+          const qAfter = qBefore.replace(
+            "npm run lint -- --max-warnings 115",
+            "npm run lint -- --max-warnings 12"
+          );
+          if (qAfter === qBefore) {
+            throw new Error("B6b could not lower permanent lint warning ceiling");
+          }
+          fs.writeFileSync(quality, qAfter);
+
+          console.log(`b6b-react-default-imports-removed=${reactImportsRemoved}`);
+          NODE
+
+      - name: Prove B6b lint boundary
+        working-directory: Frontend/antigal.client
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run lint -- --format json > "$GITHUB_WORKSPACE/b6b-lint.json" || true
+
+          node - <<'NODE' | tee "$GITHUB_WORKSPACE/b6b-summary.txt"
+          const fs = require("fs");
+          const report = JSON.parse(fs.readFileSync(process.env.GITHUB_WORKSPACE + "/b6b-lint.json", "utf8"));
+          const messages = report.flatMap((file) => file.messages || []);
+          const errors = messages.filter((m) => m.severity === 2);
+          const warnings = messages.filter((m) => m.severity === 1);
+          const byRule = Object.fromEntries(
+            [...new Set(warnings.map((m) => m.ruleId))].sort().map((rule) => [
+              rule,
+              warnings.filter((m) => m.ruleId === rule).length,
+            ])
+          );
+
+          console.log("b6b_lint_errors=" + errors.length);
+          console.log("b6b_lint_warnings=" + warnings.length);
+          for (const [rule, count] of Object.entries(byRule)) {
+            console.log(`b6b_${rule.replaceAll("/", "_")}=${count}`);
+          }
+
+          if (errors.length !== 0) {
+            throw new Error(`B6b has ${errors.length} lint errors`);
+          }
+          if (warnings.some((m) => m.ruleId === "no-unused-vars")) {
+            throw new Error("B6b left no-unused-vars debt");
+          }
+          if (warnings.length !== 12) {
+            throw new Error(`B6b expected exactly 12 non-mechanical Hook warnings, got ${warnings.length}`);
+          }
+
+          const expected = {
+            "react-hooks/set-state-in-effect": 7,
+            "react-hooks/exhaustive-deps": 3,
+            "react-hooks/incompatible-library": 2,
+          };
+          for (const [rule, count] of Object.entries(expected)) {
+            const actual = warnings.filter((m) => m.ruleId === rule).length;
+            if (actual !== count) {
+              throw new Error(`B6b expected ${count} ${rule} warnings, got ${actual}`);
+            }
+          }
+
+          console.log("b6b_unused_cleanup_boundary=accepted");
+          NODE
+
+          npm run lint -- --max-warnings 12
+
+      - name: Validate direct production dependency authority
+        run: node scripts/frontend_dependency_authority.mjs
+
+      - name: Test frontend contracts
+        working-directory: Frontend/antigal.client
+        run: npm test
+
+      - name: Build frontend
+        working-directory: Frontend/antigal.client
+        run: npm run build
+
+      - name: Restore backend
+        run: dotnet restore Backend/antigal.server.sln
+
+      - name: Build backend
+        run: dotnet build Backend/antigal.server.sln -c Release --no-restore
+
+      - name: Test backend
+        run: dotnet test Backend/antigal.server.Tests/antigal.server.Tests.csproj -c Release --no-build
+
+      - name: Validate current-tree security
+        run: python3 scripts/security_baseline.py
+
+      - name: Audit dependency graph
+        shell: bash
+        run: |
+          set -euo pipefail
+          (
+            cd Frontend/antigal.client
+            npm audit --json > "$GITHUB_WORKSPACE/b6b-audit.json" || true
+            npm audit --omit=dev --json > "$GITHUB_WORKSPACE/b6b-production-audit.json" || true
+          )
+          dotnet list Backend/antigal.server.sln package --vulnerable --include-transitive > b6b-nuget-vulnerable.txt
+
+          node - <<'NODE'
+          const fs = require("fs");
+          for (const file of ["b6b-audit.json", "b6b-production-audit.json"]) {
+            const data = JSON.parse(fs.readFileSync(file, "utf8"));
+            const v = data.metadata?.vulnerabilities || {};
+            if ((v.total || 0) !== 0) throw new Error(`${file} has ${v.total} advisories`);
+          }
+          const nuget = fs.readFileSync("b6b-nuget-vulnerable.txt", "utf8");
+          if (nuget.includes("has the following vulnerable packages")) {
+            throw new Error("B6b NuGet graph is not clean");
+          }
+          console.log("b6b_dependency_audits=clean");
+          NODE
+
+      - name: Commit validated B6b cleanup
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Frontend/antigal.client/src .github/workflows/quality.yml
+          git diff --cached --quiet && { echo "No B6b cleanup changes"; exit 0; }
+          git commit -m "B6b lab candidate: remove mechanical frontend lint debt"
+          git push origin HEAD:modernize/b6b-lint-cleanup-lab
+
+      - name: Upload B6b evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b6b-lint-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            b6b-lint.json
+            b6b-summary.txt
+            b6b-audit.json
+            b6b-production-audit.json
+            b6b-nuget-vulnerable.txt
