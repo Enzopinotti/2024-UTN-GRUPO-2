@@ -1,0 +1,170 @@
+name: B5a Vite Vitest lab
+
+on:
+  push:
+    branches:
+      - modernize/b5a-vite-lab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: "false"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+
+    steps:
+      - name: Checkout exact lab branch
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: modernize/b5a-vite-lab
+
+      - name: Setup Node 24.20.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24.20.0"
+          cache: npm
+          cache-dependency-path: Frontend/antigal.client/package-lock.json
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Replace CRA package authority with Vite and Vitest
+        shell: bash
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs = require("fs");
+          const path = "Frontend/antigal.client/package.json";
+          const pkg = JSON.parse(fs.readFileSync(path, "utf8"));
+
+          pkg.scripts.start = "vite";
+          pkg.scripts.build = "vite build";
+          pkg.scripts.test = "vitest run";
+          pkg.scripts.dev = 'concurrently "npm run sass" "vite"';
+          delete pkg.scripts.eject;
+          delete pkg.eslintConfig;
+
+          const removeDev = [
+            "@babel/plugin-proposal-private-property-in-object",
+            "@eslint/object-schema",
+            "@rollup/plugin-terser",
+            "@svgr/webpack",
+            "css-minimizer-webpack-plugin",
+            "eslint",
+            "eslint-config-react-app",
+            "html-webpack-plugin",
+            "react-scripts",
+            "rimraf",
+            "webpack-dev-server"
+          ];
+
+          for (const name of removeDev) {
+            delete pkg.devDependencies[name];
+          }
+
+          pkg.dependencies = Object.fromEntries(Object.entries(pkg.dependencies).sort());
+          pkg.devDependencies = Object.fromEntries(Object.entries(pkg.devDependencies).sort());
+          fs.writeFileSync(path, JSON.stringify(pkg, null, 2) + "\n");
+          NODE
+
+          cd Frontend/antigal.client
+          npm install --save-dev --save-exact             vite@latest             @vitejs/plugin-react@latest             vitest@latest             jsdom@latest
+          npm audit fix --package-lock-only || true
+
+      - name: Install exact Vite candidate
+        working-directory: Frontend/antigal.client
+        run: npm ci
+
+      - name: Print maintained toolchain
+        working-directory: Frontend/antigal.client
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ls vite @vitejs/plugin-react vitest jsdom react-router-dom | tee "$GITHUB_WORKSPACE/b5a-toolchain.txt"
+
+      - name: Test frontend contracts
+        working-directory: Frontend/antigal.client
+        run: npm test
+
+      - name: Build frontend
+        working-directory: Frontend/antigal.client
+        run: npm run build
+
+      - name: Restore backend
+        run: dotnet restore Backend/antigal.server.sln
+
+      - name: Build backend
+        run: dotnet build Backend/antigal.server.sln -c Release --no-restore
+
+      - name: Test backend
+        run: dotnet test Backend/antigal.server.Tests/antigal.server.Tests.csproj -c Release --no-build
+
+      - name: Validate current-tree security
+        run: python3 scripts/security_baseline.py
+
+      - name: Audit Vite candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd Frontend/antigal.client
+          npm audit --json > "$GITHUB_WORKSPACE/b5a-audit-all.json" || true
+          npm audit --omit=dev --json > "$GITHUB_WORKSPACE/b5a-audit-production.json" || true
+          cd "$GITHUB_WORKSPACE"
+
+          python3 - <<'PY' | tee b5a-summary.txt
+          import json
+          from pathlib import Path
+
+          def counts(path):
+              data = json.loads(Path(path).read_text())
+              return data.get("metadata", {}).get("vulnerabilities", {})
+
+          full = counts("b5a-audit-all.json")
+          prod = counts("b5a-audit-production.json")
+
+          for label, values in (("all", full), ("production", prod)):
+              for severity in ("low", "moderate", "high", "critical", "total"):
+                  print(f"{label}_{severity}={values.get(severity, 0)}")
+
+          if prod.get("high", 0) != 0 or prod.get("critical", 0) != 0:
+              raise SystemExit("Vite candidate regressed production high/critical boundary")
+          if prod.get("total", 0) > 2:
+              raise SystemExit("Vite candidate regressed production advisory count")
+          if full.get("critical", 0) != 0:
+              raise SystemExit("Vite candidate introduced critical dev/tooling advisories")
+
+          print("b5a_vite_security_boundary=accepted")
+          PY
+
+      - name: Commit validated package authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Frontend/antigal.client/package.json Frontend/antigal.client/package-lock.json
+          git diff --cached --quiet && { echo "No package authority changes"; exit 0; }
+          git commit -m "B5a lab candidate: Vite and Vitest package authority"
+          git push origin HEAD:modernize/b5a-vite-lab
+
+      - name: Upload B5a evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b5a-vite-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            b5a-toolchain.txt
+            b5a-summary.txt
+            b5a-audit-all.json
+            b5a-audit-production.json
