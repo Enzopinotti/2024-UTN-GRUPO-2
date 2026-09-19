@@ -174,6 +174,75 @@ promote that runtime migration merely because it is green. The next lab must
 first determine whether the same advisory cleanup is achievable while
 preserving the current `net8.0` application target.
 
+## B3c — Close the NuGet advisory graph while staying on .NET 8
+
+A prior isolated runtime lab proved that .NET 10 could produce a clean NuGet
+graph. B3c tested whether that migration was actually required.
+
+It was not.
+
+### Maintained net8 package boundary
+
+B3c keeps every backend project on `net8.0` and:
+
+- updates the Microsoft ASP.NET/EF Core 8.x package line to `8.0.31`;
+- updates `NPOI` from 2.7.1 to 2.7.6;
+- pins `SixLabors.ImageSharp 2.1.13` to override the vulnerable historical
+  transitive version;
+- updates `System.IdentityModel.Tokens.Jwt` to 8.19.2;
+- pins patched `System.Security.Cryptography.Xml 8.0.4`;
+- removes direct package references with no maintained source usage:
+  - `dotenv.net`;
+  - FluentEmail Core/SendGrid;
+  - OpenIdConnect;
+  - legacy `Microsoft.AspNetCore.Identity 2.2.0`;
+  - `Microsoft.AspNetCore.OpenApi`;
+  - explicit logging package;
+  - Web CodeGeneration.Design;
+  - SendGrid.
+
+The application still uses Identity through
+`Microsoft.AspNetCore.Identity.EntityFrameworkCore`; only the redundant
+legacy package reference is removed.
+
+### Lab evidence
+
+Validated candidate:
+
+`4ec342c5f982f3405990c57004f67f78d033cb12`
+
+Workflow:
+
+`35419059465` — success.
+
+Evidence:
+
+- frontend: 13/13 tests green;
+- frontend production build green;
+- backend: 10/10 tests green;
+- backend release build green on `net8.0`;
+- current-tree security baseline green;
+- source tree clean before evidence creation;
+- `antigal.server`: no vulnerable packages from current NuGet sources;
+- `EmailService`: no vulnerable packages;
+- `antigal.server.Tests`: no vulnerable packages;
+- solution-wide vulnerability flag: false.
+
+Artifact:
+
+- id: `10577140976`;
+- digest:
+  `sha256:c4481a4c6a7b4987ca7a24c92779a379553b4ca8a2297a112677f43548b3de9d`.
+
+Permanent Quality now fails if **any NuGet project in the solution** reports a
+known vulnerable package.
+
+### Runtime horizon
+
+This security result means .NET 10 is not required merely to clear advisories.
+Runtime lifecycle remains a separate maintenance decision rather than being
+smuggled into a dependency-security block.
+
 ## Frontend boundary
 
 The frontend still reports the historical CRA dependency debt measured in B0/B2.
