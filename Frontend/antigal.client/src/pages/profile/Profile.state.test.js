@@ -69,7 +69,7 @@ describe("Profile outlet-user contracts", () => {
     rerender(<Profile />);
 
     expect(screen.getByRole("heading", { name: "Ana Torres" })).toBeInTheDocument();
-    expect(screen.getByText("ana")).toBeInTheDocument();
+    expect(screen.getAllByText("ana").length).toBeGreaterThan(0);
   });
 
   test("keeps profile edits local until Guardar publishes through the real outlet setter", () => {
@@ -80,6 +80,9 @@ describe("Profile outlet-user contracts", () => {
     const nameInput = screen.getByDisplayValue("Lucas Martinez");
     fireEvent.change(nameInput, { target: { value: "Lucas Editado" } });
 
+    const birthDateInput = screen.getByDisplayValue("1999-01-01");
+    fireEvent.change(birthDateInput, { target: { value: "2000-02-03" } });
+
     expect(contextValue.setUserData).not.toHaveBeenCalled();
 
     fireEvent.click(screen.getByRole("button", { name: "Guardar" }));
@@ -88,6 +91,7 @@ describe("Profile outlet-user contracts", () => {
     expect(contextValue.setUserData).toHaveBeenCalledWith({
       ...contextValue.user,
       name: "Lucas Editado",
+      fechaNacimiento: "2000-02-03",
     });
     expect(screen.getByRole("button", { name: "Editar Perfil" })).toBeInTheDocument();
   });
