@@ -119,6 +119,38 @@ jobs:
           set -o pipefail
           npm run build 2>&1 | tee "$GITHUB_WORKSPACE/b11-build.txt"
 
+      - name: Verify React 19 entry chunk budget
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          assets = Path("Frontend/antigal.client/build/assets")
+          entry_chunks = sorted(assets.glob("index-*.js"))
+          react_chunks = sorted(assets.glob("react-runtime-*.js"))
+
+          if len(entry_chunks) != 1:
+              raise SystemExit(
+                  f"expected exactly one Vite entry chunk, found {len(entry_chunks)}"
+              )
+          if len(react_chunks) != 1:
+              raise SystemExit(
+                  f"expected exactly one React runtime chunk, found {len(react_chunks)}"
+              )
+
+          entry_kib = entry_chunks[0].stat().st_size / 1024
+          react_kib = react_chunks[0].stat().st_size / 1024
+
+          print(f"b11_entry_chunk_kib={entry_kib:.2f}")
+          print(f"b11_react_runtime_chunk_kib={react_kib:.2f}")
+
+          if entry_kib > 320:
+              raise SystemExit(
+                  f"React 19 entry chunk remains above B8b 320 KiB ceiling: {entry_kib:.2f}"
+              )
+          PY
+
       - name: Restore backend
         run: dotnet restore Backend/antigal.server.sln
 
