@@ -10,7 +10,7 @@ namespace antigal.server.Repositories
 {
     public interface IProductRepository
     {
-        Task<IEnumerable<Producto>> GetProductsAsync(string orden, string precio);
+        Task<IEnumerable<Producto>> GetProductsAsync(string? orden, string? precio);
         Task<Producto?> GetProductByIdAsync(int id);
         Task<IEnumerable<Producto>> GetProductsByTitleAsync(string nombre);
         Task<Producto> AddProductAsync(Producto producto);
