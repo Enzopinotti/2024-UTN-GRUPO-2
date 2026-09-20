@@ -216,16 +216,17 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          dotnet build Backend/antigal.server.sln -c Release --no-restore | tee backend-build.txt
+          dotnet build Backend/antigal.server.sln -c Release --no-restore | tee "$RUNNER_TEMP/backend-build.txt"
 
       - name: Verify backend compiler warning boundary
         shell: bash
         run: |
-          python3 - <<'PY' | tee backend-warning-summary.txt
+          python3 - <<'PY' | tee "$RUNNER_TEMP/backend-warning-summary.txt"
+          import os
           import re
           from pathlib import Path
 
-          lines = Path("backend-build.txt").read_text().splitlines()
+          lines = (Path(os.environ["RUNNER_TEMP"]) / "backend-build.txt").read_text().splitlines()
           pattern = re.compile(
               r"(?P<path>[^\s:]+\.cs)\((?P<line>\d+),(?P<col>\d+)\): warning (?P<code>CS\d+):"
           )
@@ -337,5 +338,5 @@ jobs:
             frontend-audit.json
             frontend-production-audit.json
             solution-vulnerable.txt
-            backend-build.txt
-            backend-warning-summary.txt
+            ${{ runner.temp }}/backend-build.txt
+            ${{ runner.temp }}/backend-warning-summary.txt
