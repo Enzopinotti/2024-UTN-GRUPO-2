@@ -132,13 +132,13 @@ afterEach(() => {
   window.history.pushState({}, "", "/");
 });
 
-test("renders the shared application shell and home route", () => {
+test("renders the shared application shell and home route", async () => {
   renderAt("/");
 
   expect(screen.getByTestId("app-header")).toBeInTheDocument();
   expect(screen.getByTestId("app-main")).toBeInTheDocument();
   expect(screen.getByTestId("app-footer")).toBeInTheDocument();
-  expect(screen.getByTestId("route-home")).toBeInTheDocument();
+  expect(await screen.findByTestId("route-home")).toBeInTheDocument();
 });
 
 test.each([
@@ -157,9 +157,9 @@ test.each([
   ["/authentication/confirm-email", "route-confirm-email"],
   ["/registration-success", "route-registration-success"],
   ["/checkout", "route-checkout"],
-])("maps public path %s to its maintained route", (path, testId) => {
+])("maps public path %s to its maintained route", async (path, testId) => {
   renderAt(path);
-  expect(screen.getByTestId(testId)).toBeInTheDocument();
+  expect(await screen.findByTestId(testId)).toBeInTheDocument();
 });
 
 test.each([
@@ -167,11 +167,11 @@ test.each([
   ["/profile/orders", "route-profile-orders"],
   ["/profile/favorites", "route-profile-favorites"],
   ["/profile/addresses", "route-profile-addresses"],
-])("preserves nested profile route %s", (path, testId) => {
+])("preserves nested profile route %s", async (path, testId) => {
   renderAt(path);
 
-  expect(screen.getByTestId("route-profile-layout")).toBeInTheDocument();
-  expect(screen.getByTestId(testId)).toBeInTheDocument();
+  expect(await screen.findByTestId("route-profile-layout")).toBeInTheDocument();
+  expect(await screen.findByTestId(testId)).toBeInTheDocument();
 });
 
 test.each([
@@ -179,14 +179,14 @@ test.each([
   ["/admin/products", "route-admin-products"],
   ["/admin/users", "route-admin-users"],
   ["/admin/messages", "route-admin-messages"],
-])("preserves nested admin route %s", (path, testId) => {
+])("preserves nested admin route %s", async (path, testId) => {
   renderAt(path);
 
-  expect(screen.getByTestId("route-admin-layout")).toBeInTheDocument();
-  expect(screen.getByTestId(testId)).toBeInTheDocument();
+  expect(await screen.findByTestId("route-admin-layout")).toBeInTheDocument();
+  expect(await screen.findByTestId(testId)).toBeInTheDocument();
 });
 
-test("maps unknown paths to the maintained not-found route", () => {
+test("maps unknown paths to the maintained not-found route", async () => {
   renderAt("/route-that-does-not-exist");
-  expect(screen.getByTestId("route-not-found")).toBeInTheDocument();
+  expect(await screen.findByTestId("route-not-found")).toBeInTheDocument();
 });
