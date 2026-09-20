@@ -1,27 +1,26 @@
 // src/pages/Profile.js
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import UserDetail from "../../components/users/UserDetail";
 import Swal from "sweetalert2";
 import ProfilePictureModal from "../../components/users/ProfilePictureModal";
 import { useOutletContext } from "react-router-dom";
+
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { user: currentUser, setUser: setUserData } = useOutletContext();
-  const [userData, setUserDataState] = useState(currentUser);
-  useEffect(() => {
-    setUserDataState(currentUser);
-  }, [currentUser]);
+  const [draftUser, setDraftUser] = useState(null);
+  const { user: currentUser, setUserData } = useOutletContext();
+
+  const userData = isEditing && draftUser ? draftUser : currentUser;
+
   const handleEditToggle = () => {
-    setIsEditing(!isEditing);
-    if (isEditing) {
-      console.log("ESTAS EDITANDO");
-    }
+    setDraftUser(currentUser);
+    setIsEditing(true);
   };
 
   const handleChange = (key) => (value) => {
-    setUserDataState((prev) => ({
-      ...prev,
+    setDraftUser((prev) => ({
+      ...(prev ?? currentUser),
       [key]: value,
     }));
   };
@@ -48,16 +47,26 @@ const Profile = () => {
     }
     return true;
   };
+
   const handleUploadComplete = (imageUrl) => {
-    setUserDataState((prev) => ({ ...prev, picture: imageUrl }));
+    if (isEditing) {
+      setDraftUser((prev) => ({
+        ...(prev ?? currentUser),
+        picture: imageUrl,
+      }));
+    }
+
     setUserData((prev) => ({ ...prev, picture: imageUrl }));
   };
+
   const handleSave = () => {
-    //Aca falta logica para guardar en backend
+    // Aca falta logica para guardar en backend
     if (!validateForm()) {
       return;
     }
+
     setUserData(userData);
+    setDraftUser(null);
     setIsEditing(false);
   };
 
@@ -144,4 +153,5 @@ const Profile = () => {
     </div>
   );
 };
+
 export default Profile;

@@ -7,7 +7,7 @@ const UserDetail = ({ label, value, isEditing, onChange }) => {
           <input
             type="date"
             value={value}
-            onChange={(e) => onChange(e.targets.value)}
+            onChange={(e) => onChange(e.target.value)}
             placeholder={value}
             required
           />
