@@ -1,33 +1,19 @@
 // src/components/admin/categories/CategoryForm.js
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import Swal from 'sweetalert2';
 
 const CategoryForm = ({ show, onClose, onSave, category }) => {
-  // Estados para los campos del formulario
-  const [nombre, setNombre] = useState('');
-  const [descripcion, setDescripcion] = useState('');
-  const [imagen, setImagen] = useState('');
+  // El formulario se remonta cuando cambia la categoría seleccionada.
+  // Por eso el estado puede inicializarse directamente desde las props sin
+  // sincronizar cinco setters dentro de un efecto.
+  const [nombre, setNombre] = useState(category ? category.nombre : '');
+  const [descripcion, setDescripcion] = useState(category ? category.descripcion : '');
+  const [imagen, setImagen] = useState(category ? category.imagen || '' : '');
   const [imagenFile, setImagenFile] = useState(null); // Para almacenar el archivo seleccionado
-  const [imagePreview, setImagePreview] = useState(''); // Para la previsualización de la imagen
+  const [imagePreview, setImagePreview] = useState(category ? category.imagen || '' : ''); // Para la previsualización de la imagen
 
   // Ref para el input de imagen
   const fileInputRef = useRef(null);
-
-  useEffect(() => {
-    if (category) {
-      setNombre(category.nombre);
-      setDescripcion(category.descripcion);
-      setImagen(category.imagen || '');
-      setImagenFile(null); // Resetear el archivo
-      setImagePreview(category.imagen || '');
-    } else {
-      setNombre('');
-      setDescripcion('');
-      setImagen('');
-      setImagenFile(null);
-      setImagePreview('');
-    }
-  }, [category]);
 
   // Validaciones del formulario
   const validateForm = () => {
