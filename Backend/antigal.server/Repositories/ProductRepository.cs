@@ -21,7 +21,7 @@ namespace antigal.server.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Producto>> GetProductsAsync(string orden, string precio)
+        public async Task<IEnumerable<Producto>> GetProductsAsync(string? orden, string? precio)
         {
             var productos = _context.Productos.AsQueryable();
 
