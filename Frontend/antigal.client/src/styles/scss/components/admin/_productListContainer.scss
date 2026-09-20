@@ -1,4 +1,5 @@
 // src/components/admin/products/ProductList.scss
+@use 'sass:color';
 @use "../../abstract/variables" as variables;
 @use '../../abstract/mixins' as mixins;
 
@@ -124,7 +125,7 @@
                 background-color: rgb(222, 42, 42);
 
                 &:hover {
-                  background-color: darken(rgb(222, 42, 42), 10%);
+                  background-color: color.adjust(rgb(222, 42, 42), $lightness: -10%);
                 }
               }
             }
