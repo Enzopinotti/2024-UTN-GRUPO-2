@@ -236,7 +236,7 @@ jobs:
           set -o pipefail
           npm run build 2>&1 | tee "$RUNNER_TEMP/frontend-build.txt"
 
-      - name: Verify frontend build runtime warnings
+      - name: Verify frontend build runtime and chunk boundaries
         shell: bash
         run: |
           python3 - <<'PY'
@@ -245,10 +245,34 @@ jobs:
 
           text = (Path(os.environ["RUNNER_TEMP"]) / "frontend-build.txt").read_text()
           eval_warnings = text.count("[EVAL]")
+          chunk_warnings = text.count("Some chunks are larger than 500 kB")
+
+          assets = Path("Frontend/antigal.client/build/assets")
+          entry_chunks = sorted(assets.glob("index-*.js"))
+          if len(entry_chunks) != 1:
+              raise SystemExit(
+                  f"expected exactly one Vite entry chunk, found {len(entry_chunks)}"
+              )
+
+          entry_bytes = entry_chunks[0].stat().st_size
+          entry_kib = entry_bytes / 1024
+          js_chunk_count = len(list(assets.glob("*.js")))
+
           print(f"frontend_direct_eval_warnings={eval_warnings}")
+          print(f"frontend_chunk_size_warnings={chunk_warnings}")
+          print(f"frontend_js_chunk_count={js_chunk_count}")
+          print(f"frontend_entry_chunk_kib={entry_kib:.2f}")
+
           if eval_warnings:
               raise SystemExit("frontend build regained direct eval warnings")
-          print("B8a frontend direct-eval boundary passed.")
+          if chunk_warnings:
+              raise SystemExit("frontend build regained >500 kB chunk warnings")
+          if entry_kib > 320:
+              raise SystemExit(
+                  f"frontend entry chunk regressed above B8b 320 KiB ceiling: {entry_kib:.2f}"
+              )
+
+          print("B8b route-splitting and B8a direct-eval boundaries passed.")
           PY
 
       - name: Restore backend
@@ -369,7 +393,7 @@ jobs:
           if not solution_clean:
               raise SystemExit("NuGet solution vulnerability audit is no longer clean")
 
-          print("B8a direct-eval-free frontend, B7b2 warning-free backend, B7b1 order model authority, B7a product-filter nullability, B6c3 React Hook Form compatibility, B6c2e Auth hydration, B6c2d2 Profile draft state, B6c2d1 User addresses state, B6c2c Category form state, B6c2b Admin image state, B6c2a Carousel state, B6c1 Hook dependencies, B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
+          print("B8b route-split frontend, B8a direct-eval-free frontend, B7b2 warning-free backend, B7b1 order model authority, B7a product-filter nullability, B6c3 React Hook Form compatibility, B6c2e Auth hydration, B6c2d2 Profile draft state, B6c2d1 User addresses state, B6c2c Category form state, B6c2b Admin image state, B6c2a Carousel state, B6c1 Hook dependencies, B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
           PY
 
       - name: Upload quality evidence
