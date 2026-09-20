@@ -65,7 +65,7 @@ const SearchBarMobile = () => {
     } finally {
       setLoading(false);
     }
-  }, [handleSearch, searchTerm]);
+  }, [searchTerm]);
 
   // Función para manejar cambios en el input
   const handleSearchChange = (e) => {
@@ -102,7 +102,7 @@ const SearchBarMobile = () => {
     }, 500); // Retraso de 500ms
 
     return () => clearTimeout(delayDebounceFn);
-  }, [searchTerm]);
+  }, [handleSearch, searchTerm]);
 
   return (
     <div className="search-container mobile">
