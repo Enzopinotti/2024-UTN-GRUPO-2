@@ -94,7 +94,10 @@ jobs:
           }
           removed_runtime_tooling = {
               "@lottiefiles/react-lottie-player",
+              "@mercadopago/sdk-react",
+              "@react-google-maps/api",
               "lottie-web",
+              "web-vitals",
           }
           dependencies = set(package.get("dependencies", {}))
           dev_dependencies = set(package.get("devDependencies", {}))
@@ -106,7 +109,10 @@ jobs:
           assert not removed_runtime_tooling & dependencies
           assert not removed_runtime_tooling & dev_dependencies
           assert "node_modules/@lottiefiles/react-lottie-player" not in lock_packages
+          assert "node_modules/@mercadopago/sdk-react" not in lock_packages
+          assert "node_modules/@react-google-maps/api" not in lock_packages
           assert "node_modules/lottie-web" not in lock_packages
+          assert "node_modules/web-vitals" not in lock_packages
 
           scripts = package.get("scripts", {})
           assert scripts.get("start") == "vite"
@@ -115,6 +121,8 @@ jobs:
           assert scripts.get("lint") == "eslint src"
           assert "eject" not in scripts
           assert package.get("dependencies", {}).get("prop-types") == "15.8.1"
+          assert package.get("dependencies", {}).get("react") == "19.3.0"
+          assert package.get("dependencies", {}).get("react-dom") == "19.3.0"
           assert package.get("dependencies", {}).get("react-router-dom") == "7.18.4"
           assert package.get("devDependencies", {}).get("@testing-library/react") == "16.3.3"
           assert package.get("devDependencies", {}).get("@testing-library/user-event") == "14.6.7"
@@ -146,9 +154,11 @@ jobs:
           print("integrated-source-authority=present")
           print("frontend-manifest-lock-root=matched")
           print("frontend-vite-vitest-authority=present")
+          print("frontend-react-runtime=19.3.0")
           print("frontend-testing-library-runtime=16.3.3")
           print("frontend-cra-authority=absent")
           print("frontend-lottie-runtime-authority=absent")
+          print("frontend-dead-runtime-packages=absent")
           duplicate_order_types = [
               Path("Backend/antigal.server/Models/Order.cs"),
               Path("Backend/antigal.server/Models/OrderItem.cs"),
@@ -418,7 +428,7 @@ jobs:
           if not solution_clean:
               raise SystemExit("NuGet solution vulnerability audit is no longer clean")
 
-          print("B10 warning-free Testing Library runtime, B9 dead-source authority, B8c JSX extension authority, B8b route-split frontend, B8a direct-eval-free frontend, B7b2 warning-free backend, B7b1 order model authority, B7a product-filter nullability, B6c3 React Hook Form compatibility, B6c2e Auth hydration, B6c2d2 Profile draft state, B6c2d1 User addresses state, B6c2c Category form state, B6c2b Admin image state, B6c2a Carousel state, B6c1 Hook dependencies, B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
+          print("B11 React 19 runtime and dead runtime-package pruning, B10 warning-free Testing Library runtime, B9 dead-source authority, B8c JSX extension authority, B8b route-split frontend, B8a direct-eval-free frontend, B7b2 warning-free backend, B7b1 order model authority, B7a product-filter nullability, B6c3 React Hook Form compatibility, B6c2e Auth hydration, B6c2d2 Profile draft state, B6c2d1 User addresses state, B6c2c Category form state, B6c2b Admin image state, B6c2a Carousel state, B6c1 Hook dependencies, B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
           PY
 
       - name: Upload quality evidence
