@@ -227,7 +227,7 @@ jobs:
 
           lines = Path("backend-build.txt").read_text().splitlines()
           pattern = re.compile(
-              r"(?P<path>[^\\s:]+\\.cs)\\((?P<line>\\d+),(?P<col>\\d+)\\): warning (?P<code>CS\\d+):"
+              r"(?P<path>[^\s:]+\.cs)\((?P<line>\d+),(?P<col>\d+)\): warning (?P<code>CS\d+):"
           )
 
           unique = {}
