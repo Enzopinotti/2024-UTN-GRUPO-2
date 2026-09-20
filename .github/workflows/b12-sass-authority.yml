@@ -88,24 +88,38 @@ jobs:
           build_log = (Path(os.environ["RUNNER_TEMP"]) / "frontend-build.txt").read_text()
           assets = Path("Frontend/antigal.client/build/assets")
           entry_css = sorted(assets.glob("index-*.css"))
+          store_css = sorted(assets.glob("TiendaFisica-*.css"))
 
           if len(entry_css) != 1:
               raise SystemExit(f"expected one entry stylesheet, found {len(entry_css)}")
+          if len(store_css) != 1:
+              raise SystemExit(f"expected one route-scoped TiendaFisica stylesheet, found {len(store_css)}")
 
           css_kib = entry_css[0].stat().st_size / 1024
+          store_css_kib = store_css[0].stat().st_size / 1024
           sass_deprecations = build_log.lower().count("deprecation warning")
           chunk_warnings = build_log.count("Some chunks are larger than 500 kB")
           eval_warnings = build_log.count("[EVAL]")
 
           print(f"frontend_entry_css_kib={css_kib:.2f}")
+          print(f"frontend_tienda_fisica_css_kib={store_css_kib:.2f}")
           print(f"frontend_sass_deprecation_warnings={sass_deprecations}")
           print(f"frontend_chunk_size_warnings={chunk_warnings}")
           print(f"frontend_direct_eval_warnings={eval_warnings}")
 
-          if not 145 <= css_kib <= 156:
+          if not 132 <= css_kib <= 136:
               raise SystemExit(
-                  "native Sass bundle escaped validated B11 CSS envelope "
-                  f"(145-156 KiB): {css_kib:.2f}"
+                  "native Sass entry bundle escaped validated B12 envelope "
+                  f"(132-136 KiB): {css_kib:.2f}"
+              )
+          if not 12 <= store_css_kib <= 14:
+              raise SystemExit(
+                  "route-scoped TiendaFisica stylesheet escaped validated B12 envelope "
+                  f"(12-14 KiB): {store_css_kib:.2f}"
+              )
+          if sass_deprecations:
+              raise SystemExit(
+                  f"native Sass build still emits deprecation warnings: {sass_deprecations}"
               )
           if chunk_warnings:
               raise SystemExit("frontend build regained >500 kB chunk warnings")
