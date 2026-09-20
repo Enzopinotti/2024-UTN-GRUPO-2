@@ -1,10 +1,14 @@
 import fs from "node:fs";
+import { createRequire } from "node:module";
 import path from "node:path";
 import process from "node:process";
-import { transformWithOxc } from "vite";
+import { pathToFileURL } from "node:url";
 
 const appRoot = path.join(process.cwd(), "Frontend", "antigal.client");
 const srcRoot = path.join(appRoot, "src");
+const requireFromApp = createRequire(path.join(appRoot, "package.json"));
+const viteModuleUrl = pathToFileURL(requireFromApp.resolve("vite")).href;
+const { transformWithOxc } = await import(viteModuleUrl);
 
 function walk(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
