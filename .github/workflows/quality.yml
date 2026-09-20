@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - modernize/2026-authorship-security-baseline
+      - modernize/b7b2-required-scalar-models-lab
   workflow_dispatch:
 
 permissions:
@@ -231,7 +232,7 @@ jobs:
           set -o pipefail
           dotnet build Backend/antigal.server.sln -c Release --no-restore | tee "$RUNNER_TEMP/backend-build.txt"
 
-      - name: Verify backend compiler warning boundary
+      - name: Verify backend compiler is warning-free
         shell: bash
         run: |
           python3 - <<'PY' | tee "$RUNNER_TEMP/backend-warning-summary.txt"
@@ -270,14 +271,13 @@ jobs:
           for name in sorted(files):
               print(f"backend_warning_file_{name}={files[name]}")
 
-          if counts != {"CS8618": 6}:
-              raise SystemExit(f"backend warning baseline changed: expected 6 CS8618, got {counts}")
+          if unique:
+              raise SystemExit(
+                  f"backend compiler warning-free boundary regressed: {len(unique)} warnings, "
+                  f"codes={counts}, files={files}"
+              )
 
-          expected_files = {"Contacto.cs": 4, "Envio.cs": 2}
-          if files != expected_files:
-              raise SystemExit(f"unexpected backend warning file boundary: {files}")
-
-          print("B7b1 canonical order model authority passed.")
+          print("B7b2 backend compiler warning-free boundary passed.")
           PY
 
       - name: Test backend behavior
