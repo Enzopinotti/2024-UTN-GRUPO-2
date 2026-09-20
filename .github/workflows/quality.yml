@@ -120,12 +120,15 @@ jobs:
           assert (base / "vite.config.mjs").is_file()
           assert (base / "eslint.config.mjs").is_file()
           assert (base / "index.html").is_file()
+          vite_config = (base / "vite.config.mjs").read_text(encoding="utf-8-sig")
+          assert "transformWithOxc" not in vite_config
+          assert "jsxInLegacyJs" not in vite_config
           assert not (base / "public/index.html").exists()
           assert not (base / "public/json/empty-cart-animation.json").exists()
 
           required = [
-              base / "src/pages/Home.js",
-              base / "src/contexts/CartContext.js",
+              base / "src/pages/Home.jsx",
+              base / "src/contexts/CartContext.jsx",
               Path("Backend/antigal.server/Models/Dto/ResponseDto.cs"),
               Path("Backend/antigal.server/Models/Orden.cs"),
               Path("Backend/antigal.server/Models/OrdenDetalle.cs"),
@@ -152,6 +155,8 @@ jobs:
               raise SystemExit(f"duplicate English order model authority returned: {duplicates}")
 
           print("frontend-eslint-authority=present")
+          print("frontend-jsx-extension-authority=present")
+          print("frontend-legacy-jsx-transform=absent")
           print("order-model-authority=spanish-domain")
 
           server_project = Path("Backend/antigal.server/antigal.server.csproj").read_text(encoding="utf-8-sig")
@@ -218,6 +223,9 @@ jobs:
 
       - name: Validate direct production dependency authority
         run: node scripts/frontend_dependency_authority.mjs
+
+      - name: Validate JSX extension authority
+        run: node scripts/jsx_extension_authority.mjs
 
       - name: Lint frontend
         working-directory: Frontend/antigal.client
@@ -393,7 +401,7 @@ jobs:
           if not solution_clean:
               raise SystemExit("NuGet solution vulnerability audit is no longer clean")
 
-          print("B8b route-split frontend, B8a direct-eval-free frontend, B7b2 warning-free backend, B7b1 order model authority, B7a product-filter nullability, B6c3 React Hook Form compatibility, B6c2e Auth hydration, B6c2d2 Profile draft state, B6c2d1 User addresses state, B6c2c Category form state, B6c2b Admin image state, B6c2a Carousel state, B6c1 Hook dependencies, B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
+          print("B8c JSX extension authority, B8b route-split frontend, B8a direct-eval-free frontend, B7b2 warning-free backend, B7b1 order model authority, B7a product-filter nullability, B6c3 React Hook Form compatibility, B6c2e Auth hydration, B6c2d2 Profile draft state, B6c2d1 User addresses state, B6c2c Category form state, B6c2b Admin image state, B6c2a Carousel state, B6c1 Hook dependencies, B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
           PY
 
       - name: Upload quality evidence
