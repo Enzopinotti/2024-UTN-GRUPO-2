@@ -1,16 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const UserAddresses = () => {
   const { user: currentUser, setUserData } = useOutletContext();
-  const [userData, setUserDataState] = useState(currentUser);
+  const userData = currentUser;
   const [editingAddress, setEditingAddress] = useState(null);
   const [newAddress, setNewAddress] = useState("");
-
-  useEffect(() => {
-    setUserDataState(currentUser);
-  }, [currentUser]);
 
   const handleDeleteAddress = (addressId) => {
     Swal.fire({
@@ -28,7 +24,6 @@ const UserAddresses = () => {
         );
         const updatedUserData = { ...userData, direcciones: updatedAddresses };
         setUserData(updatedUserData);
-        setUserDataState(updatedUserData);
 
         Swal.fire(
           "Eliminado",
@@ -61,7 +56,6 @@ const UserAddresses = () => {
     );
     const updatedUserData = { ...userData, direcciones: updatedAddresses };
     setUserData(updatedUserData);
-    setUserDataState(updatedUserData);
     setEditingAddress(null);
     setNewAddress("");
 
