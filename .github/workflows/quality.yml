@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - modernize/2026-authorship-security-baseline
+      - modernize/b8b-route-code-splitting-lab
   workflow_dispatch:
 
 permissions:
@@ -118,6 +119,8 @@ jobs:
           assert package.get("dependencies", {}).get("react-router-dom") == "7.18.4"
 
           assert (base / "vite.config.mjs").is_file()
+          vite_config = (base / "vite.config.mjs").read_text(encoding="utf-8-sig")
+          assert "chunkSizeWarningLimit" not in vite_config
           assert (base / "eslint.config.mjs").is_file()
           assert (base / "index.html").is_file()
           assert not (base / "public/index.html").exists()
@@ -243,12 +246,33 @@ jobs:
           import os
           from pathlib import Path
 
+          import re
+
           text = (Path(os.environ["RUNNER_TEMP"]) / "frontend-build.txt").read_text()
           eval_warnings = text.count("[EVAL]")
           print(f"frontend_direct_eval_warnings={eval_warnings}")
           if eval_warnings:
               raise SystemExit("frontend build regained direct eval warnings")
-          print("B8a frontend direct-eval boundary passed.")
+
+          js_sizes = [
+              float(value)
+              for value in re.findall(
+                  r"build/assets/[^\\s]+\\.js\\s+([0-9]+(?:\\.[0-9]+)?) kB",
+                  text,
+              )
+          ]
+          if not js_sizes:
+              raise SystemExit("frontend build did not report any JavaScript chunks")
+
+          max_js_chunk = max(js_sizes)
+          print(f"frontend_js_chunks={len(js_sizes)}")
+          print(f"frontend_max_js_chunk_kb={max_js_chunk:.2f}")
+          if max_js_chunk > 500:
+              raise SystemExit(
+                  f"frontend JavaScript chunk boundary regressed above 500 kB: {max_js_chunk:.2f}"
+              )
+
+          print("B8b route code-splitting boundary passed.")
           PY
 
       - name: Restore backend
