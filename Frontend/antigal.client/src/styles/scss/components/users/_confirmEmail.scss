@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 .confirm-email-page {
     display: flex;
     justify-content: center;
@@ -32,7 +34,7 @@
         transition: background-color 0.3s;
   
         &:hover {
-          background-color: darken(#74873D, 10%);
+          background-color: color.adjust(#74873D, $lightness: -10%);
         }
       }
     }
