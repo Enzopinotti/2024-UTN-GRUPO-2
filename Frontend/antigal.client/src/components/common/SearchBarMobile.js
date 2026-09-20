@@ -1,5 +1,5 @@
 // src/components/common/SearchBarMobile.jsx
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import LupaWidget from "./LupaWidget";
 import { toast } from "react-toastify"; // Importar react-toastify para notificaciones
 
@@ -18,7 +18,7 @@ const SearchBarMobile = () => {
   ];
 
   // Función para realizar la búsqueda
-  const handleSearch = async () => {
+  const handleSearch = useCallback(async () => {
     if (searchTerm.trim() === "") {
       toast.info("Por favor, ingresa un término de búsqueda.");
       return;
@@ -65,7 +65,7 @@ const SearchBarMobile = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchTerm]);
 
   // Función para manejar cambios en el input
   const handleSearchChange = (e) => {
@@ -102,7 +102,7 @@ const SearchBarMobile = () => {
     }, 500); // Retraso de 500ms
 
     return () => clearTimeout(delayDebounceFn);
-  }, [searchTerm]);
+  }, [handleSearch, searchTerm]);
 
   return (
     <div className="search-container mobile">

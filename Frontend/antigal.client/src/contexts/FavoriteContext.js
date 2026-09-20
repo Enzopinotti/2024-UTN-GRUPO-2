@@ -29,9 +29,9 @@ const addFavorite = useCallback((product) => {
     });
 }, []);
 
-const removeFavorite=(productId)=>{
-    setFavorites((prevFavorites)=> prevFavorites.filter((item)=>item.id!==productId));
-};
+const removeFavorite = useCallback((productId) => {
+    setFavorites((prevFavorites) => prevFavorites.filter((item) => item.id !== productId));
+}, []);
 return(
     <FavoriteContext.Provider value={{favorites,addFavorite,removeFavorite}}>
         {children}
