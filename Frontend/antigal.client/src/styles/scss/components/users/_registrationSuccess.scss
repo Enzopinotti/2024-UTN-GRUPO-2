@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 .registration-success-page {
     display: flex;
     justify-content: center;
@@ -39,7 +41,7 @@
         font-weight: bold;
   
         &:hover {
-          background-color: darken(#74873D, 10%);
+          background-color: color.adjust(#74873D, $lightness: -10%);
         }
       }
     }
