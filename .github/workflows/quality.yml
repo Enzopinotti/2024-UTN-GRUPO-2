@@ -213,7 +213,54 @@ jobs:
         run: dotnet restore Backend/antigal.server.sln
 
       - name: Build backend
-        run: dotnet build Backend/antigal.server.sln -c Release --no-restore
+        shell: bash
+        run: |
+          set -o pipefail
+          dotnet build Backend/antigal.server.sln -c Release --no-restore | tee backend-build.txt
+
+      - name: Verify backend compiler warning boundary
+        shell: bash
+        run: |
+          python3 - <<'PY' | tee backend-warning-summary.txt
+          import re
+          from pathlib import Path
+
+          lines = Path("backend-build.txt").read_text().splitlines()
+          pattern = re.compile(
+              r"(?P<path>[^\\s:]+\\.cs)\\((?P<line>\\d+),(?P<col>\\d+)\\): warning (?P<code>CS\\d+):"
+          )
+
+          unique = {}
+          for line in lines:
+              match = pattern.search(line)
+              if not match:
+                  continue
+              key = (
+                  match.group("path"),
+                  int(match.group("line")),
+                  int(match.group("col")),
+                  match.group("code"),
+              )
+              unique[key] = line
+
+          counts = {}
+          for *_, code in unique:
+              counts[code] = counts.get(code, 0) + 1
+
+          print(f"backend_unique_warnings={len(unique)}")
+          for code in sorted(counts):
+              print(f"backend_{code}={counts[code]}")
+
+          if set(counts) - {"CS8618"}:
+              raise SystemExit(f"unexpected backend warning codes: {sorted(set(counts) - {'CS8618'})}")
+
+          if counts.get("CS8618", 0) != 11 or len(unique) != 11:
+              raise SystemExit(
+                  f"backend warning baseline changed: expected 11 CS8618, got {counts} / {len(unique)} unique"
+              )
+
+          print("B7a product-filter nullability boundary passed.")
+          PY
 
       - name: Test backend behavior
         run: dotnet test Backend/antigal.server.Tests/antigal.server.Tests.csproj -c Release --no-build
@@ -290,3 +337,5 @@ jobs:
             frontend-audit.json
             frontend-production-audit.json
             solution-vulnerable.txt
+            backend-build.txt
+            backend-warning-summary.txt
