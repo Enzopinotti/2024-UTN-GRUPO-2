@@ -105,11 +105,6 @@ jobs:
             jsdom@30.0.1 \
             @testing-library/jest-dom@7.0.1
 
-          # CRA used to leak this runtime package transitively into the app.
-          # Vite/Rolldown correctly requires reachable runtime imports to be
-          # declared explicitly by Antigal.
-          npm install --save --save-exact prop-types@15.8.1
-
           # Apply only compatible lockfile fixes. Remaining advisories are measured
           # explicitly later and are never hidden with --force/--legacy-peer-deps.
           npm audit fix --package-lock-only || true
