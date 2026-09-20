@@ -18,7 +18,7 @@ public class RequiredScalarModelTests
             }
             """;
 
-        Assert.ThrowsException<JsonException>(() => JsonSerializer.Deserialize<Contacto>(json));
+        Assert.ThrowsExactly<JsonException>(() => JsonSerializer.Deserialize<Contacto>(json));
     }
 
     [TestMethod]
@@ -51,7 +51,7 @@ public class RequiredScalarModelTests
             }
             """;
 
-        Assert.ThrowsException<JsonException>(() => JsonSerializer.Deserialize<Envio>(json));
+        Assert.ThrowsExactly<JsonException>(() => JsonSerializer.Deserialize<Envio>(json));
     }
 
     [TestMethod]
