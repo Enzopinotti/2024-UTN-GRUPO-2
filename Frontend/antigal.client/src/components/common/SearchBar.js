@@ -1,5 +1,5 @@
 // src/components/common/SearchBar.jsx
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LupaWidget from "./LupaWidget";
 import { toast } from "react-toastify";
@@ -24,7 +24,7 @@ const SearchBar = ({ isVisible, onClose, isMobile }) => {
   ];
 
   // Función para realizar la búsqueda
-  const handleSearch = async () => {
+  const handleSearch = useCallback(async () => {
     console.log("Término de búsqueda:", searchTerm);
     if (searchTerm.trim() === "") {
       toast.info("Por favor, ingresa un término de búsqueda.");
@@ -70,7 +70,7 @@ const SearchBar = ({ isVisible, onClose, isMobile }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchTerm]);
 
   // Función para manejar cambios en el input
   const handleSearchChange = (e) => {
@@ -117,7 +117,7 @@ const SearchBar = ({ isVisible, onClose, isMobile }) => {
     }, 500); // Retraso de 500ms
 
     return () => clearTimeout(delayDebounceFn);
-  }, [searchTerm, isMobile]);
+  }, [handleSearch, isMobile, searchTerm]);
 
   return (
     <div
