@@ -41,10 +41,6 @@ const SegundaSection = () => {
     fetchProductos();
   }, []);
 
-  useEffect(() => {
-    setCurrentIndex(0);
-  }, [productos]);
-
   // Funciones para avanzar y retroceder en el carrusel
   const handleNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex + visibleItems) % Math.max(productos.length, 1));
