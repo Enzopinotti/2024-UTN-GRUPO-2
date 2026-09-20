@@ -107,6 +107,14 @@ for (const item of emptyFiles) {
 console.log("--- UNREACHABLE_SOURCE_FILES ---");
 for (const file of unreachableFiles) console.log(file);
 
+if (emptyFiles.length) {
+  console.error("Tracked empty JavaScript source files are not allowed:");
+  for (const item of emptyFiles) {
+    console.error("- " + item.path);
+  }
+  process.exitCode = 1;
+}
+
 if (unresolved.length) {
   console.error("--- UNRESOLVED_LOCAL_IMPORTS ---");
   for (const item of unresolved) console.error(JSON.stringify(item));
