@@ -107,6 +107,18 @@ for (const item of emptyFiles) {
 console.log("--- UNREACHABLE_SOURCE_FILES ---");
 for (const file of unreachableFiles) console.log(file);
 
+console.log("--- UNREACHABLE_SOURCE_DETAILS ---");
+for (const relativePath of unreachableFiles) {
+  const file = path.join(repoRoot, relativePath);
+  const importers = [...(reverseEdges.get(file) ?? [])]
+    .map((importer) => path.relative(repoRoot, importer))
+    .sort();
+  console.log(JSON.stringify({
+    path: relativePath,
+    importers,
+  }));
+}
+
 if (emptyFiles.length) {
   console.error("Tracked empty JavaScript source files are not allowed:");
   for (const item of emptyFiles) {
