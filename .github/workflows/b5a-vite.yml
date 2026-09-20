@@ -96,6 +96,8 @@ jobs:
           cp package-lock.json "$GITHUB_WORKSPACE/b5a-package-lock-cra.json"
           rm package-lock.json
 
+          npm install --save-exact prop-types@15.8.1
+
           npm install --save-dev --save-exact \
             vite@8.2.2 \
             @vitejs/plugin-react@6.1.1 \
