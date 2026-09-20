@@ -13,6 +13,19 @@ export default defineConfig({
   },
   build: {
     outDir: "build",
+    rolldownOptions: {
+      output: {
+        codeSplitting: {
+          groups: [
+            {
+              name: "react-runtime",
+              test: /node_modules[\\/](?:react|react-dom|scheduler)[\\/]/,
+              priority: 20,
+            },
+          ],
+        },
+      },
+    },
   },
   test: {
     environment: "jsdom",
