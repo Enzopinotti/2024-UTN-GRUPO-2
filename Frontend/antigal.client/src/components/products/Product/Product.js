@@ -25,7 +25,7 @@ const Product = ({ product }) => {
     } else {
       removeFavorite(product.id);
     }
-  }, [liked, product.id]);
+  }, [addFavorite, liked, product, removeFavorite]);
 
   useEffect(() => {
     localStorage.setItem(`cart-${product.id}`, JSON.stringify(cartCount));
