@@ -1,0 +1,155 @@
+name: B6c2a Carousel state lab
+
+on:
+  push:
+    branches:
+      - modernize/b6c2a-carousel-state-lab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: b6c2a-carousel-state-lab
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: "false"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Setup Node 24.20.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24.20.0"
+          cache: npm
+          cache-dependency-path: Frontend/antigal.client/package-lock.json
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install frontend exactly
+        working-directory: Frontend/antigal.client
+        run: npm ci
+
+      - name: Validate direct production dependency authority
+        run: node scripts/frontend_dependency_authority.mjs
+
+      - name: Characterize B6c2a lint boundary
+        working-directory: Frontend/antigal.client
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx eslint src --format json > "$GITHUB_WORKSPACE/b6c2a-eslint.json" || true
+
+          python3 - <<'PY' | tee "$GITHUB_WORKSPACE/b6c2a-lint-summary.txt"
+          import json
+          import os
+          from collections import Counter
+          from pathlib import Path
+
+          data = json.loads((Path(os.environ["GITHUB_WORKSPACE"]) / "b6c2a-eslint.json").read_text())
+          messages = [message for result in data for message in result.get("messages", [])]
+          errors = [message for message in messages if message.get("severity") == 2]
+          warnings = [message for message in messages if message.get("severity") == 1]
+          rules = Counter(message.get("ruleId") for message in warnings)
+
+          print(f"errors={len(errors)}")
+          print(f"warnings={len(warnings)}")
+          for rule in (
+              "react-hooks/exhaustive-deps",
+              "react-hooks/set-state-in-effect",
+              "react-hooks/incompatible-library",
+          ):
+              print(f"{rule}={rules.get(rule, 0)}")
+
+          if errors:
+              raise SystemExit(f"B6c2a introduced blocking lint errors: {len(errors)}")
+          if rules.get("react-hooks/exhaustive-deps", 0) != 0:
+              raise SystemExit("B6c2a exhaustive-deps warnings returned")
+          if rules.get("react-hooks/set-state-in-effect", 0) != 6:
+              raise SystemExit("B6c2a expected exactly six remaining set-state-in-effect warnings")
+          if rules.get("react-hooks/incompatible-library", 0) != 2:
+              raise SystemExit("B6c2a unexpectedly changed incompatible-library debt")
+          if len(warnings) != 8:
+              raise SystemExit(f"B6c2a expected exactly 8 remaining warnings, got {len(warnings)}")
+
+          print("b6c2a_carousel_state_boundary=accepted")
+          PY
+
+          npm run lint -- --max-warnings 8
+
+      - name: Test frontend behavior
+        working-directory: Frontend/antigal.client
+        env:
+          CI: "true"
+        run: npm test
+
+      - name: Build frontend
+        working-directory: Frontend/antigal.client
+        run: npm run build
+
+      - name: Restore backend
+        run: dotnet restore Backend/antigal.server.sln
+
+      - name: Build backend
+        run: dotnet build Backend/antigal.server.sln -c Release --no-restore
+
+      - name: Test backend
+        run: dotnet test Backend/antigal.server.Tests/antigal.server.Tests.csproj -c Release --no-build
+
+      - name: Validate current-tree security
+        run: python3 scripts/security_baseline.py
+
+      - name: Audit dependency graphs
+        shell: bash
+        run: |
+          set -euo pipefail
+          (
+            cd Frontend/antigal.client
+            npm audit --json > "$GITHUB_WORKSPACE/b6c2a-audit.json" || true
+            npm audit --omit=dev --json > "$GITHUB_WORKSPACE/b6c2a-production-audit.json" || true
+          )
+          dotnet list Backend/antigal.server.sln package --vulnerable --include-transitive > b6c2a-nuget-vulnerable.txt
+
+          python3 - <<'PY' | tee b6c2a-audit-summary.txt
+          import json
+          from pathlib import Path
+
+          for path in ("b6c2a-audit.json", "b6c2a-production-audit.json"):
+              data = json.loads(Path(path).read_text())
+              total = data.get("metadata", {}).get("vulnerabilities", {}).get("total", 0)
+              print(f"{path}_total={total}")
+              if total != 0:
+                  raise SystemExit(f"{path} is no longer clean")
+
+          nuget = Path("b6c2a-nuget-vulnerable.txt").read_text()
+          if "has the following vulnerable packages" in nuget:
+              raise SystemExit("NuGet vulnerability report is no longer clean")
+          print("nuget_solution_vulnerability_report_clean=true")
+          PY
+
+      - name: Upload B6c2a evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b6c2a-carousel-state-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            b6c2a-eslint.json
+            b6c2a-lint-summary.txt
+            b6c2a-audit.json
+            b6c2a-production-audit.json
+            b6c2a-nuget-vulnerable.txt
+            b6c2a-audit-summary.txt
