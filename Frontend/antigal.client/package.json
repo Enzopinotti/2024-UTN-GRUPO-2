@@ -24,8 +24,7 @@
     "start": "vite",
     "build": "vite build",
     "test": "vitest run",
-    "sass": "sass --no-charset --watch src/styles/scss:src/styles/css",
-    "dev": "concurrently \"npm run sass\" \"vite\"",
+    "dev": "vite",
     "json-server": "json-server --watch backend-temp/db.json --port 5000",
     "lint": "eslint src"
   },
@@ -48,7 +47,6 @@
     "@testing-library/react": "16.3.3",
     "@testing-library/user-event": "14.6.7",
     "@vitejs/plugin-react": "6.1.1",
-    "concurrently": "^8.2.2",
     "eslint": "10.11.0",
     "eslint-plugin-react-hooks": "7.1.1",
     "globals": "17.12.0",
