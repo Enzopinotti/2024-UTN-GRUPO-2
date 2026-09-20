@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - modernize/2026-authorship-security-baseline
+      - modernize/b8a-empty-cart-lottie-removal-lab
   workflow_dispatch:
 
 permissions:
@@ -92,12 +93,21 @@ jobs:
               "react-scripts",
               "webpack-dev-server",
           }
+          removed_runtime_tooling = {
+              "@lottiefiles/react-lottie-player",
+              "lottie-web",
+          }
           dependencies = set(package.get("dependencies", {}))
           dev_dependencies = set(package.get("devDependencies", {}))
+          lock_packages = set(lock.get("packages", {}))
           assert not frontend_tooling & dependencies
           assert frontend_tooling <= dev_dependencies
           assert not removed_cra_tooling & dependencies
           assert not removed_cra_tooling & dev_dependencies
+          assert not removed_runtime_tooling & dependencies
+          assert not removed_runtime_tooling & dev_dependencies
+          assert "node_modules/@lottiefiles/react-lottie-player" not in lock_packages
+          assert "node_modules/lottie-web" not in lock_packages
 
           scripts = package.get("scripts", {})
           assert scripts.get("start") == "vite"
@@ -112,6 +122,7 @@ jobs:
           assert (base / "eslint.config.mjs").is_file()
           assert (base / "index.html").is_file()
           assert not (base / "public/index.html").exists()
+          assert not (base / "public/json/empty-cart-animation.json").exists()
 
           required = [
               base / "src/pages/Home.js",
@@ -131,6 +142,7 @@ jobs:
           print("frontend-manifest-lock-root=matched")
           print("frontend-vite-vitest-authority=present")
           print("frontend-cra-authority=absent")
+          print("frontend-lottie-runtime-authority=absent")
           duplicate_order_types = [
               Path("Backend/antigal.server/Models/Order.cs"),
               Path("Backend/antigal.server/Models/OrderItem.cs"),
@@ -220,7 +232,25 @@ jobs:
 
       - name: Build frontend
         working-directory: Frontend/antigal.client
-        run: npm run build
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee "$RUNNER_TEMP/frontend-build.txt"
+
+      - name: Verify frontend build runtime warnings
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+
+          text = (Path(os.environ["RUNNER_TEMP"]) / "frontend-build.txt").read_text()
+          eval_warnings = text.count("[EVAL]")
+          print(f"frontend_direct_eval_warnings={eval_warnings}")
+          if eval_warnings:
+              raise SystemExit("frontend build regained direct eval warnings")
+          print("B8a frontend direct-eval boundary passed.")
+          PY
 
       - name: Restore backend
         run: dotnet restore Backend/antigal.server.sln
