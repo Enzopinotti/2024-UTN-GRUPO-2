@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { resetPasswordSchema } from '../../validations/validationSchemas';
+import { arePasswordConditionsMet, getPasswordConditions } from '../../utils/passwordConditions';
 import DOMPurify from 'dompurify';
 import { toast } from 'react-toastify';
 
@@ -15,36 +16,19 @@ const ResetearContrasenia = () => {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
+    control,
   } = useForm({
     resolver: yupResolver(resetPasswordSchema),
   });
 
-  const passwordValue = watch('password', '');
-
-  const [passwordConditions, setPasswordConditions] = useState({
-    length: false,
-    lowercase: false,
-    uppercase: false,
-    number: false,
-    specialChar: false,
+  const passwordValue = useWatch({
+    control,
+    name: 'password',
+    defaultValue: '',
   });
 
-  const checkPasswordConditions = (password) => {
-    setPasswordConditions({
-      length: password.length >= 8,
-      lowercase: /[a-z]/.test(password),
-      uppercase: /[A-Z]/.test(password),
-      number: /\d/.test(password),
-      specialChar: /[@$!%*?&]/.test(password),
-    });
-  };
-
-  useEffect(() => {
-    checkPasswordConditions(passwordValue);
-  }, [passwordValue]);
-
-  const allConditionsMet = Object.values(passwordConditions).every((value) => value === true);
+  const passwordConditions = getPasswordConditions(passwordValue);
+  const allConditionsMet = arePasswordConditionsMet(passwordConditions);
 
   const sanitizeInput = (input) => {
     return DOMPurify.sanitize(input);
