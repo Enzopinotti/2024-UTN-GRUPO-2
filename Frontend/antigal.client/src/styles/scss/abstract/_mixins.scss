@@ -1,5 +1,6 @@
 // src/abstract/mixins.scss
 
+@use 'sass:color';
 @use 'variables' as variables; // Asegúrate de ajustar la ruta según tu estructura de carpetas
 
 // Función para obtener el valor de una variable de tema
@@ -31,6 +32,6 @@
     -o-border-radius: 20px;
 
     &:hover {
-        background-color: darken($bg-color, 10%);
+        background-color: color.adjust($bg-color, $lightness: -10%);
     }
 }
