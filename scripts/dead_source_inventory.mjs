@@ -87,9 +87,25 @@ const unreachableFiles = sourceFiles
   .filter((file) => !reachable.has(file))
   .map((file) => path.relative(repoRoot, file));
 
+function isExternalTestRoot(relativePath) {
+  const normalized = relativePath.replaceAll("\\", "/");
+  return (
+    /\.(?:test|spec)\.(?:js|jsx|mjs|cjs)$/.test(normalized) ||
+    normalized.endsWith("/src/setupTests.js")
+  );
+}
+
+const unexpectedUnreachable = unreachableFiles.filter(
+  (file) => !isExternalTestRoot(file),
+);
+
 console.log("frontend-source-files=" + sourceFiles.length);
 console.log("frontend-reachable-source-files=" + reachable.size);
 console.log("frontend-unreachable-source-files=" + unreachableFiles.length);
+console.log(
+  "frontend-unexpected-unreachable-source-files=" +
+    unexpectedUnreachable.length,
+);
 console.log("frontend-empty-source-files=" + emptyFiles.length);
 console.log("frontend-unresolved-local-imports=" + unresolved.length);
 
@@ -117,6 +133,14 @@ for (const relativePath of unreachableFiles) {
     path: relativePath,
     importers,
   }));
+}
+
+if (unexpectedUnreachable.length) {
+  console.error("Unexpected unreachable frontend source files are not allowed:");
+  for (const file of unexpectedUnreachable) {
+    console.error("- " + file);
+  }
+  process.exitCode = 1;
 }
 
 if (emptyFiles.length) {
