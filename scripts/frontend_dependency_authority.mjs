@@ -5,7 +5,7 @@ import process from "node:process";
 const repoRoot = process.cwd();
 const appRoot = path.join(repoRoot, "Frontend", "antigal.client");
 const srcRoot = path.join(appRoot, "src");
-const entrypoint = path.join(srcRoot, "index.js");
+const entrypoint = path.join(srcRoot, "index.jsx");
 const packageJsonPath = path.join(appRoot, "package.json");
 
 const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
