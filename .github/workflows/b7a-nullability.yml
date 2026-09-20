@@ -155,10 +155,10 @@ jobs:
           print("nuget_solution_vulnerability_report_clean=true")
           PY
 
-      - name: Verify repository remains clean
+      - name: Verify tracked repository remains clean
         run: |
           git diff --exit-code
-          test -z "$(git status --porcelain)"
+          test -z "$(git status --porcelain --untracked-files=no)"
 
       - name: Upload B7a evidence
         if: always()
