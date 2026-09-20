@@ -95,10 +95,26 @@ jobs:
           text = Path("b8b-build.txt").read_text()
           chunk_warnings = text.count("Some chunks are larger than 500 kB")
           eval_warnings = text.count("[EVAL]")
+
+          assets = Path("Frontend/antigal.client/build/assets")
+          entry_chunks = sorted(assets.glob("index-*.js"))
+          if len(entry_chunks) != 1:
+              raise SystemExit(
+                  f"expected exactly one Vite entry chunk, found {len(entry_chunks)}"
+              )
+          entry_kib = entry_chunks[0].stat().st_size / 1024
+
           print(f"chunk_size_warnings={chunk_warnings}")
           print(f"direct_eval_warnings={eval_warnings}")
+          print(f"entry_chunk_kib={entry_kib:.2f}")
           if eval_warnings:
               raise SystemExit("B8b regressed the direct-eval-free boundary")
+          if chunk_warnings:
+              raise SystemExit("B8b regressed the >500 kB chunk-warning boundary")
+          if entry_kib > 320:
+              raise SystemExit(
+                  f"B8b entry chunk exceeded 320 KiB: {entry_kib:.2f}"
+              )
           PY
 
       - name: Restore backend
