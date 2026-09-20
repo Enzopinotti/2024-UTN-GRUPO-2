@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - modernize/2026-authorship-security-baseline
+      - modernize/b6c3-react-hook-form-watch-lab
   workflow_dispatch:
 
 permissions:
