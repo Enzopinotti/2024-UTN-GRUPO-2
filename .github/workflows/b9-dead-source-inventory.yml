@@ -28,9 +28,35 @@ jobs:
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: "24.20.0"
+          cache: npm
+          cache-dependency-path: Frontend/antigal.client/package-lock.json
+
+      - name: Install frontend exactly
+        working-directory: Frontend/antigal.client
+        run: npm ci
 
       - name: Inventory dead and empty frontend source
         run: node scripts/dead_source_inventory.mjs | tee b9-dead-source-inventory.txt
+
+      - name: Validate production dependency authority
+        run: node scripts/frontend_dependency_authority.mjs
+
+      - name: Validate JSX extension authority
+        run: node scripts/jsx_extension_authority.mjs
+
+      - name: Lint frontend
+        working-directory: Frontend/antigal.client
+        run: npm run lint -- --max-warnings 0
+
+      - name: Test frontend
+        working-directory: Frontend/antigal.client
+        env:
+          CI: "true"
+        run: npm test
+
+      - name: Build frontend
+        working-directory: Frontend/antigal.client
+        run: npm run build
 
       - name: Upload B9 inventory
         if: always()
