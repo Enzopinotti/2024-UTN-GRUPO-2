@@ -1,11 +1,11 @@
-﻿namespace antigal.server.Models
+namespace antigal.server.Models
 {
     public class Envio
     {
         public int Id { get; set; }
-        public string Destinatario { get; set; }
-        public string Direccion { get; set; }
+        public required string Destinatario { get; set; }
+        public required string Direccion { get; set; }
 
-        public  DateTime FechaEnvio { get; set; }
+        public DateTime FechaEnvio { get; set; }
     }
 }
