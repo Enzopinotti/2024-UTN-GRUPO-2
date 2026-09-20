@@ -54,10 +54,11 @@ jobs:
 
           python3 - <<'PY' | tee "$GITHUB_WORKSPACE/b6c1-lint-summary.txt"
           import json
+          import os
           from collections import Counter
           from pathlib import Path
 
-          data = json.loads(Path("b6c1-eslint.json").read_text())
+          data = json.loads((Path(os.environ["GITHUB_WORKSPACE"]) / "b6c1-eslint.json").read_text())
           messages = [message for result in data for message in result.get("messages", [])]
           errors = [message for message in messages if message.get("severity") == 2]
           warnings = [message for message in messages if message.get("severity") == 1]
