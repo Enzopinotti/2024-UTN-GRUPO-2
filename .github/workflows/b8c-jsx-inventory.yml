@@ -1,0 +1,132 @@
+name: B8c JSX extension inventory
+
+on:
+  push:
+    branches:
+      - modernize/b8c-jsx-extension-lab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: b8c-jsx-extension-lab
+  cancel-in-progress: true
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout triggering B8c commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+
+      - name: Setup Node 24.20.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24.20.0"
+          cache: npm
+          cache-dependency-path: Frontend/antigal.client/package-lock.json
+
+      - name: Install frontend exactly
+        working-directory: Frontend/antigal.client
+        run: npm ci
+
+      - name: Inventory JSX-bearing .js files
+        working-directory: Frontend/antigal.client
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module - <<'NODE' | tee "$GITHUB_WORKSPACE/b8c-jsx-inventory.txt"
+          import fs from "node:fs";
+          import path from "node:path";
+          import { transformWithOxc } from "vite";
+
+          const root = path.resolve("src");
+
+          function walk(dir) {
+            return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+              const full = path.join(dir, entry.name);
+              if (entry.isDirectory()) return walk(full);
+              return [full];
+            });
+          }
+
+          const files = walk(root)
+            .filter((file) => file.endsWith(".js"))
+            .sort();
+
+          const jsxFiles = [];
+          const plainJsFiles = [];
+          const parseFailures = [];
+
+          for (const file of files) {
+            const code = fs.readFileSync(file, "utf8");
+            try {
+              await transformWithOxc(code, file, { lang: "js" });
+              plainJsFiles.push(file);
+              continue;
+            } catch (jsError) {
+              try {
+                await transformWithOxc(code, file, {
+                  lang: "jsx",
+                  jsx: { runtime: "automatic" },
+                });
+                jsxFiles.push(file);
+              } catch (jsxError) {
+                parseFailures.push({
+                  file,
+                  js: String(jsError),
+                  jsx: String(jsxError),
+                });
+              }
+            }
+          }
+
+          console.log("src_js_files=" + files.length);
+          console.log("jsx_bearing_js_files=" + jsxFiles.length);
+          console.log("plain_js_files=" + plainJsFiles.length);
+          console.log("parse_failures=" + parseFailures.length);
+          console.log("--- JSX_BEARING_JS ---");
+          for (const file of jsxFiles) {
+            console.log(path.relative(process.cwd(), file));
+          }
+          console.log("--- PLAIN_JS ---");
+          for (const file of plainJsFiles) {
+            console.log(path.relative(process.cwd(), file));
+          }
+
+          if (parseFailures.length) {
+            console.error("--- PARSE_FAILURES ---");
+            for (const failure of parseFailures) {
+              console.error(failure.file);
+              console.error(failure.js);
+              console.error(failure.jsx);
+            }
+            process.exit(1);
+          }
+          NODE
+
+      - name: Inventory explicit .js imports
+        working-directory: Frontend/antigal.client
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            echo "--- EXPLICIT_JS_IMPORTS ---"
+            git grep -nE "(["'][^"']+\.js["'])" -- src || true
+          } | tee "$GITHUB_WORKSPACE/b8c-explicit-js-imports.txt"
+
+      - name: Upload B8c inventory
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b8c-jsx-inventory-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            b8c-jsx-inventory.txt
+            b8c-explicit-js-imports.txt
