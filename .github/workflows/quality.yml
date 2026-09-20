@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - modernize/2026-authorship-security-baseline
+      - modernize/b6c2d1-user-addresses-lab
   workflow_dispatch:
 
 permissions:
