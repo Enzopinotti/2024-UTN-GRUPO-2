@@ -71,7 +71,6 @@ jobs:
               "@testing-library/react",
               "@testing-library/user-event",
               "@vitejs/plugin-react",
-              "concurrently",
               "eslint",
               "eslint-plugin-react-hooks",
               "globals",
@@ -116,10 +115,16 @@ jobs:
 
           scripts = package.get("scripts", {})
           assert scripts.get("start") == "vite"
+          assert scripts.get("dev") == "vite"
           assert scripts.get("build") == "vite build"
           assert scripts.get("test") == "vitest run"
           assert scripts.get("lint") == "eslint src"
+          assert "sass" not in scripts
           assert "eject" not in scripts
+          assert package.get("devDependencies", {}).get("sass") is not None
+          assert "concurrently" not in package.get("dependencies", {})
+          assert "concurrently" not in package.get("devDependencies", {})
+          assert "node_modules/concurrently" not in lock_packages
           assert package.get("dependencies", {}).get("prop-types") == "15.8.1"
           assert package.get("dependencies", {}).get("react") == "19.3.0"
           assert package.get("dependencies", {}).get("react-dom") == "19.3.0"
@@ -131,6 +136,8 @@ jobs:
           assert (base / "vite.config.mjs").is_file()
           assert (base / "eslint.config.mjs").is_file()
           assert (base / "index.html").is_file()
+          assert (base / "src/styles/scss/index.scss").is_file()
+          assert not (base / "src/styles/css").exists()
           vite_config = (base / "vite.config.mjs").read_text(encoding="utf-8-sig")
           assert "transformWithOxc" not in vite_config
           assert "jsxInLegacyJs" not in vite_config
@@ -159,6 +166,9 @@ jobs:
           print("frontend-cra-authority=absent")
           print("frontend-lottie-runtime-authority=absent")
           print("frontend-dead-runtime-packages=absent")
+          print("frontend-native-sass-authority=present")
+          print("frontend-generated-css-authority=absent")
+          print("frontend-concurrently-authority=absent")
           duplicate_order_types = [
               Path("Backend/antigal.server/Models/Order.cs"),
               Path("Backend/antigal.server/Models/OrderItem.cs"),
@@ -244,6 +254,9 @@ jobs:
       - name: Validate dead frontend source authority
         run: node scripts/dead_source_inventory.mjs
 
+      - name: Validate native Sass authority
+        run: node scripts/style_authority.mjs
+
       - name: Lint frontend
         working-directory: Frontend/antigal.client
         run: npm run lint -- --max-warnings 0
@@ -284,19 +297,35 @@ jobs:
 
           assets = Path("Frontend/antigal.client/build/assets")
           entry_chunks = sorted(assets.glob("index-*.js"))
+          entry_css = sorted(assets.glob("index-*.css"))
+          store_css = sorted(assets.glob("TiendaFisica-*.css"))
           if len(entry_chunks) != 1:
               raise SystemExit(
                   f"expected exactly one Vite entry chunk, found {len(entry_chunks)}"
               )
+          if len(entry_css) != 1:
+              raise SystemExit(
+                  f"expected exactly one Vite entry stylesheet, found {len(entry_css)}"
+              )
+          if len(store_css) != 1:
+              raise SystemExit(
+                  f"expected exactly one route-scoped TiendaFisica stylesheet, found {len(store_css)}"
+              )
 
           entry_bytes = entry_chunks[0].stat().st_size
           entry_kib = entry_bytes / 1024
+          entry_css_kib = entry_css[0].stat().st_size / 1024
+          store_css_kib = store_css[0].stat().st_size / 1024
           js_chunk_count = len(list(assets.glob("*.js")))
+          sass_deprecations = text.lower().count("deprecation warning")
 
           print(f"frontend_direct_eval_warnings={eval_warnings}")
           print(f"frontend_chunk_size_warnings={chunk_warnings}")
           print(f"frontend_js_chunk_count={js_chunk_count}")
           print(f"frontend_entry_chunk_kib={entry_kib:.2f}")
+          print(f"frontend_entry_css_kib={entry_css_kib:.2f}")
+          print(f"frontend_tienda_fisica_css_kib={store_css_kib:.2f}")
+          print(f"frontend_sass_deprecation_warnings={sass_deprecations}")
 
           if eval_warnings:
               raise SystemExit("frontend build regained direct eval warnings")
@@ -306,8 +335,22 @@ jobs:
               raise SystemExit(
                   f"frontend entry chunk regressed above B8b 320 KiB ceiling: {entry_kib:.2f}"
               )
+          if not 132 <= entry_css_kib <= 136:
+              raise SystemExit(
+                  "frontend entry stylesheet escaped B12 native Sass envelope "
+                  f"(132-136 KiB): {entry_css_kib:.2f}"
+              )
+          if not 12 <= store_css_kib <= 14:
+              raise SystemExit(
+                  "TiendaFisica stylesheet escaped B12 route-scoped envelope "
+                  f"(12-14 KiB): {store_css_kib:.2f}"
+              )
+          if sass_deprecations:
+              raise SystemExit(
+                  f"frontend native Sass build regained deprecations: {sass_deprecations}"
+              )
 
-          print("B8b route-splitting and B8a direct-eval boundaries passed.")
+          print("B12 native Sass, B8b route-splitting and B8a direct-eval boundaries passed.")
           PY
 
       - name: Restore backend
@@ -428,7 +471,7 @@ jobs:
           if not solution_clean:
               raise SystemExit("NuGet solution vulnerability audit is no longer clean")
 
-          print("B11 React 19 runtime and dead runtime-package pruning, B10 warning-free Testing Library runtime, B9 dead-source authority, B8c JSX extension authority, B8b route-split frontend, B8a direct-eval-free frontend, B7b2 warning-free backend, B7b1 order model authority, B7a product-filter nullability, B6c3 React Hook Form compatibility, B6c2e Auth hydration, B6c2d2 Profile draft state, B6c2d1 User addresses state, B6c2c Category form state, B6c2b Admin image state, B6c2a Carousel state, B6c1 Hook dependencies, B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
+          print("B12 native Sass authority, B11 React 19 runtime and dead runtime-package pruning, B10 warning-free Testing Library runtime, B9 dead-source authority, B8c JSX extension authority, B8b route-split frontend, B8a direct-eval-free frontend, B7b2 warning-free backend, B7b1 order model authority, B7a product-filter nullability, B6c3 React Hook Form compatibility, B6c2e Auth hydration, B6c2d2 Profile draft state, B6c2d1 User addresses state, B6c2c Category form state, B6c2b Admin image state, B6c2a Carousel state, B6c1 Hook dependencies, B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
           PY
 
       - name: Upload quality evidence
