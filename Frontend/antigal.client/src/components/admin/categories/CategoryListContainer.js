@@ -152,6 +152,7 @@ const CategoryListContainer = () => {
           <button onClick={handleShowModal}>+ Nueva Categoría</button>
         </div>
         <CategoryForm
+          key={editingCategory?.idCategoria ?? 'new'}
           show={showModal}
           onClose={handleCloseModal}
           onSave={editingCategory ? handleEditCategory : handleAddCategory}
