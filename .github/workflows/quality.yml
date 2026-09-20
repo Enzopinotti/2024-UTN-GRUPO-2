@@ -197,7 +197,7 @@ jobs:
 
       - name: Lint frontend
         working-directory: Frontend/antigal.client
-        run: npm run lint -- --max-warnings 8
+        run: npm run lint -- --max-warnings 6
 
       - name: Test frontend behavior
         working-directory: Frontend/antigal.client
@@ -276,7 +276,7 @@ jobs:
           if not solution_clean:
               raise SystemExit("NuGet solution vulnerability audit is no longer clean")
 
-          print("B6c2a Carousel state, B6c1 Hook dependencies, B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
+          print("B6c2b Admin image state, B6c2a Carousel state, B6c1 Hook dependencies, B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
           PY
 
       - name: Upload quality evidence

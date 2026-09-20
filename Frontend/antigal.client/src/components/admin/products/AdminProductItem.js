@@ -1,5 +1,5 @@
 // src/components/admin/products/AdminProductItem.js
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const AdminProductItem = ({ product, onEdit, onDelete }) => {
   const {
@@ -15,26 +15,6 @@ const AdminProductItem = ({ product, onEdit, onDelete }) => {
   } = product;
 
   const [imageError, setImageError] = useState(false);
-  const [, setImageSrc] = useState('');
-
-
-  useEffect(() => {
-    if (imagenUrls && imagenUrls.length > 0) {
-      // Si la imagen es una URL (cadena), úsala directamente
-      // Si es un objeto File, crea una URL para previsualización
-      if (typeof imagenUrls === 'string') {
-        setImageSrc(imagenUrls);
-      } else {
-        const objectUrl = URL.createObjectURL(imagenUrls);
-        setImageSrc(objectUrl);
-
-        // Limpia la URL creada para evitar fugas de memoria
-        return () => URL.revokeObjectURL(objectUrl);
-      }
-    } else {
-      setImageSrc('');
-    }
-  }, [imagenUrls]);
 
   const handleImageError = () => {
     setImageError(true);
