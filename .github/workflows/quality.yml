@@ -227,6 +227,9 @@ jobs:
       - name: Validate JSX extension authority
         run: node scripts/jsx_extension_authority.mjs
 
+      - name: Validate dead frontend source authority
+        run: node scripts/dead_source_inventory.mjs
+
       - name: Lint frontend
         working-directory: Frontend/antigal.client
         run: npm run lint -- --max-warnings 0
@@ -401,7 +404,7 @@ jobs:
           if not solution_clean:
               raise SystemExit("NuGet solution vulnerability audit is no longer clean")
 
-          print("B8c JSX extension authority, B8b route-split frontend, B8a direct-eval-free frontend, B7b2 warning-free backend, B7b1 order model authority, B7a product-filter nullability, B6c3 React Hook Form compatibility, B6c2e Auth hydration, B6c2d2 Profile draft state, B6c2d1 User addresses state, B6c2c Category form state, B6c2b Admin image state, B6c2a Carousel state, B6c1 Hook dependencies, B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
+          print("B9 dead-source authority, B8c JSX extension authority, B8b route-split frontend, B8a direct-eval-free frontend, B7b2 warning-free backend, B7b1 order model authority, B7a product-filter nullability, B6c3 React Hook Form compatibility, B6c2e Auth hydration, B6c2d2 Profile draft state, B6c2d1 User addresses state, B6c2c Category form state, B6c2b Admin image state, B6c2a Carousel state, B6c1 Hook dependencies, B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
           PY
 
       - name: Upload quality evidence
