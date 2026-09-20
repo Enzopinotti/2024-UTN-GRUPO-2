@@ -120,6 +120,26 @@ jobs:
             git grep -nE "(["'][^"']+\.js["'])" -- src || true
           } | tee "$GITHUB_WORKSPACE/b8c-explicit-js-imports.txt"
 
+      - name: Validate production dependency authority
+        run: node scripts/frontend_dependency_authority.mjs
+
+      - name: Validate JSX extension authority
+        run: node scripts/jsx_extension_authority.mjs
+
+      - name: Lint frontend
+        working-directory: Frontend/antigal.client
+        run: npm run lint -- --max-warnings 0
+
+      - name: Test frontend
+        working-directory: Frontend/antigal.client
+        env:
+          CI: "true"
+        run: npm test
+
+      - name: Build frontend
+        working-directory: Frontend/antigal.client
+        run: npm run build
+
       - name: Upload B8c inventory
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
