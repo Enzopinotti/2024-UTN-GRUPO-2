@@ -21,7 +21,7 @@ namespace antigal.server.Services
             _response = response;
         }
 
-        public async Task<ResponseDto> GetProducts(string orden = null, string precio = null)
+        public async Task<ResponseDto> GetProducts(string? orden = null, string? precio = null)
         {
             var response = new ResponseDto();
             try
