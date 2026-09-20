@@ -123,7 +123,7 @@
           color: black;
           cursor: pointer;
           &:hover {
-            color: lighten(black, 30%);
+            color: color.adjust(black, $lightness: 30%);
           }
         }
         .input-envio {

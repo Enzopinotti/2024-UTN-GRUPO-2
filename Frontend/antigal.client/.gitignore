@@ -11,6 +11,9 @@
 # production
 /build
 
+# generated styles (Vite consumes src/styles/scss directly)
+/src/styles/css/
+
 # misc
 .DS_Store
 .env.local

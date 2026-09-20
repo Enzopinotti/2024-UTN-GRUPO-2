@@ -1,5 +1,7 @@
 // src/abstract/mixins.scss
 
+@use 'sass:color';
+@use 'sass:map';
 @use 'variables' as variables; // Asegúrate de ajustar la ruta según tu estructura de carpetas
 
 // Función para obtener el valor de una variable de tema
@@ -9,7 +11,7 @@
 
 // Mixin para aplicar los colores del tema
 @mixin apply-theme($theme-name) {
-  @each $property, $value in map-get(variables.$themes, $theme-name) {
+  @each $property, $value in map.get(variables.$themes, $theme-name) {
     --#{$property}: #{$value};
   }
 }
@@ -31,6 +33,6 @@
     -o-border-radius: 20px;
 
     &:hover {
-        background-color: darken($bg-color, 10%);
+        background-color: color.adjust($bg-color, $lightness: -10%);
     }
 }
