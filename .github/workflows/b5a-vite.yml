@@ -83,6 +83,8 @@ jobs:
             delete pkg.devDependencies[name];
           }
 
+          pkg.dependencies["prop-types"] = "15.8.1";
+
           pkg.dependencies = Object.fromEntries(Object.entries(pkg.dependencies).sort());
           pkg.devDependencies = Object.fromEntries(Object.entries(pkg.devDependencies).sort());
           fs.writeFileSync(path, JSON.stringify(pkg, null, 2) + "\n");
