@@ -1,0 +1,183 @@
+name: B10 Testing Library runtime lab
+
+on:
+  push:
+    branches:
+      - modernize/b10-testing-library-runtime-lab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: b10-testing-library-runtime-lab
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: "true"
+
+    steps:
+      - name: Checkout triggering B10 commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+
+      - name: Setup Node 24.20.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24.20.0"
+          cache: npm
+          cache-dependency-path: Frontend/antigal.client/package-lock.json
+
+      - name: Prepare maintained Testing Library authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs = require("fs");
+          const path = "Frontend/antigal.client/package.json";
+          const pkg = JSON.parse(fs.readFileSync(path, "utf8"));
+
+          pkg.devDependencies["@testing-library/react"] = "16.3.3";
+          pkg.devDependencies["@testing-library/dom"] = "10.4.2";
+          delete pkg.devDependencies["@testing-library/user-event"];
+
+          pkg.devDependencies = Object.fromEntries(
+            Object.entries(pkg.devDependencies).sort(([a], [b]) => a.localeCompare(b))
+          );
+
+          fs.writeFileSync(path, JSON.stringify(pkg, null, 2) + "\n");
+          NODE
+
+          cd Frontend/antigal.client
+          npm install --package-lock-only --ignore-scripts
+
+      - name: Install exact candidate
+        working-directory: Frontend/antigal.client
+        run: npm ci
+
+      - name: Verify Testing Library authority
+        working-directory: Frontend/antigal.client
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ls @testing-library/react @testing-library/dom @testing-library/user-event || true
+
+          node - <<'NODE'
+          const fs = require("fs");
+          const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
+          const lock = JSON.parse(fs.readFileSync("package-lock.json", "utf8"));
+          const dev = pkg.devDependencies ?? {};
+
+          if (dev["@testing-library/react"] !== "16.3.3") {
+            throw new Error("unexpected @testing-library/react authority");
+          }
+          if (dev["@testing-library/dom"] !== "10.4.2") {
+            throw new Error("unexpected @testing-library/dom authority");
+          }
+          if ("@testing-library/user-event" in dev) {
+            throw new Error("unused @testing-library/user-event still declared");
+          }
+          if ("node_modules/@testing-library/user-event" in (lock.packages ?? {})) {
+            throw new Error("unused @testing-library/user-event still locked");
+          }
+          NODE
+
+      - name: Validate frontend authorities
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/frontend_dependency_authority.mjs
+          node scripts/jsx_extension_authority.mjs
+          node scripts/dead_source_inventory.mjs
+
+      - name: Lint frontend
+        working-directory: Frontend/antigal.client
+        run: npm run lint -- --max-warnings 0
+
+      - name: Test frontend and capture runtime warnings
+        working-directory: Frontend/antigal.client
+        shell: bash
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee "$RUNNER_TEMP/b10-tests.txt"
+
+      - name: Enforce warning-free React test runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+
+          text = (Path(os.environ["RUNNER_TEMP"]) / "b10-tests.txt").read_text()
+          legacy_act = text.count("ReactDOMTestUtils.act")
+          print(f"b10_legacy_reactdom_act_warnings={legacy_act}")
+          if legacy_act:
+              raise SystemExit(
+                  f"Testing Library runtime still emits {legacy_act} ReactDOMTestUtils.act warnings"
+              )
+          print("b10_testing_runtime_warning_boundary=clean")
+          PY
+
+      - name: Build frontend
+        working-directory: Frontend/antigal.client
+        run: npm run build
+
+      - name: Audit candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          (
+            cd Frontend/antigal.client
+            npm audit --json > "$GITHUB_WORKSPACE/b10-audit-all.json" || true
+            npm audit --omit=dev --json > "$GITHUB_WORKSPACE/b10-audit-production.json" || true
+          )
+
+          python3 - <<'PY' | tee b10-summary.txt
+          import json
+          from pathlib import Path
+
+          for label, path in (
+              ("all", "b10-audit-all.json"),
+              ("production", "b10-audit-production.json"),
+          ):
+              data = json.loads(Path(path).read_text())
+              vulns = data.get("metadata", {}).get("vulnerabilities", {})
+              total = vulns.get("total", 0)
+              print(f"{label}_total={total}")
+              print(f"{label}_high={vulns.get('high', 0)}")
+              print(f"{label}_critical={vulns.get('critical', 0)}")
+              if total != 0:
+                  raise SystemExit(f"{label} npm audit is no longer clean: {total}")
+          print("b10_testing_library_security_boundary=clean")
+          PY
+
+      - name: Commit validated package authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Frontend/antigal.client/package.json Frontend/antigal.client/package-lock.json
+          git diff --cached --quiet && { echo "No package authority changes"; exit 0; }
+          git commit -m "B10 lab candidate: modern Testing Library authority"
+          git push origin HEAD:modernize/b10-testing-library-runtime-lab
+
+      - name: Upload B10 evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b10-testing-runtime-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            ${{ runner.temp }}/b10-tests.txt
+            b10-summary.txt
+            b10-audit-all.json
+            b10-audit-production.json
