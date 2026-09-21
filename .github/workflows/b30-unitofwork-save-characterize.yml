@@ -1,0 +1,104 @@
+name: B30 UnitOfWork SaveChanges characterization
+
+on:
+  push:
+    branches:
+      - modernize/b30-unitofwork-save-authority-lab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  characterize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Characterize SaveChanges authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          root = Path("Backend")
+          prod = root / "antigal.server"
+          tests = root / "antigal.server.Tests"
+
+          def files_under(base):
+              return [
+                  p for p in sorted(base.rglob("*.cs"))
+                  if not any(part in {"bin", "obj"} for part in p.parts)
+              ]
+
+          production_files = files_under(prod)
+          test_files = files_under(tests)
+
+          production_refs = []
+          for path in production_files:
+              src = path.read_text(encoding="utf-8-sig")
+              for lineno, line in enumerate(src.splitlines(), 1):
+                  if "SaveChangesAsync" in line:
+                      production_refs.append((path.as_posix(), lineno, line.strip()))
+
+          test_refs = []
+          for path in test_files:
+              src = path.read_text(encoding="utf-8-sig")
+              for lineno, line in enumerate(src.splitlines(), 1):
+                  if "SaveChangesAsync" in line:
+                      test_refs.append((path.as_posix(), lineno, line.strip()))
+
+          interface = (prod / "Repositories/IUnitOfWork.cs").read_text(encoding="utf-8-sig")
+          unit = (prod / "Repositories/UnitOfWork.cs").read_text(encoding="utf-8-sig")
+
+          service_calls = [
+              item for item in production_refs
+              if "/Services/" in item[0] and ".SaveChangesAsync()" in item[2]
+          ]
+          controller_calls = [
+              item for item in production_refs
+              if "/Controllers/" in item[0] and ".SaveChangesAsync()" in item[2]
+          ]
+          repository_context_calls = [
+              item for item in production_refs
+              if "/Repositories/" in item[0] and "_context.SaveChangesAsync()" in item[2]
+          ]
+
+          print(f"production-savechanges-reference-count={len(production_refs)}")
+          for path, line, source in production_refs:
+              print(f"production-savechanges-reference={path}:{line}|{source}")
+
+          print(f"test-savechanges-reference-count={len(test_refs)}")
+          for path, line, source in test_refs:
+              print(f"test-savechanges-reference={path}:{line}|{source}")
+
+          print(f"service-savechanges-call-count={len(service_calls)}")
+          print(f"controller-savechanges-call-count={len(controller_calls)}")
+          print(f"repository-context-save-call-count={len(repository_context_calls)}")
+          print(f"iunitofwork-save-contract={'Task<int> SaveChangesAsync();' in interface}")
+          print(f"unitofwork-save-implementation={'public async Task<int> SaveChangesAsync()' in unit}")
+
+          # After B29, the only production UnitOfWork SaveChanges surface should
+          # be the declaration and implementation; repositories keep context saves.
+          expected_surface = (
+              "Task<int> SaveChangesAsync();" in interface
+              and "public async Task<int> SaveChangesAsync()" in unit
+              and len(service_calls) == 0
+              and len(controller_calls) == 0
+          )
+          print(f"unitofwork-save-dead-surface-candidate={expected_surface}")
+
+          if not expected_surface:
+              raise SystemExit("UnitOfWork SaveChanges surface is not isolated as expected after B29")
+          if len(repository_context_calls) == 0:
+              raise SystemExit("repository persistence authority unexpectedly absent")
+          PY
+
+      - name: Verify checkout remains clean
+        run: |
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
