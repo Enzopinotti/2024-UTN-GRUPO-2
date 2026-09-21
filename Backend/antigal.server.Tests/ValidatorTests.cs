@@ -1,5 +1,7 @@
 using antigal.server.Models;
 using antigal.server.Validaciones;
+using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Antigal.Server.Tests;
@@ -137,4 +139,16 @@ public class ValidatorTests
         producto.stock = 0;
         Assert.AreEqual(0, producto.verificarDisponible());
     }
+    [TestMethod]
+    public void ValidationServices_AssemblyRegistration_ResolvesMaintainedValidators()
+    {
+        var services = new ServiceCollection();
+        services.AddValidatorsFromAssemblyContaining<Program>();
+
+        using var provider = services.BuildServiceProvider();
+
+        Assert.IsInstanceOfType(provider.GetRequiredService<IValidator<Categoria>>(), typeof(ValidacionCategoria));
+        Assert.IsInstanceOfType(provider.GetRequiredService<IValidator<Producto>>(), typeof(ValidacionProducto));
+    }
+
 }
