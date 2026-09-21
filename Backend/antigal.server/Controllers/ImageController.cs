@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using CloudinaryDotNet.Actions;
 using CloudinaryDotNet;
 using antigal.server.Services;
 
 namespace antigal.server.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class ImageController : ControllerBase
