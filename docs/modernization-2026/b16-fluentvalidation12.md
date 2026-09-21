@@ -127,4 +127,25 @@ Those remaining major dependencies require separate blocks.
 
 ## Closure
 
-B16 is ready for promotion after the validated laboratory workflow is retired and the carrier passes its permanent Quality and current-tree security workflows.
+B16 was promoted to the modernization carrier through PR #13.
+
+Promotion merge:
+
+`304788d941735a2bbb3b8ace48908f69a9a8b9a8` — `B16: adopt FluentValidation 12 and SharpGrip 2`.
+
+The temporary B16 laboratory workflow was retired before promotion.
+
+Final carrier validation:
+
+- Quality run `35549499838`: success;
+- Current-tree security baseline run `35549499828`: success;
+- FluentValidation DI 12.1.1 retained;
+- SharpGrip MVC auto-validation 2.0.0 retained;
+- frontend lint, 60 / 60 tests and Vite production build remained green;
+- backend release build remained warning-free;
+- backend tests remained 18 / 18 green;
+- frontend dependency audits remained clean;
+- NuGet vulnerability audit remained clean;
+- all B15 and earlier runtime, source-authority and security gates remained green.
+
+B16 is therefore closed on the carrier.
