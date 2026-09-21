@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CloudinaryDotNet" Version="1.26.2" />
+    <PackageReference Include="CloudinaryDotNet" Version="1.29.3" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
     <PackageReference Include="mercadopago-sdk" Version="2.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.12" />
@@ -18,12 +18,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NPOI" Version="2.7.6" />
+    <PackageReference Include="NPOI" Version="2.8.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="2.1.13" />
     <PackageReference Include="SharpGrip.FluentValidation.AutoValidation.Mvc" Version="1.4.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.19.2" />
-    <!-- NPOI 2.7.6 declares System.Security.Cryptography.Xml >= 8.0.2.
+    <!-- NPOI 2.8.0 retains a transitive System.Security.Cryptography.Xml floor.
          Pin the maintained .NET 10 servicing version so test/project restore
          cannot resolve the vulnerable 8.0.2 floor. NU1510 is scoped only to
          this intentional transitive security override. -->
