@@ -1,0 +1,92 @@
+name: B24 ServiceToken characterization
+
+on:
+  push:
+    branches:
+      - modernize/b24-servicetoken-authority-lab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  characterize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Characterize ServiceToken authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          root = Path("Backend/antigal.server")
+          service = root / "Services" / "ServiceToken.cs"
+          program = root / "Program.cs"
+
+          assert service.is_file(), "ServiceToken.cs missing before characterization"
+          assert program.is_file(), "Program.cs missing"
+
+          patterns = {
+              "type": re.compile(r"\bServiceToken\b"),
+              "refresh": re.compile(r"\bGenerateRefreshToken\b"),
+              "expired_principal": re.compile(r"\bGetPrincipalFromExpiredToken\b"),
+              "email_confirmation": re.compile(r"\bGenerateEmailConfirmationToken\b"),
+              "legacy_jwt_key": re.compile(r'["\']Jwt:(?:Key|Issuer|Audience)["\']'),
+          }
+
+          records = []
+          for path in sorted(root.rglob("*.cs")):
+              if any(part in {"bin", "obj"} for part in path.parts):
+                  continue
+              text = path.read_text(encoding="utf-8-sig")
+              for name, pattern in patterns.items():
+                  count = len(pattern.findall(text))
+                  if count:
+                      records.append((str(path), name, count))
+
+          for path, name, count in records:
+              print(f"{name}|{count}|{path}")
+
+          outside_service = [
+              item for item in records
+              if item[0] != str(service)
+          ]
+          consumer_refs = [
+              item for item in outside_service
+              if item[1] in {"refresh", "expired_principal", "email_confirmation"}
+          ]
+          type_refs = [
+              item for item in outside_service
+              if item[1] == "type"
+          ]
+          legacy_config_refs = [
+              item for item in outside_service
+              if item[1] == "legacy_jwt_key"
+          ]
+
+          program_text = program.read_text(encoding="utf-8-sig")
+          registration = "builder.Services.AddScoped<ServiceToken>();" in program_text
+
+          print(f"servicetoken-registration={str(registration).lower()}")
+          print(f"servicetoken-type-ref-files-outside-class={len({p for p,_,_ in type_refs})}")
+          print(f"servicetoken-method-consumer-files={len({p for p,_,_ in consumer_refs})}")
+          print(f"legacy-jwt-config-files-outside-class={len({p for p,_,_ in legacy_config_refs})}")
+
+          non_registration_type_refs = [
+              item for item in type_refs
+              if item[0] != str(program)
+          ]
+          print(f"servicetoken-non-registration-consumer-files={len({p for p,_,_ in non_registration_type_refs})}")
+          PY
+
+      - name: Verify characterization checkout is clean
+        run: |
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
