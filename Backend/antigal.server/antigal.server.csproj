@@ -20,7 +20,7 @@
     </PackageReference>
     <PackageReference Include="NPOI" Version="2.7.6" />
     <PackageReference Include="SharpGrip.FluentValidation.AutoValidation.Mvc" Version="2.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.19.2" />
     <!-- NPOI 2.7.6 declares System.Security.Cryptography.Xml >= 8.0.2.
          Pin the maintained .NET 10 servicing version so test/project restore
