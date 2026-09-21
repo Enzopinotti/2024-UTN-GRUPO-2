@@ -5,7 +5,7 @@
 
 Proyecto académico full stack desarrollado originalmente en 2024 para **Antigal**, una dietética nacida en el Mercado Municipal de Ensenada. El repositorio fue retomado y modernizado en 2026 para llevar una base histórica de React + ASP.NET Core a un stack mantenido, testeado y con CI permanente.
 
-> **Estado actual:** modernization checkpoint B37. El frontend y backend compilan y testean en CI con una política de **0 warnings**, auditorías de dependencias limpias y gates de arquitectura que protegen decisiones de modernización ya cerradas.
+> **Estado actual:** modernization checkpoint B40. El frontend y backend compilan y testean en CI con una política de **0 warnings**, auditorías de dependencias limpias y gates de arquitectura que protegen decisiones de modernización ya cerradas.
 
 ## Qué incluye
 
@@ -272,10 +272,10 @@ Las GitHub Actions de terceros están fijadas por SHA y usan runtimes Node 24 ma
 
 ## Checkpoint de validación
 
-En el cierre **B37** del carril de modernización:
+En el cierre **B40** del carril de modernización:
 
 - frontend: **60/60 tests**
-- backend: **66/66 tests**
+- backend: **75/75 tests**
 - C# Release: **0 warnings**
 - npm audit: **0 vulnerabilidades**
 - NuGet vulnerability audit: **clean**
@@ -310,7 +310,10 @@ El trabajo se hizo incrementalmente y con validación antes de cada promoción. 
 - bootstrap de administrador externalizado, deshabilitado por defecto, Development-only y fail-closed;
 - extracción de persistencia de imágenes a `ImageRepository`, dejando en **0** los consumidores directos de `AppDbContext` fuera de repositories;
 - integridad concurrente de favoritos mediante índice único filtrado `(UserId, ProductoId)`, deduplicación de datos históricos y manejo idempotente del conflicto;
-- retiro del endpoint/DTO de email de prueba públicamente alcanzable, conservando intactos confirmación y recuperación de contraseña.
+- retiro del endpoint/DTO de email de prueba públicamente alcanzable, conservando intactos confirmación y recuperación de contraseña;
+- protección Admin de las mutaciones producto/categoría, manteniendo públicos sólo sus dos GET de catálogo;
+- autenticación obligatoria para crear preferencias de pago, con identidad derivada del JWT `sub`;
+- retiro completo del callback de pago legado que permitía mutar estados desde `paymentId` + `status` aportados por el caller; no se expone webhook público hasta contar con verificación real de Mercado Pago.
 
 Para decisiones, evidencia, SHAs y runs concretos, ver el índice de modernización.
 
@@ -318,6 +321,8 @@ Para decisiones, evidencia, SHAs y runs concretos, ver el índice de modernizaci
 
 El estado actual es mucho más mantenible que el histórico, pero todavía hay trabajo explícito:
 
+- continuar cerrando fronteras de autorización en endpoints mutantes que aún no tienen una política explícita;
+- diseñar un webhook real de Mercado Pago con verificación de autenticidad y consulta de estado canónico antes de reintroducir notificaciones;
 - continuar actualización conservadora de dependencias mayores que quedaron deliberadamente fuera de los bloques previos;
 - NPOI permanece en **2.7.6** porque una actualización posterior produjo regresiones de comportamiento medidas.
 
