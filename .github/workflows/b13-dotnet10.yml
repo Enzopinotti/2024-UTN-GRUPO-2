@@ -103,10 +103,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          dotnet list Backend/antigal.server.sln package --vulnerable --include-transitive | tee b13-vulnerable.txt
-          dotnet list Backend/antigal.server.sln package --outdated --include-transitive | tee b13-outdated.txt
+          dotnet list Backend/antigal.server.sln package --vulnerable --include-transitive | tee "$RUNNER_TEMP/b13-vulnerable.txt"
+          dotnet list Backend/antigal.server.sln package --outdated --include-transitive | tee "$RUNNER_TEMP/b13-outdated.txt"
 
-          if grep -Fq "has the following vulnerable packages" b13-vulnerable.txt; then
+          if grep -Fq "has the following vulnerable packages" "$RUNNER_TEMP/b13-vulnerable.txt"; then
             echo ".NET 10 candidate contains vulnerable NuGet packages" >&2
             exit 1
           fi
@@ -129,6 +129,6 @@ jobs:
           retention-days: 14
           if-no-files-found: warn
           path: |
-            b13-vulnerable.txt
-            b13-outdated.txt
+            ${{ runner.temp }}/b13-vulnerable.txt
+            ${{ runner.temp }}/b13-outdated.txt
             ${{ runner.temp }}/b13-backend-build.txt
