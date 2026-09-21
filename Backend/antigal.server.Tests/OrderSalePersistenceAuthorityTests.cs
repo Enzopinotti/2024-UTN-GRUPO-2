@@ -290,7 +290,7 @@ public class OrderSalePersistenceAuthorityTests
 
     private sealed class StubUserManager(User user) : UserManager<User>(
         new StubUserStore(),
-        Options.Create(new IdentityOptions()),
+        Microsoft.Extensions.Options.Options.Create(new IdentityOptions()),
         new PasswordHasher<User>(),
         Array.Empty<IUserValidator<User>>(),
         Array.Empty<IPasswordValidator<User>>(),
