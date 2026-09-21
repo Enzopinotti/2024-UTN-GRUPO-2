@@ -32,7 +32,6 @@ public class DirectContextBoundaryTests
             {
                 typeof(ContactoController).FullName!,
                 typeof(ImageService).FullName!,
-                typeof(LikeService).FullName!,
             }.OrderBy(name => name, StringComparer.Ordinal).ToArray(),
             consumers);
     }
