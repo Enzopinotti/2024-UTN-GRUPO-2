@@ -367,6 +367,9 @@ jobs:
       - name: Validate payment authorization authority
         run: python3 scripts/backend_payment_authorization_authority.py
 
+      - name: Validate dead payment notification authority
+        run: python3 scripts/backend_dead_payment_notification_authority.py
+
       - name: Validate backend image repository authority
         run: python3 scripts/backend_image_repository_authority.py
 
