@@ -337,6 +337,9 @@ jobs:
       - name: Validate backend email DI authority
         run: python3 scripts/backend_di_authority.py
 
+      - name: Validate dead email test surface authority
+        run: python3 scripts/backend_dead_email_test_surface_authority.py
+
       - name: Validate JWT expiration configuration authority
         run: python3 scripts/jwt_configuration_authority.py
 
