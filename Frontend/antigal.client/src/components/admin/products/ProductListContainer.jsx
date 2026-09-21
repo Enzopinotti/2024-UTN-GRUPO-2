@@ -5,6 +5,7 @@ import ProductList from './ProductList';
 import ProductForm from './ProductForm';
 import Swal from 'sweetalert2';
 import initialProducts from '../../../data/initialProducts'; 
+import { authenticatedFetch } from '../../../utils/authenticatedFetch';
 
 const AdminProductListContainer = () => {
   const [products, setProducts] = useState([]);
@@ -65,7 +66,7 @@ const AdminProductListContainer = () => {
       const images = formData.getAll('imagenes');
       console.log(producto)
       // Enviar solicitud POST a /api/Product/addProduct
-      const response = await fetch('https://www.antigal.somee.com/api/Product/addProduct', {
+      const response = await authenticatedFetch('https://www.antigal.somee.com/api/Product/addProduct', {
         method: 'POST',
         body: JSON.stringify({
           idProducto: 0, // Según tu API, el backend generará este ID
@@ -101,7 +102,7 @@ const AdminProductListContainer = () => {
         imageFormData.append('file', image);
         console.log(imageFormData)
 
-        const uploadResponse = await fetch('https://www.antigal.somee.com/api/Image/upload', {
+        const uploadResponse = await authenticatedFetch('https://www.antigal.somee.com/api/Image/upload', {
           method: 'POST',
           body: imageFormData,
         });
@@ -112,8 +113,8 @@ const AdminProductListContainer = () => {
         }
 
         const uploadData = await uploadResponse.json();
-        if (!uploadData.isSuccess) {
-          throw new Error(uploadData.message || `Error al subir la imagen ${image.name}.`);
+        if (!uploadData.url) {
+          throw new Error(`La API no devolvió la URL de la imagen ${image.name}.`);
         }
         console.log(uploadData)
         // Opcional: Actualizar el producto con la URL de la imagen si es necesario
@@ -146,7 +147,7 @@ const AdminProductListContainer = () => {
       const images = formData.getAll('imagenes');
 
       // Enviar solicitud PUT a /api/Product/updateProduct
-      const response = await fetch('https://www.antigal.somee.com/api/Product/updateProduct', {
+      const response = await authenticatedFetch('https://www.antigal.somee.com/api/Product/updateProduct', {
         method: 'PUT', // Asegúrate de que tu API utiliza PUT o PATCH para actualizar
         body: JSON.stringify({
           idProducto,
@@ -175,7 +176,7 @@ const AdminProductListContainer = () => {
           imageFormData.append('productoId', idProducto);
           imageFormData.append('file', image);
 
-          const uploadResponse = await fetch('https://www.antigal.somee.com/api/Image/upload', {
+          const uploadResponse = await authenticatedFetch('https://www.antigal.somee.com/api/Image/upload', {
             method: 'POST',
             body: imageFormData,
           });
@@ -186,8 +187,8 @@ const AdminProductListContainer = () => {
           }
 
           const uploadData = await uploadResponse.json();
-          if (!uploadData.isSuccess) {
-            throw new Error(uploadData.message || `Error al subir la imagen ${image.name}.`);
+          if (!uploadData.url) {
+            throw new Error(`La API no devolvió la URL de la imagen ${image.name}.`);
           }
 
           // Opcional: Actualizar el producto con la URL de la imagen si es necesario
@@ -228,7 +229,7 @@ const AdminProductListContainer = () => {
         try {
           if (useBackend) {
             // Enviar solicitud DELETE a /api/Product/deleteProduct/{idProducto}
-            const response = await fetch(`https://www.antigal.somee.com/api/Product/deleteProduct/${idProducto}`, {
+            const response = await authenticatedFetch(`https://www.antigal.somee.com/api/Product/deleteProduct/${idProducto}`, {
               method: 'DELETE',
             });
 
