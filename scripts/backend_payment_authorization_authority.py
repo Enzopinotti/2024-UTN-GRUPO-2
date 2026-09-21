@@ -19,14 +19,12 @@ for contract in (
     "using Microsoft.AspNetCore.Authorization;",
     "[Authorize]",
     '[HttpPost("create-payment")]',
-    "[AllowAnonymous]",
-    '[HttpPost("notification")]',
 ):
     if contract not in controller:
         failures.append(f"PaymentController authorization/route contract missing: {contract}")
 
-if controller.count("[AllowAnonymous]") != 1:
-    failures.append("PaymentController must expose exactly one anonymous endpoint")
+if "[AllowAnonymous]" in controller:
+    failures.append("PaymentController must not expose anonymous actions after B40")
 
 create_definition = "public async Task<IActionResult> CreatePayment"
 create_pos = controller.find(create_definition)
@@ -38,17 +36,6 @@ else:
         failures.append("CreatePayment route drifted")
     if "[AllowAnonymous]" in prefix:
         failures.append("CreatePayment became anonymous")
-
-notification_definition = "public async Task<IActionResult> ReceiveNotification"
-notification_pos = controller.find(notification_definition)
-if notification_pos < 0:
-    failures.append("PaymentController ReceiveNotification definition missing")
-else:
-    prefix = controller[max(0, notification_pos - 220):notification_pos]
-    if '[HttpPost("notification")]' not in prefix:
-        failures.append("payment notification route drifted")
-    if "[AllowAnonymous]" not in prefix:
-        failures.append("payment notification lost explicit AllowAnonymous")
 
 for contract in (
     "_httpContextAccessor.HttpContext?.User?.Identity?.Name",
@@ -70,16 +57,16 @@ for contract in (
 for contract in (
     "Controller_IsAuthenticatedByDefault",
     "CreatePayment_RemainsAuthenticated",
-    "Notification_RemainsExplicitlyAnonymous",
+    "Controller_HasNoAnonymousActions",
 ):
     if contract not in tests:
         failures.append(f"Payment authorization runtime proof missing: {contract}")
 
 print("payment-controller-default-policy=authenticated")
 print("payment-create-preference-policy=authenticated")
-print("payment-notification-policy=anonymous")
+print("payment-anonymous-action-count=0")
 print("payment-user-id-authority=jwt-sub-via-identity-name")
-print("payment-webhook-authenticity=not-addressed-in-b39")
+print("payment-webhook-authority=absent-pending-real-integration")
 
 if failures:
     print("Backend payment authorization authority failed:", file=sys.stderr)
