@@ -1,10 +1,7 @@
-﻿using antigal.server.Data;
 using antigal.server.Models;
+using antigal.server.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using NPOI.SS.Formula.Functions;
 
 namespace antigal.server.Controllers
 {
@@ -13,11 +10,11 @@ namespace antigal.server.Controllers
     [ApiController]
     public class ContactoController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IContactoService _contactoService;
 
-        public ContactoController(AppDbContext context)
+        public ContactoController(IContactoService contactoService)
         {
-            _context = context;
+            _contactoService = contactoService;
         }
 
         // POST: api/Contacto
@@ -25,25 +22,23 @@ namespace antigal.server.Controllers
         [HttpPost]
         public async Task<ActionResult<Contacto>> PostContacto(Contacto contacto)
         {
-            contacto.Fecha = DateTime.Now;
-            _context.Contactos.Add(contacto);
-            await _context.SaveChangesAsync();
+            var created = await _contactoService.CreateAsync(contacto);
 
-            return CreatedAtAction(nameof(GetContacto), new { id = contacto.Id }, contacto);
+            return CreatedAtAction(nameof(GetContacto), new { id = created.Id }, created);
         }
 
         // GET: api/Contacto
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Contacto>>> GetContactos()
         {
-            return await _context.Contactos.ToListAsync();
+            return await _contactoService.GetAllAsync();
         }
 
         // GET: api/Contacto/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Contacto>> GetContacto(int id)
         {
-            var contacto = await _context.Contactos.FindAsync(id);
+            var contacto = await _contactoService.GetByIdAsync(id);
 
             if (contacto == null)
             {
