@@ -17,12 +17,12 @@ El trabajo se ejecutó en bloques pequeños, normalmente con:
 
 ## Estado
 
-El último bloque cerrado antes de este checkpoint es **B36 — Like concurrency integrity**.
+El último bloque cerrado antes de este checkpoint es **B37 — Dead email test surface removal**.
 
 Checkpoint:
 
 - frontend: 60/60
-- backend: 64/64
+- backend: 66/66
 - Release build: 0 warnings
 - npm audit: clean
 - NuGet vulnerability audit: clean
@@ -45,6 +45,7 @@ Checkpoint:
 - B34 — Admin bootstrap authority
 - B35 — Image repository authority
 - B36 — Like concurrency integrity
+- B37 — Dead email test surface removal
 
 Los archivos `bXX-*.md` de este directorio contienen la evidencia detallada, decisiones de alcance, validaciones, no-goals y rollback boundary de cada bloque.
 

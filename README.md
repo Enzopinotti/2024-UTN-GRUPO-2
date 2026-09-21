@@ -5,7 +5,7 @@
 
 Proyecto académico full stack desarrollado originalmente en 2024 para **Antigal**, una dietética nacida en el Mercado Municipal de Ensenada. El repositorio fue retomado y modernizado en 2026 para llevar una base histórica de React + ASP.NET Core a un stack mantenido, testeado y con CI permanente.
 
-> **Estado actual:** modernization checkpoint B36. El frontend y backend compilan y testean en CI con una política de **0 warnings**, auditorías de dependencias limpias y gates de arquitectura que protegen decisiones de modernización ya cerradas.
+> **Estado actual:** modernization checkpoint B37. El frontend y backend compilan y testean en CI con una política de **0 warnings**, auditorías de dependencias limpias y gates de arquitectura que protegen decisiones de modernización ya cerradas.
 
 ## Qué incluye
 
@@ -272,10 +272,10 @@ Las GitHub Actions de terceros están fijadas por SHA y usan runtimes Node 24 ma
 
 ## Checkpoint de validación
 
-En el cierre **B36** del carril de modernización:
+En el cierre **B37** del carril de modernización:
 
 - frontend: **60/60 tests**
-- backend: **64/64 tests**
+- backend: **66/66 tests**
 - C# Release: **0 warnings**
 - npm audit: **0 vulnerabilidades**
 - NuGet vulnerability audit: **clean**
@@ -309,7 +309,8 @@ El trabajo se hizo incrementalmente y con validación antes de cada promoción. 
 - extracción de `ContactoRepository` + `ContactoService`, dejando cero controllers con acceso directo a `AppDbContext`;
 - bootstrap de administrador externalizado, deshabilitado por defecto, Development-only y fail-closed;
 - extracción de persistencia de imágenes a `ImageRepository`, dejando en **0** los consumidores directos de `AppDbContext` fuera de repositories;
-- integridad concurrente de favoritos mediante índice único filtrado `(UserId, ProductoId)`, deduplicación de datos históricos y manejo idempotente del conflicto.
+- integridad concurrente de favoritos mediante índice único filtrado `(UserId, ProductoId)`, deduplicación de datos históricos y manejo idempotente del conflicto;
+- retiro del endpoint/DTO de email de prueba públicamente alcanzable, conservando intactos confirmación y recuperación de contraseña.
 
 Para decisiones, evidencia, SHAs y runs concretos, ver el índice de modernización.
 
