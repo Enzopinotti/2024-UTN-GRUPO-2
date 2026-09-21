@@ -146,7 +146,7 @@ namespace antigal.server
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
             builder.Services.AddScoped<ICartService, CartService>();
-            builder.Services.AddScoped<IEmailSender, EmailSender>();
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<ISaleService, SaleService>();
@@ -184,7 +184,6 @@ namespace antigal.server
             builder.Services.AddTransient<ResponseDto>();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddLogging();
-            builder.Services.AddTransient<IEmailSender, EmailSender>();
 
             // Controladores y JSON
             builder.Services.AddControllers()

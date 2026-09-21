@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - modernize/2026-authorship-security-baseline
+      - modernize/b21-email-di-authority-lab
   workflow_dispatch:
 
 permissions:
@@ -332,6 +333,9 @@ jobs:
           print("email-mimekit=4.18.1")
           print("dotnet10-security-package-boundary=clean")
           PY
+
+      - name: Validate backend email DI authority
+        run: python3 scripts/backend_di_authority.py
 
       - name: Reject unresolved merge markers in source authority
         shell: bash
