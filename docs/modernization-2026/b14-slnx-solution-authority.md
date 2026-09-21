@@ -119,6 +119,24 @@ Validated signals:
 - current-tree security baseline green;
 - repository clean after validation.
 
-## Closure condition
+## Closure
 
-B14 is ready for carrier promotion only when the validated permanent files are reconciled onto the current carrier, the temporary B14 workflow is retired, and carrier Quality plus current-tree security pass on the promoted commit.
+B14 was promoted to the maintenance carrier through PR #11 as:
+
+`a2855057c98a5ad72c86bbf4246d63f4e5a6405f` — `B14: adopt SLNX solution authority`.
+
+The temporary B14 workflow was retired before promotion.
+
+Final carrier validation:
+
+- Quality run `35547494708`: success;
+- Current-tree security baseline run `35547494678`: success;
+- `Backend/antigal.server.slnx` is the only maintained solution authority;
+- the legacy `Backend/antigal.server.sln` is absent;
+- SLNX restore/build/audit paths are owned by permanent Quality;
+- backend compiler warnings remain 0;
+- backend tests remain 16 / 16 green;
+- NuGet vulnerability audit remains clean;
+- all B13 and earlier frontend/runtime/security gates remained green.
+
+B14 is therefore closed on the carrier.
