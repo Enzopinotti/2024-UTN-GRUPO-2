@@ -130,4 +130,23 @@ B17 does not:
 
 ## Closure
 
-B17 is ready for promotion after the temporary laboratory workflow is retired and the carrier passes permanent Quality and current-tree security.
+B17 was promoted to the modernization carrier through PR #14.
+
+Promotion merge:
+
+`a0c67841eb17ee64bb1061b67793962dd57fd4fb` — `B17: remove unused direct ImageSharp authority`.
+
+The temporary B17 laboratory workflow was retired before promotion.
+
+Final carrier validation:
+
+- Quality run `35549874580`: success;
+- Current-tree security baseline run `35549874573`: success;
+- direct ImageSharp package authority remained absent;
+- frontend lint, 60 / 60 tests and production build remained green;
+- backend release build remained warning-free;
+- backend tests remained 18 / 18 green;
+- frontend and NuGet vulnerability audits remained clean;
+- all B16 and earlier authority gates remained green.
+
+B17 is therefore closed on the carrier. ImageSharp remains only as the NPOI 2.7.6 transitive dependency boundary.
