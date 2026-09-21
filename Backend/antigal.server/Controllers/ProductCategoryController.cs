@@ -1,10 +1,12 @@
 using antigal.server.Models.Dto; // Asegúrate de incluir el espacio de nombres correcto para ResponseDto
 using antigal.server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks; // Importar para Task
 
 namespace antigal.server.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductCategoryController : ControllerBase
@@ -54,6 +56,7 @@ namespace antigal.server.Controllers
             return NoContent();
         }
 
+        [AllowAnonymous]
         [HttpGet("categorias/{idProducto}")]
         public async Task<ActionResult<ResponseDto>> ObtenerCategoriasDeProductoAsync(int idProducto)
         {
@@ -77,6 +80,7 @@ namespace antigal.server.Controllers
             });
         }
 
+        [AllowAnonymous]
         [HttpGet("productos/{idCategoria}")]
         public async Task<ActionResult<ResponseDto>> ObtenerProductosDeCategoriaAsync(int idCategoria)
         {
