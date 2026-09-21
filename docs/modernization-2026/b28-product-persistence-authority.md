@@ -245,3 +245,31 @@ No schema, data, external-service or deployment migration is involved.
 
 Temporary characterization workflow and lab triggers are removed before
 carrier promotion.
+
+
+## Carrier promotion evidence
+
+The cleaned B28 tree was promoted by non-forced fast-forward.
+
+Promoted carrier SHA:
+
+`e690ebc76a0d6ea1aa87eec105ca44aa6b1587e8`
+
+Exact-SHA carrier validation:
+
+- Quality `35562491359` — success
+- Current-tree security `35562491355` — success
+- frontend tests: 60/60
+- backend tests: 38/38
+- Release compiler warnings: 0
+- npm audit findings: 0
+- NuGet vulnerability audit: clean
+- `product-repository-self-save-count=4`
+- `product-service-second-save-count=0`
+- `product-persistence-authority=ProductRepository`
+- `product-add-duplicate-guard=Any`
+- `backend-product-persistence-authority=clean`
+
+A documentation-only closure commit follows this promotion evidence. B28 is
+closed only after permanent Quality and Current-tree security pass again on that
+exact closure SHA.
