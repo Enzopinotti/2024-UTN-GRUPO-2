@@ -106,7 +106,7 @@ The final native Sass build emits zero deprecation warnings.
 
 Final B12 laboratory run:
 
-`35546025673` — success.
+`35546114012` — success on the final lab composition (including the permanent Quality contract and this B12 documentation).
 
 Validated signals:
 
@@ -161,4 +161,23 @@ Any future visual redesign or deeper Sass architecture cleanup belongs in a sepa
 
 ## Closure
 
-B12 is ready for carrier promotion once the permanent Quality and current-tree security workflows pass on the reconciled carrier composition. The temporary `.github/workflows/b12-sass-authority.yml` workflow is laboratory-only and must be retired at closure.
+B12 was promoted to the maintenance carrier as:
+
+`020ae03c6898dbacb9c79c697a2bc1e060086c57` — `B12: adopt native Sass source authority`.
+
+The promotion was composed directly on top of the B11 carrier and copied only validated B12 product, authority, Quality and documentation blobs. The temporary `.github/workflows/b12-sass-authority.yml` laboratory workflow was deliberately excluded from the carrier tree.
+
+Carrier validation for the promotion:
+
+- Quality run `35546207410`: success;
+- Current-tree security baseline run `35546207384`: success;
+- frontend lint: zero warnings;
+- frontend tests: 60 / 60 green;
+- native Sass bundle boundary: accepted;
+- Sass deprecation warnings: 0;
+- backend compiler warnings: 0;
+- backend tests: 16 / 16 green;
+- npm full graph: 0 advisories;
+- npm production graph: 0 advisories.
+
+B12 is therefore closed on the carrier. Native SCSS is the maintained stylesheet authority; generated CSS and the parallel Sass watcher are no longer part of the repository contract.
