@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - modernize/2026-authorship-security-baseline
+      - modernize/b31-direct-context-persistence-authority-lab
   workflow_dispatch:
 
 permissions:

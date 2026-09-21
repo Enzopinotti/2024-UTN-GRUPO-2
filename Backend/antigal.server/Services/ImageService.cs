@@ -46,16 +46,14 @@ namespace antigal.server.Services
                 };
 
                 _context.Imagenes.Add(nuevaImagen);
-                await _context.SaveChangesAsync();
 
-                // Actualizar la entidad correspondiente con la URL
+                // Actualizar la entidad correspondiente con la URL antes del único flush.
                 if (productoId.HasValue)
                 {
                     var producto = await _context.Productos.FindAsync(productoId.Value);
                     if (producto != null)
                     {
                         producto.ImagenUrls.Add(nuevaImagen.Url); // Agregar la URL a la lista de URLs del producto
-                        await _context.SaveChangesAsync();
                     }
                 }
                 else if (!string.IsNullOrEmpty(usuarioId))
@@ -64,7 +62,6 @@ namespace antigal.server.Services
                     if (usuario != null)
                     {
                         usuario.ImagenUrl = nuevaImagen.Url; // Asignar la URL directamente
-                        await _context.SaveChangesAsync();
                     }
                 }
                 else if (categoriaId.HasValue)
@@ -73,10 +70,10 @@ namespace antigal.server.Services
                     if (categoria != null)
                     {
                         categoria.ImagenUrl = nuevaImagen.Url; // Asignar la URL directamente
-                        await _context.SaveChangesAsync();
                     }
                 }
 
+                await _context.SaveChangesAsync();
                 return nuevaImagen;
             }
             else
