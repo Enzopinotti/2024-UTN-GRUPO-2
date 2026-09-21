@@ -11,32 +11,30 @@ namespace antigal.server.Services
     public class ProductService : IProductService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ResponseDto _response;
 
-        public ProductService(IUnitOfWork unitOfWork, ResponseDto response)
+        public ProductService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _response = response;
         }
 
         public async Task<ResponseDto> GetProducts(string? orden = null, string? precio = null)
         {
+            var response = new ResponseDto();
             try
             {
                 var productos = await _unitOfWork.Products.GetProductsAsync(orden, precio);
 
-                // Asignar datos a la respuesta
-                _response.Data = productos.ToList();
-                _response.IsSuccess = true;
-                _response.Message = "Productos obtenidos correctamente.";
+                response.Data = productos.ToList();
+                response.IsSuccess = true;
+                response.Message = "Productos obtenidos correctamente.";
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                response.IsSuccess = false;
+                response.Message = ex.Message;
             }
 
-            return _response;
+            return response;
         }
 
         public async Task<ResponseDto> GetProductByIdAsync(int id)

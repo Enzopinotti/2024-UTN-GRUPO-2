@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - modernize/2026-authorship-security-baseline
+      - modernize/b27-response-dto-authority-lab
   workflow_dispatch:
 
 permissions:

@@ -175,7 +175,6 @@ namespace antigal.server
                 });
             });
 
-            builder.Services.AddTransient<ResponseDto>();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddLogging();
 

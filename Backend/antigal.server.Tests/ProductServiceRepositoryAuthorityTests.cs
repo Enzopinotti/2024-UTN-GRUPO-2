@@ -23,12 +23,9 @@ public class ProductServiceRepositoryAuthorityTests
                 return Task.FromResult<IEnumerable<Producto>>([first, second]);
             }
         };
-        var response = new ResponseDto();
-        var service = new ProductService(new StubUnitOfWork(repository), response);
+        var service = new ProductService(new StubUnitOfWork(repository));
 
         var result = await service.GetProducts("recientes", "descendente");
-
-        Assert.AreSame(response, result);
         Assert.IsTrue(result.IsSuccess);
         Assert.AreEqual("Productos obtenidos correctamente.", result.Message);
         var products = result.Data as List<Producto>;
@@ -47,7 +44,7 @@ public class ProductServiceRepositoryAuthorityTests
         {
             GetFeaturedProductsHandler = () => Task.FromResult(new List<Producto> { featured })
         };
-        var service = new ProductService(new StubUnitOfWork(repository), new ResponseDto());
+        var service = new ProductService(new StubUnitOfWork(repository));
 
         var result = await service.GetProductsHomeAsync();
 
@@ -67,7 +64,7 @@ public class ProductServiceRepositoryAuthorityTests
         {
             GetFeaturedProductsHandler = () => Task.FromResult(new List<Producto>())
         };
-        var service = new ProductService(new StubUnitOfWork(repository), new ResponseDto());
+        var service = new ProductService(new StubUnitOfWork(repository));
 
         var result = await service.GetProductsHomeAsync();
 
@@ -78,6 +75,43 @@ public class ProductServiceRepositoryAuthorityTests
     }
 
     [TestMethod]
+    public async Task GetProducts_ReturnsIndependentResponseObjectsAcrossCalls()
+    {
+        var repository = new StubProductRepository
+        {
+            GetProductsHandler = (_, _) =>
+                Task.FromResult<IEnumerable<Producto>>([Product(20, "Independent")])
+        };
+        var service = new ProductService(new StubUnitOfWork(repository));
+
+        var first = await service.GetProducts();
+        first.Message = "mutated by caller";
+        var second = await service.GetProducts();
+
+        Assert.AreNotSame(first, second);
+        Assert.AreEqual("Productos obtenidos correctamente.", second.Message);
+        Assert.IsTrue(second.IsSuccess);
+        Assert.AreEqual(2, repository.GetProductsCalls);
+    }
+
+    [TestMethod]
+    public async Task GetProducts_ReturnsFreshFailureResponse_WhenRepositoryThrows()
+    {
+        var repository = new StubProductRepository
+        {
+            GetProductsHandler = (_, _) => throw new InvalidOperationException("repository failure")
+        };
+        var service = new ProductService(new StubUnitOfWork(repository));
+
+        var result = await service.GetProducts();
+
+        Assert.IsFalse(result.IsSuccess);
+        Assert.AreEqual("repository failure", result.Message);
+        Assert.IsNull(result.Data);
+        Assert.AreEqual(1, repository.GetProductsCalls);
+    }
+
+    [TestMethod]
     public void Constructor_HasNoDirectProductRepositoryDependency()
     {
         var constructors = typeof(ProductService).GetConstructors();
@@ -85,7 +119,7 @@ public class ProductServiceRepositoryAuthorityTests
         Assert.AreEqual(1, constructors.Length);
         var parameterTypes = constructors[0].GetParameters().Select(parameter => parameter.ParameterType).ToArray();
         CollectionAssert.AreEqual(
-            new[] { typeof(IUnitOfWork), typeof(ResponseDto) },
+            new[] { typeof(IUnitOfWork) },
             parameterTypes);
     }
 
