@@ -233,7 +233,6 @@ jobs:
               'Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.12"',
               'Microsoft.EntityFrameworkCore.Tools" Version="10.0.12"',
               'NPOI" Version="2.7.6"',
-              'SixLabors.ImageSharp" Version="2.1.13"',
               'SharpGrip.FluentValidation.AutoValidation.Mvc" Version="2.0.0"',
               'System.IdentityModel.Tokens.Jwt" Version="8.19.2"',
               'System.Security.Cryptography.Xml" Version="10.0.12" NoWarn="NU1510"',
@@ -252,6 +251,7 @@ jobs:
               "Microsoft.VisualStudio.Web.CodeGeneration.Design",
               'SendGrid"',
               "AutoMapper",
+              "SixLabors.ImageSharp",
           )
           for package in forbidden_server_packages:
               assert package not in server_project, f"removed server package reintroduced: {package}"
@@ -265,6 +265,7 @@ jobs:
           print("backend-cloudinary=1.29.3")
           print("backend-fluentvalidation-di=12.1.1")
           print("backend-sharpgrip-autovalidation=2.0.0")
+          print("backend-imagesharp-authority=absent")
           print("backend-npoi=2.7.6-held")
           print("email-mimekit=4.18.1")
           print("dotnet10-security-package-boundary=clean")
@@ -509,7 +510,7 @@ jobs:
           if not solution_clean:
               raise SystemExit("NuGet solution vulnerability audit is no longer clean")
 
-          print("B16 FluentValidation 12 and SharpGrip 2 authority, B15 conservative backend dependency refresh, B14 SLNX solution authority, B13 .NET 10 runtime, B12 native Sass authority, B11 React 19 runtime and dead runtime-package pruning, B10 warning-free Testing Library runtime, B9 dead-source authority, B8c JSX extension authority, B8b route-split frontend, B8a direct-eval-free frontend, B7b2 warning-free backend, B7b1 order model authority, B7a product-filter nullability, B6c3 React Hook Form compatibility, B6c2e Auth hydration, B6c2d2 Profile draft state, B6c2d1 User addresses state, B6c2c Category form state, B6c2b Admin image state, B6c2a Carousel state, B6c1 Hook dependencies, B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
+          print("B17 unused ImageSharp authority removal, B16 FluentValidation 12 and SharpGrip 2 authority, B15 conservative backend dependency refresh, B14 SLNX solution authority, B13 .NET 10 runtime, B12 native Sass authority, B11 React 19 runtime and dead runtime-package pruning, B10 warning-free Testing Library runtime, B9 dead-source authority, B8c JSX extension authority, B8b route-split frontend, B8a direct-eval-free frontend, B7b2 warning-free backend, B7b1 order model authority, B7a product-filter nullability, B6c3 React Hook Form compatibility, B6c2e Auth hydration, B6c2d2 Profile draft state, B6c2d1 User addresses state, B6c2c Category form state, B6c2b Admin image state, B6c2a Carousel state, B6c1 Hook dependencies, B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
           PY
 
       - name: Upload quality evidence
