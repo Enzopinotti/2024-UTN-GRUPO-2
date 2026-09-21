@@ -55,18 +55,23 @@ jobs:
           interface = (prod / "Repositories/IUnitOfWork.cs").read_text(encoding="utf-8-sig")
           unit = (prod / "Repositories/UnitOfWork.cs").read_text(encoding="utf-8-sig")
 
-          service_calls = [
+          unitofwork_calls = [
               item for item in production_refs
-              if "/Services/" in item[0] and ".SaveChangesAsync()" in item[2]
+              if "_unitOfWork.SaveChangesAsync()" in item[2]
           ]
-          controller_calls = [
+          direct_context_calls = [
               item for item in production_refs
-              if "/Controllers/" in item[0] and ".SaveChangesAsync()" in item[2]
+              if "_context.SaveChangesAsync()" in item[2]
           ]
           repository_context_calls = [
-              item for item in production_refs
-              if "/Repositories/" in item[0] and "_context.SaveChangesAsync()" in item[2]
+              item for item in direct_context_calls
+              if "/Repositories/" in item[0]
           ]
+          test_unitofwork_implementations = []
+          for path in test_files:
+              src = path.read_text(encoding="utf-8-sig")
+              if ": IUnitOfWork" in src:
+                  test_unitofwork_implementations.append(path.as_posix())
 
           print(f"production-savechanges-reference-count={len(production_refs)}")
           for path, line, source in production_refs:
@@ -76,19 +81,22 @@ jobs:
           for path, line, source in test_refs:
               print(f"test-savechanges-reference={path}:{line}|{source}")
 
-          print(f"service-savechanges-call-count={len(service_calls)}")
-          print(f"controller-savechanges-call-count={len(controller_calls)}")
+          print(f"production-unitofwork-save-call-count={len(unitofwork_calls)}")
+          print(f"production-direct-context-save-call-count={len(direct_context_calls)}")
           print(f"repository-context-save-call-count={len(repository_context_calls)}")
           print(f"iunitofwork-save-contract={'Task<int> SaveChangesAsync();' in interface}")
           print(f"unitofwork-save-implementation={'public async Task<int> SaveChangesAsync()' in unit}")
+          print(f"test-iunitofwork-implementation-count={len(test_unitofwork_implementations)}")
+          for path in test_unitofwork_implementations:
+              print(f"test-iunitofwork-implementation={path}")
 
-          # After B29, the only production UnitOfWork SaveChanges surface should
-          # be the declaration and implementation; repositories keep context saves.
+          # After B29, no production caller should depend on the UnitOfWork
+          # SaveChanges surface. Direct AppDbContext persistence elsewhere is
+          # deliberately independent of this contract.
           expected_surface = (
               "Task<int> SaveChangesAsync();" in interface
               and "public async Task<int> SaveChangesAsync()" in unit
-              and len(service_calls) == 0
-              and len(controller_calls) == 0
+              and len(unitofwork_calls) == 0
           )
           print(f"unitofwork-save-dead-surface-candidate={expected_surface}")
 
