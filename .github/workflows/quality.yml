@@ -352,6 +352,9 @@ jobs:
       - name: Validate backend Like repository authority
         run: python3 scripts/backend_like_repository_authority.py
 
+      - name: Validate backend Like concurrency authority
+        run: python3 scripts/backend_like_concurrency_authority.py
+
       - name: Validate backend Contacto repository authority
         run: python3 scripts/backend_contacto_repository_authority.py
 
