@@ -126,3 +126,29 @@ migration.
 Temporary lab workflow triggers are removed before carrier promotion. Final
 closure requires Quality and Current-tree security to pass on the exact promoted
 carrier SHA.
+
+
+## Carrier promotion evidence
+
+The cleaned B22 tree was promoted by non-forced fast-forward to the maintained
+carrier.
+
+Promoted carrier SHA:
+
+`2d56ce172a37eab95d9b67eb010a7028738b2b8e`
+
+Exact-SHA carrier validation:
+
+- Quality `35558478411` — success
+- Current-tree security `35558478422` — success
+- JWT expiration authority: clean
+- frontend tests: 60/60
+- backend tests: 27/27
+- frontend build: success
+- backend Release build: 0 warnings
+- npm audit: 0 findings
+- NuGet vulnerability audit: clean
+
+A documentation-only closure commit follows this evidence. B22 is considered
+closed only after permanent Quality and Current-tree security pass again on the
+exact closure SHA.
