@@ -17,12 +17,12 @@ El trabajo se ejecutó en bloques pequeños, normalmente con:
 
 ## Estado
 
-El último bloque cerrado antes de este checkpoint es **B45 — Profile Orders dead backend branch removal**.
+El carril de modernización 2026 queda **cerrado** en **B46 — Admin product/image authenticated transport**.
 
 Checkpoint:
 
-- frontend: 61/61
-- backend: 90/90
+- frontend: 63/63
+- backend: 93/93
 - Release build: 0 warnings
 - npm audit: clean
 - NuGet vulnerability audit: clean
@@ -54,11 +54,26 @@ Checkpoint:
 - B43 — Orders authorization boundary
 - B44 — Order contract surface reduction
 - B45 — Profile Orders dead backend branch removal
+- B46 — Admin product/image authenticated transport
 
 Los archivos `bXX-*.md` de este directorio contienen la evidencia detallada, decisiones de alcance, validaciones, no-goals y rollback boundary de cada bloque.
 
-## Próximos candidatos
+## Cierre
 
-- future user-order API, if needed, must be owner-bound rather than reusing the Admin Orders surface
-- a real Mercado Pago webhook integration with authenticity verification before any public callback returns
-- upgrades mayores pendientes que requieran pruebas de comportamiento
+El programa de modernización queda cerrado. El estado funcional final previo al commit documental es:
+
+`dffe0dd132280b3b1bab242b7df46052c5d516c5`
+
+Evidencia publicada:
+
+- Quality `35633997525` — success
+- Current-tree security `35633997355` — success
+- frontend: 63/63
+- backend: 93/93
+- Release build: 0 warnings
+- npm / production npm audit: clean
+- NuGet vulnerability audit: clean
+
+Trabajo futuro de producto/integración está separado en el issue **#42 — Post-modernization product integration backlog**.
+
+Ver también `closeout-2026.md`.
