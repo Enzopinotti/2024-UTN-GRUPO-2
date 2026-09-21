@@ -17,11 +17,11 @@ El trabajo se ejecutó en bloques pequeños, normalmente con:
 
 ## Estado
 
-El último bloque cerrado antes de este checkpoint es **B44 — Order contract surface reduction**.
+El último bloque cerrado antes de este checkpoint es **B45 — Profile Orders dead backend branch removal**.
 
 Checkpoint:
 
-- frontend: 60/60
+- frontend: 61/61
 - backend: 90/90
 - Release build: 0 warnings
 - npm audit: clean
@@ -53,12 +53,12 @@ Checkpoint:
 - B42 — Dead Sale API surface removal
 - B43 — Orders authorization boundary
 - B44 — Order contract surface reduction
+- B45 — Profile Orders dead backend branch removal
 
 Los archivos `bXX-*.md` de este directorio contienen la evidencia detallada, decisiones de alcance, validaciones, no-goals y rollback boundary de cada bloque.
 
 ## Próximos candidatos
 
-- B45 candidate — remove the permanently disabled backend placeholder branch from the profile Orders page
 - future user-order API, if needed, must be owner-bound rather than reusing the Admin Orders surface
 - a real Mercado Pago webhook integration with authenticity verification before any public callback returns
 - upgrades mayores pendientes que requieran pruebas de comportamiento
