@@ -36,11 +36,9 @@ for path in files:
             outside_save_distribution[relative] = count
 
 expected_consumers = {
-    "Backend/antigal.server/Controllers/ContactoController.cs",
     "Backend/antigal.server/Services/ImageService.cs",
 }
 expected_saves = {
-    "Backend/antigal.server/Controllers/ContactoController.cs": 1,
     "Backend/antigal.server/Services/ImageService.cs": 3,
 }
 
