@@ -5,7 +5,7 @@
 
 Proyecto académico full stack desarrollado originalmente en 2024 para **Antigal**, una dietética nacida en el Mercado Municipal de Ensenada. El repositorio fue retomado y modernizado en 2026 para llevar una base histórica de React + ASP.NET Core a un stack mantenido, testeado y con CI permanente.
 
-> **Estado actual:** modernization checkpoint B44. El frontend y backend compilan y testean en CI con una política de **0 warnings**, auditorías de dependencias limpias y gates de arquitectura que protegen decisiones de modernización ya cerradas.
+> **Estado actual:** modernization checkpoint B45. El frontend y backend compilan y testean en CI con una política de **0 warnings**, auditorías de dependencias limpias y gates de arquitectura que protegen decisiones de modernización ya cerradas.
 
 ## Qué incluye
 
@@ -271,9 +271,9 @@ Las GitHub Actions de terceros están fijadas por SHA y usan runtimes Node 24 ma
 
 ## Checkpoint de validación
 
-En el cierre **B44** del carril de modernización:
+En el cierre **B45** del carril de modernización:
 
-- frontend: **60/60 tests**
+- frontend: **61/61 tests**
 - backend: **90/90 tests**
 - C# Release: **0 warnings**
 - npm audit: **0 vulnerabilidades**
@@ -317,7 +317,8 @@ El trabajo se hizo incrementalmente y con validación antes de cada promoción. 
 - autenticación + ownership explícito en las seis rutas de carrito: el `userId` de la ruta debe coincidir con el `sub` autenticado del JWT;
 - retiro de la API paralela de ventas (`SaleController` / `SaleService` / DTOs) sin tocar la creación transaccional de ventas desde `OrderService`; `ISaleRepository` queda create-only;
 - protección Admin por defecto de las dos rutas mantenidas de `OrdersController`;
-- reducción de `IOrderService` a 3 operaciones y de `IOrderRepository` a 4 operaciones realmente consumidas, preservando la transacción de confirmación.
+- reducción de `IOrderService` a 3 operaciones y de `IOrderRepository` a 4 operaciones realmente consumidas, preservando la transacción de confirmación;
+- retiro de la rama backend permanentemente deshabilitada en `Mis Pedidos`; la vista declara explícitamente su fuente demo local y CI prueba que no realiza llamadas de red.
 
 Para decisiones, evidencia, SHAs y runs concretos, ver el índice de modernización.
 
@@ -325,7 +326,6 @@ Para decisiones, evidencia, SHAs y runs concretos, ver el índice de modernizaci
 
 El estado actual es mucho más mantenible que el histórico, pero todavía hay trabajo explícito:
 
-- retirar la rama backend muerta de la pantalla `Mis Pedidos` y dejar explícito que hoy usa datos locales de demostración;
 - si se implementa un endpoint real de `Mis Pedidos`, diseñarlo owner-bound al JWT en vez de reutilizar la superficie Admin de Orders;
 - diseñar un webhook real de Mercado Pago con verificación de autenticidad y consulta de estado canónico antes de reintroducir notificaciones;
 - continuar actualización conservadora de dependencias mayores que quedaron deliberadamente fuera de los bloques previos;
