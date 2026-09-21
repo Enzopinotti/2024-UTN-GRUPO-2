@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - modernize/2026-authorship-security-baseline
+      - modernize/b20-actions-node24-lab
   workflow_dispatch:
 
 permissions:
@@ -20,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout exact commit
-        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Validate current-tree security boundary
         run: python3 scripts/security_baseline.py
