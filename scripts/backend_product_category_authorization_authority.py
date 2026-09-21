@@ -26,27 +26,35 @@ for contract in (
 if controller.count("[AllowAnonymous]") != 2:
     failures.append("ProductCategoryController must expose exactly two anonymous read endpoints")
 
-for method_marker in (
-    "AsignarCategoriaAProductoAsync",
-    "DesasignarCategoriaDeProductoAsync",
-):
-    method_pos = controller.find(method_marker)
+mutation_contracts = {
+    "AsignarCategoriaAProductoAsync": '[HttpPost("asignar")]',
+    "DesasignarCategoriaDeProductoAsync": '[HttpDelete("desasignar")]',
+}
+for method_marker, route_marker in mutation_contracts.items():
+    definition = f"public async Task<ActionResult<ResponseDto>> {method_marker}"
+    method_pos = controller.find(definition)
     if method_pos < 0:
         failures.append(f"ProductCategory mutation missing: {method_marker}")
         continue
-    prefix = controller[max(0, method_pos - 180):method_pos]
+    prefix = controller[max(0, method_pos - 220):method_pos]
+    if route_marker not in prefix:
+        failures.append(f"ProductCategory mutation route drifted: {method_marker}")
     if "[AllowAnonymous]" in prefix:
         failures.append(f"ProductCategory mutation became anonymous: {method_marker}")
 
-for method_marker in (
-    "ObtenerCategoriasDeProductoAsync",
-    "ObtenerProductosDeCategoriaAsync",
-):
-    method_pos = controller.find(method_marker)
+read_contracts = {
+    "ObtenerCategoriasDeProductoAsync": '[HttpGet("categorias/{idProducto}")]',
+    "ObtenerProductosDeCategoriaAsync": '[HttpGet("productos/{idCategoria}")]',
+}
+for method_marker, route_marker in read_contracts.items():
+    definition = f"public async Task<ActionResult<ResponseDto>> {method_marker}"
+    method_pos = controller.find(definition)
     if method_pos < 0:
         failures.append(f"ProductCategory read missing: {method_marker}")
         continue
-    prefix = controller[max(0, method_pos - 180):method_pos]
+    prefix = controller[max(0, method_pos - 220):method_pos]
+    if route_marker not in prefix:
+        failures.append(f"ProductCategory read route drifted: {method_marker}")
     if "[AllowAnonymous]" not in prefix:
         failures.append(f"ProductCategory public read lost AllowAnonymous: {method_marker}")
 
