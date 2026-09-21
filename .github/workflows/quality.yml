@@ -388,6 +388,9 @@ jobs:
       - name: Validate dead Sale API authority
         run: python3 scripts/backend_dead_sale_api_authority.py
 
+      - name: Validate Orders authorization authority
+        run: python3 scripts/backend_orders_authorization_authority.py
+
       - name: Validate backend product persistence authority
         run: python3 scripts/backend_product_persistence_authority.py
 
