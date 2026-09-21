@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="antigal.server/antigal.server.csproj" />
+  <Project Path="EmailService/EmailService.csproj" />
+  <Project Path="antigal.server.Tests/antigal.server.Tests.csproj" />
+</Solution>
