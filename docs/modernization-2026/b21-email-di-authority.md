@@ -139,32 +139,3 @@ Exact-SHA carrier validation:
 A documentation-only closure commit follows this evidence. B21 is considered
 closed only after permanent Quality and Current-tree security pass again on the
 exact closure SHA.
-
-
-## Carrier promotion evidence
-
-The cleaned B21 tree was promoted by non-forced fast-forward to the maintained
-carrier.
-
-Promoted carrier SHA:
-
-`4cc63beab22ad90c21f03eeed69f3e042c1733ab`
-
-Exact-SHA carrier validation:
-
-- Quality `35557964888` — success
-- Current-tree security `35557964871` — success
-- `email-sender-registration-count=1`
-- `email-sender-registration=Transient:EmailSender`
-- `email-sender-multi-consumer-count=0`
-- `backend-email-di-authority=clean`
-- frontend tests: 60/60
-- backend tests: 24/24
-- backend Release build: 0 warnings
-- npm audit: 0 findings
-- NuGet vulnerability audit: clean
-- GitHub Actions runtime authority: Node 24
-
-A documentation-only closure commit follows this evidence. B21 is considered
-closed only after permanent Quality and Current-tree security pass again on that
-exact closure SHA.
