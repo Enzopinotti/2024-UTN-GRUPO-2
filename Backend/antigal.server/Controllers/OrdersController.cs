@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace antigal.server.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/[controller]")]
     public class OrdersController : ControllerBase
@@ -17,7 +18,6 @@ namespace antigal.server.Controllers
         }
 
         // Obtener todas las órdenes
-        [Authorize(Roles = "Admin")]
         [HttpGet("all")]
         public async Task<IActionResult> GetAllOrders()
         {
