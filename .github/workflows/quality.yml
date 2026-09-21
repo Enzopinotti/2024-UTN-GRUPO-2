@@ -361,6 +361,9 @@ jobs:
       - name: Validate backend Contacto repository authority
         run: python3 scripts/backend_contacto_repository_authority.py
 
+      - name: Validate ProductCategory authorization authority
+        run: python3 scripts/backend_product_category_authorization_authority.py
+
       - name: Validate backend image repository authority
         run: python3 scripts/backend_image_repository_authority.py
 
