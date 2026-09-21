@@ -115,4 +115,46 @@ B19 does not:
 - alter persistence, database schema, payment behavior or frontend behavior;
 - change NPOI 2.7.6.
 
-Final laboratory and carrier evidence will be appended after validation.
+## Validated laboratory evidence
+
+Final B19 laboratory run:
+
+`35553882388` — success on
+`022420691fcbedaf977f32886cf0ed6b9ada6adb`.
+
+Validated signals:
+
+- Swashbuckle.AspNetCore 10.2.3 authority present;
+- Microsoft.OpenApi 2.x JWT security surface present;
+- legacy `Microsoft.OpenApi.Models` and `OpenApiReference` usage absent;
+- frontend source-authority gates green;
+- ESLint green with zero warnings;
+- frontend tests: 60 / 60 green across 13 files;
+- Vite production build green;
+- frontend npm audit: 0 vulnerabilities;
+- backend restore green through the SLNX solution;
+- backend release build: 0 warnings, 0 errors;
+- backend tests: 22 / 22 green;
+- NuGet vulnerability audit clean;
+- targeted Swashbuckle outdated check clean;
+- current-tree security baseline green;
+- repository remains clean after validation.
+
+The first run `35553755806` is retained as rejected harness evidence: all
+functional/security checks passed, but the workflow wrote its own evidence
+files into the checkout. That defect was corrected by moving evidence to
+`RUNNER_TEMP`.
+
+## Promotion readiness
+
+Permanent Quality now protects:
+
+- Swashbuckle.AspNetCore 10.2.3;
+- Microsoft.OpenApi 2.x source authority;
+- absence of legacy OpenAPI reference APIs;
+- the B19 compatibility test file;
+- every B18 and earlier authority gate.
+
+The temporary B19 workflow can therefore be retired before promotion. Carrier
+closure evidence will be appended after the promotion commit passes permanent
+Quality and current-tree security.
