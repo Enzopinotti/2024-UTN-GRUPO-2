@@ -6,9 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Storage;
-using antigal.server.Models.Dto.VentaDtos;
-using antigal.server.Controllers;
 using Microsoft.AspNetCore.Identity;
 
 namespace antigal.server.Services
@@ -115,22 +112,6 @@ namespace antigal.server.Services
                     {
                         throw new Exception("Error al realizar la venta, la venta no fue creada");
                     }
-
-                    var saleResponse = new SaleResponseDto
-                    {
-                        IsSuccess = true,
-                        Message = "Venta realizada con éxito",
-                        Data = new SaleDto
-                        {
-                            idVenta = saleCreated.idVenta,
-                            idOrden = saleCreated.idOrden,
-                            fechaVenta = saleCreated.fechaVenta,
-                            total = saleCreated.total,
-                            metodoPago = saleCreated.metodoPago,
-                            estado = saleCreated.EstadoVenta.ToString(),
-                            idUsuario = saleCreated.idUsuario
-                        }
-                    };
 
                     foreach (var item in orden.Items)
                     {
