@@ -172,10 +172,7 @@ public class OrderSalePersistenceAuthorityTests
         }
 
         public Task<List<Orden>> GetAllOrdersAsync() => throw new NotSupportedException();
-        public Task<List<Orden>> GetOrdersByUserIdAsync(string userId) => throw new NotSupportedException();
-        public Task<List<Orden>> GetOrdersByStatusAsync(string status) => throw new NotSupportedException();
         public Task<Orden> GetOrderByIdAsync(int orderId) => throw new NotSupportedException();
-        public Task AddOrderAsync(Orden order) => throw new NotSupportedException();
     }
 
     private sealed class StubSaleRepository : ISaleRepository
