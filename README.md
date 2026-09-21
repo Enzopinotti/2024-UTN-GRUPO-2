@@ -5,7 +5,7 @@
 
 Proyecto académico full stack desarrollado originalmente en 2024 para **Antigal**, una dietética nacida en el Mercado Municipal de Ensenada. El repositorio fue retomado y modernizado en 2026 para llevar una base histórica de React + ASP.NET Core a un stack mantenido, testeado y con CI permanente.
 
-> **Estado actual:** modernization checkpoint B45. El frontend y backend compilan y testean en CI con una política de **0 warnings**, auditorías de dependencias limpias y gates de arquitectura que protegen decisiones de modernización ya cerradas.
+> **Estado actual:** modernización 2026 cerrada en **B46**. El repositorio queda en modo mantenimiento: frontend y backend compilan y testean en CI con **0 warnings**, auditorías de dependencias limpias y gates permanentes que protegen las decisiones cerradas.
 
 ## Qué incluye
 
@@ -271,16 +271,18 @@ Las GitHub Actions de terceros están fijadas por SHA y usan runtimes Node 24 ma
 
 ## Checkpoint de validación
 
-En el cierre **B45** del carril de modernización:
+En el cierre funcional **B46** del carril de modernización:
 
-- frontend: **61/61 tests**
-- backend: **90/90 tests**
+- frontend: **63/63 tests**
+- backend: **93/93 tests**
 - C# Release: **0 warnings**
 - npm audit: **0 vulnerabilidades**
 - NuGet vulnerability audit: **clean**
 - `OrdersController`: **2/2 rutas Admin**, **0** acciones anónimas
 - `IOrderService`: **3** operaciones mantenidas
 - `IOrderRepository`: **4** operaciones mantenidas
+- `ImageController`: **3/3 rutas Admin**, **0** acciones anónimas
+- panel Admin de productos: **5** mutaciones con transporte Bearer autenticado
 
 La evidencia detallada de cada bloque está en:
 
@@ -318,18 +320,25 @@ El trabajo se hizo incrementalmente y con validación antes de cada promoción. 
 - retiro de la API paralela de ventas (`SaleController` / `SaleService` / DTOs) sin tocar la creación transaccional de ventas desde `OrderService`; `ISaleRepository` queda create-only;
 - protección Admin por defecto de las dos rutas mantenidas de `OrdersController`;
 - reducción de `IOrderService` a 3 operaciones y de `IOrderRepository` a 4 operaciones realmente consumidas, preservando la transacción de confirmación;
-- retiro de la rama backend permanentemente deshabilitada en `Mis Pedidos`; la vista declara explícitamente su fuente demo local y CI prueba que no realiza llamadas de red.
+- retiro de la rama backend permanentemente deshabilitada en `Mis Pedidos`; la vista declara explícitamente su fuente demo local y CI prueba que no realiza llamadas de red;
+- transporte autenticado reutilizable para mutaciones Admin de productos/imágenes, con fail-closed sin token;
+- `ImageController` protegido por rol Admin y contrato de upload frontend alineado con la respuesta real `{ id, url }`.
 
 Para decisiones, evidencia, SHAs y runs concretos, ver el índice de modernización.
 
-## Deuda conocida / próximos cortes
+## Estado de mantenimiento y backlog de producto
 
-El estado actual es mucho más mantenible que el histórico, pero todavía hay trabajo explícito:
+La modernización 2026 queda cerrada. Nuevos cambios deben preservar los gates actuales y justificarse como mantenimiento o producto, no como continuación automática del carril.
 
-- si se implementa un endpoint real de `Mis Pedidos`, diseñarlo owner-bound al JWT en vez de reutilizar la superficie Admin de Orders;
-- diseñar un webhook real de Mercado Pago con verificación de autenticidad y consulta de estado canónico antes de reintroducir notificaciones;
-- continuar actualización conservadora de dependencias mayores que quedaron deliberadamente fuera de los bloques previos;
+El backlog histórico de integración frontend/backend está separado en **issue #42 — Post-modernization product integration backlog**. Allí quedan documentados, entre otros, perfil demo-local, Admin Users/Messages, mutaciones de categorías todavía locales, foto de perfil sin backend, contacto con endpoint histórico y recuperación de contraseña desalineada.
+
+También permanecen decisiones deliberadas:
+
+- un futuro endpoint real de `Mis Pedidos` debe ser owner-bound al JWT, no reutilizar la superficie Admin de Orders;
+- un webhook real de Mercado Pago requiere verificación de autenticidad y resolución de estado canónico;
 - NPOI permanece en **2.7.6** porque una actualización posterior produjo regresiones de comportamiento medidas.
+
+Para retomar el repositorio, empezar desde `main`, revisar el issue #42 y mantener verdes Quality + Current-tree security.
 
 ## Origen del proyecto
 
