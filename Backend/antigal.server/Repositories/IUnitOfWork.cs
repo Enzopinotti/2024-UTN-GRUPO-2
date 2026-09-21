@@ -14,6 +14,7 @@ namespace antigal.server.Repositories
         IProductCategoryRepository ProductCategories { get; }
         ICartRepository Carts { get; }
         ILikeRepository Likes { get; }
+        IContactoRepository Contactos { get; }
         IEnvioRepository Envio { get; }
 
         Task<IDbContextTransaction> BeginTransactionAsync();
