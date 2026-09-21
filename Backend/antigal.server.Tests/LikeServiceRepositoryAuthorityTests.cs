@@ -101,6 +101,7 @@ public class LikeServiceRepositoryAuthorityTests
     {
         public ILikeRepository Likes { get; } = likes;
         public IContactoRepository Contactos => throw new NotSupportedException();
+        public IImageRepository Images => throw new NotSupportedException();
         public IOrderRepository Orders => throw new NotSupportedException();
         public ISaleRepository Sales => throw new NotSupportedException();
         public IProductRepository Products => throw new NotSupportedException();
