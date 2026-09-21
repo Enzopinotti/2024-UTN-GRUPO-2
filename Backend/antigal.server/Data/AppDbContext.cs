@@ -131,6 +131,11 @@ namespace antigal.server.Data
                 .HasForeignKey(l => l.UserId) // FK en Like hacia User
                 .OnDelete(DeleteBehavior.Cascade); // Si se elimina el usuario, se eliminan sus likes
 
+            modelBuilder.Entity<Like>()
+                .HasIndex(l => new { l.UserId, l.ProductoId })
+                .IsUnique()
+                .HasFilter("[UserId] IS NOT NULL");
+
             /////////////////////// RELACIÓN DE VENTA CON USER ///////////////////////
             modelBuilder.Entity<Sale>()
                 .HasOne(s => s.User) // Una venta tiene un usuario opcionalmente
