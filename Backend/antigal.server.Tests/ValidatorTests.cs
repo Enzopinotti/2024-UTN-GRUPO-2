@@ -156,7 +156,7 @@ public class ValidatorTests
     public void ValidationServices_AssemblyRegistration_ResolvesMaintainedValidators()
     {
         var services = new ServiceCollection();
-        services.AddValidatorsFromAssemblyContaining<Program>();
+        services.AddValidatorsFromAssemblyContaining<ValidacionCategoria>();
 
         using var provider = services.BuildServiceProvider();
 
