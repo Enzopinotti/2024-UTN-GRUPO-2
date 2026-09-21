@@ -100,6 +100,7 @@ public class LikeServiceRepositoryAuthorityTests
     private sealed class StubUnitOfWork(ILikeRepository likes) : IUnitOfWork
     {
         public ILikeRepository Likes { get; } = likes;
+        public IContactoRepository Contactos => throw new NotSupportedException();
         public IOrderRepository Orders => throw new NotSupportedException();
         public ISaleRepository Sales => throw new NotSupportedException();
         public IProductRepository Products => throw new NotSupportedException();
