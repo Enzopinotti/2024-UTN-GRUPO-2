@@ -115,3 +115,29 @@ behavior is migrated.
 Temporary lab branch triggers are removed before promotion. Final closure still
 requires Quality and Current-tree security to pass again on the exact promoted
 carrier SHA.
+
+
+## Carrier promotion evidence
+
+The cleaned B20 tree was promoted by non-forced fast-forward to the maintained
+carrier.
+
+Promoted carrier SHA:
+
+`7cc0ab397e4cbc88559d9e975bdbb21c047adc77`
+
+Exact-SHA carrier validation:
+
+- Quality `35557044268` — success
+- Current-tree security `35557044194` — success
+- CI action runtime authority: Node 24
+- frontend tests: 60/60
+- backend tests: 22/22
+- frontend build: success
+- backend Release build: 0 warnings
+- npm audits: 0 findings
+- NuGet vulnerability audit: clean
+
+A documentation-only closure commit follows this evidence. B20 is considered
+closed only after the permanent Quality and Current-tree security workflows pass
+again on that exact closure SHA.
