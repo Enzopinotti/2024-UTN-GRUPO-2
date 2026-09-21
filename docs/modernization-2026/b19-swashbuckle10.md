@@ -158,3 +158,32 @@ Permanent Quality now protects:
 The temporary B19 workflow can therefore be retired before promotion. Carrier
 closure evidence will be appended after the promotion commit passes permanent
 Quality and current-tree security.
+
+## Closure
+
+B19 was promoted to the modernization carrier through PR #16.
+
+Promotion merge:
+
+`3b5fb6a7196e9837b252e07e748bfc15dcddc0b3` — `B19: upgrade Swashbuckle to 10.2.3`.
+
+Final carrier validation on the promotion merge:
+
+- Quality run `35554049723`: success;
+- Current-tree security baseline run `35554049689`: success;
+- Swashbuckle.AspNetCore 10.2.3 retained;
+- Microsoft.OpenApi 2.x JWT configuration retained;
+- legacy `Microsoft.OpenApi.Models` and `OpenApiReference` authority remained absent;
+- frontend source gates, lint, 60 / 60 tests and Vite production build remained green;
+- backend release build remained warning-free;
+- backend tests remained 22 / 22 green;
+- frontend dependency audits remained clean;
+- NuGet vulnerability audit remained clean;
+- all B18 and earlier runtime, source-authority and security gates remained green.
+
+The Vercel PR deployment did not provide product evidence because the external
+free-tier deployment quota had been exhausted. This did not affect the
+repository validation: the maintained GitHub Quality and security gates both
+passed on the exact promotion merge.
+
+B19 is therefore closed on the carrier.
