@@ -1,0 +1,99 @@
+name: B31 direct context persistence characterization
+
+on:
+  push:
+    branches:
+      - modernize/b31-direct-context-persistence-authority-lab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  characterize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Characterize direct AppDbContext persistence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          root = Path("Backend/antigal.server")
+          files = [
+              p for p in sorted(root.rglob("*.cs"))
+              if not any(part in {"bin", "obj"} for part in p.parts)
+          ]
+
+          direct_context_consumers = []
+          direct_save_sites = []
+          for path in files:
+              src = path.read_text(encoding="utf-8-sig")
+              rel = path.as_posix()
+              if "AppDbContext" in src and "_context" in src:
+                  ctor = re.search(r"public\s+\w+\([^)]*AppDbContext\s+context[^)]*\)", src, flags=re.S)
+                  if ctor:
+                      direct_context_consumers.append(rel)
+              for lineno, line in enumerate(src.splitlines(), 1):
+                  if "_context.SaveChangesAsync()" in line:
+                      direct_save_sites.append((rel, lineno, line.strip()))
+
+          outside_repositories = [
+              item for item in direct_save_sites if "/Repositories/" not in item[0]
+          ]
+          repository_sites = [
+              item for item in direct_save_sites if "/Repositories/" in item[0]
+          ]
+
+          print(f"direct-context-consumer-count={len(direct_context_consumers)}")
+          for path in direct_context_consumers:
+              print(f"direct-context-consumer={path}")
+
+          print(f"direct-context-save-site-count={len(direct_save_sites)}")
+          print(f"repository-context-save-site-count={len(repository_sites)}")
+          print(f"outside-repository-save-site-count={len(outside_repositories)}")
+          for path, line, source in outside_repositories:
+              print(f"outside-repository-save-site={path}:{line}|{source}")
+
+          expected_outside = {
+              "Backend/antigal.server/Services/ImageService.cs": 6,
+              "Backend/antigal.server/Services/LikeService.cs": 2,
+              "Backend/antigal.server/Controllers/ContactoController.cs": 1,
+          }
+          actual = {}
+          for path, _line, _source in outside_repositories:
+              actual[path] = actual.get(path, 0) + 1
+
+          print("outside-repository-save-distribution=" + ",".join(
+              f"{path}:{count}" for path, count in sorted(actual.items())
+          ))
+
+          image = (root / "Services/ImageService.cs").read_text(encoding="utf-8-sig")
+          methods = {
+              "upload": r"public async Task<Imagen> UploadImageAsync\(.*?\n        \}",
+              "delete-id": r"public async Task<bool> DeleteImageAsync\(.*?\n        \}",
+              "delete-url": r"public async Task<bool> DeleteImageByUrlAsync\(.*?\n        \}",
+          }
+          for name, pattern in methods.items():
+              match = re.search(pattern, image, flags=re.S)
+              if not match:
+                  raise SystemExit(f"missing ImageService method: {name}")
+              count = match.group(0).count("_context.SaveChangesAsync()")
+              print(f"image-service-{name}-save-site-count={count}")
+
+          if actual != expected_outside:
+              raise SystemExit(
+                  f"unexpected direct-context persistence inventory: {actual}"
+              )
+          PY
+
+      - name: Verify checkout remains clean
+        run: |
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
