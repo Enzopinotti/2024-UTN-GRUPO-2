@@ -8,7 +8,6 @@ on:
     branches:
       - main
       - modernize/2026-authorship-security-baseline
-      - modernize/b23-jwt-package-823-lab
   workflow_dispatch:
 
 permissions:
@@ -317,6 +316,7 @@ jobs:
           print("backend-cloudinary=1.29.3")
           print("backend-fluentvalidation-di=12.1.1")
           print("backend-mercadopago-sdk=3.7.0")
+          print("backend-system-identitymodel-tokens-jwt=8.23.0")
           program_text = Path("Backend/antigal.server/Program.cs").read_text(encoding="utf-8-sig")
           assert "using Microsoft.OpenApi;" in program_text
           assert "Microsoft.OpenApi.Models" not in program_text
@@ -463,12 +463,6 @@ jobs:
 
       - name: Restore backend
         run: dotnet restore Backend/antigal.server.slnx
-
-      - name: Report resolved IdentityModel package graph
-        shell: bash
-        run: |
-          set -euo pipefail
-          dotnet package list --project Backend/antigal.server.slnx --include-transitive --no-restore             | grep -E 'System.IdentityModel.Tokens.Jwt|Microsoft.IdentityModel\.|System.IdentityModel' || true
 
       - name: Build backend
         shell: bash
