@@ -153,3 +153,31 @@ external-service migrations.
 
 Temporary characterization workflow and lab triggers are removed before
 carrier promotion.
+
+
+## Carrier promotion evidence
+
+The cleaned B27 tree was promoted by non-forced fast-forward.
+
+Promoted carrier SHA:
+
+`e88b7345f410aa2b68114f9b10011a2f9bbeb06b`
+
+Exact-SHA carrier validation:
+
+- Quality `35561978213` — success
+- Current-tree security `35561978265` — success
+- frontend tests: 60/60
+- backend tests: 34/34
+- Release compiler warnings: 0
+- npm audit findings: 0
+- NuGet vulnerability audit: clean
+- `responsedto-di-registration=absent`
+- `responsedto-constructor-consumer-count=0`
+- `responsedto-field-consumer-count=0`
+- `responsedto-local-allocation-count=47`
+- `productservice-response-authority=method-local`
+
+A documentation-only closure commit follows this promotion evidence. B27 is
+closed only after permanent Quality and Current-tree security pass again on that
+exact closure SHA.
