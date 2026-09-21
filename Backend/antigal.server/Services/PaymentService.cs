@@ -65,9 +65,4 @@ public class PaymentService : IPaymentService
         return preference.InitPoint; // URL para realizar el pago en Mercado Pago
     }
 
-    public async Task<bool> HandlePaymentNotificationAsync(string paymentId, string status)
-    {
-        // Actualizar el estado del pago en la base de datos
-        return await _paymentRepository.UpdatePaymentStatusAsync(paymentId, status);
-    }
 }
