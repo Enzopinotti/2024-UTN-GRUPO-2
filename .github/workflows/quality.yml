@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - modernize/2026-authorship-security-baseline
+      - modernize/b20-actions-node24-lab
   workflow_dispatch:
 
 permissions:
@@ -24,19 +25,60 @@ jobs:
 
     steps:
       - name: Checkout exact commit
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Setup Node 24.20.0
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version: "24.20.0"
           cache: npm
           cache-dependency-path: Frontend/antigal.client/package-lock.json
 
       - name: Setup .NET 10.0.401
-        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
         with:
           dotnet-version: "10.0.401"
+
+      - name: Verify CI action runtime authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          quality = Path(".github/workflows/quality.yml").read_text(encoding="utf-8")
+          security = Path(".github/workflows/security-baseline.yml").read_text(encoding="utf-8")
+
+          expected = {
+              "actions/checkout": "3d3c42e5aac5ba805825da76410c181273ba90b1",
+              "actions/setup-node": "820762786026740c76f36085b0efc47a31fe5020",
+              "actions/setup-dotnet": "a98b56852c35b8e3190ac28c8c2271da59106c68",
+              "actions/upload-artifact": "043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+          }
+          obsolete = {
+              "11d5960a326750d5838078e36cf38b85af677262",
+              "fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09",
+              "49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "67a3573c9a986a3f9c594539f4ab511d57bb3ce9",
+              "ea165f8d65b6e75b540449e92b4886f43607fa02",
+          }
+
+          combined = quality + "\n" + security
+          for action, sha in expected.items():
+              needle = f"{action}@{sha}"
+              if needle not in combined:
+                  raise SystemExit(f"missing maintained Node 24 action pin: {needle}")
+
+          returned = sorted(sha for sha in obsolete if sha in combined)
+          if returned:
+              raise SystemExit(f"obsolete Node 20 action pins returned: {returned}")
+
+          if f"actions/checkout@{expected['actions/checkout']}" not in security:
+              raise SystemExit("security workflow is not using the maintained checkout pin")
+
+          print("github-actions-runtime-authority=node24")
+          print("github-actions-sha-pinning=preserved")
+          PY
 
       - name: Verify frontend runtime contract
         shell: bash
@@ -527,7 +569,7 @@ jobs:
           PY
 
       - name: Upload quality evidence
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: quality-${{ github.sha }}
           retention-days: 30
