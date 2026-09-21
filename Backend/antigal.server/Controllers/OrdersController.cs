@@ -2,9 +2,6 @@ using antigal.server.Models.Dto;
 using antigal.server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace antigal.server.Controllers
 {
@@ -13,12 +10,10 @@ namespace antigal.server.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IOrderService _orderService;
-        private readonly ISaleService _saleService;  // Dependencia inyectada si aún es necesaria
 
-        public OrdersController(IOrderService orderService, ISaleService saleService)
+        public OrdersController(IOrderService orderService)
         {
             _orderService = orderService;
-            _saleService = saleService;  // Inyección de ISaleService si aún es requerida
         }
 
         // Obtener todas las órdenes
@@ -45,7 +40,6 @@ namespace antigal.server.Controllers
                     return NotFound(new { Message = "Orden no encontrada" });
                 }
 
-                // Preparar el DTO de la orden para confirmar
                 var orderDto = new OrdenDto
                 {
                     idUsuario = order.idUsuario,
@@ -57,7 +51,6 @@ namespace antigal.server.Controllers
                     montoTotal = order.Items.Sum(item => item.cantidad * (item.Producto?.precio ?? 0))
                 };
 
-                // Llamar al servicio para confirmar la orden y crear la venta
                 await _orderService.ConfirmOrder(orderDto);
 
                 return Ok(new { Message = "Orden confirmada y venta creada con éxito." });
