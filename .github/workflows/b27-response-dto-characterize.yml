@@ -1,0 +1,83 @@
+name: B27 ResponseDto characterization
+
+on:
+  push:
+    branches:
+      - modernize/b27-response-dto-authority-lab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  characterize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Characterize ResponseDto authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+
+          root = Path("Backend/antigal.server")
+          program = (root / "Program.cs").read_text(encoding="utf-8-sig")
+          files = [
+              p for p in sorted(root.rglob("*.cs"))
+              if not any(part in {"bin", "obj"} for part in p.parts)
+          ]
+
+          registration = "builder.Services.AddTransient<ResponseDto>();"
+          constructor_pattern = re.compile(r"[\(,]\s*ResponseDto\s+[A-Za-z_][A-Za-z0-9_]*\s*(?:[,\)])")
+          field_pattern = re.compile(r"\bResponseDto\s+_[A-Za-z_][A-Za-z0-9_]*\s*;")
+          new_pattern = re.compile(r"\bnew\s+ResponseDto\s*(?:\(|\{)")
+
+          ctor_files = []
+          field_files = []
+          new_files = []
+          total_new = 0
+
+          for path in files:
+              src = path.read_text(encoding="utf-8-sig")
+              if constructor_pattern.search(src):
+                  ctor_files.append(path)
+              if field_pattern.search(src):
+                  field_files.append(path)
+              count = len(new_pattern.findall(src))
+              if count:
+                  new_files.append((path, count))
+                  total_new += count
+
+          print(f"responsedto-di-registration={registration in program}")
+          print(f"responsedto-constructor-consumer-count={len(ctor_files)}")
+          for path in ctor_files:
+              print(f"responsedto-constructor-consumer={path.as_posix()}")
+          print(f"responsedto-field-consumer-count={len(field_files)}")
+          for path in field_files:
+              print(f"responsedto-field-consumer={path.as_posix()}")
+          print(f"responsedto-local-allocation-count={total_new}")
+          print(f"responsedto-local-allocation-file-count={len(new_files)}")
+          for path, count in new_files:
+              print(f"responsedto-local-allocation={count}|{path.as_posix()}")
+
+          expected_product = root / "Services" / "ProductService.cs"
+          if not registration:
+              raise SystemExit("historical ResponseDto DI registration missing")
+          if ctor_files != [expected_product]:
+              raise SystemExit(f"unexpected ResponseDto constructor consumers: {ctor_files}")
+          if field_files != [expected_product]:
+              raise SystemExit(f"unexpected ResponseDto field consumers: {field_files}")
+          if total_new == 0:
+              raise SystemExit("expected local ResponseDto allocations were not found")
+          PY
+
+      - name: Verify checkout remains clean
+        run: |
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
