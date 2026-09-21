@@ -1,6 +1,5 @@
 using antigal.server.Models;
 using antigal.server.Models.Dto;
-using antigal.server.Models.Dto.VentaDtos;
 using antigal.server.Repositories;
 using antigal.server.Services;
 using Microsoft.AspNetCore.Http;
@@ -15,40 +14,6 @@ namespace antigal.server.Tests;
 [TestClass]
 public class OrderSalePersistenceAuthorityTests
 {
-    [TestMethod]
-    public async Task UpdateSaleStatus_RepositoryOwnsPersistence()
-    {
-        var order = Order(10, "user-1");
-        var sale = new Sale
-        {
-            idVenta = 20,
-            idOrden = order.idOrden,
-            Orden = order,
-            total = 100m,
-            metodoPago = "test",
-            EstadoVenta = VentaEstado.Pendiente,
-            idUsuario = order.idUsuario
-        };
-        var sales = new StubSaleRepository
-        {
-            GetSaleByIdHandler = _ => Task.FromResult<Sale?>(sale),
-            UpdateSaleHandler = _ => Task.FromResult(true)
-        };
-        var unit = new StubUnitOfWork(
-            new StubOrderRepository(),
-            sales,
-            new StubProductRepository(),
-            new TrackingTransaction());
-        var service = new SaleService(unit);
-
-        var result = await service.UpdateSaleStatusAsync(sale.idVenta, VentaEstado.Completada);
-
-        Assert.IsTrue(result);
-        Assert.AreEqual(VentaEstado.Completada, sale.EstadoVenta);
-        Assert.AreEqual(1, sales.GetSaleByIdCalls);
-        Assert.AreEqual(1, sales.UpdateSaleCalls);
-    }
-
     [TestMethod]
     public async Task ConfirmOrder_CommitsTransaction_AfterRepositoryOwnedMutations()
     {
@@ -216,11 +181,7 @@ public class OrderSalePersistenceAuthorityTests
     private sealed class StubSaleRepository : ISaleRepository
     {
         public Func<Sale, Task<Sale?>>? CreateSaleHandler { get; init; }
-        public Func<int, Task<Sale?>>? GetSaleByIdHandler { get; init; }
-        public Func<Sale, Task<bool>>? UpdateSaleHandler { get; init; }
         public int CreateSaleCalls { get; private set; }
-        public int GetSaleByIdCalls { get; private set; }
-        public int UpdateSaleCalls { get; private set; }
 
         public Task<Sale?> CreateSaleAsync(Sale sale)
         {
@@ -228,17 +189,6 @@ public class OrderSalePersistenceAuthorityTests
             return CreateSaleHandler?.Invoke(sale) ?? Task.FromResult<Sale?>(sale);
         }
 
-        public Task<Sale?> GetSaleByIdAsync(int idVenta)
-        {
-            GetSaleByIdCalls++;
-            return GetSaleByIdHandler?.Invoke(idVenta) ?? Task.FromResult<Sale?>(null);
-        }
-
-        public Task<bool> UpdateSaleAsync(Sale sale)
-        {
-            UpdateSaleCalls++;
-            return UpdateSaleHandler?.Invoke(sale) ?? Task.FromResult(true);
-        }
     }
 
     private sealed class StubProductRepository : IProductRepository
