@@ -5,7 +5,7 @@
 
 Proyecto académico full stack desarrollado originalmente en 2024 para **Antigal**, una dietética nacida en el Mercado Municipal de Ensenada. El repositorio fue retomado y modernizado en 2026 para llevar una base histórica de React + ASP.NET Core a un stack mantenido, testeado y con CI permanente.
 
-> **Estado actual:** modernization checkpoint B33. El frontend y backend compilan y testean en CI con una política de **0 warnings**, auditorías de dependencias limpias y gates de arquitectura que protegen decisiones de modernización ya cerradas.
+> **Estado actual:** modernization checkpoint B34. El frontend y backend compilan y testean en CI con una política de **0 warnings**, auditorías de dependencias limpias y gates de arquitectura que protegen decisiones de modernización ya cerradas.
 
 ## Qué incluye
 
@@ -143,7 +143,7 @@ Se requieren estas secciones:
 
 ### Nota sobre bootstrap de desarrollo
 
-El `DbInitializer` histórico todavía contiene creación automática de roles y un usuario administrador de bootstrap pensado para desarrollo. **No debe considerarse una estrategia válida de credenciales para producción.** La externalización/eliminación de ese bootstrap es deuda técnica conocida y debe resolverse antes de un despliegue real.
+El bootstrap de administrador está **deshabilitado por defecto**, no contiene credenciales embebidas y sólo puede habilitarse explícitamente en entorno Development mediante configuración externa. Una configuración incompleta o un intento de habilitarlo fuera de Development falla de forma cerrada durante el arranque.
 
 ## Ejecutar el frontend
 
@@ -267,10 +267,10 @@ Las GitHub Actions de terceros están fijadas por SHA y usan runtimes Node 24 ma
 
 ## Checkpoint de validación
 
-En el cierre **B33** del carril de modernización:
+En el cierre **B34** del carril de modernización:
 
 - frontend: **60/60 tests**
-- backend: **52/52 tests**
+- backend: **57/57 tests**
 - C# Release: **0 warnings**
 - npm audit: **0 vulnerabilidades**
 - NuGet vulnerability audit: **clean**
@@ -301,7 +301,8 @@ El trabajo se hizo incrementalmente y con validación antes de cada promoción. 
 - retiro del contrato muerto `IUnitOfWork.SaveChangesAsync()`;
 - reducción y allowlist de accesos directos a `AppDbContext`;
 - extracción de `LikeRepository` bajo `UnitOfWork`;
-- extracción de `ContactoRepository` + `ContactoService`, dejando cero controllers con acceso directo a `AppDbContext`.
+- extracción de `ContactoRepository` + `ContactoService`, dejando cero controllers con acceso directo a `AppDbContext`;
+- bootstrap de administrador externalizado, deshabilitado por defecto, Development-only y fail-closed.
 
 Para decisiones, evidencia, SHAs y runs concretos, ver el índice de modernización.
 
@@ -309,7 +310,6 @@ Para decisiones, evidencia, SHAs y runs concretos, ver el índice de modernizaci
 
 El estado actual es mucho más mantenible que el histórico, pero todavía hay trabajo explícito:
 
-- externalizar/eliminar el bootstrap de admin de `DbInitializer`;
 - seguir evaluando si `ImageService` debe conservar acceso directo a `AppDbContext`;
 - caracterizar duplicados existentes antes de agregar una restricción única `(UserId, ProductoId)` en Likes;
 - continuar actualización conservadora de dependencias mayores que quedaron deliberadamente fuera de los bloques previos;
