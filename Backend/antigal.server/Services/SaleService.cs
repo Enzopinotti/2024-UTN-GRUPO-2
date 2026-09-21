@@ -103,10 +103,6 @@ namespace antigal.server.Services
 
             sale.EstadoVenta = nuevoEstado;
             var result = await _unitOfWork.Sales.UpdateSaleAsync(sale);
-            if (result)
-            {
-                await _unitOfWork.SaveChangesAsync();
-            }
             return result;
         }
     }

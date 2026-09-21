@@ -147,7 +147,6 @@ namespace antigal.server.Services
                         }
                     }
 
-                    await _unitOfWork.SaveChangesAsync();
                     await transaction.CommitAsync();
                 }
                 catch
