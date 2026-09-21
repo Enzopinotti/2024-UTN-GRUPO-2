@@ -136,6 +136,7 @@ namespace antigal.server
 
             // Registrar servicios con interfaces
             builder.Services.AddScoped<ILikeService, LikeService>();
+            builder.Services.AddScoped<IContactoService, ContactoService>();
             builder.Services.AddScoped<IImageService, ImageService>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
