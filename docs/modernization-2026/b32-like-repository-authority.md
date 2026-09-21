@@ -299,3 +299,36 @@ Rollback requires:
 No data/schema migration is involved.
 
 Temporary lab triggers are removed before carrier promotion.
+
+
+## Carrier promotion evidence
+
+The cleaned B32 tree was promoted by non-forced fast-forward.
+
+Promoted carrier SHA:
+
+`28878ec087d80132329afe7158b3a837517a0d11`
+
+Exact-SHA carrier validation:
+
+- Quality `35598468670` — success
+- Current-tree security `35598468653` — success
+- frontend tests: 60/60
+- backend tests: 48/48
+- Release compiler warnings: 0
+- npm audit findings: 0
+- NuGet vulnerability audit: clean
+- `unitofwork-owned-repositories=Products,Orders,Sales,Categories,ProductCategories,Carts,Likes`
+- `likeservice-like-repository-authority=IUnitOfWork.Likes`
+- `likeservice-direct-context=absent`
+- `likerepository-save-site-count=2`
+- `like-user-product-unique-index=False`
+- `outside-repository-context-consumer-count=2`
+- `outside-repository-save-site-count=4`
+- `outside-repository-save-distribution=ContactoController.cs:1,ImageService.cs:3`
+- `backend-like-repository-authority=clean`
+- `backend-direct-context-persistence-authority=clean`
+
+A documentation-only closure commit follows this evidence. B32 is closed only
+after permanent Quality and Current-tree security pass again on that exact
+closure SHA.
