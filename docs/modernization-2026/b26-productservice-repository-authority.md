@@ -191,3 +191,29 @@ There are no schema, data or external-service migrations.
 
 Temporary characterization workflow and lab branch triggers are removed before
 carrier promotion.
+
+
+## Carrier promotion evidence
+
+The cleaned B26 tree was promoted by non-forced fast-forward.
+
+Promoted carrier SHA:
+
+`5142640b56276e5607067f9bb7898d2d3b8793ee`
+
+Exact-SHA carrier validation:
+
+- Quality `35561596410` — success
+- Current-tree security `35561596377` — success
+- frontend tests: 60/60
+- backend tests: 32/32
+- Release compiler warnings: 0
+- npm audit findings: 0
+- NuGet vulnerability audit: clean
+- `unitofwork-owned-repositories=Products,Orders,Sales,Categories,ProductCategories,Carts`
+- `productservice-product-repository-authority=IUnitOfWork.Products`
+- `direct-repository-di=IPaymentRepository,IEnvioRepository`
+
+A documentation-only closure commit follows this promotion evidence. B26 is
+closed only after the permanent Quality and Current-tree security workflows pass
+again on that exact closure SHA.
