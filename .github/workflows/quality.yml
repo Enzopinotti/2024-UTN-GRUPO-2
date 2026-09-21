@@ -63,17 +63,25 @@ jobs:
               "ea165f8d65b6e75b540449e92b4886f43607fa02",
           }
 
-          combined = quality + "\n" + security
+          import re
+
+          quality_uses = set(re.findall(r"^\\s*uses:\\s*([^\\s#]+)", quality, flags=re.MULTILINE))
+          security_uses = set(re.findall(r"^\\s*uses:\\s*([^\\s#]+)", security, flags=re.MULTILINE))
+          combined_uses = quality_uses | security_uses
+
           for action, sha in expected.items():
               needle = f"{action}@{sha}"
-              if needle not in combined:
+              if needle not in combined_uses:
                   raise SystemExit(f"missing maintained Node 24 action pin: {needle}")
 
-          returned = sorted(sha for sha in obsolete if sha in combined)
+          returned = sorted(
+              use for use in combined_uses
+              if any(use.endswith(f"@{sha}") for sha in obsolete)
+          )
           if returned:
               raise SystemExit(f"obsolete Node 20 action pins returned: {returned}")
 
-          if f"actions/checkout@{expected['actions/checkout']}" not in security:
+          if f"actions/checkout@{expected['actions/checkout']}" not in security_uses:
               raise SystemExit("security workflow is not using the maintained checkout pin")
 
           print("github-actions-runtime-authority=node24")
