@@ -9,6 +9,7 @@ UNIT_OF_WORK = ROOT / "Backend" / "antigal.server" / "Repositories" / "UnitOfWor
 IUNIT_OF_WORK = ROOT / "Backend" / "antigal.server" / "Repositories" / "IUnitOfWork.cs"
 PRODUCT_SERVICE = ROOT / "Backend" / "antigal.server" / "Services" / "ProductService.cs"
 LIKE_SERVICE = ROOT / "Backend" / "antigal.server" / "Services" / "LikeService.cs"
+CONTACTO_SERVICE = ROOT / "Backend" / "antigal.server" / "Services" / "ContactoService.cs"
 PAYMENT_SERVICE = ROOT / "Backend" / "antigal.server" / "Services" / "PaymentService.cs"
 ENVIO_SERVICE = ROOT / "Backend" / "antigal.server" / "Services" / "EnvioService.cs"
 
@@ -19,6 +20,7 @@ unit = UNIT_OF_WORK.read_text(encoding="utf-8-sig")
 iunit = IUNIT_OF_WORK.read_text(encoding="utf-8-sig")
 product_service = PRODUCT_SERVICE.read_text(encoding="utf-8-sig")
 like_service = LIKE_SERVICE.read_text(encoding="utf-8-sig")
+contacto_service = CONTACTO_SERVICE.read_text(encoding="utf-8-sig")
 payment_service = PAYMENT_SERVICE.read_text(encoding="utf-8-sig")
 envio_service = ENVIO_SERVICE.read_text(encoding="utf-8-sig")
 
@@ -52,6 +54,11 @@ unit_owned = {
         "builder.Services.AddScoped<ILikeRepository, LikeRepository>();",
         "public ILikeRepository Likes => _likeRepository ??= new LikeRepository(_context);",
         "ILikeRepository Likes { get; }",
+    ),
+    "IContactoRepository": (
+        "builder.Services.AddScoped<IContactoRepository, ContactoRepository>();",
+        "public IContactoRepository Contactos => _contactoRepository ??= new ContactoRepository(_context);",
+        "IContactoRepository Contactos { get; }",
     ),
 }
 
@@ -112,9 +119,22 @@ for contract in (
     if contract not in like_service:
         failures.append(f"LikeService UnitOfWork repository path missing: {contract}")
 
-print("unitofwork-owned-repositories=Products,Orders,Sales,Categories,ProductCategories,Carts,Likes")
+if "AppDbContext" in contacto_service or "_context" in contacto_service:
+    failures.append("ContactoService regained direct AppDbContext state")
+for contract in (
+    "_unitOfWork.Contactos.AddAsync(contacto)",
+    "_unitOfWork.Contactos.GetAllAsync()",
+    "_unitOfWork.Contactos.GetByIdAsync(id)",
+):
+    if contract not in contacto_service:
+        failures.append(f"ContactoService UnitOfWork repository path missing: {contract}")
+if "builder.Services.AddScoped<IContactoService, ContactoService>();" not in program:
+    failures.append("ContactoService DI registration missing")
+
+print("unitofwork-owned-repositories=Products,Orders,Sales,Categories,ProductCategories,Carts,Likes,Contactos")
 print("productservice-product-repository-authority=IUnitOfWork.Products")
 print("likeservice-like-repository-authority=IUnitOfWork.Likes")
+print("contactoservice-contacto-repository-authority=IUnitOfWork.Contactos")
 print("direct-repository-di=IPaymentRepository,IEnvioRepository")
 
 if failures:
