@@ -376,6 +376,9 @@ jobs:
       - name: Validate backend image repository authority
         run: python3 scripts/backend_image_repository_authority.py
 
+      - name: Validate backend Image authorization authority
+        run: python3 scripts/backend_image_authorization_authority.py
+
       - name: Validate backend direct-context persistence authority
         run: python3 scripts/backend_direct_context_persistence_authority.py
 
@@ -421,6 +424,9 @@ jobs:
 
       - name: Validate dead frontend source authority
         run: node scripts/dead_source_inventory.mjs
+
+      - name: Validate authenticated frontend API authority
+        run: node scripts/frontend_authenticated_api_authority.mjs
 
       - name: Validate Profile Orders local-data authority
         run: node scripts/frontend_profile_orders_authority.mjs
