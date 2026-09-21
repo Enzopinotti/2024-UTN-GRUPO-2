@@ -65,8 +65,8 @@ jobs:
 
           import re
 
-          quality_uses = set(re.findall(r"^\\s*uses:\\s*([^\\s#]+)", quality, flags=re.MULTILINE))
-          security_uses = set(re.findall(r"^\\s*uses:\\s*([^\\s#]+)", security, flags=re.MULTILINE))
+          quality_uses = set(re.findall(r"^\\s*-?\\s*uses:\\s*([^\\s#]+)", quality, flags=re.MULTILINE))
+          security_uses = set(re.findall(r"^\\s*-?\\s*uses:\\s*([^\\s#]+)", security, flags=re.MULTILINE))
           combined_uses = quality_uses | security_uses
 
           for action, sha in expected.items():
