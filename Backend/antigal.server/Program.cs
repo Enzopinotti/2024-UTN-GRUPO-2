@@ -54,6 +54,9 @@ namespace antigal.server
             builder.Services.Configure<DataProtectionTokenProviderOptions>(opt =>
                 opt.TokenLifespan = TimeSpan.FromHours(2));
 
+            builder.Services.Configure<AdminBootstrapOptions>(
+                builder.Configuration.GetSection(AdminBootstrapOptions.SectionName));
+
             // Configuración de JWT
             var jwtSettings = builder.Configuration.GetSection("JWTSettings");
             builder.Services.AddAuthentication(opt =>
