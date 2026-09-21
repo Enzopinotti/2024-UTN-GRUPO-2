@@ -148,7 +148,6 @@ namespace antigal.server
             builder.Services.AddTransient<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
-            builder.Services.AddScoped<ISaleService, SaleService>();
             builder.Services.AddScoped<IEnvioService, EnvioService>(); // Registrar IEnvioService
             // Eliminar duplicaciones y registros innecesarios
 
