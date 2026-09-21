@@ -17,12 +17,12 @@ El trabajo se ejecutó en bloques pequeños, normalmente con:
 
 ## Estado
 
-El último bloque cerrado antes de este checkpoint es **B37 — Dead email test surface removal**.
+El último bloque cerrado antes de este checkpoint es **B40 — Dead payment notification surface removal**.
 
 Checkpoint:
 
 - frontend: 60/60
-- backend: 66/66
+- backend: 75/75
 - Release build: 0 warnings
 - npm audit: clean
 - NuGet vulnerability audit: clean
@@ -46,9 +46,14 @@ Checkpoint:
 - B35 — Image repository authority
 - B36 — Like concurrency integrity
 - B37 — Dead email test surface removal
+- B38 — ProductCategory authorization boundary
+- B39 — Payment authorization boundary
+- B40 — Dead payment notification surface removal
 
 Los archivos `bXX-*.md` de este directorio contienen la evidencia detallada, decisiones de alcance, validaciones, no-goals y rollback boundary de cada bloque.
 
 ## Próximos candidatos
 
+- authorization boundaries for remaining mutating controllers, starting from measured frontend/API usage
+- a real Mercado Pago webhook integration with authenticity verification before any public callback returns
 - upgrades mayores pendientes que requieran pruebas de comportamiento
