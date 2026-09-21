@@ -109,11 +109,23 @@ B13 does not:
 
 Those are separate future blocks with their own compatibility evidence.
 
-## Closure condition
+## Closure
 
-B13 is ready for carrier promotion only after:
+B13 was promoted to the maintenance carrier through PR #10 as:
 
-1. the laboratory remains green with the permanent Quality contract present;
-2. the validated B13 product/configuration blobs are reconciled onto the current carrier;
-3. the temporary B13 workflow is excluded from the final carrier tree;
-4. carrier Quality and current-tree security both pass on the promoted commit.
+`30ff876869665a65352f47864dd894d9314824d7` — `B13: adopt .NET 10 runtime authority`.
+
+The temporary B13 workflow was retired before promotion.
+
+Final carrier validation:
+
+- Quality run `35547104368`: success;
+- Current-tree security baseline run `35547104557`: success;
+- .NET SDK authority: 10.0.401;
+- .NET target framework: net10.0;
+- backend compiler warnings: 0;
+- backend tests: 16 / 16 green;
+- NuGet vulnerable-package audit: clean;
+- all B12 and earlier frontend/runtime/security gates remained green.
+
+B13 is therefore closed on the carrier.
