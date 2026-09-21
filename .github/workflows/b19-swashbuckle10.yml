@@ -1,0 +1,172 @@
+name: B19 Swashbuckle 10 lab
+
+on:
+  push:
+    branches:
+      - modernize/b19-swashbuckle10-lab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: b19-swashbuckle10-lab
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: "false"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+
+    steps:
+      - name: Checkout triggering B19 commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+
+      - name: Setup Node 24.20.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24.20.0"
+          cache: npm
+          cache-dependency-path: Frontend/antigal.client/package-lock.json
+
+      - name: Setup .NET 10.0.401
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9
+        with:
+          dotnet-version: "10.0.401"
+
+      - name: Verify B19 source authority
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          grep -Fq 'Swashbuckle.AspNetCore" Version="10.2.3"' Backend/antigal.server/antigal.server.csproj
+          grep -Fq 'using Microsoft.OpenApi;' Backend/antigal.server/Program.cs
+          grep -Fq 'OpenApiSecuritySchemeReference("Bearer", document)' Backend/antigal.server/Program.cs
+
+          if grep -R -n -F 'Microsoft.OpenApi.Models' Backend/antigal.server Backend/antigal.server.Tests; then
+            echo "Legacy Microsoft.OpenApi.Models namespace remains" >&2
+            exit 1
+          fi
+
+          if grep -R -n -F 'OpenApiReference' Backend/antigal.server Backend/antigal.server.Tests; then
+            echo "Legacy OpenApiReference surface remains" >&2
+            exit 1
+          fi
+
+          echo "b19_swashbuckle=10.2.3"
+          echo "b19_microsoft_openapi_v2_surface=present"
+          echo "b19_legacy_openapi_models=absent"
+
+      - name: Install frontend exactly
+        working-directory: Frontend/antigal.client
+        run: npm ci
+
+      - name: Validate frontend source authorities
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/frontend_dependency_authority.mjs
+          node scripts/jsx_extension_authority.mjs
+          node scripts/dead_source_inventory.mjs
+          node scripts/style_authority.mjs
+
+      - name: Lint frontend
+        working-directory: Frontend/antigal.client
+        run: npm run lint -- --max-warnings 0
+
+      - name: Test frontend
+        working-directory: Frontend/antigal.client
+        env:
+          CI: "true"
+        run: npm test
+
+      - name: Build frontend
+        working-directory: Frontend/antigal.client
+        run: npm run build
+
+      - name: Audit frontend dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          (
+            cd Frontend/antigal.client
+            npm audit --json > "$GITHUB_WORKSPACE/b19-frontend-audit.json" || true
+          )
+
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          audit = json.loads(Path("b19-frontend-audit.json").read_text())
+          total = audit.get("metadata", {}).get("vulnerabilities", {}).get("total", 0)
+          print(f"b19_frontend_audit_total={total}")
+          if total:
+              raise SystemExit(f"frontend dependency graph is not clean: {total}")
+          PY
+
+      - name: Restore backend
+        run: dotnet restore Backend/antigal.server.slnx
+
+      - name: Build backend warning-free
+        run: dotnet build Backend/antigal.server.slnx -c Release --no-restore -warnaserror
+
+      - name: Test backend
+        run: dotnet test Backend/antigal.server.Tests/antigal.server.Tests.csproj -c Release --no-build
+
+      - name: Audit NuGet graph
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          dotnet package list             --project Backend/antigal.server.slnx             --vulnerable             --include-transitive             --no-restore > b19-solution-vulnerable.txt
+
+          dotnet package list             --project Backend/antigal.server/antigal.server.csproj             --outdated             --no-restore > b19-server-outdated.txt
+
+          python3 - <<'PY' | tee b19-summary.txt
+          from pathlib import Path
+
+          vulnerable = Path("b19-solution-vulnerable.txt").read_text()
+          outdated = Path("b19-server-outdated.txt").read_text()
+
+          vulnerable_clean = "has the following vulnerable packages" not in vulnerable
+          swashbuckle_current = "Swashbuckle.AspNetCore" not in outdated
+
+          print(f"b19_nuget_vulnerability_report_clean={str(vulnerable_clean).lower()}")
+          print(f"b19_swashbuckle_outdated_check_clean={str(swashbuckle_current).lower()}")
+
+          if not vulnerable_clean:
+              raise SystemExit("NuGet graph contains known vulnerable packages")
+          if not swashbuckle_current:
+              raise SystemExit("Swashbuckle.AspNetCore 10.2.3 is already outdated")
+
+          print("b19_swashbuckle10_candidate=accepted")
+          PY
+
+      - name: Validate current-tree security
+        run: python3 scripts/security_baseline.py
+
+      - name: Verify repository remains clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
+
+      - name: Upload B19 evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b19-swashbuckle10-${{ github.sha }}
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            b19-summary.txt
+            b19-frontend-audit.json
+            b19-solution-vulnerable.txt
+            b19-server-outdated.txt
