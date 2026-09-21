@@ -265,3 +265,32 @@ No schema, data or deployment migration is involved.
 
 Temporary characterization workflow and lab branch triggers are removed before
 carrier promotion.
+
+
+## Carrier promotion evidence
+
+The cleaned B31 tree was promoted by non-forced fast-forward.
+
+Promoted carrier SHA:
+
+`287c8816952b5fe0f18f77e0757afc6b96e59d5f`
+
+Exact-SHA carrier validation:
+
+- Quality `35596817096` — success
+- Current-tree security `35596816952` — success
+- frontend tests: 60/60
+- backend tests: 44/44
+- Release compiler warnings: 0
+- npm audit findings: 0
+- NuGet vulnerability audit: clean
+- `outside-repository-context-consumer-count=3`
+- `outside-repository-save-site-count=6`
+- `image-service-upload-save-site-count=1`
+- `image-service-delete-id-save-site-count=1`
+- `image-service-delete-url-save-site-count=1`
+- `backend-direct-context-persistence-authority=clean`
+
+A documentation-only closure commit follows this evidence. B31 is closed only
+after permanent Quality and Current-tree security pass again on that exact
+closure SHA.
