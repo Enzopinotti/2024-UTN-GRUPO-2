@@ -227,6 +227,7 @@ jobs:
           required_server_packages = (
               'CloudinaryDotNet" Version="1.29.3"',
               'FluentValidation.DependencyInjectionExtensions" Version="12.1.1"',
+              'mercadopago-sdk" Version="3.7.0"',
               'Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.12"',
               'Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.12"',
               'Microsoft.EntityFrameworkCore" Version="10.0.12"',
@@ -264,6 +265,7 @@ jobs:
           print("dotnet-legacy-sln-authority=absent")
           print("backend-cloudinary=1.29.3")
           print("backend-fluentvalidation-di=12.1.1")
+          print("backend-mercadopago-sdk=3.7.0")
           print("backend-sharpgrip-autovalidation=2.0.0")
           print("backend-imagesharp-authority=absent")
           print("backend-npoi=2.7.6-held")
@@ -510,7 +512,7 @@ jobs:
           if not solution_clean:
               raise SystemExit("NuGet solution vulnerability audit is no longer clean")
 
-          print("B17 unused ImageSharp authority removal, B16 FluentValidation 12 and SharpGrip 2 authority, B15 conservative backend dependency refresh, B14 SLNX solution authority, B13 .NET 10 runtime, B12 native Sass authority, B11 React 19 runtime and dead runtime-package pruning, B10 warning-free Testing Library runtime, B9 dead-source authority, B8c JSX extension authority, B8b route-split frontend, B8a direct-eval-free frontend, B7b2 warning-free backend, B7b1 order model authority, B7a product-filter nullability, B6c3 React Hook Form compatibility, B6c2e Auth hydration, B6c2d2 Profile draft state, B6c2d1 User addresses state, B6c2c Category form state, B6c2b Admin image state, B6c2a Carousel state, B6c1 Hook dependencies, B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
+          print("B18 Mercado Pago SDK 3.7.0 authority, B17 unused ImageSharp authority removal, B16 FluentValidation 12 and SharpGrip 2 authority, B15 conservative backend dependency refresh, B14 SLNX solution authority, B13 .NET 10 runtime, B12 native Sass authority, B11 React 19 runtime and dead runtime-package pruning, B10 warning-free Testing Library runtime, B9 dead-source authority, B8c JSX extension authority, B8b route-split frontend, B8a direct-eval-free frontend, B7b2 warning-free backend, B7b1 order model authority, B7a product-filter nullability, B6c3 React Hook Form compatibility, B6c2e Auth hydration, B6c2d2 Profile draft state, B6c2d1 User addresses state, B6c2c Category form state, B6c2b Admin image state, B6c2a Carousel state, B6c1 Hook dependencies, B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
           PY
 
       - name: Upload quality evidence
