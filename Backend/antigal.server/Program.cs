@@ -124,7 +124,6 @@ namespace antigal.server
             builder.Services.AddSingleton<JwtHandler>();
 
             // Registrar Repositorios
-            builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
             builder.Services.AddScoped<IEnvioRepository, EnvioRepository>(); // Registrar IEnvioRepository
             // Agrega otros repositorios según sea necesario

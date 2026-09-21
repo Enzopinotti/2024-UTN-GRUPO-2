@@ -21,6 +21,11 @@ payment_service = PAYMENT_SERVICE.read_text(encoding="utf-8-sig")
 envio_service = ENVIO_SERVICE.read_text(encoding="utf-8-sig")
 
 unit_owned = {
+    "IProductRepository": (
+        "builder.Services.AddScoped<IProductRepository, ProductRepository>();",
+        "public IProductRepository Products => _productRepository ??= new ProductRepository(_context);",
+        "IProductRepository Products { get; }",
+    ),
     "ICategoriaRepository": (
         "builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();",
         "public ICategoriaRepository Categories => _categoriaRepository ??= new CategoriaRepository(_context);",
@@ -54,11 +59,6 @@ for service, (registration, owner_contract, interface_contract) in unit_owned.it
 # These direct repository registrations remain intentional because maintained
 # services consume them directly outside UnitOfWork.
 required_direct = {
-    "IProductRepository": (
-        "builder.Services.AddScoped<IProductRepository, ProductRepository>();",
-        "IProductRepository productRepository",
-        product_service,
-    ),
     "IPaymentRepository": (
         "builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();",
         "IPaymentRepository paymentRepository",
@@ -83,9 +83,21 @@ if "AddScoped<ISaleRepository" in program:
 if "public ISaleRepository Sales => _saleRepository ??= new SaleRepository(_context);" not in unit:
     failures.append("UnitOfWork SaleRepository ownership contract missing")
 
+if "IProductRepository productRepository" in product_service:
+    failures.append("ProductService regained a direct IProductRepository constructor dependency")
+if "_productRepository" in product_service:
+    failures.append("ProductService regained direct product repository state")
+for contract in (
+    "_unitOfWork.Products.GetProductsAsync(orden, precio)",
+    "_unitOfWork.Products.GetFeaturedProductsAsync()",
+):
+    if contract not in product_service:
+        failures.append(f"ProductService UnitOfWork product path missing: {contract}")
+
 print("unitofwork-owned-direct-registration-count=0")
-print("unitofwork-owned-repositories=Orders,Sales,Categories,ProductCategories,Carts")
-print("direct-repository-di=IProductRepository,IPaymentRepository,IEnvioRepository")
+print("unitofwork-owned-repositories=Products,Orders,Sales,Categories,ProductCategories,Carts")
+print("productservice-product-repository-authority=IUnitOfWork.Products")
+print("direct-repository-di=IPaymentRepository,IEnvioRepository")
 
 if failures:
     print("Backend repository DI authority failed:", file=sys.stderr)

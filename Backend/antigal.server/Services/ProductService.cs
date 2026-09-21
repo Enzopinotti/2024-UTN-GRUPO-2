@@ -11,23 +11,19 @@ namespace antigal.server.Services
     public class ProductService : IProductService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IProductRepository _productRepository;
         private readonly ResponseDto _response;
 
-        public ProductService(IUnitOfWork unitOfWork, IProductRepository productRepository, ResponseDto response)
+        public ProductService(IUnitOfWork unitOfWork, ResponseDto response)
         {
             _unitOfWork = unitOfWork;
-            _productRepository = productRepository;
             _response = response;
         }
 
         public async Task<ResponseDto> GetProducts(string? orden = null, string? precio = null)
         {
-            var response = new ResponseDto();
             try
             {
-                // Obtener productos del repositorio
-                var productos = await _productRepository.GetProductsAsync(orden, precio);
+                var productos = await _unitOfWork.Products.GetProductsAsync(orden, precio);
 
                 // Asignar datos a la respuesta
                 _response.Data = productos.ToList();
@@ -245,7 +241,7 @@ namespace antigal.server.Services
 
         public async Task<ResponseDto> GetProductsHomeAsync()
         {
-            var productosDestacados = await _productRepository.GetFeaturedProductsAsync();
+            var productosDestacados = await _unitOfWork.Products.GetFeaturedProductsAsync();
 
             if (!productosDestacados.Any())
             {
