@@ -93,7 +93,7 @@ namespace antigal.server.Services
             try
             {
                 var productoExistente = await _unitOfWork.Products.GetProductsByTitleAsync(producto.nombre);
-                if (productoExistente != null)
+                if (productoExistente.Any())
                 {
                     response.IsSuccess = false;
                     response.Message = "Ya existe un producto con ese nombre.";
@@ -101,7 +101,6 @@ namespace antigal.server.Services
                 }
 
                 await _unitOfWork.Products.AddProductAsync(producto);
-                await _unitOfWork.SaveChangesAsync();
 
                 response.IsSuccess = true;
                 response.Message = "Producto agregado exitosamente.";
@@ -130,7 +129,6 @@ namespace antigal.server.Services
                 }
 
                 await _unitOfWork.Products.DeleteProductAsync(id);
-                await _unitOfWork.SaveChangesAsync();
 
                 response.IsSuccess = true;
                 response.Message = "Producto eliminado exitosamente.";
@@ -171,7 +169,6 @@ namespace antigal.server.Services
                     return response;
                 }
 
-                await _unitOfWork.SaveChangesAsync();
 
                 response.IsSuccess = true;
                 response.Message = "Producto actualizado exitosamente.";

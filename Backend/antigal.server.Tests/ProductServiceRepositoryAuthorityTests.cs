@@ -112,6 +112,105 @@ public class ProductServiceRepositoryAuthorityTests
     }
 
     [TestMethod]
+    public async Task AddProduct_EmptyTitleMatch_AddsOnce_WithoutSecondUnitOfWorkSave()
+    {
+        var product = Product(30, "New product");
+        var repository = new StubProductRepository
+        {
+            GetProductsByTitleHandler = _ => Task.FromResult<IEnumerable<Producto>>([]),
+            AddProductHandler = candidate => Task.FromResult(candidate)
+        };
+        var unitOfWork = new StubUnitOfWork(repository);
+        var service = new ProductService(unitOfWork);
+
+        var result = await service.AddProductAsync(product);
+
+        Assert.IsTrue(result.IsSuccess);
+        Assert.AreEqual("Producto agregado exitosamente.", result.Message);
+        Assert.AreSame(product, result.Data);
+        Assert.AreEqual(1, repository.GetProductsByTitleCalls);
+        Assert.AreEqual(1, repository.AddProductCalls);
+        Assert.AreEqual(0, unitOfWork.SaveChangesCalls);
+    }
+
+    [TestMethod]
+    public async Task AddProduct_ExistingTitle_DoesNotAdd_AndDoesNotSaveAgain()
+    {
+        var product = Product(31, "Existing product");
+        var repository = new StubProductRepository
+        {
+            GetProductsByTitleHandler = _ =>
+                Task.FromResult<IEnumerable<Producto>>([Product(99, "Existing product")])
+        };
+        var unitOfWork = new StubUnitOfWork(repository);
+        var service = new ProductService(unitOfWork);
+
+        var result = await service.AddProductAsync(product);
+
+        Assert.IsFalse(result.IsSuccess);
+        Assert.AreEqual("Ya existe un producto con ese nombre.", result.Message);
+        Assert.AreEqual(1, repository.GetProductsByTitleCalls);
+        Assert.AreEqual(0, repository.AddProductCalls);
+        Assert.AreEqual(0, unitOfWork.SaveChangesCalls);
+    }
+
+    [TestMethod]
+    public async Task DeleteProduct_ExistingProduct_DelegatesRepositoryCommit_WithoutSecondUnitOfWorkSave()
+    {
+        var existing = Product(40, "Delete me");
+        var repository = new StubProductRepository
+        {
+            GetProductByIdHandler = _ => Task.FromResult<Producto?>(existing),
+            DeleteProductHandler = _ => Task.FromResult(true)
+        };
+        var unitOfWork = new StubUnitOfWork(repository);
+        var service = new ProductService(unitOfWork);
+
+        var result = await service.DeleteProductAsync(existing.idProducto);
+
+        Assert.IsTrue(result.IsSuccess);
+        Assert.AreEqual("Producto eliminado exitosamente.", result.Message);
+        Assert.AreEqual(1, repository.GetProductByIdCalls);
+        Assert.AreEqual(1, repository.DeleteProductCalls);
+        Assert.AreEqual(0, unitOfWork.SaveChangesCalls);
+    }
+
+    [TestMethod]
+    public async Task PutProduct_ExistingProduct_DelegatesRepositoryCommit_WithoutSecondUnitOfWorkSave()
+    {
+        var existing = Product(50, "Old");
+        existing.descripcion = "old description";
+        existing.precio = 10m;
+        existing.stock = 2;
+
+        var update = Product(50, "Updated");
+        update.descripcion = "new description";
+        update.precio = 25m;
+        update.stock = 8;
+
+        var repository = new StubProductRepository
+        {
+            GetProductByIdHandler = _ => Task.FromResult<Producto?>(existing),
+            UpdateProductHandler = _ => Task.FromResult(true)
+        };
+        var unitOfWork = new StubUnitOfWork(repository);
+        var service = new ProductService(unitOfWork);
+
+        var result = await service.PutProductAsync(update);
+
+        Assert.IsTrue(result.IsSuccess);
+        Assert.AreEqual("Producto actualizado exitosamente.", result.Message);
+        Assert.AreSame(existing, result.Data);
+        Assert.AreEqual("Updated", existing.nombre);
+        Assert.AreEqual("new description", existing.descripcion);
+        Assert.AreEqual(25m, existing.precio);
+        Assert.AreEqual(8, existing.stock);
+        Assert.AreEqual(1, repository.GetProductByIdCalls);
+        Assert.AreEqual(1, repository.UpdateProductCalls);
+        Assert.AreEqual(0, unitOfWork.SaveChangesCalls);
+    }
+
+    [TestMethod]
     public void Constructor_HasNoDirectProductRepositoryDependency()
     {
         var constructors = typeof(ProductService).GetConstructors();
@@ -145,7 +244,14 @@ public class ProductServiceRepositoryAuthorityTests
         public IEnvioRepository Envio => throw new NotSupportedException();
 
         public Task<IDbContextTransaction> BeginTransactionAsync() => throw new NotSupportedException();
-        public Task<int> SaveChangesAsync() => Task.FromResult(0);
+        public int SaveChangesCalls { get; private set; }
+
+        public Task<int> SaveChangesAsync()
+        {
+            SaveChangesCalls++;
+            return Task.FromResult(0);
+        }
+
         public void Dispose() { }
     }
 
@@ -153,8 +259,19 @@ public class ProductServiceRepositoryAuthorityTests
     {
         public Func<string?, string?, Task<IEnumerable<Producto>>>? GetProductsHandler { get; init; }
         public Func<Task<List<Producto>>>? GetFeaturedProductsHandler { get; init; }
+        public Func<string, Task<IEnumerable<Producto>>>? GetProductsByTitleHandler { get; init; }
+        public Func<Producto, Task<Producto>>? AddProductHandler { get; init; }
+        public Func<int, Task<Producto?>>? GetProductByIdHandler { get; init; }
+        public Func<int, Task<bool>>? DeleteProductHandler { get; init; }
+        public Func<Producto, Task<bool>>? UpdateProductHandler { get; init; }
+
         public int GetProductsCalls { get; private set; }
         public int GetFeaturedProductsCalls { get; private set; }
+        public int GetProductsByTitleCalls { get; private set; }
+        public int AddProductCalls { get; private set; }
+        public int GetProductByIdCalls { get; private set; }
+        public int DeleteProductCalls { get; private set; }
+        public int UpdateProductCalls { get; private set; }
 
         public Task<IEnumerable<Producto>> GetProductsAsync(string? orden, string? precio)
         {
@@ -170,11 +287,40 @@ public class ProductServiceRepositoryAuthorityTests
                 ?? Task.FromResult(new List<Producto>());
         }
 
-        public Task<Producto?> GetProductByIdAsync(int id) => throw new NotSupportedException();
-        public Task<IEnumerable<Producto>> GetProductsByTitleAsync(string nombre) => throw new NotSupportedException();
-        public Task<Producto> AddProductAsync(Producto producto) => throw new NotSupportedException();
-        public Task<bool> UpdateProductAsync(Producto producto) => throw new NotSupportedException();
-        public Task<bool> DeleteProductAsync(int id) => throw new NotSupportedException();
+        public Task<Producto?> GetProductByIdAsync(int id)
+        {
+            GetProductByIdCalls++;
+            return GetProductByIdHandler?.Invoke(id)
+                ?? Task.FromResult<Producto?>(null);
+        }
+
+        public Task<IEnumerable<Producto>> GetProductsByTitleAsync(string nombre)
+        {
+            GetProductsByTitleCalls++;
+            return GetProductsByTitleHandler?.Invoke(nombre)
+                ?? Task.FromResult<IEnumerable<Producto>>([]);
+        }
+
+        public Task<Producto> AddProductAsync(Producto producto)
+        {
+            AddProductCalls++;
+            return AddProductHandler?.Invoke(producto)
+                ?? Task.FromResult(producto);
+        }
+
+        public Task<bool> UpdateProductAsync(Producto producto)
+        {
+            UpdateProductCalls++;
+            return UpdateProductHandler?.Invoke(producto)
+                ?? Task.FromResult(true);
+        }
+
+        public Task<bool> DeleteProductAsync(int id)
+        {
+            DeleteProductCalls++;
+            return DeleteProductHandler?.Invoke(id)
+                ?? Task.FromResult(true);
+        }
         public Task<IEnumerable<Producto>> GetProductsByCategoryIdAsync(int categoriaId) => throw new NotSupportedException();
         public Task<IEnumerable<Producto>> ImportProductsFromExcelAsync(Stream fileStream) => throw new NotSupportedException();
     }
