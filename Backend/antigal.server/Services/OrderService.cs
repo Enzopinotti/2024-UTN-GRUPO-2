@@ -33,21 +33,6 @@ namespace antigal.server.Services
             return await _unitOfWork.Orders.GetOrderByIdAsync(orderId);
         }
 
-        public async Task<List<Orden>> GetOrdersByUserIdAsync(string userId)
-        {
-            return await _unitOfWork.Orders.GetOrdersByUserIdAsync(userId);
-        }
-
-        public async Task<List<Orden>> GetOrdersByStatusAsync(string status)
-        {
-            return await _unitOfWork.Orders.GetOrdersByStatusAsync(status);
-        }
-
-        public async Task<Orden?> GetPendingOrderByUserIdAsync(string userId)
-        {
-            return await _unitOfWork.Orders.GetPendingOrderByUserIdAsync(userId);
-        }
-
         public async Task ConfirmOrder(OrdenDto orderDto)
         {
             using (var transaction = await _unitOfWork.BeginTransactionAsync())
@@ -138,9 +123,5 @@ namespace antigal.server.Services
             }
         }
 
-        public async Task<bool> UpdateOrderStatusAsync(int orderId, string newStatus)
-        {
-            return await _unitOfWork.Orders.UpdateOrderStatusAsync(orderId, newStatus);
-        }
     }
 }
