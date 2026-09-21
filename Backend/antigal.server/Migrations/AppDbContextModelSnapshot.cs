@@ -308,6 +308,10 @@ namespace antigal.server.Migrations
 
                     b.HasIndex("UserId");
 
+                    b.HasIndex("UserId", "ProductoId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
+
                     b.ToTable("Likes");
                 });
 
