@@ -1,5 +1,4 @@
 using antigal.server.Data;
-using antigal.server.Services;
 
 namespace antigal.server.Tests;
 
@@ -26,11 +25,6 @@ public class DirectContextBoundaryTests
             .OrderBy(name => name, StringComparer.Ordinal)
             .ToArray();
 
-        CollectionAssert.AreEqual(
-            new[]
-            {
-                typeof(ImageService).FullName!,
-            }.OrderBy(name => name, StringComparer.Ordinal).ToArray(),
-            consumers);
+        CollectionAssert.AreEqual(Array.Empty<string>(), consumers);
     }
 }
