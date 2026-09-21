@@ -46,10 +46,10 @@ jobs:
           set -euo pipefail
           test "$(dotnet --version)" = "10.0.401"
           grep -Fq 'CloudinaryDotNet" Version="1.29.3"' Backend/antigal.server/antigal.server.csproj
-          grep -Fq 'NPOI" Version="2.8.0"' Backend/antigal.server/antigal.server.csproj
+          grep -Fq 'NPOI" Version="2.7.6"' Backend/antigal.server/antigal.server.csproj
           grep -Fq 'MimeKit" Version="4.18.1"' Backend/EmailService/EmailService.csproj
           grep -Fq 'backend-cloudinary=1.29.3' .github/workflows/quality.yml
-          grep -Fq 'backend-npoi=2.8.0' .github/workflows/quality.yml
+          grep -Fq 'backend-npoi=2.7.6-held' .github/workflows/quality.yml
           grep -Fq 'email-mimekit=4.18.1' .github/workflows/quality.yml
           grep -Fq 'dotnet package list --project Backend/antigal.server.slnx --vulnerable --include-transitive --no-restore' .github/workflows/quality.yml
           echo "b15_direct_package_authority=present"
@@ -114,14 +114,16 @@ jobs:
           set -euo pipefail
           dotnet package list             --project Backend/antigal.server.slnx             --outdated             --no-restore | tee "$RUNNER_TEMP/b15-outdated.txt"
 
-          for package in CloudinaryDotNet NPOI MimeKit; do
+          for package in CloudinaryDotNet MimeKit; do
             if grep -Eq "^[[:space:]]*>[[:space:]]+$package[[:space:]]" "$RUNNER_TEMP/b15-outdated.txt"; then
               echo "$package is still outdated after B15 refresh" >&2
               exit 1
             fi
           done
 
+          grep -Fq 'NPOI" Version="2.7.6"' Backend/antigal.server/antigal.server.csproj
           echo "b15_targeted_outdated_packages=0"
+          echo "b15_npoi_held=2.7.6"
 
       - name: Validate current-tree security
         run: python3 scripts/security_baseline.py
