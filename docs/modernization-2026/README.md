@@ -17,12 +17,12 @@ El trabajo se ejecutó en bloques pequeños, normalmente con:
 
 ## Estado
 
-El último bloque cerrado antes de este checkpoint es **B41 — Cart ownership boundary**.
+El último bloque cerrado antes de este checkpoint es **B42 — Dead Sale API surface removal**.
 
 Checkpoint:
 
 - frontend: 60/60
-- backend: 79/79
+- backend: 83/83
 - Release build: 0 warnings
 - npm audit: clean
 - NuGet vulnerability audit: clean
@@ -50,11 +50,12 @@ Checkpoint:
 - B39 — Payment authorization boundary
 - B40 — Dead payment notification surface removal
 - B41 — Cart ownership boundary
+- B42 — Dead Sale API surface removal
 
 Los archivos `bXX-*.md` de este directorio contienen la evidencia detallada, decisiones de alcance, validaciones, no-goals y rollback boundary de cada bloque.
 
 ## Próximos candidatos
 
-- authorization/ownership boundaries for Orders and retirement of redundant Sale API surface, starting from measured consumers
+- Orders authorization boundary and subsequent Order service/repository surface cleanup, starting from measured consumers
 - a real Mercado Pago webhook integration with authenticity verification before any public callback returns
 - upgrades mayores pendientes que requieran pruebas de comportamiento
