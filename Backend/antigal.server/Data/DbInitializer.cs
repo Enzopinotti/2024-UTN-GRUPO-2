@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using System;
-using System.Threading.Tasks;
-using antigal.server.Models;
 using System.Linq;
+using System.Threading.Tasks;
+using antigal.server.Data;
+using antigal.server.Models;
 
 public class DbInitializer
 {
@@ -11,8 +14,12 @@ public class DbInitializer
     {
         var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
         var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+        var environment = serviceProvider.GetRequiredService<IHostEnvironment>();
+        var bootstrapOptions = serviceProvider
+            .GetRequiredService<IOptions<AdminBootstrapOptions>>()
+            .Value;
 
-        // Crear los roles si no existen
+        // Los roles forman parte del modelo de autorización y se crean si faltan.
         string[] roleNames = { "Admin", "User", "Visitor" };
         string[] roleDescriptions = { "Administradores del sistema", "Usuarios regulares", "Visitantes" };
 
@@ -24,7 +31,7 @@ public class DbInitializer
                 var role = new Role
                 {
                     Name = roleNames[i],
-                    NormalizedName = roleNames[i].ToUpper(),
+                    NormalizedName = roleNames[i].ToUpperInvariant(),
                     Description = roleDescriptions[i]
                 };
 
@@ -35,39 +42,53 @@ public class DbInitializer
                 }
                 else
                 {
-                    Console.WriteLine($"Error al crear el rol '{roleNames[i]}': {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                    Console.WriteLine(
+                        $"Error al crear el rol '{roleNames[i]}': " +
+                        string.Join(", ", result.Errors.Select(e => e.Description)));
                 }
             }
         }
 
-        // Crear el usuario administrador si no existe
-        string adminEmail = "admin@gmail.com";
-        string adminPassword = "Admin123!";
+        var bootstrap = AdminBootstrapPolicy.Resolve(
+            bootstrapOptions,
+            environment.IsDevelopment());
 
-        var existingAdmin = await userManager.FindByEmailAsync(adminEmail);
-        if (existingAdmin == null)
+        if (bootstrap is null)
         {
-            var adminUser = new User
-            {
-                UserName = "admin",
-                Email = adminEmail,
-                EmailConfirmed = true // Confirmar el email directamente
-            };
+            return;
+        }
 
-            var result = await userManager.CreateAsync(adminUser, adminPassword);
-            if (result.Succeeded)
-            {
-                await userManager.AddToRoleAsync(adminUser, "Admin");
-                Console.WriteLine($"Usuario administrador '{adminUser.UserName}' creado con éxito.");
-            }
-            else
-            {
-                Console.WriteLine($"Error al crear el usuario administrador: {string.Join(", ", result.Errors.Select(e => e.Description))}");
-            }
-        }
-        else
+        var existingAdmin = await userManager.FindByEmailAsync(bootstrap.Email);
+        if (existingAdmin is not null)
         {
-            Console.WriteLine($"El usuario administrador '{adminEmail}' ya existe.");
+            Console.WriteLine("El usuario administrador de bootstrap ya existe.");
+            return;
         }
+
+        var adminUser = new User
+        {
+            UserName = bootstrap.UserName,
+            Email = bootstrap.Email,
+            EmailConfirmed = true
+        };
+
+        var createResult = await userManager.CreateAsync(adminUser, bootstrap.Password);
+        if (!createResult.Succeeded)
+        {
+            Console.WriteLine(
+                "Error al crear el usuario administrador de bootstrap: " +
+                string.Join(", ", createResult.Errors.Select(e => e.Description)));
+            return;
+        }
+
+        var roleResult = await userManager.AddToRoleAsync(adminUser, "Admin");
+        if (!roleResult.Succeeded)
+        {
+            throw new InvalidOperationException(
+                "El usuario administrador de bootstrap fue creado pero no pudo asignarse al rol Admin: " +
+                string.Join(", ", roleResult.Errors.Select(e => e.Description)));
+        }
+
+        Console.WriteLine("Usuario administrador de bootstrap creado con éxito.");
     }
 }
