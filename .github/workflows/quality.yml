@@ -370,6 +370,9 @@ jobs:
       - name: Validate dead payment notification authority
         run: python3 scripts/backend_dead_payment_notification_authority.py
 
+      - name: Validate cart ownership authority
+        run: python3 scripts/backend_cart_ownership_authority.py
+
       - name: Validate backend image repository authority
         run: python3 scripts/backend_image_repository_authority.py
 
