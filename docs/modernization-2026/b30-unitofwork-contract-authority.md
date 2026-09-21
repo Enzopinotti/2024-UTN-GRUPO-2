@@ -216,3 +216,33 @@ No schema, data, external-service or deployment migration is involved.
 
 Temporary characterization workflow and lab triggers are removed before carrier
 promotion.
+
+
+## Carrier promotion evidence
+
+The cleaned B30 tree was promoted by non-forced fast-forward.
+
+Promoted carrier SHA:
+
+`b2f1c658a90505f561c63b1ad6f2afde95d3b723`
+
+Exact-SHA carrier validation:
+
+- Quality `35595492204` — success
+- Current-tree security `35595492114` — success
+- frontend tests: 60/60
+- backend tests: 43/43
+- Release compiler warnings: 0
+- npm audit findings: 0
+- NuGet vulnerability audit: clean
+- `iunitofwork-savechanges-contract=absent`
+- `unitofwork-savechanges-implementation=absent`
+- `production-unitofwork-save-call-count=0`
+- `test-unitofwork-save-surface-count=0`
+- `production-direct-context-save-call-count=32`
+- `unitofwork-transaction-authority=preserved`
+- `backend-unitofwork-contract-authority=clean`
+
+A documentation-only closure commit follows this evidence. B30 is closed only
+after permanent Quality and Current-tree security pass again on that exact
+closure SHA.
