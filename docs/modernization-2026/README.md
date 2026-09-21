@@ -17,12 +17,12 @@ El trabajo se ejecutó en bloques pequeños, normalmente con:
 
 ## Estado
 
-El último bloque cerrado antes de este checkpoint es **B34 — Admin bootstrap authority**.
+El último bloque cerrado antes de este checkpoint es **B35 — Image repository authority**.
 
 Checkpoint:
 
 - frontend: 60/60
-- backend: 57/57
+- backend: 58/58
 - Release build: 0 warnings
 - npm audit: clean
 - NuGet vulnerability audit: clean
@@ -43,11 +43,11 @@ Checkpoint:
 - B32 — Like repository authority
 - B33 — Contacto persistence boundary
 - B34 — Admin bootstrap authority
+- B35 — Image repository authority
 
 Los archivos `bXX-*.md` de este directorio contienen la evidencia detallada, decisiones de alcance, validaciones, no-goals y rollback boundary de cada bloque.
 
 ## Próximos candidatos
 
 - Likes unique constraint/concurrency integrity, previa caracterización de datos
-- ImageService direct-context boundary
 - upgrades mayores pendientes que requieran pruebas de comportamiento
