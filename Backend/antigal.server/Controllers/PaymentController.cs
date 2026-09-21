@@ -1,10 +1,12 @@
 ﻿// File: Controllers/PaymentController.cs
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using antigal.server.Services;
 
 namespace antigal.server.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PaymentController : ControllerBase
@@ -25,6 +27,7 @@ namespace antigal.server.Controllers
         }
 
         // Endpoint para recibir notificaciones de Mercado Pago
+        [AllowAnonymous]
         [HttpPost("notification")]
         public async Task<IActionResult> ReceiveNotification([FromQuery] string paymentId, [FromQuery] string status)
         {
