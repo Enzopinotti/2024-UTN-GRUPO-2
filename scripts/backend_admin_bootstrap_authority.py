@@ -61,9 +61,13 @@ for contract in (
 for contract in (
     "builder.Services.Configure<AdminBootstrapOptions>(",
     "builder.Configuration.GetSection(AdminBootstrapOptions.SectionName)",
+    "await DbInitializer.Initialize(scope.ServiceProvider);",
 ):
     if contract not in program:
-        failures.append(f"Program bootstrap registration missing: {contract}")
+        failures.append(f"Program bootstrap registration/startup contract missing: {contract}")
+
+if re.search(r"await\s+DbInitializer\.Initialize\([^;]+;\s*\}\s*catch", program, flags=re.S):
+    failures.append("Program must fail closed instead of swallowing DbInitializer exceptions")
 
 bootstrap = appsettings.get("BootstrapAdmin")
 if not isinstance(bootstrap, dict):
@@ -81,6 +85,7 @@ print("bootstrap-admin-credential-authority=external-configuration")
 print("bootstrap-admin-embedded-credentials=absent")
 print("bootstrap-admin-required-fields=UserName,Email,Password")
 print("bootstrap-role-authority=Admin,User,Visitor")
+print("bootstrap-startup-failure-authority=fail-closed")
 
 if failures:
     print("Backend admin bootstrap authority failed:", file=sys.stderr)
