@@ -17,12 +17,12 @@ El trabajo se ejecutó en bloques pequeños, normalmente con:
 
 ## Estado
 
-El último bloque cerrado antes de este checkpoint es **B32 — Like repository authority**.
+El último bloque cerrado antes de este checkpoint es **B33 — Contacto persistence boundary**.
 
 Checkpoint:
 
 - frontend: 60/60
-- backend: 48/48
+- backend: 52/52
 - Release build: 0 warnings
 - npm audit: clean
 - NuGet vulnerability audit: clean
@@ -41,12 +41,12 @@ Checkpoint:
 - B30 — dead UnitOfWork SaveChanges contract removal
 - B31 — direct AppDbContext persistence boundary
 - B32 — Like repository authority
+- B33 — Contacto persistence boundary
 
 Los archivos `bXX-*.md` de este directorio contienen la evidencia detallada, decisiones de alcance, validaciones, no-goals y rollback boundary de cada bloque.
 
 ## Próximos candidatos
 
-- ContactoController persistence boundary
 - DbInitializer development bootstrap authority
 - Likes unique constraint/concurrency integrity, previa caracterización de datos
 - ImageService direct-context boundary

@@ -5,7 +5,7 @@
 
 Proyecto académico full stack desarrollado originalmente en 2024 para **Antigal**, una dietética nacida en el Mercado Municipal de Ensenada. El repositorio fue retomado y modernizado en 2026 para llevar una base histórica de React + ASP.NET Core a un stack mantenido, testeado y con CI permanente.
 
-> **Estado actual:** modernization checkpoint B32. El frontend y backend compilan y testean en CI con una política de **0 warnings**, auditorías de dependencias limpias y gates de arquitectura que protegen decisiones de modernización ya cerradas.
+> **Estado actual:** modernization checkpoint B33. El frontend y backend compilan y testean en CI con una política de **0 warnings**, auditorías de dependencias limpias y gates de arquitectura que protegen decisiones de modernización ya cerradas.
 
 ## Qué incluye
 
@@ -87,7 +87,7 @@ En el backend, las responsabilidades de persistencia fueron explicitándose dura
 - los repositorios son dueños de la persistencia de sus mutaciones;
 - `IUnitOfWork.SaveChangesAsync()` fue retirado al quedar sin consumidores productivos;
 - `LikeService` ya delega en `IUnitOfWork.Likes` / `LikeRepository`;
-- los únicos consumidores de `AppDbContext` fuera de repositories que quedan permitidos por CI son `ImageService` y `ContactoController`;
+- el único consumidor de `AppDbContext` fuera de repositories que queda permitido por CI es `ImageService`;
 - `ImageService` usa un único flush de base por operación mutante.
 
 ## Requisitos
@@ -267,10 +267,10 @@ Las GitHub Actions de terceros están fijadas por SHA y usan runtimes Node 24 ma
 
 ## Checkpoint de validación
 
-En el cierre **B32** del carril de modernización:
+En el cierre **B33** del carril de modernización:
 
 - frontend: **60/60 tests**
-- backend: **48/48 tests**
+- backend: **52/52 tests**
 - C# Release: **0 warnings**
 - npm audit: **0 vulnerabilidades**
 - NuGet vulnerability audit: **clean**
@@ -300,7 +300,8 @@ El trabajo se hizo incrementalmente y con validación antes de cada promoción. 
 - protección de la transacción de confirmación de órdenes;
 - retiro del contrato muerto `IUnitOfWork.SaveChangesAsync()`;
 - reducción y allowlist de accesos directos a `AppDbContext`;
-- extracción de `LikeRepository` bajo `UnitOfWork`.
+- extracción de `LikeRepository` bajo `UnitOfWork`;
+- extracción de `ContactoRepository` + `ContactoService`, dejando cero controllers con acceso directo a `AppDbContext`.
 
 Para decisiones, evidencia, SHAs y runs concretos, ver el índice de modernización.
 
@@ -309,7 +310,6 @@ Para decisiones, evidencia, SHAs y runs concretos, ver el índice de modernizaci
 El estado actual es mucho más mantenible que el histórico, pero todavía hay trabajo explícito:
 
 - externalizar/eliminar el bootstrap de admin de `DbInitializer`;
-- decidir la frontera de persistencia de `ContactoController`;
 - seguir evaluando si `ImageService` debe conservar acceso directo a `AppDbContext`;
 - caracterizar duplicados existentes antes de agregar una restricción única `(UserId, ProductoId)` en Likes;
 - continuar actualización conservadora de dependencias mayores que quedaron deliberadamente fuera de los bloques previos;
