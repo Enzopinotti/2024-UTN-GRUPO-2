@@ -15,6 +15,7 @@ migration = (BACKEND / "Migrations" / f"{MIGRATION_ID}.cs").read_text(encoding="
 designer = (BACKEND / "Migrations" / f"{MIGRATION_ID}.Designer.cs").read_text(encoding="utf-8-sig")
 tests_project = (TESTS / "antigal.server.Tests.csproj").read_text(encoding="utf-8-sig")
 tests = (TESTS / "LikeRepositoryConcurrencyTests.cs").read_text(encoding="utf-8-sig")
+migration_runtime_tests = (TESTS / "LikeMigrationRuntimeTests.cs").read_text(encoding="utf-8-sig")
 
 failures: list[str] = []
 
@@ -108,6 +109,17 @@ for contract in (
     if contract not in tests:
         failures.append(f"Like concurrency relational test contract missing: {contract}")
 
+for contract in (
+    "LikeIntegrityMigration_IsDiscoverableByEfRuntime",
+    "LikeIntegrityMigration_GeneratesDeduplicationBeforeUniqueIndex",
+    "context.Database.GetMigrations()",
+    "context.GetService<IMigrator>()",
+    "migrator.GenerateScript(",
+    'CREATE UNIQUE INDEX [IX_Likes_UserId_ProductoId]',
+):
+    if contract not in migration_runtime_tests:
+        failures.append(f"Like migration runtime proof missing: {contract}")
+
 print("like-unique-key=UserId,ProductoId")
 print("like-unique-filter=UserId-IS-NOT-NULL")
 print("like-migration-deduplication=oldest-Id-kept")
@@ -116,6 +128,8 @@ print("like-add-authority=insert-then-classify-db-conflict")
 print("like-duplicate-conflict-result=false")
 print("like-unrelated-db-failure=rethrow")
 print("like-null-user-historical-rows=unconstrained")
+print("like-migration-runtime-discovery=covered")
+print("like-migration-sql-generation=covered")
 
 if failures:
     print("Backend Like concurrency authority failed:", file=sys.stderr)
