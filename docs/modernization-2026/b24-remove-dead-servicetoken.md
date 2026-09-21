@@ -139,3 +139,30 @@ involved.
 Temporary lab triggers are removed before carrier promotion. Final closure
 requires Quality and Current-tree security to pass again on the exact promoted
 carrier SHA.
+
+
+## Carrier promotion evidence
+
+The cleaned B24 tree was promoted by non-forced fast-forward to the maintained
+carrier.
+
+Promoted carrier SHA:
+
+`84e69fb458899290413fa0c0f461fec4a0fe8714`
+
+Exact-SHA carrier validation:
+
+- Quality `35559922827` — success
+- Current-tree security `35559922779` — success
+- `servicetoken-authority=absent`
+- `legacy-jwt-config-authority=absent`
+- `jwt-handler-authority=canonical`
+- frontend tests: 60/60
+- backend tests: 28/28
+- backend Release build: 0 warnings
+- npm audit: 0 findings
+- NuGet vulnerability audit: clean
+
+A documentation-only closure commit follows this evidence. B24 is considered
+closed only after permanent Quality and Current-tree security pass again on that
+exact closure SHA.
