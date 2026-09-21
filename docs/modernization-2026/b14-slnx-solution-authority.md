@@ -98,6 +98,27 @@ B14 does not:
 
 Any future project-structure or package modernization belongs to a separate block.
 
+## Validated laboratory evidence
+
+Final B14 laboratory run:
+
+`35547329569` — success on `93b7b07ee02373a5d680990a621c634a754d7185`.
+
+Validated signals:
+
+- .NET SDK 10.0.401;
+- SLNX source authority accepted by the .NET 10 CLI;
+- exactly three projects resolved by `dotnet sln ... list`;
+- permanent Quality SLNX contract present;
+- frontend maintained authorities clean;
+- frontend lint/tests/build green;
+- SLNX restore green;
+- SLNX release build green with zero compiler warnings;
+- backend tests: 16 / 16 green;
+- NuGet vulnerable-package audit through SLNX: clean;
+- current-tree security baseline green;
+- repository clean after validation.
+
 ## Closure condition
 
-B14 is ready for carrier promotion only when the laboratory is fully green, the permanent Quality contract owns the SLNX path, the temporary B14 workflow is retired, and carrier Quality plus current-tree security pass on the promoted commit.
+B14 is ready for carrier promotion only when the validated permanent files are reconciled onto the current carrier, the temporary B14 workflow is retired, and carrier Quality plus current-tree security pass on the promoted commit.
