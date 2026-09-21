@@ -96,14 +96,15 @@ jobs:
           set -euo pipefail
           (
             cd Frontend/antigal.client
-            npm audit --json > "$GITHUB_WORKSPACE/b19-frontend-audit.json" || true
+            npm audit --json > "$RUNNER_TEMP/b19-frontend-audit.json" || true
           )
 
           python3 - <<'PY'
           import json
+          import os
           from pathlib import Path
 
-          audit = json.loads(Path("b19-frontend-audit.json").read_text())
+          audit = json.loads((Path(os.environ["RUNNER_TEMP"]) / "b19-frontend-audit.json").read_text())
           total = audit.get("metadata", {}).get("vulnerabilities", {}).get("total", 0)
           print(f"b19_frontend_audit_total={total}")
           if total:
@@ -124,15 +125,17 @@ jobs:
         run: |
           set -euo pipefail
 
-          dotnet package list             --project Backend/antigal.server.slnx             --vulnerable             --include-transitive             --no-restore > b19-solution-vulnerable.txt
+          dotnet package list             --project Backend/antigal.server.slnx             --vulnerable             --include-transitive             --no-restore > "$RUNNER_TEMP/b19-solution-vulnerable.txt"
 
-          dotnet package list             --project Backend/antigal.server/antigal.server.csproj             --outdated             --no-restore > b19-server-outdated.txt
+          dotnet package list             --project Backend/antigal.server/antigal.server.csproj             --outdated             --no-restore > "$RUNNER_TEMP/b19-server-outdated.txt"
 
-          python3 - <<'PY' | tee b19-summary.txt
+          python3 - <<'PY' | tee "$RUNNER_TEMP/b19-summary.txt"
+          import os
           from pathlib import Path
 
-          vulnerable = Path("b19-solution-vulnerable.txt").read_text()
-          outdated = Path("b19-server-outdated.txt").read_text()
+          temp = Path(os.environ["RUNNER_TEMP"])
+          vulnerable = (temp / "b19-solution-vulnerable.txt").read_text()
+          outdated = (temp / "b19-server-outdated.txt").read_text()
 
           vulnerable_clean = "has the following vulnerable packages" not in vulnerable
           swashbuckle_current = "Swashbuckle.AspNetCore" not in outdated
@@ -166,7 +169,7 @@ jobs:
           retention-days: 30
           if-no-files-found: warn
           path: |
-            b19-summary.txt
-            b19-frontend-audit.json
-            b19-solution-vulnerable.txt
-            b19-server-outdated.txt
+            ${{ runner.temp }}/b19-summary.txt
+            ${{ runner.temp }}/b19-frontend-audit.json
+            ${{ runner.temp }}/b19-solution-vulnerable.txt
+            ${{ runner.temp }}/b19-server-outdated.txt
