@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import re
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -16,26 +16,45 @@ def expect(condition: bool, message: str) -> None:
         failures.append(message)
 
 
-text = APPSETTINGS.read_text(encoding="utf-8-sig")
+def read_path(config: dict[str, object], *parts: str) -> object | None:
+    current: object = config
+    for part in parts:
+        if not isinstance(current, dict) or part not in current:
+            return None
+        current = current[part]
+    return current
 
-sensitive_keys = [
-    "DefaultConnection",
-    "securityKey",
-    "CloudName",
-    "ApiKey",
-    "ApiSecret",
-    "From",
-    "Username",
-    "Password",
-    "SmtpServer",
-    "AccessToken",
+
+config = json.loads(APPSETTINGS.read_text(encoding="utf-8-sig"))
+
+sensitive_paths = [
+    ("ConnectionStrings", "DefaultConnection"),
+    ("JWTSettings", "securityKey"),
+    ("Cloudinary", "CloudName"),
+    ("Cloudinary", "ApiKey"),
+    ("Cloudinary", "ApiSecret"),
+    ("EmailConfiguration", "From"),
+    ("EmailConfiguration", "Username"),
+    ("EmailConfiguration", "Password"),
+    ("EmailConfiguration", "SmtpServer"),
+    ("MercadoPago", "AccessToken"),
+    ("BootstrapAdmin", "UserName"),
+    ("BootstrapAdmin", "Email"),
+    ("BootstrapAdmin", "Password"),
 ]
 
-for key in sensitive_keys:
-    match = re.search(rf'"{re.escape(key)}"\s*:\s*"([^"]*)"', text)
-    expect(match is not None, f"expected appsettings key is missing: {key}")
-    if match:
-        expect(match.group(1) == "", f"tracked appsettings value must be empty: {key}")
+for path in sensitive_paths:
+    value = read_path(config, *path)
+    label = ":".join(path)
+    expect(value is not None, f"expected appsettings key is missing: {label}")
+    if value is not None:
+        expect(value == "", f"tracked appsettings value must be empty: {label}")
+
+bootstrap_enabled = read_path(config, "BootstrapAdmin", "Enabled")
+expect(
+    bootstrap_enabled is False,
+    "tracked BootstrapAdmin:Enabled must remain false",
+)
 
 tracked = subprocess.check_output(
     ["git", "ls-files"],
@@ -67,6 +86,7 @@ if failures:
     raise SystemExit(1)
 
 print("Current-tree security baseline passed.")
-print(f"sensitive-appsettings-values={len(sensitive_keys)} empty")
+print(f"sensitive-appsettings-values={len(sensitive_paths)} empty")
+print("bootstrap-admin-tracked-enabled=false")
 print("tracked-dotnet-generated-output=0")
 print("tracked-environment-files=0")
