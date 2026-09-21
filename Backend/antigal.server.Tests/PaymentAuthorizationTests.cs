@@ -36,17 +36,14 @@ public class PaymentAuthorizationTests
     }
 
     [TestMethod]
-    public void Notification_RemainsExplicitlyAnonymous()
+    public void Controller_HasNoAnonymousActions()
     {
-        var method = typeof(PaymentController).GetMethod(
-            nameof(PaymentController.ReceiveNotification));
+        var anonymousActions = typeof(PaymentController)
+            .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
+            .Where(method => method.IsDefined(typeof(AllowAnonymousAttribute), inherit: true))
+            .Select(method => method.Name)
+            .ToArray();
 
-        Assert.IsNotNull(method);
-        Assert.IsTrue(
-            method.IsDefined(typeof(AllowAnonymousAttribute), inherit: true));
-
-        var httpPost = method.GetCustomAttribute<HttpPostAttribute>();
-        Assert.IsNotNull(httpPost);
-        Assert.AreEqual("notification", httpPost.Template);
+        CollectionAssert.AreEqual(Array.Empty<string>(), anonymousActions);
     }
 }
