@@ -144,6 +144,25 @@ Validated signals:
 
 Rejected-candidate evidence is preserved from run `35547683790`, where NPOI 2.8.0 introduced the OSMF EULA warning and a vulnerable `Microsoft.Build.Tasks.Git 8.0.0` transitive dependency.
 
-## Closure condition
+## Closure
 
-B15 is ready for carrier promotion only after the validated permanent files are reconciled onto the current carrier, the temporary B15 workflow is retired, and carrier Quality plus current-tree security pass after promotion.
+B15 was promoted to the maintenance carrier through PR #12 as:
+
+`c490b16504627bdd3a78fe6ebd1a528c69677b4d` — `B15: refresh conservative backend dependencies`.
+
+The temporary B15 workflow was retired before promotion.
+
+Final carrier validation:
+
+- Quality run `35547977801`: success;
+- Current-tree security baseline run `35547977787`: success;
+- CloudinaryDotNet 1.29.3 retained;
+- MimeKit 4.18.1 retained;
+- NPOI 2.7.6 intentionally held;
+- noun-first `dotnet package list` audit retained;
+- backend compiler warnings remain 0;
+- backend tests remain 16 / 16 green;
+- NuGet vulnerability audit remains clean;
+- all B14 and earlier frontend/runtime/security gates remained green.
+
+B15 is therefore closed on the carrier.
