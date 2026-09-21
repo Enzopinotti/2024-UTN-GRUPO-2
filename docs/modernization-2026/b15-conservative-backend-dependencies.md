@@ -19,7 +19,7 @@ B15 targets only packages for which the existing direct dependency can move to t
 Server project:
 
 - `CloudinaryDotNet 1.26.2 → 1.29.3`;
-- `NPOI 2.7.6 → 2.8.0`.
+- `NPOI 2.7.6` remains intentionally pinned.
 
 EmailService project:
 
@@ -29,15 +29,30 @@ MailKit remains on `4.18.0` because it is already on its current direct release 
 
 ## Why these packages are grouped
 
-These three changes are deliberately conservative:
+The promoted changes are deliberately conservative:
 
 - CloudinaryDotNet remains within the 1.x line;
-- NPOI remains within the 2.x line;
 - MimeKit is a patch update within 4.18.x.
 
 The packages compile against the existing net10.0 carrier without requiring application source rewrites.
 
 MimeKit 4.18.1 also contains a parser hardening fix for integer-overflow handling in corrupt TNEF content.
+
+### NPOI 2.8.0 rejection
+
+The first B15 candidate also tested `NPOI 2.8.0`. The laboratory rejected it.
+
+Observed evidence:
+
+- NPOI 2.8.0 emits a build-time warning requiring explicit acceptance of the OSMF EULA;
+- the 2.8.0 release introduced an Open Source Maintenance Fee EULA for binary users that generate revenue;
+- the candidate dependency graph resolved `Microsoft.Build.Tasks.Git 8.0.0`;
+- NuGet reported that transitive package with moderate vulnerability `GHSA-23fw-v26w-5fgq`;
+- the B15 vulnerability gate failed before promotion.
+
+B15 therefore keeps `NPOI 2.7.6` as the validated pre-EULA authority. No EULA acceptance flag, vulnerability suppression, or forced transitive override is introduced.
+
+Any future NPOI migration requires a separate licensing and dependency-security decision.
 
 ## Deferred major upgrades
 
@@ -68,7 +83,7 @@ Permanent Quality uses `--no-restore` because its restore step is already explic
 Quality must retain:
 
 - CloudinaryDotNet 1.29.3;
-- NPOI 2.8.0;
+- NPOI 2.7.6 (intentionally held);
 - MimeKit 4.18.1;
 - MailKit 4.18.0;
 - the explicit System.Security.Cryptography.Xml 10.0.12 security override;
@@ -91,7 +106,8 @@ B15 must prove:
 - release build remains warning-free;
 - backend tests remain 16 / 16 green;
 - `dotnet package list --vulnerable --include-transitive` is clean;
-- `dotnet package list --outdated` no longer reports CloudinaryDotNet, NPOI or MimeKit;
+- `dotnet package list --outdated` no longer reports CloudinaryDotNet or MimeKit;
+- NPOI remains exactly 2.7.6 and the dependency graph remains vulnerability-clean;
 - current-tree security remains green;
 - validation leaves the repository clean.
 
@@ -99,7 +115,7 @@ B15 must prove:
 
 B15 does not:
 
-- cross a major-version boundary for any targeted package;
+- cross a major-version boundary for any promoted package;
 - alter application source code;
 - change target frameworks;
 - change API or persistence behavior;
