@@ -1,22 +1,20 @@
-using antigal.server.Data;
 using antigal.server.Models;
+using antigal.server.Repositories;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace antigal.server.Services
 {
     public class ImageService : IImageService
     {
         private readonly Cloudinary _cloudinary;
-        private readonly AppDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ImageService(Cloudinary cloudinary, AppDbContext context)
+        public ImageService(Cloudinary cloudinary, IUnitOfWork unitOfWork)
         {
             _cloudinary = cloudinary;
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Imagen> UploadImageAsync(IFormFile file, int? productoId = null, string? usuarioId = null, int? categoriaId = null)
@@ -26,7 +24,7 @@ namespace antigal.server.Services
                 throw new ArgumentException("No file uploaded");
             }
 
-            var uploadparams = new ImageUploadParams()
+            var uploadparams = new ImageUploadParams
             {
                 File = new FileDescription(file.FileName, file.OpenReadStream()),
                 Folder = "antigal-photos"
@@ -34,104 +32,41 @@ namespace antigal.server.Services
 
             var uploadResult = await _cloudinary.UploadAsync(uploadparams);
 
-            if (uploadResult.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                var nuevaImagen = new Imagen
-                {
-                    Url = uploadResult.SecureUrl.ToString(),
-                    PublicId = uploadResult.PublicId, 
-                    ProductoId = productoId,
-                    UsuarioId = usuarioId,
-                    CategoriaId = categoriaId
-                };
-
-                _context.Imagenes.Add(nuevaImagen);
-
-                // Actualizar la entidad correspondiente con la URL antes del único flush.
-                if (productoId.HasValue)
-                {
-                    var producto = await _context.Productos.FindAsync(productoId.Value);
-                    if (producto != null)
-                    {
-                        producto.ImagenUrls.Add(nuevaImagen.Url); // Agregar la URL a la lista de URLs del producto
-                    }
-                }
-                else if (!string.IsNullOrEmpty(usuarioId))
-                {
-                    var usuario = await _context.Users.FindAsync(usuarioId);
-                    if (usuario != null)
-                    {
-                        usuario.ImagenUrl = nuevaImagen.Url; // Asignar la URL directamente
-                    }
-                }
-                else if (categoriaId.HasValue)
-                {
-                    var categoria = await _context.Categorias.FindAsync(categoriaId.Value);
-                    if (categoria != null)
-                    {
-                        categoria.ImagenUrl = nuevaImagen.Url; // Asignar la URL directamente
-                    }
-                }
-
-                await _context.SaveChangesAsync();
-                return nuevaImagen;
-            }
-            else
+            if (uploadResult.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 throw new Exception("Error uploading image");
             }
 
+            var nuevaImagen = new Imagen
+            {
+                Url = uploadResult.SecureUrl.ToString(),
+                PublicId = uploadResult.PublicId,
+                ProductoId = productoId,
+                UsuarioId = usuarioId,
+                CategoriaId = categoriaId
+            };
+
+            return await _unitOfWork.Images.AddAsync(nuevaImagen);
         }
 
         public async Task<bool> DeleteImageAsync(int imageId)
         {
-            var image = await _context.Imagenes.FindAsync(imageId);
+            var image = await _unitOfWork.Images.GetByIdAsync(imageId);
             if (image == null)
             {
-                return false; // La imagen no existe
+                return false;
             }
 
-            // Eliminar la imagen de Cloudinary
             var deleteParams = new DeletionParams(image.PublicId);
             var deleteResult = await _cloudinary.DestroyAsync(deleteParams);
 
-            if (deleteResult.StatusCode == System.Net.HttpStatusCode.OK)
+            if (deleteResult.StatusCode != System.Net.HttpStatusCode.OK)
             {
-                _context.Imagenes.Remove(image);
-
-                // Actualizar el producto, usuario o categoría según corresponda
-                if (image.ProductoId.HasValue)
-                {
-                    var producto = await _context.Productos.FindAsync(image.ProductoId.Value);
-                    if (producto != null)
-                    {
-                        producto.ImagenUrls.Remove(image.Url); 
-                    }
-                }
-                else if (!string.IsNullOrEmpty(image.UsuarioId))
-                {
-                    var usuario = await _context.Users.FindAsync(image.UsuarioId);
-                    if (usuario != null)
-                    {
-                        usuario.ImagenUrl = null;
-                    }
-                }
-                else if (image.CategoriaId.HasValue)
-                {
-                    var categoria = await _context.Categorias.FindAsync(image.CategoriaId.Value);
-                    if (categoria != null)
-                    {
-                        categoria.ImagenUrl = null; 
-                    }
-                }
-
-                await _context.SaveChangesAsync(); 
-                return true; // Eliminación exitosa
+                return false;
             }
-            else
-            {
-                return false; // Error al eliminar la imagen
-            }
+
+            await _unitOfWork.Images.DeleteAsync(image);
+            return true;
         }
 
         public async Task<bool> DeleteImageByUrlAsync(string imageUrl)
@@ -142,54 +77,23 @@ namespace antigal.server.Services
                 throw new Exception("No se pudo extraer el PublicId de la URL proporcionada.");
             }
 
-            // Eliminar la imagen de Cloudinary
             var deleteParams = new DeletionParams(publicId);
             var deleteResult = await _cloudinary.DestroyAsync(deleteParams);
 
-            if (deleteResult.StatusCode == System.Net.HttpStatusCode.OK)
+            if (deleteResult.StatusCode != System.Net.HttpStatusCode.OK)
             {
-                var image = await _context.Imagenes.FirstOrDefaultAsync(i => i.Url == imageUrl);
-                if (image != null)
-                {
-                    _context.Imagenes.Remove(image);
-
-                    // Actualizar el producto, usuario o categoría según corresponda
-                    if (image.ProductoId.HasValue)
-                    {
-                        var producto = await _context.Productos.FindAsync(image.ProductoId.Value);
-                        if (producto != null)
-                        {
-                            producto.ImagenUrls.Remove(image.Url); 
-                        }
-                    }
-                    else if (!string.IsNullOrEmpty(image.UsuarioId))
-                    {
-                        var usuario = await _context.Users.FindAsync(image.UsuarioId);
-                        if (usuario != null)
-                        {
-                            usuario.ImagenUrl = null; 
-                        }
-                    }
-                    else if (image.CategoriaId.HasValue)
-                    {
-                        var categoria = await _context.Categorias.FindAsync(image.CategoriaId.Value);
-                        if (categoria != null)
-                        {
-                            categoria.ImagenUrl = null; 
-                        }
-                    }
-
-                    await _context.SaveChangesAsync();
-                }
-                return true; // Eliminación exitosa
+                return false;
             }
-            else
+
+            var image = await _unitOfWork.Images.GetByUrlAsync(imageUrl);
+            if (image != null)
             {
-                return false; // Error al eliminar la imagen
+                await _unitOfWork.Images.DeleteAsync(image);
             }
+
+            return true;
         }
 
-        //metodo para extraer la PublicId desde la url
         private string ExtractPublicIdFromUrl(string imageUrl)
         {
             var uri = new Uri(imageUrl);
@@ -204,6 +108,5 @@ namespace antigal.server.Services
 
             throw new InvalidOperationException("No se pudo extraer el Public ID de la URL proporcionada.");
         }
-
     }
 }
