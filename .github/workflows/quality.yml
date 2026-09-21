@@ -422,6 +422,9 @@ jobs:
       - name: Validate dead frontend source authority
         run: node scripts/dead_source_inventory.mjs
 
+      - name: Validate Profile Orders local-data authority
+        run: node scripts/frontend_profile_orders_authority.mjs
+
       - name: Validate native Sass authority
         run: node scripts/style_authority.mjs
 
