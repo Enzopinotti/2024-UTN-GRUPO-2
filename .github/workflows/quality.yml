@@ -355,6 +355,9 @@ jobs:
       - name: Validate backend Contacto repository authority
         run: python3 scripts/backend_contacto_repository_authority.py
 
+      - name: Validate backend image repository authority
+        run: python3 scripts/backend_image_repository_authority.py
+
       - name: Validate backend direct-context persistence authority
         run: python3 scripts/backend_direct_context_persistence_authority.py
 
