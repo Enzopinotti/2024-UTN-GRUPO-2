@@ -6,6 +6,7 @@ using antigal.server.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 
@@ -296,7 +297,7 @@ public class OrderSalePersistenceAuthorityTests
         Array.Empty<IPasswordValidator<User>>(),
         new UpperInvariantLookupNormalizer(),
         new IdentityErrorDescriber(),
-        null,
+        new ServiceCollection().BuildServiceProvider(),
         NullLogger<UserManager<User>>.Instance)
     {
         public override Task<User?> FindByIdAsync(string userId) =>
