@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - modernize/2026-authorship-security-baseline
+      - modernize/b23-jwt-package-823-lab
   workflow_dispatch:
 
 permissions:
