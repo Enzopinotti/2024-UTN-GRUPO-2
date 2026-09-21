@@ -3,6 +3,7 @@ using antigal.server.Validaciones;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 namespace Antigal.Server.Tests;
 
@@ -139,6 +140,18 @@ public class ValidatorTests
         producto.stock = 0;
         Assert.AreEqual(0, producto.verificarDisponible());
     }
+    [TestMethod]
+    public void ValidationServices_SharpGripAutoValidation_RegistersWithMvc()
+    {
+        var services = new ServiceCollection();
+        services.AddControllers();
+        var countBeforeAutoValidation = services.Count;
+
+        services.AddFluentValidationAutoValidation();
+
+        Assert.IsTrue(services.Count > countBeforeAutoValidation);
+    }
+
     [TestMethod]
     public void ValidationServices_AssemblyRegistration_ResolvesMaintainedValidators()
     {
