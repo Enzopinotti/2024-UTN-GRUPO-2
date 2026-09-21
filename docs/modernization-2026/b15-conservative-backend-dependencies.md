@@ -122,6 +122,28 @@ B15 does not:
 - remove the crypto security override without explicit dependency-graph evidence;
 - upgrade the deferred major packages listed above.
 
+## Validated laboratory evidence
+
+Final B15 laboratory run:
+
+`35547803582` — success on `20dcaa9fbd2cd83d8cd123e0fd514aa3b702a18a`.
+
+Validated signals:
+
+- CloudinaryDotNet 1.29.3 restored and current;
+- MimeKit 4.18.1 restored and current;
+- NPOI 2.7.6 retained intentionally;
+- frontend authorities, lint, tests and Vite build green;
+- backend restore green through SLNX;
+- backend release build green;
+- backend tests: 16 / 16 green;
+- noun-first `dotnet package list` vulnerability audit clean;
+- targeted outdated packages: 0 for CloudinaryDotNet and MimeKit;
+- current-tree security baseline green;
+- repository clean after validation.
+
+Rejected-candidate evidence is preserved from run `35547683790`, where NPOI 2.8.0 introduced the OSMF EULA warning and a vulnerable `Microsoft.Build.Tasks.Git 8.0.0` transitive dependency.
+
 ## Closure condition
 
-B15 is ready for carrier promotion only after the laboratory is fully green, permanent Quality owns the refreshed pins and noun-first audit command, the temporary B15 workflow is retired, and carrier Quality plus current-tree security pass after promotion.
+B15 is ready for carrier promotion only after the validated permanent files are reconciled onto the current carrier, the temporary B15 workflow is retired, and carrier Quality plus current-tree security pass after promotion.
