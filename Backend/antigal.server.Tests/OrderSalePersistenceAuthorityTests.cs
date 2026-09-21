@@ -16,7 +16,7 @@ namespace antigal.server.Tests;
 public class OrderSalePersistenceAuthorityTests
 {
     [TestMethod]
-    public async Task UpdateSaleStatus_RepositoryOwnsPersistence_WithoutSecondUnitOfWorkSave()
+    public async Task UpdateSaleStatus_RepositoryOwnsPersistence()
     {
         var order = Order(10, "user-1");
         var sale = new Sale
@@ -47,11 +47,10 @@ public class OrderSalePersistenceAuthorityTests
         Assert.AreEqual(VentaEstado.Completada, sale.EstadoVenta);
         Assert.AreEqual(1, sales.GetSaleByIdCalls);
         Assert.AreEqual(1, sales.UpdateSaleCalls);
-        Assert.AreEqual(0, unit.SaveChangesCalls);
     }
 
     [TestMethod]
-    public async Task ConfirmOrder_CommitsTransaction_AfterRepositoryOwnedMutations_WithoutFinalFlush()
+    public async Task ConfirmOrder_CommitsTransaction_AfterRepositoryOwnedMutations()
     {
         var product = Product(30, "Product", stock: 10, price: 50m);
         var order = Order(40, "user-1");
@@ -101,7 +100,6 @@ public class OrderSalePersistenceAuthorityTests
         Assert.AreEqual(1, orders.UpdateStatusCalls);
         Assert.AreEqual(1, sales.CreateSaleCalls);
         Assert.AreEqual(1, products.UpdateProductCalls);
-        Assert.AreEqual(0, unit.SaveChangesCalls);
         Assert.AreEqual(1, transaction.CommitCalls);
         Assert.AreEqual(0, transaction.RollbackCalls);
     }
@@ -147,7 +145,6 @@ public class OrderSalePersistenceAuthorityTests
         Assert.AreEqual(0, orders.UpdateStatusCalls);
         Assert.AreEqual(0, sales.CreateSaleCalls);
         Assert.AreEqual(0, products.UpdateProductCalls);
-        Assert.AreEqual(0, unit.SaveChangesCalls);
         Assert.AreEqual(0, transaction.CommitCalls);
         Assert.AreEqual(1, transaction.RollbackCalls);
     }
@@ -185,16 +182,8 @@ public class OrderSalePersistenceAuthorityTests
         public IProductCategoryRepository ProductCategories => throw new NotSupportedException();
         public ICartRepository Carts => throw new NotSupportedException();
         public IEnvioRepository Envio => throw new NotSupportedException();
-        public int SaveChangesCalls { get; private set; }
-
         public Task<IDbContextTransaction> BeginTransactionAsync() =>
             Task.FromResult<IDbContextTransaction>(transaction);
-
-        public Task<int> SaveChangesAsync()
-        {
-            SaveChangesCalls++;
-            return Task.FromResult(0);
-        }
 
         public void Dispose() { }
     }

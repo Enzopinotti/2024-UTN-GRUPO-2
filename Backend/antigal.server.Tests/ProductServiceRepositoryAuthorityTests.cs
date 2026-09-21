@@ -112,7 +112,7 @@ public class ProductServiceRepositoryAuthorityTests
     }
 
     [TestMethod]
-    public async Task AddProduct_EmptyTitleMatch_AddsOnce_WithoutSecondUnitOfWorkSave()
+    public async Task AddProduct_EmptyTitleMatch_AddsOnce_ThroughRepositoryPersistence()
     {
         var product = Product(30, "New product");
         var repository = new StubProductRepository
@@ -130,11 +130,10 @@ public class ProductServiceRepositoryAuthorityTests
         Assert.AreSame(product, result.Data);
         Assert.AreEqual(1, repository.GetProductsByTitleCalls);
         Assert.AreEqual(1, repository.AddProductCalls);
-        Assert.AreEqual(0, unitOfWork.SaveChangesCalls);
     }
 
     [TestMethod]
-    public async Task AddProduct_ExistingTitle_DoesNotAdd_AndDoesNotSaveAgain()
+    public async Task AddProduct_ExistingTitle_DoesNotAdd()
     {
         var product = Product(31, "Existing product");
         var repository = new StubProductRepository
@@ -151,11 +150,10 @@ public class ProductServiceRepositoryAuthorityTests
         Assert.AreEqual("Ya existe un producto con ese nombre.", result.Message);
         Assert.AreEqual(1, repository.GetProductsByTitleCalls);
         Assert.AreEqual(0, repository.AddProductCalls);
-        Assert.AreEqual(0, unitOfWork.SaveChangesCalls);
     }
 
     [TestMethod]
-    public async Task DeleteProduct_ExistingProduct_DelegatesRepositoryCommit_WithoutSecondUnitOfWorkSave()
+    public async Task DeleteProduct_ExistingProduct_DelegatesRepositoryPersistence()
     {
         var existing = Product(40, "Delete me");
         var repository = new StubProductRepository
@@ -172,11 +170,10 @@ public class ProductServiceRepositoryAuthorityTests
         Assert.AreEqual("Producto eliminado exitosamente.", result.Message);
         Assert.AreEqual(1, repository.GetProductByIdCalls);
         Assert.AreEqual(1, repository.DeleteProductCalls);
-        Assert.AreEqual(0, unitOfWork.SaveChangesCalls);
     }
 
     [TestMethod]
-    public async Task PutProduct_ExistingProduct_DelegatesRepositoryCommit_WithoutSecondUnitOfWorkSave()
+    public async Task PutProduct_ExistingProduct_DelegatesRepositoryPersistence()
     {
         var existing = Product(50, "Old");
         existing.descripcion = "old description";
@@ -207,7 +204,6 @@ public class ProductServiceRepositoryAuthorityTests
         Assert.AreEqual(8, existing.stock);
         Assert.AreEqual(1, repository.GetProductByIdCalls);
         Assert.AreEqual(1, repository.UpdateProductCalls);
-        Assert.AreEqual(0, unitOfWork.SaveChangesCalls);
     }
 
     [TestMethod]
@@ -244,13 +240,6 @@ public class ProductServiceRepositoryAuthorityTests
         public IEnvioRepository Envio => throw new NotSupportedException();
 
         public Task<IDbContextTransaction> BeginTransactionAsync() => throw new NotSupportedException();
-        public int SaveChangesCalls { get; private set; }
-
-        public Task<int> SaveChangesAsync()
-        {
-            SaveChangesCalls++;
-            return Task.FromResult(0);
-        }
 
         public void Dispose() { }
     }

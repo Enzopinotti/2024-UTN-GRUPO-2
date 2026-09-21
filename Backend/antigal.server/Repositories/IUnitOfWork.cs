@@ -16,6 +16,5 @@ namespace antigal.server.Repositories
         IEnvioRepository Envio { get; }
 
         Task<IDbContextTransaction> BeginTransactionAsync();
-        Task<int> SaveChangesAsync();
     }
 }

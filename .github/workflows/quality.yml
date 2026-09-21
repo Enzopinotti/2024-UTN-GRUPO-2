@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - modernize/2026-authorship-security-baseline
+      - modernize/b30-unitofwork-save-authority-lab
   workflow_dispatch:
 
 permissions:
@@ -345,6 +346,9 @@ jobs:
 
       - name: Validate backend repository DI authority
         run: python3 scripts/backend_repository_di_authority.py
+
+      - name: Validate backend UnitOfWork contract authority
+        run: python3 scripts/backend_unitofwork_contract_authority.py
 
       - name: Validate backend order/sale persistence authority
         run: python3 scripts/backend_order_sale_persistence_authority.py

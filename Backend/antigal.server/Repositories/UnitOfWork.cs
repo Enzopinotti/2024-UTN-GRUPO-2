@@ -41,11 +41,6 @@ namespace antigal.server.Repositories
             return await _context.Database.BeginTransactionAsync();
         }
 
-        public async Task<int> SaveChangesAsync()
-        {
-            return await _context.SaveChangesAsync();
-        }
-
         public void Dispose()
         {
             _context.Dispose();
