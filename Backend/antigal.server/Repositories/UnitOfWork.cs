@@ -18,6 +18,7 @@ namespace antigal.server.Repositories
         private IProductCategoryRepository? _productCategoryRepository;
         private ICartRepository? _cartRepository;
         private ILikeRepository? _likeRepository;
+        private IContactoRepository? _contactoRepository;
         private readonly IEnvioRepository _envioRepository; // Cambiado a no nullable y readonly
         // Agrega otros repositorios según sea necesario
 
@@ -36,6 +37,7 @@ namespace antigal.server.Repositories
         public IProductCategoryRepository ProductCategories => _productCategoryRepository ??= new ProductCategoryRepository(_context);
         public ICartRepository Carts => _cartRepository ??= new CartRepository(_context, _carritoMapper);
         public ILikeRepository Likes => _likeRepository ??= new LikeRepository(_context);
+        public IContactoRepository Contactos => _contactoRepository ??= new ContactoRepository(_context);
         public IEnvioRepository Envio => _envioRepository; // Implementación de la propiedad Envio
 
         public async Task<IDbContextTransaction> BeginTransactionAsync()
