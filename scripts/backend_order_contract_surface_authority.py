@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
@@ -15,53 +16,64 @@ tests = (TESTS / "OrderContractSurfaceTests.cs").read_text(encoding="utf-8-sig")
 
 failures: list[str] = []
 
-maintained_service = (
+expected_service = {
     "GetAllOrdersAsync",
     "GetOrderByIdAsync",
     "ConfirmOrder",
-)
-retired_service = (
-    "GetOrdersByUserIdAsync",
-    "GetOrdersByStatusAsync",
-    "GetPendingOrderByUserIdAsync",
-    "UpdateOrderStatusAsync",
-)
-
-maintained_repository = (
+}
+expected_repository = {
     "GetAllOrdersAsync",
     "GetOrderByIdAsync",
     "GetPendingOrderByUserIdAsync",
     "UpdateOrderStatusAsync",
-)
-retired_repository = (
-    "GetOrdersByUserIdAsync",
-    "GetOrdersByStatusAsync",
-    "AddOrderAsync",
-)
+}
 
-for name in maintained_service:
-    if name not in service_contract:
-        failures.append(f"IOrderService maintained operation missing: {name}")
-    if name not in service:
-        failures.append(f"OrderService maintained implementation missing: {name}")
+def interface_task_methods(source: str) -> set[str]:
+    return set(
+        re.findall(
+            r"^\s*Task.*?\s+(\w+)\s*\(",
+            source,
+            flags=re.MULTILINE,
+        )
+    )
 
-for name in retired_service:
-    if name in service_contract:
-        failures.append(f"IOrderService retired operation returned: {name}")
-    if f"public async" in service and name in service:
-        failures.append(f"OrderService retired wrapper returned: {name}")
+def public_async_task_methods(source: str) -> set[str]:
+    return set(
+        re.findall(
+            r"^\s*public\s+async\s+Task.*?\s+(\w+)\s*\(",
+            source,
+            flags=re.MULTILINE,
+        )
+    )
 
-for name in maintained_repository:
-    if name not in repository_contract:
-        failures.append(f"IOrderRepository maintained operation missing: {name}")
-    if name not in repository:
-        failures.append(f"OrderRepository maintained implementation missing: {name}")
+service_contract_methods = interface_task_methods(service_contract)
+service_methods = public_async_task_methods(service)
+repository_contract_methods = interface_task_methods(repository_contract)
+repository_methods = public_async_task_methods(repository)
 
-for name in retired_repository:
-    if name in repository_contract:
-        failures.append(f"IOrderRepository retired operation returned: {name}")
-    if name in repository:
-        failures.append(f"OrderRepository retired implementation returned: {name}")
+if service_contract_methods != expected_service:
+    failures.append(
+        "IOrderService surface changed: "
+        f"expected={sorted(expected_service)} actual={sorted(service_contract_methods)}"
+    )
+
+if service_methods != expected_service:
+    failures.append(
+        "OrderService public async surface changed: "
+        f"expected={sorted(expected_service)} actual={sorted(service_methods)}"
+    )
+
+if repository_contract_methods != expected_repository:
+    failures.append(
+        "IOrderRepository surface changed: "
+        f"expected={sorted(expected_repository)} actual={sorted(repository_contract_methods)}"
+    )
+
+if repository_methods != expected_repository:
+    failures.append(
+        "OrderRepository public async surface changed: "
+        f"expected={sorted(expected_repository)} actual={sorted(repository_methods)}"
+    )
 
 if "_unitOfWork.Orders.GetPendingOrderByUserIdAsync(orderDto.idUsuario)" not in service:
     failures.append("ConfirmOrder pending-order repository authority missing")
