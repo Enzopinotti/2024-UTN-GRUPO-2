@@ -391,6 +391,9 @@ jobs:
       - name: Validate Orders authorization authority
         run: python3 scripts/backend_orders_authorization_authority.py
 
+      - name: Validate Order contract surface authority
+        run: python3 scripts/backend_order_contract_surface_authority.py
+
       - name: Validate backend product persistence authority
         run: python3 scripts/backend_product_persistence_authority.py
 
