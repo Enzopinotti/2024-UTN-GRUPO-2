@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - modernize/2026-authorship-security-baseline
+      - modernize/b25-backend-di-inventory-lab
   workflow_dispatch:
 
 permissions:
@@ -342,6 +343,9 @@ jobs:
 
       - name: Validate backend token authority
         run: python3 scripts/backend_token_authority.py
+
+      - name: Validate backend repository DI authority
+        run: python3 scripts/backend_repository_di_authority.py
 
       - name: Reject unresolved merge markers in source authority
         shell: bash

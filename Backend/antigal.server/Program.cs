@@ -125,11 +125,7 @@ namespace antigal.server
 
             // Registrar Repositorios
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
-            builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
-            builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
-            builder.Services.AddScoped<ICartRepository, CartRepository>();
             builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
-            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IEnvioRepository, EnvioRepository>(); // Registrar IEnvioRepository
             // Agrega otros repositorios según sea necesario
 
