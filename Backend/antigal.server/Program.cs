@@ -151,7 +151,6 @@ namespace antigal.server
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<ISaleService, SaleService>();
             builder.Services.AddScoped<IEnvioService, EnvioService>(); // Registrar IEnvioService
-            builder.Services.AddScoped<ServiceToken>();
             // Eliminar duplicaciones y registros innecesarios
 
             // Configuración de CORS

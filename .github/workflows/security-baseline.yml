@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - modernize/2026-authorship-security-baseline
+      - modernize/b24-servicetoken-authority-lab
   workflow_dispatch:
 
 permissions:

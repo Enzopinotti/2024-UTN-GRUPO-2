@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - modernize/2026-authorship-security-baseline
+      - modernize/b24-servicetoken-authority-lab
   workflow_dispatch:
 
 permissions:
@@ -339,6 +340,9 @@ jobs:
 
       - name: Validate JWT expiration configuration authority
         run: python3 scripts/jwt_configuration_authority.py
+
+      - name: Validate backend token authority
+        run: python3 scripts/backend_token_authority.py
 
       - name: Reject unresolved merge markers in source authority
         shell: bash
