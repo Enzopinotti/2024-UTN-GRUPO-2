@@ -33,10 +33,10 @@ jobs:
           cache: npm
           cache-dependency-path: Frontend/antigal.client/package-lock.json
 
-      - name: Setup .NET 8
+      - name: Setup .NET 10.0.401
         uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9
         with:
-          dotnet-version: "8.0.x"
+          dotnet-version: "10.0.401"
 
       - name: Verify frontend runtime contract
         shell: bash
@@ -47,7 +47,9 @@ jobs:
           test "$(cat .nvmrc)" = "24.20.0"
           echo "node=$(node --version)"
           echo "npm=$(npm --version)"
-          dotnet --version
+          test "$(dotnet --version)" = "10.0.401"
+          test "$(python3 -c 'import json; print(json.load(open("global.json"))["sdk"]["version"])')" = "10.0.401"
+          echo "dotnet=$(dotnet --version)"
 
       - name: Verify integrated source authority
         shell: bash
@@ -183,8 +185,20 @@ jobs:
           print("frontend-legacy-jsx-transform=absent")
           print("order-model-authority=spanish-domain")
 
-          server_project = Path("Backend/antigal.server/antigal.server.csproj").read_text(encoding="utf-8-sig")
-          email_project = Path("Backend/EmailService/EmailService.csproj").read_text(encoding="utf-8-sig")
+          server_project_path = Path("Backend/antigal.server/antigal.server.csproj")
+          email_project_path = Path("Backend/EmailService/EmailService.csproj")
+          test_project_path = Path("Backend/antigal.server.Tests/antigal.server.Tests.csproj")
+          server_project = server_project_path.read_text(encoding="utf-8-sig")
+          email_project = email_project_path.read_text(encoding="utf-8-sig")
+          test_project = test_project_path.read_text(encoding="utf-8-sig")
+
+          assert "<TargetFramework>net10.0</TargetFramework>" in server_project
+          assert "<TargetFramework>net10.0</TargetFramework>" in email_project
+          assert "<TargetFramework>net10.0</TargetFramework>" in test_project
+          global_json = json.loads(Path("global.json").read_text(encoding="utf-8-sig"))
+          assert global_json["sdk"]["version"] == "10.0.401"
+          assert global_json["sdk"]["rollForward"] == "disable"
+          assert global_json["sdk"]["allowPrerelease"] is False
 
           assert 'Include="NETCore.MailKit"' not in server_project
           assert 'Include="NETCore.MailKit"' not in email_project
@@ -199,15 +213,15 @@ jobs:
           assert Path("Backend/antigal.server/Mapping/UserRegistrationMapper.cs").is_file()
 
           required_server_packages = (
-              'Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.31"',
-              'Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.31"',
-              'Microsoft.EntityFrameworkCore" Version="8.0.31"',
-              'Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.31"',
-              'Microsoft.EntityFrameworkCore.Tools" Version="8.0.31"',
+              'Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.12"',
+              'Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.12"',
+              'Microsoft.EntityFrameworkCore" Version="10.0.12"',
+              'Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.12"',
+              'Microsoft.EntityFrameworkCore.Tools" Version="10.0.12"',
               'NPOI" Version="2.7.6"',
               'SixLabors.ImageSharp" Version="2.1.13"',
               'System.IdentityModel.Tokens.Jwt" Version="8.19.2"',
-              'System.Security.Cryptography.Xml" Version="8.0.4"',
+              'System.Security.Cryptography.Xml" Version="10.0.12" NoWarn="NU1510"',
           )
           for package in required_server_packages:
               assert package in server_project, f"missing maintained server package pin: {package}"
@@ -229,7 +243,9 @@ jobs:
 
           print("mail-dependency-boundary=clean")
           print("registration-mapping-boundary=explicit")
-          print("net8-security-package-boundary=clean")
+          print("dotnet-sdk-authority=10.0.401")
+          print("dotnet-target-framework=net10.0")
+          print("dotnet10-security-package-boundary=clean")
           PY
 
       - name: Reject unresolved merge markers in source authority
@@ -471,7 +487,7 @@ jobs:
           if not solution_clean:
               raise SystemExit("NuGet solution vulnerability audit is no longer clean")
 
-          print("B12 native Sass authority, B11 React 19 runtime and dead runtime-package pruning, B10 warning-free Testing Library runtime, B9 dead-source authority, B8c JSX extension authority, B8b route-split frontend, B8a direct-eval-free frontend, B7b2 warning-free backend, B7b1 order model authority, B7a product-filter nullability, B6c3 React Hook Form compatibility, B6c2e Auth hydration, B6c2d2 Profile draft state, B6c2d1 User addresses state, B6c2c Category form state, B6c2b Admin image state, B6c2a Carousel state, B6c1 Hook dependencies, B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
+          print("B13 .NET 10 runtime, B12 native Sass authority, B11 React 19 runtime and dead runtime-package pruning, B10 warning-free Testing Library runtime, B9 dead-source authority, B8c JSX extension authority, B8b route-split frontend, B8a direct-eval-free frontend, B7b2 warning-free backend, B7b1 order model authority, B7a product-filter nullability, B6c3 React Hook Form compatibility, B6c2e Auth hydration, B6c2d2 Profile draft state, B6c2d1 User addresses state, B6c2c Category form state, B6c2b Admin image state, B6c2a Carousel state, B6c1 Hook dependencies, B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
           PY
 
       - name: Upload quality evidence
