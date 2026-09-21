@@ -1,12 +1,13 @@
 using MercadoPago.Client.Preference;
 using MercadoPago.Config;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Antigal.Server.Tests;
 
+[TestClass]
 public class MercadoPagoSdkCompatibilityTests
 {
-    [Fact]
+    [TestMethod]
     public void CheckoutProPreferenceSurfaceRemainsAvailable()
     {
         var request = new PreferenceRequest
@@ -31,18 +32,20 @@ public class MercadoPagoSdkCompatibilityTests
         };
 
         var client = new PreferenceClient();
+        var items = request.Items ?? throw new InvalidOperationException("Preference items were not retained.");
+        var backUrls = request.BackUrls ?? throw new InvalidOperationException("Preference back URLs were not retained.");
 
-        Assert.NotNull(client);
-        Assert.Single(request.Items);
-        Assert.Equal("Producto de prueba", request.Items[0].Title);
-        Assert.Equal(2, request.Items[0].Quantity);
-        Assert.Equal("ARS", request.Items[0].CurrencyId);
-        Assert.Equal(1250.50m, request.Items[0].UnitPrice);
-        Assert.Equal("https://example.test/success", request.BackUrls.Success);
-        Assert.Equal("approved", request.AutoReturn);
+        Assert.IsNotNull(client);
+        Assert.AreEqual(1, items.Count);
+        Assert.AreEqual("Producto de prueba", items[0].Title);
+        Assert.AreEqual(2, items[0].Quantity);
+        Assert.AreEqual("ARS", items[0].CurrencyId);
+        Assert.AreEqual(1250.50m, items[0].UnitPrice);
+        Assert.AreEqual("https://example.test/success", backUrls.Success);
+        Assert.AreEqual("approved", request.AutoReturn);
     }
 
-    [Fact]
+    [TestMethod]
     public void GlobalAccessTokenConfigurationSurfaceRemainsAvailable()
     {
         var original = MercadoPagoConfig.AccessToken;
@@ -50,11 +53,11 @@ public class MercadoPagoSdkCompatibilityTests
         try
         {
             MercadoPagoConfig.AccessToken = "b18-test-token";
-            Assert.Equal("b18-test-token", MercadoPagoConfig.AccessToken);
+            Assert.AreEqual("b18-test-token", MercadoPagoConfig.AccessToken);
         }
         finally
         {
-            MercadoPagoConfig.AccessToken = original;
+            MercadoPagoConfig.AccessToken = original ?? string.Empty;
         }
     }
 }
