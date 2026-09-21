@@ -1,0 +1,134 @@
+name: B13 .NET 10 lab
+
+on:
+  push:
+    branches:
+      - modernize/b13-dotnet10-lab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: b13-dotnet10-lab
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: "false"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+
+    steps:
+      - name: Checkout triggering B13 commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+
+      - name: Setup Node 24.20.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24.20.0"
+          cache: npm
+          cache-dependency-path: Frontend/antigal.client/package-lock.json
+
+      - name: Setup .NET 10.0.401
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9
+        with:
+          dotnet-version: "10.0.401"
+
+      - name: Verify B13 runtime authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(dotnet --version)" = "10.0.401"
+          grep -Fq '"version": "10.0.401"' global.json
+          grep -Fq '<TargetFramework>net10.0</TargetFramework>' Backend/antigal.server/antigal.server.csproj
+          grep -Fq '<TargetFramework>net10.0</TargetFramework>' Backend/EmailService/EmailService.csproj
+          grep -Fq '<TargetFramework>net10.0</TargetFramework>' Backend/antigal.server.Tests/antigal.server.Tests.csproj
+          grep -Fq 'Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.12"' Backend/antigal.server/antigal.server.csproj
+          grep -Fq 'Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.12"' Backend/antigal.server/antigal.server.csproj
+          grep -Fq 'Microsoft.EntityFrameworkCore" Version="10.0.12"' Backend/antigal.server/antigal.server.csproj
+          grep -Fq 'Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.12"' Backend/antigal.server/antigal.server.csproj
+          grep -Fq 'Microsoft.EntityFrameworkCore.Tools" Version="10.0.12"' Backend/antigal.server/antigal.server.csproj
+          dotnet --info
+
+      - name: Install frontend exactly
+        working-directory: Frontend/antigal.client
+        run: npm ci
+
+      - name: Validate frontend maintained authorities
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/frontend_dependency_authority.mjs
+          node scripts/jsx_extension_authority.mjs
+          node scripts/dead_source_inventory.mjs
+          node scripts/style_authority.mjs
+
+      - name: Lint frontend
+        working-directory: Frontend/antigal.client
+        run: npm run lint -- --max-warnings 0
+
+      - name: Test frontend
+        working-directory: Frontend/antigal.client
+        env:
+          CI: "true"
+        run: npm test
+
+      - name: Build frontend
+        working-directory: Frontend/antigal.client
+        run: npm run build
+
+      - name: Restore .NET 10 solution
+        run: dotnet restore Backend/antigal.server.sln
+
+      - name: Build .NET 10 solution warning-free
+        shell: bash
+        run: |
+          set -o pipefail
+          dotnet build Backend/antigal.server.sln -c Release --no-restore | tee "$RUNNER_TEMP/b13-backend-build.txt"
+          if grep -Eq '\.cs\([0-9]+,[0-9]+\): warning CS[0-9]+:' "$RUNNER_TEMP/b13-backend-build.txt"; then
+            echo ".NET 10 build introduced compiler warnings" >&2
+            exit 1
+          fi
+
+      - name: Test .NET 10 backend behavior
+        run: dotnet test Backend/antigal.server.Tests/antigal.server.Tests.csproj -c Release --no-build
+
+      - name: Audit NuGet security and outdated packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet list Backend/antigal.server.sln package --vulnerable --include-transitive | tee b13-vulnerable.txt
+          dotnet list Backend/antigal.server.sln package --outdated --include-transitive | tee b13-outdated.txt
+
+          if grep -Fq "has the following vulnerable packages" b13-vulnerable.txt; then
+            echo ".NET 10 candidate contains vulnerable NuGet packages" >&2
+            exit 1
+          fi
+
+      - name: Validate current-tree security
+        run: python3 scripts/security_baseline.py
+
+      - name: Verify repository remains clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
+
+      - name: Upload B13 evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b13-dotnet10-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            b13-vulnerable.txt
+            b13-outdated.txt
+            ${{ runner.temp }}/b13-backend-build.txt
