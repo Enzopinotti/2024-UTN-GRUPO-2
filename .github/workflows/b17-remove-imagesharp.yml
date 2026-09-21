@@ -111,15 +111,34 @@ jobs:
         run: |
           set -euo pipefail
           dotnet package list --project Backend/antigal.server/antigal.server.csproj --include-transitive --no-restore | tee "$RUNNER_TEMP/b17-package-list.txt"
-          if grep -Eq '^[[:space:]]*>[[:space:]]+SixLabors\.ImageSharp[[:space:]]' "$RUNNER_TEMP/b17-package-list.txt"; then
-            echo "ImageSharp is still a direct package after B17" >&2
-            exit 1
-          fi
-          if grep -Fq 'SixLabors.ImageSharp' "$RUNNER_TEMP/b17-package-list.txt"; then
-            echo "b17_imagesharp_resolved_transitively=true"
-          else
-            echo "b17_imagesharp_resolved_transitively=false"
-          fi
+
+          python3 - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+
+          text = (Path(os.environ["RUNNER_TEMP"]) / "b17-package-list.txt").read_text()
+          top_level, sep, transitive = text.partition("Transitive Package")
+          if not sep:
+              raise SystemExit("dotnet package list did not expose the transitive package section")
+
+          if "SixLabors.ImageSharp" in top_level:
+              raise SystemExit("ImageSharp is still a top-level package after B17")
+
+          match = re.search(r"SixLabors\.ImageSharp\s+(\S+)", transitive)
+          if not match:
+              raise SystemExit("expected NPOI-held ImageSharp transitive dependency is missing")
+
+          resolved = match.group(1)
+          if resolved != "2.1.11":
+              raise SystemExit(
+                  "ImageSharp transitive resolution changed outside B17 boundary: " + resolved
+              )
+
+          print("b17_imagesharp_direct_authority=absent")
+          print("b17_imagesharp_transitive_owner=NPOI-2.7.6")
+          print("b17_imagesharp_transitive_version=2.1.11")
+          PY
 
       - name: Audit NuGet security
         shell: bash
