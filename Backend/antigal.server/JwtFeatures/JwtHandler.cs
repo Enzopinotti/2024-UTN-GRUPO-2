@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Globalization;
 namespace antigal.server.JwtFeatures
 {
     public class JwtHandler
@@ -61,11 +62,26 @@ namespace antigal.server.JwtFeatures
                 issuer: _jwtSettings["validIssuer"],
                 audience: _jwtSettings["validAudience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(Convert.ToDouble(_jwtSettings["expiryInMinutes"])),
+                expires: GetTokenExpiration(),
                 signingCredentials: signingCredentials
             );
 
             return tokenOptions;
+        }
+
+        private DateTime GetTokenExpiration()
+        {
+            var configuredExpiry = _jwtSettings["expiryInMinutes"];
+
+            if (!int.TryParse(configuredExpiry, NumberStyles.Integer, CultureInfo.InvariantCulture, out var expiryInMinutes)
+                || expiryInMinutes <= 0)
+            {
+                throw new InvalidOperationException(
+                    "JWTSettings:expiryInMinutes debe configurarse como un entero positivo."
+                );
+            }
+
+            return DateTime.UtcNow.AddMinutes(expiryInMinutes);
         }
 
     }

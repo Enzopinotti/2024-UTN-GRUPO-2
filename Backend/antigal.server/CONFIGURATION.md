@@ -32,6 +32,16 @@ MercadoPago__AccessToken
 
 Do **not** commit real values.
 
+## Maintained non-secret JWT defaults
+
+`JWTSettings__expiryInMinutes` defaults to `60` minutes in tracked
+`appsettings.json`. It may be overridden through normal ASP.NET Core
+configuration, but the effective value must be a positive integer.
+
+This value is application behavior, not a secret. Keeping a tracked positive
+default prevents the historical missing-value behavior from generating tokens
+with effectively immediate expiration.
+
 ## Important historical boundary
 
 Removing values from the current tree does not remove them from Git history and
