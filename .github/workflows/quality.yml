@@ -466,7 +466,7 @@ jobs:
             npm audit --json > "$GITHUB_WORKSPACE/frontend-audit.json" || true
             npm audit --omit=dev --json > "$GITHUB_WORKSPACE/frontend-production-audit.json" || true
           )
-          dotnet list Backend/antigal.server.slnx package --vulnerable --include-transitive > solution-vulnerable.txt
+          dotnet package list --project Backend/antigal.server.slnx --vulnerable --include-transitive --no-restore > solution-vulnerable.txt
 
           python3 - <<'PY' | tee quality-summary.txt
           import json
