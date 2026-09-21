@@ -2,7 +2,6 @@ using antigal.server.Data;
 using antigal.server.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq; // Asegúrate de incluir esto para usar Where
 using System.Threading.Tasks;
 
 namespace antigal.server.Repositories
@@ -23,22 +22,6 @@ namespace antigal.server.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<Orden>> GetOrdersByUserIdAsync(string userId)
-        {
-            return await _context.Ordenes
-                .Include(o => o.Items) // Incluye ítems de la orden
-                .Where(o => o.idUsuario == userId) // Filtra por idUsuario
-                .ToListAsync();
-        }
-
-        public async Task<List<Orden>> GetOrdersByStatusAsync(string status)
-        {
-            return await _context.Ordenes
-                .Include(o => o.Items) // Incluye ítems de la orden si es necesario
-                .Where(o => o.estado == status)
-                .ToListAsync();
-        }
-
         public async Task<Orden> GetOrderByIdAsync(int idOrden)
         {
             var orden = await _context.Ordenes
@@ -54,12 +37,6 @@ namespace antigal.server.Repositories
             return orden;
         }
 
-
-        public async Task AddOrderAsync(Orden order)
-        {
-            await _context.Ordenes.AddAsync(order);
-            await _context.SaveChangesAsync();
-        }
 
         public async Task<bool> UpdateOrderStatusAsync(int orderId, string newStatus)
         {
