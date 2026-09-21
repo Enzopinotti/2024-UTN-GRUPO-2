@@ -38,12 +38,10 @@ for path in files:
 expected_consumers = {
     "Backend/antigal.server/Controllers/ContactoController.cs",
     "Backend/antigal.server/Services/ImageService.cs",
-    "Backend/antigal.server/Services/LikeService.cs",
 }
 expected_saves = {
     "Backend/antigal.server/Controllers/ContactoController.cs": 1,
     "Backend/antigal.server/Services/ImageService.cs": 3,
-    "Backend/antigal.server/Services/LikeService.cs": 2,
 }
 
 if outside_context_consumers != expected_consumers:

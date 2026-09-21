@@ -8,6 +8,7 @@ PROGRAM = ROOT / "Backend" / "antigal.server" / "Program.cs"
 UNIT_OF_WORK = ROOT / "Backend" / "antigal.server" / "Repositories" / "UnitOfWork.cs"
 IUNIT_OF_WORK = ROOT / "Backend" / "antigal.server" / "Repositories" / "IUnitOfWork.cs"
 PRODUCT_SERVICE = ROOT / "Backend" / "antigal.server" / "Services" / "ProductService.cs"
+LIKE_SERVICE = ROOT / "Backend" / "antigal.server" / "Services" / "LikeService.cs"
 PAYMENT_SERVICE = ROOT / "Backend" / "antigal.server" / "Services" / "PaymentService.cs"
 ENVIO_SERVICE = ROOT / "Backend" / "antigal.server" / "Services" / "EnvioService.cs"
 
@@ -17,6 +18,7 @@ program = PROGRAM.read_text(encoding="utf-8-sig")
 unit = UNIT_OF_WORK.read_text(encoding="utf-8-sig")
 iunit = IUNIT_OF_WORK.read_text(encoding="utf-8-sig")
 product_service = PRODUCT_SERVICE.read_text(encoding="utf-8-sig")
+like_service = LIKE_SERVICE.read_text(encoding="utf-8-sig")
 payment_service = PAYMENT_SERVICE.read_text(encoding="utf-8-sig")
 envio_service = ENVIO_SERVICE.read_text(encoding="utf-8-sig")
 
@@ -45,6 +47,11 @@ unit_owned = {
         "builder.Services.AddScoped<IOrderRepository, OrderRepository>();",
         "public IOrderRepository Orders => _orderRepository ??= new OrderRepository(_context);",
         "IOrderRepository Orders { get; }",
+    ),
+    "ILikeRepository": (
+        "builder.Services.AddScoped<ILikeRepository, LikeRepository>();",
+        "public ILikeRepository Likes => _likeRepository ??= new LikeRepository(_context);",
+        "ILikeRepository Likes { get; }",
     ),
 }
 
@@ -95,8 +102,19 @@ for contract in (
         failures.append(f"ProductService UnitOfWork product path missing: {contract}")
 
 print("unitofwork-owned-direct-registration-count=0")
-print("unitofwork-owned-repositories=Products,Orders,Sales,Categories,ProductCategories,Carts")
+if "AppDbContext" in like_service or "_context" in like_service:
+    failures.append("LikeService regained direct AppDbContext state")
+for contract in (
+    "_unitOfWork.Likes.AddLikeAsync(userId, productoId)",
+    "_unitOfWork.Likes.RemoveLikeAsync(userId, productoId)",
+    "_unitOfWork.Likes.GetUserLikesAsync(userId)",
+):
+    if contract not in like_service:
+        failures.append(f"LikeService UnitOfWork repository path missing: {contract}")
+
+print("unitofwork-owned-repositories=Products,Orders,Sales,Categories,ProductCategories,Carts,Likes")
 print("productservice-product-repository-authority=IUnitOfWork.Products")
+print("likeservice-like-repository-authority=IUnitOfWork.Likes")
 print("direct-repository-di=IPaymentRepository,IEnvioRepository")
 
 if failures:
