@@ -1,0 +1,70 @@
+name: B26 ProductService repository characterization
+
+on:
+  push:
+    branches:
+      - modernize/b26-productservice-repository-authority-lab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  characterize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Characterize ProductService repository authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          root = Path("Backend/antigal.server")
+          program = (root / "Program.cs").read_text(encoding="utf-8-sig")
+          service = (root / "Services/ProductService.cs").read_text(encoding="utf-8-sig")
+          unit = (root / "Repositories/UnitOfWork.cs").read_text(encoding="utf-8-sig")
+
+          direct_registration = "builder.Services.AddScoped<IProductRepository, ProductRepository>();"
+          direct_field = "private readonly IProductRepository _productRepository;"
+          direct_ctor = "IProductRepository productRepository"
+          direct_get_all = "_productRepository.GetProductsAsync"
+          direct_get_featured = "_productRepository.GetFeaturedProductsAsync"
+          unit_get_all = "_unitOfWork.Products.GetProductsAsync"
+          unit_get_featured = "_unitOfWork.Products.GetFeaturedProductsAsync"
+          unit_owner = "public IProductRepository Products => _productRepository ??= new ProductRepository(_context);"
+
+          print(f"direct-product-repository-registration={direct_registration in program}")
+          print(f"productservice-direct-field={direct_field in service}")
+          print(f"productservice-direct-constructor-parameter={direct_ctor in service}")
+          print(f"productservice-direct-get-products={direct_get_all in service}")
+          print(f"productservice-direct-get-featured={direct_get_featured in service}")
+          print(f"productservice-unitofwork-get-products={unit_get_all in service}")
+          print(f"productservice-unitofwork-get-featured={unit_get_featured in service}")
+          print(f"unitofwork-product-owner={unit_owner in unit}")
+
+          checks = {
+              "historical direct DI registration missing": direct_registration in program,
+              "historical ProductService direct field missing": direct_field in service,
+              "historical ProductService direct ctor dependency missing": direct_ctor in service,
+              "historical GetProducts direct path missing": direct_get_all in service,
+              "historical GetProductsHome direct path missing": direct_get_featured in service,
+              "UnitOfWork product ownership missing": unit_owner in unit,
+          }
+
+          failed = [name for name, ok in checks.items() if not ok]
+          if failed:
+              for item in failed:
+                  print(f"FAIL: {item}")
+              raise SystemExit(1)
+          PY
+
+      - name: Verify checkout remains clean
+        run: |
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
