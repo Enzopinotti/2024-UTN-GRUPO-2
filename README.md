@@ -5,7 +5,7 @@
 
 Proyecto académico full stack desarrollado originalmente en 2024 para **Antigal**, una dietética nacida en el Mercado Municipal de Ensenada. El repositorio fue retomado y modernizado en 2026 para llevar una base histórica de React + ASP.NET Core a un stack mantenido, testeado y con CI permanente.
 
-> **Estado actual:** modernization checkpoint B35. El frontend y backend compilan y testean en CI con una política de **0 warnings**, auditorías de dependencias limpias y gates de arquitectura que protegen decisiones de modernización ya cerradas.
+> **Estado actual:** modernization checkpoint B36. El frontend y backend compilan y testean en CI con una política de **0 warnings**, auditorías de dependencias limpias y gates de arquitectura que protegen decisiones de modernización ya cerradas.
 
 ## Qué incluye
 
@@ -106,6 +106,10 @@ Para trabajar con el estado mantenido actual:
   - cadena de conexión SQL Server
 
 Los valores sensibles no están versionados en `appsettings.json`; el archivo conserva las claves esperadas con valores vacíos.
+
+### Migraciones de base de datos
+
+Los cambios de esquema mantenidos están versionados en `Backend/antigal.server/Migrations/`. Desde B36, la integridad de favoritos depende de la migración `20260921141500_LikeConcurrencyIntegrity`. Una base existente debe aplicar las migraciones pendientes como parte de su proceso de despliegue **antes** de recibir escrituras con el nuevo código.
 
 ## Configuración backend
 
@@ -268,10 +272,10 @@ Las GitHub Actions de terceros están fijadas por SHA y usan runtimes Node 24 ma
 
 ## Checkpoint de validación
 
-En el cierre **B35** del carril de modernización:
+En el cierre **B36** del carril de modernización:
 
 - frontend: **60/60 tests**
-- backend: **58/58 tests**
+- backend: **64/64 tests**
 - C# Release: **0 warnings**
 - npm audit: **0 vulnerabilidades**
 - NuGet vulnerability audit: **clean**
@@ -304,7 +308,8 @@ El trabajo se hizo incrementalmente y con validación antes de cada promoción. 
 - extracción de `LikeRepository` bajo `UnitOfWork`;
 - extracción de `ContactoRepository` + `ContactoService`, dejando cero controllers con acceso directo a `AppDbContext`;
 - bootstrap de administrador externalizado, deshabilitado por defecto, Development-only y fail-closed;
-- extracción de persistencia de imágenes a `ImageRepository`, dejando en **0** los consumidores directos de `AppDbContext` fuera de repositories.
+- extracción de persistencia de imágenes a `ImageRepository`, dejando en **0** los consumidores directos de `AppDbContext` fuera de repositories;
+- integridad concurrente de favoritos mediante índice único filtrado `(UserId, ProductoId)`, deduplicación de datos históricos y manejo idempotente del conflicto.
 
 Para decisiones, evidencia, SHAs y runs concretos, ver el índice de modernización.
 
@@ -312,7 +317,6 @@ Para decisiones, evidencia, SHAs y runs concretos, ver el índice de modernizaci
 
 El estado actual es mucho más mantenible que el histórico, pero todavía hay trabajo explícito:
 
-- caracterizar duplicados existentes antes de agregar una restricción única `(UserId, ProductoId)` en Likes;
 - continuar actualización conservadora de dependencias mayores que quedaron deliberadamente fuera de los bloques previos;
 - NPOI permanece en **2.7.6** porque una actualización posterior produjo regresiones de comportamiento medidas.
 
