@@ -239,6 +239,7 @@ public class ProductServiceRepositoryAuthorityTests
         public ICartRepository Carts => throw new NotSupportedException();
         public ILikeRepository Likes => throw new NotSupportedException();
         public IContactoRepository Contactos => throw new NotSupportedException();
+        public IImageRepository Images => throw new NotSupportedException();
         public IEnvioRepository Envio => throw new NotSupportedException();
 
         public Task<IDbContextTransaction> BeginTransactionAsync() => throw new NotSupportedException();
