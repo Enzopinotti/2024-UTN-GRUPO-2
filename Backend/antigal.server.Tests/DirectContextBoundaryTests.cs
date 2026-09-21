@@ -14,8 +14,8 @@ public class DirectContextBoundaryTests
 
         var consumers = assembly
             .GetTypes()
-            .Where(type => type.IsClass && type.Namespace is not null)
-            .Where(type => !type.Namespace.StartsWith("antigal.server.Repositories", StringComparison.Ordinal))
+            .Where(type => type.IsClass)
+            .Where(type => type.Namespace?.StartsWith("antigal.server.Repositories", StringComparison.Ordinal) != true)
             .Where(type => type
                 .GetConstructors()
                 .Any(constructor => constructor
