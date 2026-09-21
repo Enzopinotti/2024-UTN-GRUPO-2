@@ -15,18 +15,31 @@ namespace antigal.server.Repositories
 
         public async Task<bool> AddLikeAsync(string userId, int productoId)
         {
-            var existingLike = await _context.Likes
-                .FirstOrDefaultAsync(l => l.UserId == userId && l.ProductoId == productoId);
-
-            if (existingLike != null)
-            {
-                return false;
-            }
-
             var like = new Like { UserId = userId, ProductoId = productoId };
             _context.Likes.Add(like);
-            await _context.SaveChangesAsync();
-            return true;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateException)
+            {
+                // A concurrent request may have inserted the same favorite first.
+                // Detach this failed insert before verifying whether that exact pair now exists.
+                _context.Entry(like).State = EntityState.Detached;
+
+                var duplicateExists = await _context.Likes
+                    .AsNoTracking()
+                    .AnyAsync(l => l.UserId == userId && l.ProductoId == productoId);
+
+                if (duplicateExists)
+                {
+                    return false;
+                }
+
+                throw;
+            }
         }
 
         public async Task<bool> RemoveLikeAsync(string userId, int productoId)
