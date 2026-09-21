@@ -196,18 +196,11 @@ namespace antigal.server
 
             var app = builder.Build();
 
-            // Inicialización de la base de datos
+            // Inicialización de la base de datos.
+            // Los errores son fatales: no se continúa con roles/bootstrap incompletos.
             using (var scope = app.Services.CreateScope())
             {
-                var services = scope.ServiceProvider;
-                try
-                {
-                    await DbInitializer.Initialize(services);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error al inicializar la base de datos: {ex.Message}");
-                }
+                await DbInitializer.Initialize(scope.ServiceProvider);
             }
 
             // Middleware de CORS y autenticación
