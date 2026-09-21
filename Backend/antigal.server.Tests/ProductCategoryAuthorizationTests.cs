@@ -1,6 +1,7 @@
 using antigal.server.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using System.Reflection;
 
 namespace antigal.server.Tests;
