@@ -178,3 +178,31 @@ schema, data, external API or configuration migration is involved.
 Temporary lab triggers are removed before carrier promotion. Final closure
 requires Quality and Current-tree security to pass again on the exact promoted
 carrier SHA.
+
+
+## Carrier promotion evidence
+
+The cleaned B25 tree was promoted by non-forced fast-forward to the maintained
+carrier.
+
+Promoted carrier SHA:
+
+`9210536e4946c283955e9d6b823a9d18f086856d`
+
+Exact-SHA carrier validation:
+
+- Quality `35560719529` — success
+- Current-tree security `35560719572` — success
+- `unitofwork-owned-direct-registration-count=0`
+- `unitofwork-owned-repositories=Orders,Sales,Categories,ProductCategories,Carts`
+- `direct-repository-di=IProductRepository,IPaymentRepository,IEnvioRepository`
+- `backend-repository-di-authority=clean`
+- frontend tests: 60/60
+- backend tests: 28/28
+- backend Release build: 0 warnings
+- npm audit: 0 findings
+- NuGet vulnerability audit: clean
+
+A documentation-only closure commit follows this evidence. B25 is considered
+closed only after permanent Quality and Current-tree security pass again on that
+exact closure SHA.
