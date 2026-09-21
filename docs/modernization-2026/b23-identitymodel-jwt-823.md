@@ -127,3 +127,31 @@ secret or external-system migration is involved.
 Temporary lab triggers and the graph-reporting diagnostic are removed before
 carrier promotion. Final closure requires Quality and Current-tree security to
 pass again on the exact promoted carrier SHA.
+
+
+## Carrier promotion evidence
+
+The cleaned B23 tree was promoted by non-forced fast-forward to the maintained
+carrier.
+
+Promoted carrier SHA:
+
+`319dc05eac4ac43891722a08e9afc66005a7f95f`
+
+Exact-SHA carrier validation:
+
+- Quality `35559494397` — success
+- Current-tree security `35559494484` — success
+- frontend tests: 60/60
+- backend tests: 28/28
+- backend Release build: 0 warnings
+- npm audit: 0 findings
+- NuGet vulnerability audit: clean
+- direct JWT package authority: `System.IdentityModel.Tokens.Jwt 8.23.0`
+- JWT expiration authority: clean
+- email DI authority: clean
+- GitHub Actions runtime authority: Node 24
+
+A documentation-only closure commit follows this evidence. B23 is considered
+closed only after permanent Quality and Current-tree security pass again on that
+exact closure SHA.
