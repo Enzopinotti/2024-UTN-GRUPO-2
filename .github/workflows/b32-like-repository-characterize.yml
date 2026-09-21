@@ -1,0 +1,85 @@
+name: B32 like repository characterization
+
+on:
+  push:
+    branches:
+      - modernize/b32-like-repository-authority-lab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  characterize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Characterize LikeService persistence boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          root = Path("Backend/antigal.server")
+          tests = Path("Backend/antigal.server.Tests")
+
+          like_service = (root / "Services/LikeService.cs").read_text(encoding="utf-8-sig")
+          iunit = (root / "Repositories/IUnitOfWork.cs").read_text(encoding="utf-8-sig")
+          unit = (root / "Repositories/UnitOfWork.cs").read_text(encoding="utf-8-sig")
+          snapshot = (root / "Migrations/AppDbContextModelSnapshot.cs").read_text(encoding="utf-8-sig")
+
+          print(f"like-service-direct-context={'AppDbContext context' in like_service}")
+          print(f"like-service-save-site-count={like_service.count('_context.SaveChangesAsync()')}")
+          print(f"like-service-like-query-count={like_service.count('_context.Likes')}")
+          print(f"like-service-product-query-count={like_service.count('_context.Productos')}")
+          print(f"iunitofwork-likes-surface={'ILikeRepository Likes { get; }' in iunit}")
+          print(f"unitofwork-like-owner={'new LikeRepository(_context)' in unit}")
+
+          test_implementers = []
+          for path in sorted(tests.rglob("*.cs")):
+              src = path.read_text(encoding="utf-8-sig")
+              if ": IUnitOfWork" in src:
+                  test_implementers.append(path.as_posix())
+          print(f"test-iunitofwork-implementation-count={len(test_implementers)}")
+          for path in test_implementers:
+              print(f"test-iunitofwork-implementation={path}")
+
+          like_block = re.search(
+              r'modelBuilder\.Entity\("antigal\.server\.Models\.Like", b =>\s*\{.*?\n\s*\}\);',
+              snapshot,
+              flags=re.S,
+          )
+          if not like_block:
+              raise SystemExit("Like model snapshot block missing")
+          block = like_block.group(0)
+          compound_unique = (
+              'HasIndex("UserId", "ProductoId")' in block
+              and ".IsUnique()" in block
+          )
+          print(f"like-user-product-unique-index={compound_unique}")
+
+          required = {
+              "LikeService direct AppDbContext dependency": "AppDbContext context" in like_service,
+              "LikeService two save sites": like_service.count("_context.SaveChangesAsync()") == 2,
+              "LikeService Like queries": like_service.count("_context.Likes") >= 3,
+              "LikeService product query": "_context.Productos" in like_service,
+              "IUnitOfWork does not yet own Likes": "ILikeRepository Likes { get; }" not in iunit,
+              "UnitOfWork does not yet construct LikeRepository": "new LikeRepository(_context)" not in unit,
+              "known two test IUnitOfWork implementers": len(test_implementers) == 2,
+          }
+          failed=[name for name,ok in required.items() if not ok]
+          if failed:
+              for name in failed:
+                  print(f"FAIL: {name}")
+              raise SystemExit(1)
+          PY
+
+      - name: Verify checkout remains clean
+        run: |
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
