@@ -215,7 +215,7 @@ jobs:
           assert 'Include="NETCore.MailKit"' not in server_project
           assert 'Include="NETCore.MailKit"' not in email_project
           assert 'Include="MailKit" Version="4.18.0"' in email_project
-          assert 'Include="MimeKit" Version="4.18.0"' in email_project
+          assert 'Include="MimeKit" Version="4.18.1"' in email_project
           assert 'Include="MailKit"' not in server_project
           assert 'Include="MimeKit"' not in server_project
           assert 'Include="Microsoft.AspNetCore.Identity"' not in email_project
@@ -225,6 +225,7 @@ jobs:
           assert Path("Backend/antigal.server/Mapping/UserRegistrationMapper.cs").is_file()
 
           required_server_packages = (
+              'CloudinaryDotNet" Version="1.29.3"',
               'Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.12"',
               'Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.12"',
               'Microsoft.EntityFrameworkCore" Version="10.0.12"',
@@ -259,6 +260,9 @@ jobs:
           print("dotnet-target-framework=net10.0")
           print("dotnet-solution-authority=slnx")
           print("dotnet-legacy-sln-authority=absent")
+          print("backend-cloudinary=1.29.3")
+          print("backend-npoi=2.7.6-held")
+          print("email-mimekit=4.18.1")
           print("dotnet10-security-package-boundary=clean")
           PY
 
@@ -462,7 +466,7 @@ jobs:
             npm audit --json > "$GITHUB_WORKSPACE/frontend-audit.json" || true
             npm audit --omit=dev --json > "$GITHUB_WORKSPACE/frontend-production-audit.json" || true
           )
-          dotnet list Backend/antigal.server.slnx package --vulnerable --include-transitive > solution-vulnerable.txt
+          dotnet package list --project Backend/antigal.server.slnx --vulnerable --include-transitive --no-restore > solution-vulnerable.txt
 
           python3 - <<'PY' | tee quality-summary.txt
           import json
@@ -501,7 +505,7 @@ jobs:
           if not solution_clean:
               raise SystemExit("NuGet solution vulnerability audit is no longer clean")
 
-          print("B14 SLNX solution authority, B13 .NET 10 runtime, B12 native Sass authority, B11 React 19 runtime and dead runtime-package pruning, B10 warning-free Testing Library runtime, B9 dead-source authority, B8c JSX extension authority, B8b route-split frontend, B8a direct-eval-free frontend, B7b2 warning-free backend, B7b1 order model authority, B7a product-filter nullability, B6c3 React Hook Form compatibility, B6c2e Auth hydration, B6c2d2 Profile draft state, B6c2d1 User addresses state, B6c2c Category form state, B6c2b Admin image state, B6c2a Carousel state, B6c1 Hook dependencies, B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
+          print("B15 conservative backend dependency refresh, B14 SLNX solution authority, B13 .NET 10 runtime, B12 native Sass authority, B11 React 19 runtime and dead runtime-package pruning, B10 warning-free Testing Library runtime, B9 dead-source authority, B8c JSX extension authority, B8b route-split frontend, B8a direct-eval-free frontend, B7b2 warning-free backend, B7b1 order model authority, B7a product-filter nullability, B6c3 React Hook Form compatibility, B6c2e Auth hydration, B6c2d2 Profile draft state, B6c2d1 User addresses state, B6c2c Category form state, B6c2b Admin image state, B6c2a Carousel state, B6c1 Hook dependencies, B6a ESLint, B5b Router 7 and zero-advisory dependency-security contracts passed.")
           PY
 
       - name: Upload quality evidence
