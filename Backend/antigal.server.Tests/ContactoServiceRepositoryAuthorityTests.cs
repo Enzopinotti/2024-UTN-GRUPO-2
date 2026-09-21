@@ -108,6 +108,7 @@ public class ContactoServiceRepositoryAuthorityTests
     private sealed class StubUnitOfWork(IContactoRepository contactos) : IUnitOfWork
     {
         public IContactoRepository Contactos { get; } = contactos;
+        public IImageRepository Images => throw new NotSupportedException();
         public IOrderRepository Orders => throw new NotSupportedException();
         public ISaleRepository Sales => throw new NotSupportedException();
         public IProductRepository Products => throw new NotSupportedException();
