@@ -343,6 +343,9 @@ jobs:
       - name: Validate backend token authority
         run: python3 scripts/backend_token_authority.py
 
+      - name: Validate backend admin bootstrap authority
+        run: python3 scripts/backend_admin_bootstrap_authority.py
+
       - name: Validate backend repository DI authority
         run: python3 scripts/backend_repository_di_authority.py
 
