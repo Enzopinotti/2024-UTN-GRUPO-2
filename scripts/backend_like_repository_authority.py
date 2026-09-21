@@ -57,14 +57,23 @@ like_block = re.search(
 compound_unique = False
 if like_block:
     block = like_block.group(0)
-    compound_unique = 'HasIndex("UserId", "ProductoId")' in block and ".IsUnique()" in block
+    compound_unique = (
+        'HasIndex("UserId", "ProductoId")' in block
+        and ".IsUnique()" in block
+        and '.HasFilter("[UserId] IS NOT NULL")' in block
+    )
+else:
+    failures.append("Like model snapshot block missing")
+
+if not compound_unique:
+    failures.append("Like UserId/ProductoId unique filtered index authority missing")
 
 print("likeservice-direct-context=absent")
 print("likeservice-repository-authority=IUnitOfWork.Likes")
 print("likerepository-save-site-count=2")
 print("likerepository-owner=UnitOfWork")
 print(f"like-user-product-unique-index={compound_unique}")
-print("like-concurrency-unique-constraint-status=not-addressed-in-b32")
+print("like-concurrency-unique-constraint-status=enforced")
 
 if failures:
     print("Backend Like repository authority failed:", file=sys.stderr)
