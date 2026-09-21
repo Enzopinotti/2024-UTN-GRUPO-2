@@ -1,0 +1,90 @@
+name: Post-B19 diagnostic
+
+on:
+  push:
+    branches:
+      - modernize/post-b19-diagnostic-lab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Setup Node 24.20.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24.20.0"
+          cache: npm
+          cache-dependency-path: Frontend/antigal.client/package-lock.json
+
+      - name: Setup .NET 10.0.401
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9
+        with:
+          dotnet-version: "10.0.401"
+
+      - name: Install frontend exactly
+        working-directory: Frontend/antigal.client
+        run: npm ci
+
+      - name: Frontend direct dependency tree
+        working-directory: Frontend/antigal.client
+        shell: bash
+        run: npm ls --depth=0 || true
+
+      - name: Frontend outdated inventory
+        working-directory: Frontend/antigal.client
+        shell: bash
+        run: |
+          set +e
+          npm outdated --json > "$RUNNER_TEMP/npm-outdated.json"
+          rc=$?
+          cat "$RUNNER_TEMP/npm-outdated.json"
+          echo "npm_outdated_exit_code=$rc"
+
+      - name: Frontend audit inventory
+        working-directory: Frontend/antigal.client
+        shell: bash
+        run: |
+          npm audit --json > "$RUNNER_TEMP/npm-audit.json" || true
+          npm audit --omit=dev --json > "$RUNNER_TEMP/npm-audit-production.json" || true
+          cat "$RUNNER_TEMP/npm-audit.json"
+          echo "--- production ---"
+          cat "$RUNNER_TEMP/npm-audit-production.json"
+
+      - name: Restore backend
+        run: dotnet restore Backend/antigal.server.slnx
+
+      - name: Backend direct and transitive outdated inventory
+        shell: bash
+        run: |
+          dotnet package list --project Backend/antigal.server.slnx --outdated --include-transitive --no-restore
+
+      - name: Backend vulnerability inventory
+        shell: bash
+        run: |
+          dotnet package list --project Backend/antigal.server.slnx --vulnerable --include-transitive --no-restore
+
+      - name: Existing source authority diagnostics
+        shell: bash
+        run: |
+          node scripts/frontend_dependency_authority.mjs
+          node scripts/dead_source_inventory.mjs
+          node scripts/jsx_extension_authority.mjs
+          node scripts/style_authority.mjs
+          python3 scripts/security_baseline.py
+
+      - name: Verify diagnostic did not mutate checkout
+        run: |
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
