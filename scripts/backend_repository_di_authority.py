@@ -10,6 +10,7 @@ IUNIT_OF_WORK = ROOT / "Backend" / "antigal.server" / "Repositories" / "IUnitOfW
 PRODUCT_SERVICE = ROOT / "Backend" / "antigal.server" / "Services" / "ProductService.cs"
 LIKE_SERVICE = ROOT / "Backend" / "antigal.server" / "Services" / "LikeService.cs"
 CONTACTO_SERVICE = ROOT / "Backend" / "antigal.server" / "Services" / "ContactoService.cs"
+IMAGE_SERVICE = ROOT / "Backend" / "antigal.server" / "Services" / "ImageService.cs"
 PAYMENT_SERVICE = ROOT / "Backend" / "antigal.server" / "Services" / "PaymentService.cs"
 ENVIO_SERVICE = ROOT / "Backend" / "antigal.server" / "Services" / "EnvioService.cs"
 
@@ -21,6 +22,7 @@ iunit = IUNIT_OF_WORK.read_text(encoding="utf-8-sig")
 product_service = PRODUCT_SERVICE.read_text(encoding="utf-8-sig")
 like_service = LIKE_SERVICE.read_text(encoding="utf-8-sig")
 contacto_service = CONTACTO_SERVICE.read_text(encoding="utf-8-sig")
+image_service = IMAGE_SERVICE.read_text(encoding="utf-8-sig")
 payment_service = PAYMENT_SERVICE.read_text(encoding="utf-8-sig")
 envio_service = ENVIO_SERVICE.read_text(encoding="utf-8-sig")
 
@@ -59,6 +61,11 @@ unit_owned = {
         "builder.Services.AddScoped<IContactoRepository, ContactoRepository>();",
         "public IContactoRepository Contactos => _contactoRepository ??= new ContactoRepository(_context);",
         "IContactoRepository Contactos { get; }",
+    ),
+    "IImageRepository": (
+        "builder.Services.AddScoped<IImageRepository, ImageRepository>();",
+        "public IImageRepository Images => _imageRepository ??= new ImageRepository(_context);",
+        "IImageRepository Images { get; }",
     ),
 }
 
@@ -131,10 +138,22 @@ for contract in (
 if "builder.Services.AddScoped<IContactoService, ContactoService>();" not in program:
     failures.append("ContactoService DI registration missing")
 
-print("unitofwork-owned-repositories=Products,Orders,Sales,Categories,ProductCategories,Carts,Likes,Contactos")
+if "AppDbContext" in image_service or "_context" in image_service:
+    failures.append("ImageService regained direct AppDbContext state")
+for contract in (
+    "_unitOfWork.Images.AddAsync(nuevaImagen)",
+    "_unitOfWork.Images.GetByIdAsync(imageId)",
+    "_unitOfWork.Images.GetByUrlAsync(imageUrl)",
+    "_unitOfWork.Images.DeleteAsync(image)",
+):
+    if contract not in image_service:
+        failures.append(f"ImageService UnitOfWork repository path missing: {contract}")
+
+print("unitofwork-owned-repositories=Products,Orders,Sales,Categories,ProductCategories,Carts,Likes,Contactos,Images")
 print("productservice-product-repository-authority=IUnitOfWork.Products")
 print("likeservice-like-repository-authority=IUnitOfWork.Likes")
 print("contactoservice-contacto-repository-authority=IUnitOfWork.Contactos")
+print("imageservice-image-repository-authority=IUnitOfWork.Images")
 print("direct-repository-di=IPaymentRepository,IEnvioRepository")
 
 if failures:
